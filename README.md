@@ -19,6 +19,8 @@ The `split_traffic` function provides a flexible way to split traffic (users, se
 
 ## Installation
 
+### Using pip
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/CausalKit.git
@@ -26,6 +28,18 @@ cd CausalKit
 
 # Install in development mode
 pip install -e .
+```
+
+### Using conda
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/CausalKit.git
+cd CausalKit
+
+# Create and activate conda environment
+conda env create -f environment.yml
+conda activate causalkit
 ```
 
 ## Usage Examples
@@ -80,7 +94,22 @@ causalkit/
 
 ## Running Tests
 
+### Using pip environment
+
 ```bash
+# Run all tests
+python -m unittest discover
+
+# Run specific test file
+python -m unittest causalkit.tests.test_traffic_splitter
+```
+
+### Using conda environment
+
+```bash
+# Activate the conda environment first
+conda activate causalkit
+
 # Run all tests
 python -m unittest discover
 
