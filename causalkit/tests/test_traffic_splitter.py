@@ -5,7 +5,7 @@ Tests for the traffic_splitter module.
 import unittest
 import pandas as pd
 import numpy as np
-from causalkit.utils.traffic_splitter import split_traffic
+from causalkit.design.traffic_splitter import split_traffic
 
 
 class TestTrafficSplitter(unittest.TestCase):
@@ -24,14 +24,14 @@ class TestTrafficSplitter(unittest.TestCase):
     def test_simple_split(self):
         """Test a simple 50/50 split."""
         train_df, test_df = split_traffic(self.df, random_state=42)
-        
+
         # Check that the split sizes are correct
         self.assertEqual(len(train_df), 50)
         self.assertEqual(len(test_df), 50)
-        
+
         # Check that all rows are preserved
         self.assertEqual(len(train_df) + len(test_df), len(self.df))
-        
+
         # Check that there's no overlap between the splits
         train_ids = set(train_df['user_id'])
         test_ids = set(test_df['user_id'])
@@ -40,11 +40,11 @@ class TestTrafficSplitter(unittest.TestCase):
     def test_custom_ratio_split(self):
         """Test a custom ratio split (80/20)."""
         train_df, test_df = split_traffic(self.df, split_ratio=0.8, random_state=42)
-        
+
         # Check that the split sizes are correct
         self.assertEqual(len(train_df), 80)
         self.assertEqual(len(test_df), 20)
-        
+
         # Check that all rows are preserved
         self.assertEqual(len(train_df) + len(test_df), len(self.df))
 
@@ -53,12 +53,12 @@ class TestTrafficSplitter(unittest.TestCase):
         train_df, val_df, test_df = split_traffic(
             self.df, split_ratio=[0.7, 0.2], random_state=42
         )
-        
+
         # Check that the split sizes are correct
         self.assertEqual(len(train_df), 70)
         self.assertEqual(len(val_df), 20)
         self.assertEqual(len(test_df), 10)
-        
+
         # Check that all rows are preserved
         self.assertEqual(len(train_df) + len(val_df) + len(test_df), len(self.df))
 
@@ -67,15 +67,15 @@ class TestTrafficSplitter(unittest.TestCase):
         train_df, test_df = split_traffic(
             self.df, split_ratio=0.8, stratify_column='group', random_state=42
         )
-        
+
         # Check that the split sizes are correct
         self.assertEqual(len(train_df), 80)
         self.assertEqual(len(test_df), 20)
-        
+
         # Check that the stratification is preserved
         train_group_counts = train_df['group'].value_counts(normalize=True)
         test_group_counts = test_df['group'].value_counts(normalize=True)
-        
+
         # The proportions should be approximately equal
         self.assertAlmostEqual(train_group_counts['A'], 0.5, places=1)
         self.assertAlmostEqual(train_group_counts['B'], 0.5, places=1)
