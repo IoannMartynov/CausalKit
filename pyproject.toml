@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "causalkit"
+version = "0.1.0"
+description = "A Python toolkit for causal inference and experimentation"
+readme = "README.md"
+authors = [
+    {name = "CausalKit Team"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "statsmodels",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "isort",
+    "flake8",
+]
+docs = [
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings>=0.20.0",
+    "mkdocstrings-python>=1.0.0",
+    "pymdown-extensions>=10.0.0",
+]
+
+[tool.setuptools]
+packages = ["causalkit", "causalkit.data", "causalkit.design", "causalkit.analysis"]
