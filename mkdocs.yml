@@ -1,7 +1,7 @@
 site_name: CausalKit
 site_description: A Python package for causal inference
 site_author: CausalKit Team
-repo_url: https://github.com/ioannMartynov/causalkit
+repo_url: https://ioannmartynov.github.io/causalkit/
 repo_name: causalkit
 
 theme:
