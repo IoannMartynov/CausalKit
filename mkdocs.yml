@@ -31,11 +31,7 @@ plugins:
   - search
   - mkdocstrings:
       handlers:
-        python:
-          selection:
-            docstring_style: numpy
-          rendering:
-            show_source: true
+        python: {}
 
 nav:
   - Home: index.md
