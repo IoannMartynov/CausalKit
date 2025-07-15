@@ -76,12 +76,43 @@ control_df, treatment_df = split_traffic(
 
 For more detailed examples, see the [examples directory](causalkit/examples/).
 
+## Documentation
+
+The documentation for CausalKit is built using [MkDocs](https://www.mkdocs.org/) with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
+
+### Online Documentation
+
+The latest documentation is available at: [https://yourusername.github.io/causalkit/](https://yourusername.github.io/causalkit/)
+
+### Building Documentation Locally
+
+To build and view the documentation locally:
+
+```bash
+# Install MkDocs and required plugins
+pip install mkdocs-material mkdocstrings[python] pymdown-extensions
+
+# Serve the documentation (with live reloading)
+mkdocs serve
+
+# Build the documentation
+mkdocs build
+```
+
+The documentation will be available at http://localhost:8000/.
+
 ## Project Structure
 
 ```
 causalkit/
 ├── __init__.py
-├── utils/
+├── analysis/
+│   ├── __init__.py
+│   └── ttest.py
+├── data/
+│   ├── __init__.py
+│   └── generators.py
+├── design/
 │   ├── __init__.py
 │   └── traffic_splitter.py
 ├── tests/
@@ -89,7 +120,9 @@ causalkit/
 │   └── test_traffic_splitter.py
 └── examples/
     ├── __init__.py
-    └── traffic_splitting_example.py
+    ├── generators_notebook.ipynb
+    ├── traffic_splitting_example.ipynb
+    └── ttest.ipynb
 ```
 
 ## Running Tests
