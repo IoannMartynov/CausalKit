@@ -1,0 +1,46 @@
+site_name: CausalKit
+site_description: A Python package for causal inference
+site_author: CausalKit Team
+repo_url: https://github.com/yourusername/causalkit
+repo_name: causalkit
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python: {}
+
+nav:
+  - Home: index.md
+  - User Guide:
+    - Installation: user-guide/installation.md
+    - Getting Started: user-guide/getting-started.md
+  - API Reference:
+    - Data: api/data.md
+    - Design: api/design.md
+    - Analysis: api/analysis.md
+  - Examples: examples.md
+  - Contributing: contributing.md
