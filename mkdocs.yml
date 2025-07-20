@@ -8,8 +8,8 @@ repo_name: causalkit
 theme:
   name: material
   palette:
-    primary: indigo
-    accent: indigo
+    primary: black
+    accent: white
   features:
     - navigation.tabs
     - navigation.sections
