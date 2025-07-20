@@ -23,6 +23,8 @@ jobs:
           pip install -e ".[docs]"
       - name: Build documentation
         run: mkdocs build
+      - name: Create .nojekyll file
+        run: touch ./site/.nojekyll
       - name: Deploy documentation
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
