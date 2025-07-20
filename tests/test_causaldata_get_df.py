@@ -1,93 +1,111 @@
 """
-Test script to verify the get_df method in causaldata class.
+Tests for the get_df method in causaldata class.
 """
 
+import pytest
 import pandas as pd
 import numpy as np
 from causalkit.data import causaldata
 
-# Create a test DataFrame
-df = pd.DataFrame({
-    'user_id': range(1, 101),
-    'treatment': np.random.choice([0, 1], size=100),
-    'age': np.random.randint(18, 65, size=100),
-    'gender': np.random.choice(['M', 'F'], size=100),
-    'invited_friend': np.random.choice([0, 1], size=100),
-    'target': np.random.normal(0, 1, size=100)
-})
 
-# Create a causaldata object
-ck = causaldata(
-    df=df,
-    target='target',
-    cofounders=['age', 'invited_friend'],
-    treatment='treatment'
-)
+@pytest.fixture
+def random_seed():
+    """Fixture to provide a consistent random seed for tests."""
+    return 42
 
-# Test 1: Get the entire DataFrame
-print("Test 1: Get the entire DataFrame")
-result_df = ck.get_df()
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print(f"Is a copy: {result_df is not df}")
-print()
 
-# Test 2: Get specific columns
-print("Test 2: Get specific columns")
-result_df = ck.get_df(columns=['user_id', 'gender'])
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
+@pytest.fixture
+def test_dataframe(random_seed):
+    """Fixture to provide a test DataFrame."""
+    np.random.seed(random_seed)
+    
+    return pd.DataFrame({
+        'user_id': range(1, 101),
+        'treatment': np.random.choice([0, 1], size=100),
+        'age': np.random.randint(18, 65, size=100),
+        'gender': np.random.choice(['M', 'F'], size=100),
+        'invited_friend': np.random.choice([0, 1], size=100),
+        'target': np.random.normal(0, 1, size=100)
+    })
 
-# Test 3: Get target columns
-print("Test 3: Get target columns")
-result_df = ck.get_df(include_target=True)
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
 
-# Test 4: Get cofounder columns
-print("Test 4: Get cofounder columns")
-result_df = ck.get_df(include_cofounders=True)
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
+@pytest.fixture
+def causal_data(test_dataframe):
+    """Fixture to provide a causaldata object."""
+    return causaldata(
+        df=test_dataframe,
+        target='target',
+        cofounders=['age', 'invited_friend'],
+        treatment='treatment'
+    )
 
-# Test 5: Get treatment columns
-print("Test 5: Get treatment columns")
-result_df = ck.get_df(include_treatment=True)
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
 
-# Test 6: Get combination of columns
-print("Test 6: Get combination of columns")
-result_df = ck.get_df(
-    columns=['user_id', 'gender'],
-    include_target=True,
-    include_treatment=True
-)
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
+def test_get_entire_dataframe(causal_data, test_dataframe):
+    """Test getting the entire DataFrame."""
+    result_df = causal_data.get_df()
+    
+    assert result_df.shape == test_dataframe.shape
+    assert set(result_df.columns) == set(test_dataframe.columns)
+    assert result_df is not test_dataframe  # Should be a copy
 
-# Test 7: Handle duplicate columns
-print("Test 7: Handle duplicate columns")
-result_df = ck.get_df(
-    columns=['age', 'gender'],
-    include_cofounders=True  # 'age' is also in cofounders
-)
-print(f"Shape: {result_df.shape}")
-print(f"Columns: {list(result_df.columns)}")
-print()
 
-# Test 8: Error handling for non-existent columns
-print("Test 8: Error handling for non-existent columns")
-try:
-    result_df = ck.get_df(columns=['non_existent_column'])
-    print("Error: Test failed - should have raised ValueError")
-except ValueError as e:
-    print(f"Success: Correctly raised ValueError: {e}")
-print()
+def test_get_specific_columns(causal_data):
+    """Test getting specific columns."""
+    result_df = causal_data.get_df(columns=['user_id', 'gender'])
+    
+    assert result_df.shape[0] == 100  # Number of rows should be the same
+    assert set(result_df.columns) == {'user_id', 'gender'}
 
-print("All tests completed.")
+
+def test_get_target_columns(causal_data):
+    """Test getting target columns."""
+    result_df = causal_data.get_df(include_target=True)
+    
+    assert result_df.shape[0] == 100
+    assert 'target' in result_df.columns
+
+
+def test_get_cofounder_columns(causal_data):
+    """Test getting cofounder columns."""
+    result_df = causal_data.get_df(include_cofounders=True)
+    
+    assert result_df.shape[0] == 100
+    assert set(['age', 'invited_friend']).issubset(set(result_df.columns))
+
+
+def test_get_treatment_columns(causal_data):
+    """Test getting treatment columns."""
+    result_df = causal_data.get_df(include_treatment=True)
+    
+    assert result_df.shape[0] == 100
+    assert 'treatment' in result_df.columns
+
+
+def test_get_combination_of_columns(causal_data):
+    """Test getting a combination of columns."""
+    result_df = causal_data.get_df(
+        columns=['user_id', 'gender'],
+        include_target=True,
+        include_treatment=True
+    )
+    
+    assert result_df.shape[0] == 100
+    assert set(result_df.columns) == {'user_id', 'gender', 'target', 'treatment'}
+
+
+def test_handle_duplicate_columns(causal_data):
+    """Test handling of duplicate columns."""
+    result_df = causal_data.get_df(
+        columns=['age', 'gender'],
+        include_cofounders=True  # 'age' is also in cofounders
+    )
+    
+    assert result_df.shape[0] == 100
+    # Each column should appear only once
+    assert set(result_df.columns) == {'age', 'gender', 'invited_friend'}
+
+
+def test_error_handling_for_non_existent_columns(causal_data):
+    """Test error handling for non-existent columns."""
+    with pytest.raises(ValueError):
+        causal_data.get_df(columns=['non_existent_column'])
