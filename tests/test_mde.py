@@ -1,56 +1,107 @@
 """
-Simple test script to verify the calculate_mde function.
+Tests for the calculate_mde function in the design module.
 """
 
+import pytest
 from causalkit.design import calculate_mde
 
-# Test for conversion data
-print("Testing MDE calculation for conversion data:")
-result_conv = calculate_mde(
-    sample_size=1000,
-    baseline_rate=0.1,
-    data_type='conversion'
-)
-print(f"MDE (absolute): {result_conv['mde']:.4f}")
-print(f"MDE (relative): {result_conv['mde_relative']:.4f} or {result_conv['mde_relative']*100:.2f}%")
-print("Parameters used:", result_conv['parameters'])
-print()
 
-# Test for continuous data
-print("Testing MDE calculation for continuous data:")
-result_cont = calculate_mde(
-    sample_size=(500, 500),
-    variance=4,
-    baseline_rate=10,  # Optional for continuous data
-    data_type='continuous'
-)
-print(f"MDE (absolute): {result_cont['mde']:.4f}")
-print(f"MDE (relative): {result_cont['mde_relative']:.4f} or {result_cont['mde_relative']*100:.2f}%")
-print("Parameters used:", result_cont['parameters'])
-print()
+def test_mde_calculation_for_conversion_data():
+    """Test MDE calculation for conversion data."""
+    result = calculate_mde(
+        sample_size=1000,
+        baseline_rate=0.1,
+        data_type='conversion'
+    )
+    
+    # Check that the result contains all expected keys
+    assert 'mde' in result
+    assert 'mde_relative' in result
+    assert 'parameters' in result
+    
+    # Check that the MDE values are positive floats
+    assert isinstance(result['mde'], float)
+    assert result['mde'] > 0
+    
+    assert isinstance(result['mde_relative'], float)
+    assert result['mde_relative'] > 0
+    
+    # Check that the parameters dictionary contains expected keys
+    assert 'sample_size' in result['parameters']
+    assert 'baseline_rate' in result['parameters']
+    assert 'data_type' in result['parameters']
+    assert result['parameters']['data_type'] == 'conversion'
 
-# Test with different sample allocation
-print("Testing MDE calculation with different sample allocation:")
-result_ratio = calculate_mde(
-    sample_size=1000,
-    baseline_rate=0.1,
-    data_type='conversion',
-    ratio=0.7  # 70% in control, 30% in treatment
-)
-print(f"MDE (absolute): {result_ratio['mde']:.4f}")
-print(f"MDE (relative): {result_ratio['mde_relative']:.4f} or {result_ratio['mde_relative']*100:.2f}%")
-print("Parameters used:", result_ratio['parameters'])
-print()
 
-# Test with different alpha and power
-print("Testing MDE calculation with different alpha and power:")
-result_power = calculate_mde(
-    sample_size=1000,
-    baseline_rate=0.1,
-    data_type='conversion',
-    alpha=0.01,  # More stringent significance level
-    power=0.9    # Higher power
-)
-print(f"MDE (absolute): {result_power['mde']:.4f}")
-print(f"MDE (relative): {result_power['mde_relative']:.4f} or {result_power['mde_relative']*100:.2f}%")
-print("Parameters used:", result_power['parameters'])
+def test_mde_calculation_for_continuous_data():
+    """Test MDE calculation for continuous data."""
+    result = calculate_mde(
+        sample_size=(500, 500),
+        variance=4,
+        baseline_rate=10,  # Optional for continuous data
+        data_type='continuous'
+    )
+    
+    # Check that the result contains all expected keys
+    assert 'mde' in result
+    assert 'mde_relative' in result
+    assert 'parameters' in result
+    
+    # Check that the MDE values are positive floats
+    assert isinstance(result['mde'], float)
+    assert result['mde'] > 0
+    
+    assert isinstance(result['mde_relative'], float)
+    assert result['mde_relative'] > 0
+    
+    # Check that the parameters dictionary contains expected keys
+    assert 'sample_size' in result['parameters']
+    assert 'variance' in result['parameters']
+    assert 'data_type' in result['parameters']
+    assert result['parameters']['data_type'] == 'continuous'
+
+
+def test_mde_calculation_with_different_sample_allocation():
+    """Test MDE calculation with different sample allocation."""
+    result = calculate_mde(
+        sample_size=1000,
+        baseline_rate=0.1,
+        data_type='conversion',
+        ratio=0.7  # 70% in control, 30% in treatment
+    )
+    
+    # Check that the result contains all expected keys
+    assert 'mde' in result
+    assert 'mde_relative' in result
+    assert 'parameters' in result
+    
+    # The ratio parameter affects the calculation but might not be included in the parameters dictionary
+    # Just verify that the function runs successfully with a custom ratio
+
+
+def test_mde_calculation_with_different_alpha_and_power():
+    """Test MDE calculation with different alpha and power."""
+    result = calculate_mde(
+        sample_size=1000,
+        baseline_rate=0.1,
+        data_type='conversion',
+        alpha=0.01,  # More stringent significance level
+        power=0.9    # Higher power
+    )
+    
+    # Check that the result contains all expected keys
+    assert 'mde' in result
+    assert 'mde_relative' in result
+    assert 'parameters' in result
+    
+    # Check that the alpha and power parameters were correctly used
+    assert 'alpha' in result['parameters']
+    assert result['parameters']['alpha'] == 0.01
+    
+    assert 'power' in result['parameters']
+    assert result['parameters']['power'] == 0.9
+
+
+if __name__ == "__main__":
+    # Allow running this test directly
+    pytest.main(["-xvs", __file__])
