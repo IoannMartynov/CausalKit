@@ -87,8 +87,10 @@ print(treatment_df['country'].value_counts(normalize=True))
 
 ## More Examples
 
-For more examples, check out the Jupyter notebooks in the [examples directory](https://github.com/yourusername/causalkit/tree/main/causalkit/examples) of the repository:
+For more examples, check out the Jupyter notebooks in the [examples directory](https://github.com/ioannmartynov/causalkit/tree/main/examples) of the repository:
 
-- [A/B Testing with T-Test](https://github.com/yourusername/causalkit/blob/main/causalkit/examples/ttest.ipynb)
-- [Traffic Splitting](https://github.com/yourusername/causalkit/blob/main/causalkit/examples/traffic_splitting_example.ipynb)
-- [Double Machine Learning with PLR](https://github.com/yourusername/causalkit/blob/main/causalkit/examples/dml_pls_ttest.ipynb)
+- [A/B Testing with T-Test](https://github.com/ioannmartynov/causalkit/blob/main/examples/ttest.ipynb)
+- [Traffic Splitting](https://github.com/ioannmartynov/causalkit/blob/main/examples/traffic_splitting_example.ipynb)
+- [Double Machine Learning with PLR](https://github.com/ioannmartynov/causalkit/blob/main/examples/dml_pls_ttest.ipynb)
+- [Data Functions](https://github.com/ioannmartynov/causalkit/blob/main/examples/data_functions_example.ipynb) - Demonstrates how to use the data generation functions and the causaldata class for managing causal inference data
+- [Design Functions](https://github.com/ioannmartynov/causalkit/blob/main/examples/design_functions_example.ipynb) - Shows how to use traffic splitting for A/B testing and calculate minimum detectable effect (MDE) for experimental design
