@@ -2,6 +2,8 @@
 
 A Python toolkit for causal inference and experimentation.
 
+Official documentation https://ioannmartynov.github.io/CausalKit/
+
 ## Installation
 
 ### Using pip

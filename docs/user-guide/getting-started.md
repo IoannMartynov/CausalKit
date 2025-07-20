@@ -113,4 +113,4 @@ Now that you're familiar with the basic functionality of CausalKit, you can:
 - Check out the [Examples](../examples.md) for more complex use cases
 - Read about advanced topics in causal inference in the user guide
 
-For any questions or issues, please visit the [GitHub repository](https://github.com/yourusername/causalkit).
+For any questions or issues, please visit the [GitHub repository](https://github.com/ioannmartynov/causalkit).
