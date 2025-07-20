@@ -14,7 +14,7 @@ try:
     # Test importing specific functions
     from causalkit.data import generate_rct_data
     from causalkit.design import split_traffic
-    from causalkit.analysis import compare_ab
+    from causalkit.analysis import ttest
     print("Successfully imported specific functions")
     
     print("All imports successful!")

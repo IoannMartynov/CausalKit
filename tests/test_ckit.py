@@ -4,7 +4,7 @@ Test script for the ckit class.
 
 import pandas as pd
 import numpy as np
-from causalkit.data import generate_rct_data, generate_obs_data, ckit
+from causalkit.data import generate_rct_data, generate_obs_data, causaldata
 
 # Test with RCT data
 print("Testing ckit with RCT data:")
@@ -13,7 +13,7 @@ print(f"RCT data shape: {rct_df.shape}")
 print(f"RCT data columns: {rct_df.columns.tolist()}")
 
 # Create ckit object with RCT data
-ck_rct = ckit(
+ck_rct = causaldata(
     df=rct_df,
     target='target',
     cofounders=['age', 'invited_friend'],
@@ -35,7 +35,7 @@ print(f"Observational data shape: {obs_df.shape}")
 print(f"Observational data columns: {obs_df.columns.tolist()}")
 
 # Create ckit object with observational data
-ck_obs = ckit(
+ck_obs = causaldata(
     df=obs_df,
     target=None,  # No target column in observational data
     cofounders=['age', 'income', 'education'],
@@ -61,7 +61,7 @@ custom_df = pd.DataFrame({
 print(f"Custom data:\n{custom_df}")
 
 # Create ckit object with custom data
-ck_custom = ckit(
+ck_custom = causaldata(
     df=custom_df,
     target='ltv',
     cofounders=['age', 'invited_friend'],
