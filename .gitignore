@@ -30,7 +30,7 @@ site/
 # IDE
 .idea/
 .vscode/
-.junie/
+.junie
 *.swp
 *.swo
 

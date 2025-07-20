@@ -145,6 +145,90 @@ class causaldata:
         
         return self.df[self._treatment]
 
+    def get_df(
+        self,
+        columns: Optional[List[str]] = None,
+        include_target: bool = False,
+        include_cofounders: bool = False,
+        include_treatment: bool = False
+    ) -> pd.DataFrame:
+        """
+        Get a DataFrame from the causaldata object with specified columns.
+        
+        Parameters
+        ----------
+        columns : List[str], optional
+            Specific column names to include in the returned DataFrame.
+            If None and no other include parameters are True, returns the entire DataFrame.
+        include_target : bool, default False
+            Whether to include target column(s) in the returned DataFrame.
+        include_cofounders : bool, default False
+            Whether to include cofounder column(s) in the returned DataFrame.
+        include_treatment : bool, default False
+            Whether to include treatment column(s) in the returned DataFrame.
+            
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the specified columns.
+            
+        Examples
+        --------
+        >>> from causalkit.data import generate_rct_data
+        >>> from causalkit.data import causaldata
+        >>> 
+        >>> # Generate data
+        >>> df = generate_rct_data()
+        >>> 
+        >>> # Create ckit object
+        >>> ck = causaldata(
+        ...     df=df,
+        ...     target='target',
+        ...     cofounders=['age', 'invited_friend'],
+        ...     treatment='treatment'
+        ... )
+        >>> 
+        >>> # Get specific columns
+        >>> ck.get_df(columns=['age', 'gender'])
+        >>> 
+        >>> # Get target and treatment columns
+        >>> ck.get_df(include_target=True, include_treatment=True)
+        >>> 
+        >>> # Get all columns
+        >>> ck.get_df()
+        """
+        # If no specific columns or includes are specified, return the entire DataFrame
+        if columns is None and not any([include_target, include_cofounders, include_treatment]):
+            return self.df.copy()
+        
+        # Start with empty list of columns to include
+        cols_to_include = []
+        
+        # Add specific columns if provided
+        if columns is not None:
+            cols_to_include.extend(columns)
+        
+        # Add columns based on include parameters
+        if include_target:
+            cols_to_include.extend(self._target)
+        
+        if include_cofounders:
+            cols_to_include.extend(self._cofounders)
+        
+        if include_treatment:
+            cols_to_include.extend(self._treatment)
+        
+        # Remove duplicates while preserving order
+        cols_to_include = list(dict.fromkeys(cols_to_include))
+        
+        # Validate that all requested columns exist
+        for col in cols_to_include:
+            if col not in self.df.columns:
+                raise ValueError(f"Column '{col}' does not exist in the DataFrame.")
+        
+        # Return the DataFrame with selected columns
+        return self.df[cols_to_include].copy()
+    
     def __repr__(self) -> str:
         """
         String representation of the ckit object.
