@@ -83,7 +83,7 @@ control_df, treatment_df = split_traffic(
 )
 ```
 
-For more detailed examples, see the [examples directory](causalkit/examples/).
+For more detailed examples, see the [examples directory](examples/).
 
 ## Documentation
 
