@@ -73,7 +73,7 @@ print(f"Relative CI: {results['relative_ci']}")
 
 ## API Reference
 
-::: causalkit.analysis.ttest
+::: causalkit.inference.ttest
     handler: python
     selection:
       members:

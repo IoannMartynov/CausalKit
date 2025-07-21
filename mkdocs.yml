@@ -45,7 +45,7 @@ nav:
   - API Reference:
     - Data: api/data.md
     - Design: api/design.md
-    - Analysis: api/inference.md
+    - Analysis: api/analysis.md
   - Examples: examples.md
   - Contributing: 
     - Guidelines: contributing.md
