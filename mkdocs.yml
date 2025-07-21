@@ -16,6 +16,8 @@ theme:
     - toc.integrate
     - search.suggest
     - search.highlight
+  font:
+    text: Calm
 
 markdown_extensions:
   - pymdownx.highlight

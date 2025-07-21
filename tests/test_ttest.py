@@ -5,7 +5,7 @@ Tests for the ttest function in the analysis module.
 import pytest
 import pandas as pd
 import numpy as np
-from causalkit.data import causaldata
+from causalkit.data import CausalData
 from causalkit.analysis.ttest import ttest
 
 
@@ -29,7 +29,7 @@ def test_data(random_seed):
         'user_id': range(1, n + 1),
         'treatment': np.random.choice([0, 1], size=n),
         'age': np.random.randint(18, 65, size=n),
-        'gender': np.random.choice(['M', 'F'], size=n),
+        'gender': np.random.choice([0, 1], size=n),  # Numeric gender: 0 for 'M', 1 for 'F'
     })
     
     # Generate target variable with treatment effect
@@ -50,7 +50,7 @@ def test_data(random_seed):
 @pytest.fixture
 def causal_data(test_data):
     """Fixture to provide a causaldata object."""
-    return causaldata(
+    return CausalData(
         df=test_data['df'],
         target='target',
         cofounders=['age', 'gender'],
@@ -132,11 +132,16 @@ def test_ttest_confidence_levels(causal_data):
 
 def test_ttest_error_no_treatment(test_data):
     """Test error handling when no treatment is specified."""
-    ck_no_treatment = causaldata(
+    # Create CausalData with required parameters
+    ck_no_treatment = CausalData(
         df=test_data['df'],
         target='target',
+        treatment='treatment',
         cofounders=['age', 'gender']
     )
+    
+    # Manually set _treatment to empty list to simulate no treatment
+    ck_no_treatment._treatment = []
     
     with pytest.raises(ValueError):
         ttest(ck_no_treatment)
@@ -144,11 +149,16 @@ def test_ttest_error_no_treatment(test_data):
 
 def test_ttest_error_no_target(test_data):
     """Test error handling when no target is specified."""
-    ck_no_target = causaldata(
+    # Create CausalData with required parameters
+    ck_no_target = CausalData(
         df=test_data['df'],
-        cofounders=['age', 'gender'],
-        treatment='treatment'
+        target='target',
+        treatment='treatment',
+        cofounders=['age', 'gender']
     )
+    
+    # Manually set _target to empty list to simulate no target
+    ck_no_target._target = []
     
     with pytest.raises(ValueError):
         ttest(ck_no_target)
@@ -159,7 +169,7 @@ def test_ttest_error_non_binary_treatment(test_data):
     df_multi = test_data['df'].copy()
     df_multi['treatment'] = np.random.choice([0, 1, 2], size=test_data['n'])
     
-    ck_multi = causaldata(
+    ck_multi = CausalData(
         df=df_multi,
         target='target',
         cofounders=['age', 'gender'],

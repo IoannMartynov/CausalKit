@@ -3,10 +3,11 @@ CKit class for storing DataFrame and column metadata for causal inference.
 """
 
 import pandas as pd
+import pandas.api.types as pdtypes
 from typing import Union, List, Dict, Optional, Any
 
 
-class causaldata:
+class CausalData:
     """
     A class that wraps a pandas DataFrame and stores metadata about columns
     for causal inference analysis.
@@ -14,26 +15,24 @@ class causaldata:
     Parameters
     ----------
     df : pd.DataFrame
-        The DataFrame containing the data.
-    target : Union[str, List[str]], optional
+        The DataFrame containing the data. Cannot contain NaN values.
+    target : Union[str, List[str]]
         Column name(s) representing the target/outcome variable(s).
     cofounders : Union[str, List[str]], optional
         Column name(s) representing the cofounders/covariates.
-    treatment : Union[str, List[str]], optional
+    treatment : Union[str, List[str]]
         Column name(s) representing the treatment variable(s).
-    metadata : Dict[str, Any], optional
-        Additional metadata about the dataset.
 
     Examples
     --------
     >>> from causalkit.data import generate_rct_data
-    >>> from causalkit.data import causaldata
+    >>> from causalkit.data import CausalData
     >>> 
     >>> # Generate data
     >>> df = generate_rct_data()
     >>> 
     >>> # Create ckit object
-    >>> ck = causaldata(
+    >>> ck = CausalData(
     ...     df=df,
     ...     target='target',
     ...     cofounders=['age', 'invited_friend'],
@@ -52,19 +51,17 @@ class causaldata:
     def __init__(
         self,
         df: pd.DataFrame,
-        target: Optional[Union[str, List[str]]] = None,
+        target: Union[str, List[str]],
+        treatment: Union[str, List[str]],
         cofounders: Optional[Union[str, List[str]]] = None,
-        treatment: Optional[Union[str, List[str]]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
     ):
         """
         Initialize a ckit object.
         """
         self.df = df
-        self._target = self._ensure_list(target) if target is not None else []
+        self._target = self._ensure_list(target)
+        self._treatment = self._ensure_list(treatment)
         self._cofounders = self._ensure_list(cofounders) if cofounders is not None else []
-        self._treatment = self._ensure_list(treatment) if treatment is not None else []
-        self.metadata = metadata or {}
 
         # Validate column names
         self._validate_columns()
@@ -79,8 +76,13 @@ class causaldata:
 
     def _validate_columns(self):
         """
-        Validate that all specified columns exist in the DataFrame.
+        Validate that all specified columns exist in the DataFrame and that the DataFrame does not contain NaN values.
+        Also validate that target, cofounders, and treatment columns contain only int or float values.
         """
+        # Check for NaN values in the DataFrame
+        if self.df.isna().any().any():
+            raise ValueError("DataFrame contains NaN values, which are not allowed.")
+            
         all_columns = set(self.df.columns)
         
         for col_list, name in [
@@ -91,6 +93,10 @@ class causaldata:
             for col in col_list:
                 if col not in all_columns:
                     raise ValueError(f"Column '{col}' specified as {name} does not exist in the DataFrame.")
+                
+                # Check if column contains only int or float values
+                if not pdtypes.is_numeric_dtype(self.df[col]):
+                    raise ValueError(f"Column '{col}' specified as {name} must contain only int or float values.")
 
     @property
     def target(self) -> Union[pd.Series, pd.DataFrame]:
@@ -175,13 +181,13 @@ class causaldata:
         Examples
         --------
         >>> from causalkit.data import generate_rct_data
-        >>> from causalkit.data import causaldata
+        >>> from causalkit.data import CausalData
         >>> 
         >>> # Generate data
         >>> df = generate_rct_data()
         >>> 
         >>> # Create ckit object
-        >>> ck = causaldata(
+        >>> ck = CausalData(
         ...     df=df,
         ...     target='target',
         ...     cofounders=['age', 'invited_friend'],

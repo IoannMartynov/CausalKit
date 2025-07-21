@@ -5,7 +5,7 @@ Tests for the causaldata class.
 import pytest
 import pandas as pd
 import numpy as np
-from causalkit.data import generate_rct_data, generate_obs_data, causaldata
+from causalkit.data import generate_rct_data, generate_obs_data, CausalData
 
 
 @pytest.fixture
@@ -32,7 +32,7 @@ def test_causaldata_with_rct_data(random_seed):
     rct_df = generate_rct_data(n_users=1000, split=0.5, random_state=random_seed)
     
     # Create causaldata object
-    ck_rct = causaldata(
+    ck_rct = CausalData(
         df=rct_df,
         target='target',
         cofounders=['age', 'invited_friend'],
@@ -52,23 +52,23 @@ def test_causaldata_with_observational_data(random_seed):
     obs_df = generate_obs_data(n_users=1000, split=0.1, random_state=random_seed)
     
     # Create causaldata object
-    ck_obs = causaldata(
+    ck_obs = CausalData(
         df=obs_df,
-        target=None,  # No target column in observational data
-        cofounders=['age', 'income', 'education'],
+        target='income',  # Use 'income' as target column
+        cofounders=['age'],  # Use only numeric columns as cofounders
         treatment='treatment'
     )
     
     # Verify causaldata object properties
-    assert ck_obs.target is None
-    assert set(ck_obs.cofounders.columns) == {'age', 'income', 'education'}
+    assert ck_obs.target is not None
+    assert set(ck_obs.cofounders.columns) == {'age'}
     assert abs(ck_obs.treatment.mean() - 0.1) < 0.05  # Treatment ratio should be close to 0.1
 
 
 def test_causaldata_with_custom_data(custom_dataframe):
     """Test causaldata class with custom DataFrame."""
     # Create causaldata object
-    ck_custom = causaldata(
+    ck_custom = CausalData(
         df=custom_dataframe,
         target='ltv',
         cofounders=['age', 'invited_friend'],
@@ -79,3 +79,114 @@ def test_causaldata_with_custom_data(custom_dataframe):
     assert ck_custom.target.tolist() == [100, 200, 150, 300, 250]
     assert set(ck_custom.cofounders.columns) == {'age', 'invited_friend'}
     assert ck_custom.treatment.tolist() == [1, 0, 1, 0, 1]
+
+
+def test_causaldata_missing_target(custom_dataframe):
+    """Test that an error is raised when target is not provided."""
+    with pytest.raises(TypeError):
+        CausalData(
+            df=custom_dataframe,
+            cofounders=['age', 'invited_friend'],
+            treatment='treatment'
+        )
+
+
+def test_causaldata_missing_treatment(custom_dataframe):
+    """Test that an error is raised when treatment is not provided."""
+    with pytest.raises(TypeError):
+        CausalData(
+            df=custom_dataframe,
+            target='ltv',
+            cofounders=['age', 'invited_friend']
+        )
+
+
+def test_causaldata_with_nan_values():
+    """Test that an error is raised when the DataFrame contains NaN values."""
+    # Create a DataFrame with NaN values
+    df_with_nan = pd.DataFrame({
+        'user_id': [f'user_{i}' for i in range(5)],
+        'ltv': [100, np.nan, 150, 300, 250],
+        'age': [25, 30, 35, 40, 45],
+        'invited_friend': [1, 0, 1, 0, 1],
+        'treatment': [1, 0, 1, 0, 1]
+    })
+    
+    with pytest.raises(ValueError) as excinfo:
+        CausalData(
+            df=df_with_nan,
+            target='ltv',
+            cofounders=['age', 'invited_friend'],
+            treatment='treatment'
+        )
+    
+    assert "DataFrame contains NaN values" in str(excinfo.value)
+
+
+def test_causaldata_with_non_numeric_target():
+    """Test that an error is raised when target column is not numeric."""
+    # Create a DataFrame with non-numeric target column
+    df_with_non_numeric_target = pd.DataFrame({
+        'user_id': [f'user_{i}' for i in range(5)],
+        'target': ['high', 'low', 'medium', 'high', 'low'],  # Non-numeric target
+        'age': [25, 30, 35, 40, 45],
+        'invited_friend': [1, 0, 1, 0, 1],
+        'treatment': [1, 0, 1, 0, 1]
+    })
+    
+    with pytest.raises(ValueError) as excinfo:
+        CausalData(
+            df=df_with_non_numeric_target,
+            target='target',
+            cofounders=['age', 'invited_friend'],
+            treatment='treatment'
+        )
+    
+    assert "must contain only int or float values" in str(excinfo.value)
+    assert "target" in str(excinfo.value)
+
+
+def test_causaldata_with_non_numeric_cofounders():
+    """Test that an error is raised when cofounders column is not numeric."""
+    # Create a DataFrame with non-numeric cofounders column
+    df_with_non_numeric_cofounders = pd.DataFrame({
+        'user_id': [f'user_{i}' for i in range(5)],
+        'target': [100, 200, 150, 300, 250],
+        'age': [25, 30, 35, 40, 45],
+        'category': ['A', 'B', 'C', 'A', 'B'],  # Non-numeric cofounder
+        'treatment': [1, 0, 1, 0, 1]
+    })
+    
+    with pytest.raises(ValueError) as excinfo:
+        CausalData(
+            df=df_with_non_numeric_cofounders,
+            target='target',
+            cofounders=['age', 'category'],
+            treatment='treatment'
+        )
+    
+    assert "must contain only int or float values" in str(excinfo.value)
+    assert "cofounders" in str(excinfo.value)
+
+
+def test_causaldata_with_non_numeric_treatment():
+    """Test that an error is raised when treatment column is not numeric."""
+    # Create a DataFrame with non-numeric treatment column
+    df_with_non_numeric_treatment = pd.DataFrame({
+        'user_id': [f'user_{i}' for i in range(5)],
+        'target': [100, 200, 150, 300, 250],
+        'age': [25, 30, 35, 40, 45],
+        'invited_friend': [1, 0, 1, 0, 1],
+        'treatment': ['A', 'B', 'A', 'B', 'A']  # Non-numeric treatment
+    })
+    
+    with pytest.raises(ValueError) as excinfo:
+        CausalData(
+            df=df_with_non_numeric_treatment,
+            target='target',
+            cofounders=['age', 'invited_friend'],
+            treatment='treatment'
+        )
+    
+    assert "must contain only int or float values" in str(excinfo.value)
+    assert "treatment" in str(excinfo.value)
