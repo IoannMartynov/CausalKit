@@ -9,7 +9,7 @@ This example demonstrates how to generate A/B test data and analyze the results:
 ```python
 import causalkit
 from causalkit.data import generate_ab_test_data
-from causalkit.analysis import compare_ab
+from causalkit.inference import compare_ab
 
 # Generate synthetic A/B test data
 df = generate_ab_test_data(
@@ -34,7 +34,7 @@ This example shows how to generate RCT data and analyze it:
 import numpy as np
 import pandas as pd
 from causalkit.data import generate_rct_data
-from causalkit.analysis import compare_ab_with_plr
+from causalkit.inference import compare_ab_with_plr
 
 # Generate RCT data
 df = generate_rct_data(

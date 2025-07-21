@@ -31,7 +31,7 @@ Here's a simple example of generating A/B test data and analyzing the results:
 ```python
 import causalkit
 from causalkit.data import generate_ab_test_data
-from causalkit.analysis import compare_ab
+from causalkit.inference import compare_ab
 
 # Generate synthetic A/B test data
 df = generate_ab_test_data(

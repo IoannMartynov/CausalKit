@@ -1,5 +1,5 @@
 """
-T-test analysis for causaldata objects.
+T-test inference for causaldata objects.
 """
 
 import numpy as np
@@ -41,7 +41,7 @@ def ttest(data: CausalData, confidence_level: float = 0.95) -> Dict[str, Any]:
     --------
     >>> from causalkit.data import generate_rct_data
     >>> from causalkit.data import CausalData
-    >>> from causalkit.analysis import ttest
+    >>> from causalkit.inference import ttest
     >>> 
     >>> # Generate data
     >>> df = generate_rct_data()

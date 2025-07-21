@@ -34,7 +34,7 @@ T-tests are appropriate when:
 
 ```python
 from causalkit.data import generate_rct_data, CausalData
-from causalkit.analysis import ttest
+from causalkit.inference import ttest
 
 # Generate sample RCT data
 df = generate_rct_data(

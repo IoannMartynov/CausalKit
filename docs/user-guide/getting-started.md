@@ -86,7 +86,7 @@ train_df, test_df = split_traffic(df, split_ratio=0.7, stratify_column='feature_
 
 ```python
 import numpy as np
-from causalkit.analysis import compare_ab
+from causalkit.inference import compare_ab
 
 # Generate some sample data
 control = np.random.normal(10, 2, 1000)  # Control group data
@@ -99,7 +99,7 @@ compare_ab(control, treatment)
 ### Advanced Analysis with PLR
 
 ```python
-from causalkit.analysis import compare_ab_with_plr
+from causalkit.inference import compare_ab_with_plr
 
 # Compare using Partial Linear Regression
 compare_ab_with_plr(control, treatment)

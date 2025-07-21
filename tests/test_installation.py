@@ -19,11 +19,11 @@ def test_import_causalkit():
 def test_import_submodules():
     """Test that causalkit submodules can be imported."""
     try:
-        from causalkit import data, design, analysis
+        from causalkit import data, design, inference
         # Check that the imported objects are modules
         assert data.__name__ == 'causalkit.data'
         assert design.__name__ == 'causalkit.design'
-        assert analysis.__name__ == 'causalkit.analysis'
+        assert inference.__name__ == 'causalkit.inference'
     except ImportError as e:
         pytest.fail(f"Failed to import causalkit submodules: {e}")
 
@@ -33,7 +33,7 @@ def test_import_specific_functions():
     try:
         from causalkit.data import generate_rct_data
         from causalkit.design import split_traffic
-        from causalkit.analysis import ttest
+        from causalkit.inference import ttest
         
         # Check that the imported objects are callable
         assert callable(generate_rct_data)
