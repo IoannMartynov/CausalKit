@@ -160,7 +160,7 @@ rct_causal_data = CausalData(
     cofounders=['age', 'invited_friend']
 )
 
-# Now you can use this for analysis
+# Now you can use this for inference
 print(rct_causal_data.target.mean())
 print(rct_causal_data.treatment.value_counts())
 ```

@@ -1,12 +1,12 @@
 """
-Tests for the ttest function in the analysis module.
+Tests for the ttest function in the inference module.
 """
 
 import pytest
 import pandas as pd
 import numpy as np
 from causalkit.data import CausalData
-from causalkit.analysis.ttest import ttest
+from causalkit.inference.ttest import ttest
 
 
 @pytest.fixture

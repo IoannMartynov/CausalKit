@@ -10,7 +10,7 @@ from typing import Union, List, Dict, Optional, Any
 class CausalData:
     """
     A class that wraps a pandas DataFrame and stores metadata about columns
-    for causal inference analysis.
+    for causal inference inference.
 
     Parameters
     ----------
