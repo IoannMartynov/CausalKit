@@ -7,16 +7,16 @@ import pandas as pd
 from scipy import stats
 from typing import Dict, Any, Optional, Union, Tuple
 
-from causalkit.data.causaldata import causaldata
+from causalkit.data.causaldata import CausalData
 
 
-def ttest(data: causaldata, confidence_level: float = 0.95) -> Dict[str, Any]:
+def ttest(data: CausalData, confidence_level: float = 0.95) -> Dict[str, Any]:
     """
     Perform a t-test on a causaldata object to compare the target variable between treatment groups.
     
     Parameters
     ----------
-    data : causaldata
+    data : CausalData
         The causaldata object containing treatment and target variables.
     confidence_level : float, default 0.95
         The confidence level for calculating confidence intervals (between 0 and 1).
@@ -40,14 +40,14 @@ def ttest(data: causaldata, confidence_level: float = 0.95) -> Dict[str, Any]:
     Examples
     --------
     >>> from causalkit.data import generate_rct_data
-    >>> from causalkit.data import causaldata
+    >>> from causalkit.data import CausalData
     >>> from causalkit.analysis import ttest
     >>> 
     >>> # Generate data
     >>> df = generate_rct_data()
     >>> 
     >>> # Create causaldata object
-    >>> ck = causaldata(
+    >>> ck = CausalData(
     ...     df=df,
     ...     target='target',
     ...     treatment='treatment'

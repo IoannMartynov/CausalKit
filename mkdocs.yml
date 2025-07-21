@@ -16,6 +16,8 @@ theme:
     - toc.integrate
     - search.suggest
     - search.highlight
+  font:
+    text: Calm
 
 markdown_extensions:
   - pymdownx.highlight
@@ -39,9 +41,12 @@ nav:
   - User Guide:
     - Installation: user-guide/installation.md
     - Getting Started: user-guide/getting-started.md
+    - Working with CausalData: user-guide/causaldata.md
   - API Reference:
     - Data: api/data.md
     - Design: api/design.md
     - Analysis: api/analysis.md
   - Examples: examples.md
-  - Contributing: contributing.md
+  - Contributing: 
+    - Guidelines: contributing.md
+    - Git Workflow: git-guide.md
