@@ -44,7 +44,7 @@ nav:
     - Getting Started: user-guide/getting-started.md
     - Working with CausalData: user-guide/causaldata.md
   - Examples:
-    - CausalData: rct_analysis.ipynb
+    - CausalData: examples/rct_analysis.ipynb
   - API Reference:
     - Data: api/data.md
     - Design: api/design.md
