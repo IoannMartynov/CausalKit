@@ -90,16 +90,12 @@ html_theme_options = {
     'use_issues_button': True,
     'use_edit_page_button': True,
     'use_download_button': True,
-    'use_sidenav_button': True,
     'path_to_docs': 'docs',
     'show_navbar_depth': 2,
     'show_toc_level': 2,
     'navigation_with_keys': True,
-    'announcement': None,
-    'extra_navbar': None,
-    'extra_footer': None,
     'home_page_in_toc': True,
-    'logo_only': False,
+    'toc_title': 'On this page',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
