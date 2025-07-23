@@ -217,7 +217,7 @@ Here are some best practices for working with `CausalData`:
 Now that you understand how to use the `CausalData` class, you can:
 
 - Explore the [API Reference](../api/data.md) for detailed documentation
-- Check out the [Examples](../examples.md) for more complex use cases
+- Check out the [Examples](../examples/examples.md) for more complex use cases
 - Learn about analysis techniques in the [Analysis API](../api/analysis.md)
 
 For any questions or issues, please visit the [GitHub repository](https://github.com/ioannmartynov/causalkit).
