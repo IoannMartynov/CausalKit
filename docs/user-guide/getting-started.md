@@ -110,7 +110,7 @@ compare_ab_with_plr(control, treatment)
 Now that you're familiar with the basic functionality of CausalKit, you can:
 
 - Explore the [API Reference](../api/data.md) for detailed documentation of all functions
-- Check out the [Examples](../examples.md) for more complex use cases
+- Check out the [Examples](../examples/examples.md) for more complex use cases
 - Read about advanced topics in causal inference in the user guide
 
 For any questions or issues, please visit the [GitHub repository](https://github.com/ioannmartynov/causalkit).
