@@ -2,3 +2,4 @@ mkdocs-material>=9.0.0
 mkdocstrings>=0.20.0
 mkdocstrings-python>=1.0.0
 pymdown-extensions>=10.0.0
+mknotebooks>=0.7.0
