@@ -1,0 +1,114 @@
+/* Custom CSS for Sphinx documentation */
+
+/* Match the Material theme colors */
+:root {
+    --pst-color-primary: #000000;
+    --pst-color-secondary: #ffffff;
+    --pst-color-link: #000000;
+    --pst-color-link-hover: #444444;
+}
+
+/* Typography */
+body {
+    font-family: 'Calm', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+/* Code blocks */
+pre {
+    border-radius: 4px;
+    background-color: #f8f8f8;
+}
+
+.highlight {
+    border-radius: 4px;
+}
+
+/* Admonitions */
+.admonition {
+    border-radius: 4px;
+    margin: 1.5em 0;
+}
+
+.admonition-title {
+    font-weight: bold;
+}
+
+/* Tables */
+table.docutils {
+    border-collapse: collapse;
+    margin: 1em 0;
+    width: 100%;
+}
+
+table.docutils th, table.docutils td {
+    padding: 0.5em;
+    border: 1px solid #e1e4e5;
+}
+
+table.docutils th {
+    background-color: #f3f6f6;
+}
+
+/* Navigation */
+.toc-item {
+    margin-top: 0.5em;
+}
+
+/* Jupyter notebook styling */
+.cell_output {
+    padding: 1em;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+/* API documentation */
+dl.py.class, dl.py.function, dl.py.method {
+    padding: 1em;
+    margin: 1em 0;
+    border-left: 3px solid var(--pst-color-primary);
+    background-color: #f8f8f8;
+}
+
+dl.py dt {
+    font-weight: bold;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .sidebar-drawer {
+        width: 100%;
+    }
+}
+
+/* Copy button for code blocks */
+button.copybtn {
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+button.copybtn:hover {
+    opacity: 1;
+}
+
+/* Improve spacing */
+.section {
+    margin-bottom: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+/* Improve links */
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
