@@ -8,10 +8,10 @@ import sys
 import pytest
 
 
-def is_mkdocs_installed():
-    """Check if mkdocs is installed."""
+def is_sphinx_installed():
+    """Check if sphinx-build is installed."""
     try:
-        subprocess.run(["mkdocs", "--version"], check=True, capture_output=True)
+        subprocess.run(["sphinx-build", "--version"], check=True, capture_output=True)
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
@@ -29,25 +29,40 @@ def test_docs_build():
     if os.environ.get("SKIP_DOCS_BUILD", "").lower() in ("true", "1", "yes"):
         pytest.skip("Skipping documentation build as requested by environment variable")
     
-    # Check if mkdocs is installed, install if not
-    if not is_mkdocs_installed():
+    # Check if sphinx is installed, install if not
+    if not is_sphinx_installed():
         install_docs_dependencies()
         # Verify installation was successful
-        assert is_mkdocs_installed(), "Failed to install MkDocs"
+        assert is_sphinx_installed(), "Failed to install Sphinx"
     
     # Build the documentation
     try:
+        # Change to the docs directory
+        os.chdir("docs")
+        
+        # Run make html
         result = subprocess.run(
-            ["mkdocs", "build", "--strict"], 
+            ["make", "html"], 
             check=True, 
             capture_output=True, 
             text=True
         )
-        # Check that the site directory was created
-        assert os.path.exists("site"), "Documentation build did not create 'site' directory"
-        assert os.path.exists("site/index.html"), "Documentation build did not create index.html"
+        
+        # Change back to the root directory
+        os.chdir("..")
+        
+        # Check that the build directory was created
+        assert os.path.exists("docs/_build/html"), "Documentation build did not create '_build/html' directory"
+        assert os.path.exists("docs/_build/html/index.html"), "Documentation build did not create index.html"
+        
+        # Copy to site directory for consistency with GitHub Pages deployment
+        os.makedirs("site", exist_ok=True)
+        subprocess.run(["cp", "-r", "docs/_build/html/.", "site/"], check=True)
+        
     except subprocess.CalledProcessError as e:
         pytest.fail(f"Documentation build failed: STDOUT: {e.stdout}, STDERR: {e.stderr}")
+    except Exception as e:
+        pytest.fail(f"Documentation build failed: {str(e)}")
 
 
 if __name__ == "__main__":

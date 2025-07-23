@@ -1,4 +1,4 @@
-name: Deploy MkDocs
+name: Deploy Sphinx Docs
 
 on:
   push:
@@ -28,11 +28,19 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-      - name: Build and deploy
+      - name: Build documentation
         run: |
-          # Build the site
-          mkdocs build
+          cd docs
+          make html
+          # Create site directory if it doesn't exist
+          mkdir -p ../site
+          # Copy built documentation to site directory
+          cp -r _build/html/* ../site/
           # Create .nojekyll file
-          touch ./site/.nojekyll
-          # Deploy to GitHub Pages
-          mkdocs gh-deploy --force
+          touch ../site/.nojekyll
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: site
+          branch: gh-pages
+          clean: true
