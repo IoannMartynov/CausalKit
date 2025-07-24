@@ -82,40 +82,13 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 source_suffix = ['.rst', '.md', '.ipynb']
 
 # -- Options for HTML output -------------------------------------------------
-html_theme = 'sphinx_book_theme'
-html_theme_options = {
-    'repository_url': 'https://github.com/ioannmartynov/causalkit',
-    'repository_branch': 'main',
-    'use_repository_button': True,
-    'use_issues_button': True,
-    'use_edit_page_button': True,
-    'use_download_button': True,
-    'path_to_docs': 'docs',
-    'show_navbar_depth': 2,
-    'show_toc_level': 2,
-    'navigation_with_keys': True,
-    'home_page_in_toc': True,
-    'toc_title': 'On this page',
-    # Configure for horizontal navigation
-    'navbar_start': ["navbar-logo"],
-    'navbar_center': ["navbar-nav"],
-    'navbar_end': ["navbar-icon-links"],
-    'navbar_persistent': ["search-button"],
-    'header_links_before_dropdown': 6,
-    # Disable sidebar
-    'show_sidebar': False,
-}
+html_theme = 'pydata_sphinx_theme'
+html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-
-# These paths are either relative to html_static_path
-# or fully qualified paths (eg. https://...)
-html_css_files = [
-    'css/custom.css',
-]
+html_static_path = []
 
 # -- Options for nbsphinx output ---------------------------------------------
 nbsphinx_execute = 'auto'

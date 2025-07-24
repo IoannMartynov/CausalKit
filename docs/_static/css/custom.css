@@ -60,6 +60,7 @@ table.docutils th {
     flex-wrap: wrap;
     justify-content: center;
     padding: 0.5rem 0;
+    align-items: center;
 }
 
 .navbar-nav.navbar-nav-scroll .nav-item {
@@ -69,6 +70,51 @@ table.docutils th {
 .navbar-nav.navbar-nav-scroll .nav-link {
     padding: 0.5rem 1rem;
     white-space: nowrap;
+}
+
+/* Style for search button and theme toggle in navbar */
+.navbar-header-items__center .search-button,
+.navbar-header-items__center .theme-switch-button {
+    margin-left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure buttons are properly sized and styled */
+.navbar-header-items__center .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    background-color: transparent;
+    border: none;
+    color: var(--pst-color-primary);
+}
+
+.navbar-header-items__center .btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--pst-color-link-hover);
+}
+
+/* Add a separator between nav items and buttons */
+.navbar-header-items__center .navbar-nav:after {
+    content: "";
+    display: inline-block;
+    height: 24px;
+    margin: 0 0.5rem;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure all navbar items are aligned properly */
+.navbar-header-items__center {
+    display: flex;
+    align-items: center;
+}
+
+/* Make sure the icons are visible and properly sized */
+.navbar-header-items__center .fa-lg {
+    font-size: 1.25em;
+    line-height: 0.75em;
+    vertical-align: -0.0667em;
 }
 
 /* Ensure dropdown menus appear below their parent items */
@@ -96,6 +142,32 @@ table.docutils th {
 }
 
 .sidebar-drawer {
+    display: none !important;
+}
+
+/* Hide sidebar toggle buttons, checkboxes, and overlays */
+.sidebar-toggle.primary-toggle {
+    display: none !important;
+}
+
+#pst-primary-sidebar-checkbox {
+    display: none !important;
+}
+
+.overlay.overlay-primary {
+    display: none !important;
+}
+
+/* Hide sidebar header items */
+.sidebar-header-items {
+    display: none !important;
+}
+
+.sidebar-primary-items__start {
+    display: none !important;
+}
+
+.sidebar-primary-items__end {
     display: none !important;
 }
 

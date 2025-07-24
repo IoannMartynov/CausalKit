@@ -13,29 +13,12 @@ CausalKit simplifies the process of conducting causal inference studies by provi
 - **Statistical Analysis**: Methods for analyzing experimental results using various statistical approaches
 
 .. toctree::
-   :maxdepth: 2
-   :caption: User Guide
-   :hidden:
+   :maxdepth: 1
+   :caption: Main Sections
 
-   user-guide/installation
-   user-guide/getting-started
-   user-guide/causaldata
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Examples
-   :hidden:
-
-   examples/rct_analysis
-
-.. toctree::
-   :maxdepth: 2
-   :caption: API Reference
-   :hidden:
-
-   api/data
-   api/design
-   api/analysis
+   user-guide
+   examples
+   api
 
 Installation
 -----------
