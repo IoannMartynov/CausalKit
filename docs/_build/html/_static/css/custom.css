@@ -54,6 +54,64 @@ table.docutils th {
     margin-top: 0.5em;
 }
 
+/* Horizontal Navigation Styling */
+.navbar-nav.navbar-nav-scroll {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.navbar-nav.navbar-nav-scroll .nav-item {
+    margin: 0 0.5rem;
+}
+
+.navbar-nav.navbar-nav-scroll .nav-link {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+}
+
+/* Ensure dropdown menus appear below their parent items */
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Style for active navigation items */
+.navbar-nav .active {
+    font-weight: bold;
+    border-bottom: 2px solid var(--pst-color-primary);
+}
+
+/* Adjust main content to account for horizontal navbar */
+.bd-main .bd-content {
+    padding-top: 1rem;
+}
+
+/* Hide sidebar completely */
+.bd-sidebar-primary {
+    display: none !important;
+}
+
+.sidebar-drawer {
+    display: none !important;
+}
+
+/* Ensure main content uses full width */
+.bd-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+}
+
+.bd-page-width {
+    max-width: 100% !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
 /* Jupyter notebook styling */
 .cell_output {
     padding: 1em;
