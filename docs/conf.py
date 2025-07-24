@@ -96,6 +96,14 @@ html_theme_options = {
     'navigation_with_keys': True,
     'home_page_in_toc': True,
     'toc_title': 'On this page',
+    # Configure for horizontal navigation
+    'navbar_start': ["navbar-logo"],
+    'navbar_center': ["navbar-nav"],
+    'navbar_end': ["navbar-icon-links"],
+    'navbar_persistent': ["search-button"],
+    'header_links_before_dropdown': 6,
+    # Disable sidebar
+    'show_sidebar': False,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
