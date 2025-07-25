@@ -1,7 +1,7 @@
 # CausalKit
 
-A Python toolkit for causal inference and experimentation.
-
+Evaluate the impact of the treatment on the target metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
+Written with python.
 Official documentation https://ioannmartynov.github.io/CausalKit/
 
 ## Installation
@@ -9,31 +9,6 @@ Official documentation https://ioannmartynov.github.io/CausalKit/
 ### Using pip
 
 ```bash
-# Clone the repository
-git clone https://github.com/ioannmartynov/CausalKit.git
-cd CausalKit
-
-# Install in development mode
-pip install -e .
-
-# Install with documentation dependencies
-pip install -e ".[docs]"
-
-# Install with development dependencies
-pip install -e ".[dev]"
+pip install git+https://github.com/ioannmartynov/causalkit.git
 ```
 
-### Using conda
-
-```bash
-# Clone the repository
-git clone https://github.com/ioannmartynov/CausalKit.git
-cd CausalKit
-
-# Create and activate conda environment
-conda env create -f environment.yml
-conda activate causalkit
-
-# Install the package in development mode
-pip install -e .
-```
