@@ -315,87 +315,34 @@ document.write(`
                   
   <section id="causalkit">
 <h1>CausalKit<a class="headerlink" href="#causalkit" title="Link to this heading">#</a></h1>
-<p>CausalKit is a Python package for causal inference that provides tools for designing, implementing, and analyzing causal inference experiments.</p>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>Evaluate the impact of the treatment on the target metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.</p>
+<section id="scenarios-covered">
+<h2>Scenarios Covered<a class="headerlink" href="#scenarios-covered" title="Link to this heading">#</a></h2>
 <p>CausalKit simplifies the process of conducting causal inference studies by providing:</p>
 <ul class="simple">
-<li><p><strong>Data Generation</strong>: Tools for generating synthetic data for A/B tests and randomized controlled trials</p></li>
-<li><p><strong>Experimental Design</strong>: Utilities for splitting traffic and designing experiments</p></li>
-<li><p><strong>Statistical Analysis</strong>: Methods for analyzing experimental results using various statistical approaches</p></li>
+<li><p><strong>RCT Inference</strong>: Estimate effect in your AB test</p></li>
+<li><p><strong>Observational Data Inference</strong>: Estimate effect on observational data</p></li>
 </ul>
 <div class="toctree-wrapper compound">
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Main Sections</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
-</ul>
 </div>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>causalkit
+<p>Install from github directly</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/ioannmartynov/causalkit.git
 </pre></div>
 </div>
-<p>Or clone the repository and install from source:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ioannmartynov/causalkit.git
-<span class="nb">cd</span><span class="w"> </span>causalkit
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</pre></div>
-</div>
-</section>
-<section id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
-<p>Here’s a simple example of generating A/B test data and analyzing the results:</p>
+<p>Then import the library</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">causalkit</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_ab_test_data</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_ab</span>
-
-<span class="c1"># Generate synthetic A/B test data</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">generate_ab_test_data</span><span class="p">(</span>
-    <span class="n">n_samples</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">},</span>
-    <span class="n">conversion_rates</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.10</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mf">0.12</span><span class="p">}</span>
-<span class="p">)</span>
-
-<span class="c1"># Extract control and treatment data</span>
-<span class="n">control</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span><span class="p">][</span><span class="s1">&#39;conversion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">treatment</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;group&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">][</span><span class="s1">&#39;conversion&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-<span class="c1"># Compare the results</span>
-<span class="n">compare_ab</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="n">treatment</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
-<section id="data-generation">
-<h3>Data Generation<a class="headerlink" href="#data-generation" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Generate A/B test data with customizable parameters</p></li>
-<li><p>Create randomized controlled trial (RCT) data</p></li>
-<li><p>Generate observational data for more complex causal inference scenarios</p></li>
-</ul>
+<section id="start-using-with-user-guide">
+<h2>Start using with <a class="reference internal" href="user-guide.html"><span class="doc">User Guide</span></a><a class="headerlink" href="#start-using-with-user-guide" title="Link to this heading">#</a></h2>
 </section>
-<section id="experimental-design">
-<h3>Experimental Design<a class="headerlink" href="#experimental-design" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Split traffic for experiments with customizable ratios</p></li>
-<li><p>Support for stratified splitting to maintain distribution of key variables</p></li>
-</ul>
-</section>
-<section id="analysis">
-<h3>Analysis<a class="headerlink" href="#analysis" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Two-sample t-tests for comparing control and treatment groups</p></li>
-<li><p>OLS regression with treatment dummies</p></li>
-<li><p>Advanced methods like Partial Linear Regression (PLR) using DoubleML</p></li>
-</ul>
-</section>
-</section>
-<section id="license">
-<h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>This project is licensed under the terms of the <a class="reference external" href="https://github.com/ioannmartynov/causalkit/blob/main/LICENSE">LICENSE</a> file.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p><a class="github reference external" href="https://github.com/DoubleML/doubleml-for-py">DoubleML/doubleml-for-py</a></p>
 </section>
 </section>
 
@@ -436,16 +383,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scenarios-covered">Scenarios Covered</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generation">Data Generation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experimental-design">Experimental Design</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis">Analysis</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-using-with-user-guide">Start using with <span class="xref std std-doc">User Guide</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
   </nav></div>
 

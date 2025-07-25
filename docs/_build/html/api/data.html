@@ -48,8 +48,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/data';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Design Module" href="design.html" />
-    <link rel="prev" title="API Reference" href="../api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -139,26 +137,6 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../user-guide.html">
-    User Guide
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../examples.html">
-    Examples
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../api.html">
-    API Reference
-  </a>
-</li>
-
   </ul>
 </nav></div>
       
@@ -243,26 +221,6 @@ document.write(`
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../user-guide.html">
-    User Guide
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../examples.html">
-    Examples
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../api.html">
-    API Reference
-  </a>
-</li>
-
   </ul>
 </nav></div>
           
@@ -294,12 +252,7 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="design.html">Design Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis Module</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
     </div>
   
@@ -335,9 +288,6 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page">Data Module</li>
   </ul>
 </nav>
@@ -445,12 +395,12 @@ will be in the treatment group and 90% in the control group.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">causalkit.data.causaldata.</span></span><span class="sig-name descname"><span class="pre">CausalData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cofounders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/data/causaldata.html#CausalData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.causaldata.CausalData" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A class that wraps a pandas DataFrame and stores metadata about columns
-for causal inference inference.</p>
+for causal inference.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the data. Cannot contain NaN values.</p></li>
-<li><p><strong>target</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em>) – Column name(s) representing the target/outcome variable(s).</p></li>
+<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Column name representing the target/outcome variable(s).</p></li>
 <li><p><strong>cofounders</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Column name(s) representing the cofounders/covariates.</p></li>
 <li><p><strong>treatment</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em>) – Column name(s) representing the treatment variable(s).</p></li>
 </ul>
@@ -488,15 +438,14 @@ for causal inference inference.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.target">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)"><span class="pre">Series</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#causalkit.data.causaldata.CausalData.target" title="Link to this definition">#</a></dt>
-<dd><p>Get the target/outcome variable(s).</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)"><span class="pre">Series</span></a></em><a class="headerlink" href="#causalkit.data.causaldata.CausalData.target" title="Link to this definition">#</a></dt>
+<dd><p>Get the target/outcome variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If a single target column is specified, returns a pandas Series.
-If multiple target columns are specified, returns a pandas DataFrame.</p>
+<dd class="field-odd"><p>The target column as a pandas Series.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Union[pd.Series, pd.DataFrame]</p>
+<dd class="field-even"><p>pd.Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -517,15 +466,14 @@ If multiple target columns are specified, returns a pandas DataFrame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.treatment">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">treatment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)"><span class="pre">Series</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#causalkit.data.causaldata.CausalData.treatment" title="Link to this definition">#</a></dt>
-<dd><p>Get the treatment variable(s).</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">treatment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)"><span class="pre">Series</span></a></em><a class="headerlink" href="#causalkit.data.causaldata.CausalData.treatment" title="Link to this definition">#</a></dt>
+<dd><p>Get the treatment variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If a single treatment column is specified, returns a pandas Series.
-If multiple treatment columns are specified, returns a pandas DataFrame.</p>
+<dd class="field-odd"><p>The treatment column as a pandas Series.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Union[pd.Series, pd.DataFrame]</p>
+<dd class="field-even"><p>pd.Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -604,24 +552,6 @@ If None and no other include parameters are True, returns the entire DataFrame.<
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../api.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">API Reference</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="design.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Design Module</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

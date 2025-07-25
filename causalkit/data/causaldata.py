@@ -10,14 +10,14 @@ from typing import Union, List, Dict, Optional, Any
 class CausalData:
     """
     A class that wraps a pandas DataFrame and stores metadata about columns
-    for causal inference inference.
+    for causal inference.
 
     Parameters
     ----------
     df : pd.DataFrame
         The DataFrame containing the data. Cannot contain NaN values.
-    target : Union[str, List[str]]
-        Column name(s) representing the target/outcome variable(s).
+    target : str
+        Column name representing the target/outcome variable(s).
     cofounders : Union[str, List[str]], optional
         Column name(s) representing the cofounders/covariates.
     treatment : Union[str, List[str]]
@@ -51,16 +51,16 @@ class CausalData:
     def __init__(
         self,
         df: pd.DataFrame,
-        target: Union[str, List[str]],
-        treatment: Union[str, List[str]],
+        target: str,
+        treatment: str,
         cofounders: Optional[Union[str, List[str]]] = None,
     ):
         """
         Initialize a ckit object.
         """
         self.df = df
-        self._target = self._ensure_list(target)
-        self._treatment = self._ensure_list(treatment)
+        self._target = target
+        self._treatment = treatment
         self._cofounders = self._ensure_list(cofounders) if cofounders is not None else []
 
         # Validate column names
@@ -85,36 +85,41 @@ class CausalData:
             
         all_columns = set(self.df.columns)
         
-        for col_list, name in [
-            (self._target, "target"),
-            (self._cofounders, "cofounders"),
-            (self._treatment, "treatment"),
-        ]:
-            for col in col_list:
-                if col not in all_columns:
-                    raise ValueError(f"Column '{col}' specified as {name} does not exist in the DataFrame.")
-                
-                # Check if column contains only int or float values
-                if not pdtypes.is_numeric_dtype(self.df[col]):
-                    raise ValueError(f"Column '{col}' specified as {name} must contain only int or float values.")
+        # Validate target column
+        if self._target not in all_columns:
+            raise ValueError(f"Column '{self._target}' specified as target does not exist in the DataFrame.")
+        
+        # Check if target column contains only int or float values
+        if not pdtypes.is_numeric_dtype(self.df[self._target]):
+            raise ValueError(f"Column '{self._target}' specified as target must contain only int or float values.")
+        
+        # Validate treatment column
+        if self._treatment not in all_columns:
+            raise ValueError(f"Column '{self._treatment}' specified as treatment does not exist in the DataFrame.")
+        
+        # Check if treatment column contains only int or float values
+        if not pdtypes.is_numeric_dtype(self.df[self._treatment]):
+            raise ValueError(f"Column '{self._treatment}' specified as treatment must contain only int or float values.")
+        
+        # Validate cofounders columns
+        for col in self._cofounders:
+            if col not in all_columns:
+                raise ValueError(f"Column '{col}' specified as cofounders does not exist in the DataFrame.")
+            
+            # Check if column contains only int or float values
+            if not pdtypes.is_numeric_dtype(self.df[col]):
+                raise ValueError(f"Column '{col}' specified as cofounders must contain only int or float values.")
 
     @property
-    def target(self) -> Union[pd.Series, pd.DataFrame]:
+    def target(self) -> pd.Series:
         """
-        Get the target/outcome variable(s).
+        Get the target/outcome variable.
         
         Returns
         -------
-        Union[pd.Series, pd.DataFrame]
-            If a single target column is specified, returns a pandas Series.
-            If multiple target columns are specified, returns a pandas DataFrame.
+        pd.Series
+            The target column as a pandas Series.
         """
-        if not self._target:
-            return None
-        
-        if len(self._target) == 1:
-            return self.df[self._target[0]]
-        
         return self.df[self._target]
 
     @property
@@ -133,22 +138,15 @@ class CausalData:
         return self.df[self._cofounders]
 
     @property
-    def treatment(self) -> Union[pd.Series, pd.DataFrame]:
+    def treatment(self) -> pd.Series:
         """
-        Get the treatment variable(s).
+        Get the treatment variable.
         
         Returns
         -------
-        Union[pd.Series, pd.DataFrame]
-            If a single treatment column is specified, returns a pandas Series.
-            If multiple treatment columns are specified, returns a pandas DataFrame.
+        pd.Series
+            The treatment column as a pandas Series.
         """
-        if not self._treatment:
-            return None
-        
-        if len(self._treatment) == 1:
-            return self.df[self._treatment[0]]
-        
         return self.df[self._treatment]
 
     def get_df(
@@ -216,13 +214,13 @@ class CausalData:
         
         # Add columns based on include parameters
         if include_target:
-            cols_to_include.extend(self._target)
+            cols_to_include.append(self._target)
         
         if include_cofounders:
             cols_to_include.extend(self._cofounders)
         
         if include_treatment:
-            cols_to_include.extend(self._treatment)
+            cols_to_include.append(self._treatment)
         
         # Remove duplicates while preserving order
         cols_to_include = list(dict.fromkeys(cols_to_include))
@@ -241,7 +239,7 @@ class CausalData:
         """
         return (
             f"ckit(df={self.df.shape}, "
-            f"target={self._target}, "
+            f"target='{self._target}', "
             f"cofounders={self._cofounders}, "
-            f"treatment={self._treatment})"
+            f"treatment='{self._treatment}')"
         )
