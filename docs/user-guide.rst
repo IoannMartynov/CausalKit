@@ -6,6 +6,4 @@ This guide will help you get started with CausalKit and understand its core conc
 .. toctree::
    :maxdepth: 2
 
-   user-guide/installation
-   user-guide/getting-started
    user-guide/causaldata
