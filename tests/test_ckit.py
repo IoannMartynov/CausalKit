@@ -190,3 +190,35 @@ def test_causaldata_with_non_numeric_treatment():
     
     assert "must contain only int or float values" in str(excinfo.value)
     assert "treatment" in str(excinfo.value)
+
+
+def test_causaldata_truncated_dataframe(custom_dataframe):
+    """Test that CausalData stores only the relevant columns (target, treatment, cofounders)."""
+    # Create causaldata object
+    ck = CausalData(
+        df=custom_dataframe,
+        target='ltv',
+        cofounders=['age', 'invited_friend'],
+        treatment='treatment'
+    )
+    
+    # Verify that only the relevant columns are stored
+    assert set(ck.df.columns) == {'ltv', 'age', 'invited_friend', 'treatment'}
+    assert 'user_id' not in ck.df.columns
+    
+    # Verify that the stored data is correct
+    assert ck.target.tolist() == [100, 200, 150, 300, 250]
+    assert set(ck.cofounders.columns) == {'age', 'invited_friend'}
+    assert ck.treatment.tolist() == [1, 0, 1, 0, 1]
+    
+    # Test get_df with all columns
+    df_all = ck.get_df()
+    assert set(df_all.columns) == {'ltv', 'age', 'invited_friend', 'treatment'}
+    assert df_all.shape[1] == 4
+    
+    # Test __repr__ format
+    repr_str = repr(ck)
+    assert "df=(5, 4)" in repr_str
+    assert "target='ltv'" in repr_str
+    assert "cofounders=['age', 'invited_friend']" in repr_str
+    assert "treatment='treatment'" in repr_str
