@@ -4,7 +4,7 @@ CKit class for storing DataFrame and column metadata for causal inference.
 
 import pandas as pd
 import pandas.api.types as pdtypes
-from typing import Union, List, Dict, Optional, Any
+from typing import Union, List, Optional
 
 
 class CausalData:
@@ -33,8 +33,8 @@ class CausalData:
     >>> # Generate data
     >>> df = generate_rct_data()
     >>>
-    >>> # Create ckit object
-    >>> ckit_object = CausalData(
+    >>> # Create CausalData object
+    >>> causal_data = CausalData(
     ...     df=df,
     ...     treatment='treatment',
     ...     target='target',
@@ -42,12 +42,12 @@ class CausalData:
     ... )
     >>>
     >>> # Access data
-    >>> ckit_object.df.head()
+    >>> causal_data.df.head()
     >>>
     >>> # Access columns by role
-    >>> ckit_object.target
-    >>> ckit_object.cofounders
-    >>> ckit_object.treatment
+    >>> causal_data.target
+    >>> causal_data.cofounders
+    >>> causal_data.treatment
     """
 
     def __init__(
@@ -58,7 +58,7 @@ class CausalData:
             cofounders: Optional[Union[str, List[str]]] = None,
     ):
         """
-        Initialize a ckit object.
+        Initialize a CausalData object.
         """
         self._treatment = treatment
         self._target = target
@@ -159,12 +159,12 @@ class CausalData:
     def get_df(
             self,
             columns: Optional[List[str]] = None,
+            include_treatment: bool = True,
             include_target: bool = True,
-            include_cofounders: bool = True,
-            include_treatment: bool = True
+            include_cofounders: bool = True
     ) -> pd.DataFrame:
         """
-        Get a DataFrame from the causaldata object with specified columns.
+        Get a DataFrame from the CausalData object with specified columns.
 
         Parameters
         ----------
@@ -174,12 +174,12 @@ class CausalData:
             specified by the include parameters.
             If None, columns will be determined solely by the include parameters.
             If None and no include parameters are True, returns the entire DataFrame.
+        include_treatment : bool, default True
+            Whether to include treatment column(s) in the returned DataFrame.
         include_target : bool, default True
             Whether to include target column(s) in the returned DataFrame.
         include_cofounders : bool, default True
             Whether to include cofounder column(s) in the returned DataFrame.
-        include_treatment : bool, default True
-            Whether to include treatment column(s) in the returned DataFrame.
 
         Returns
         -------
@@ -194,8 +194,8 @@ class CausalData:
         >>> # Generate data
         >>> df = generate_rct_data()
         >>>
-        >>> # Create ckit object
-        >>> ckit_object = CausalData(
+        >>> # Create CausalData object
+        >>> causal_data = CausalData(
         ...     df=df,
         ...     treatment='treatment',
         ...     target='target',
@@ -203,13 +203,10 @@ class CausalData:
         ... )
         >>>
         >>> # Get specific columns
-        >>> ckit_object.get_df(columns=['age'])
-        >>>
-        >>> # Get target and treatment columns
-        >>> ckit_object.get_df(include_target=True, include_treatment=True)
+        >>> causal_data.get_df(columns=['age'])
         >>>
         >>> # Get all columns
-        >>> ckit_object.get_df()
+        >>> causal_data.get_df()
         """
         # Start with empty list of columns to include
         cols_to_include = []
@@ -246,11 +243,11 @@ class CausalData:
 
     def __repr__(self) -> str:
         """
-        String representation of the ckit object.
+        String representation of the CausalData object.
         """
         return (
-            f"ckit(df={self.df.shape}, "
+            f"CausalData(df={self.df.shape}, "
+            f"treatment='{self._treatment}')"
             f"target='{self._target}', "
             f"cofounders={self._cofounders}, "
-            f"treatment='{self._treatment}')"
         )
