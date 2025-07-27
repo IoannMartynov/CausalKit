@@ -49,7 +49,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Examples" href="../examples.html" />
-    <link rel="prev" title="Getting Started with CausalKit" href="getting-started.html" />
+    <link rel="prev" title="User Guide" href="../user-guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -295,8 +295,6 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started with CausalKit</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with CausalData</a></li>
 </ul>
 </div>
@@ -371,23 +369,18 @@ document.write(`
 <section id="creating-a-causaldata-object">
 <h2>Creating a CausalData Object<a class="headerlink" href="#creating-a-causaldata-object" title="Link to this heading">#</a></h2>
 <p>You can create a <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> object by passing a pandas DataFrame along with column specifications:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="c1"># Create a sample DataFrame</span>
-<span class="n">sample_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-    <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span> <span class="o">+</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">40</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
-    <span class="s1">&#39;treatment&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
-    <span class="s1">&#39;conversion&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
-<span class="p">})</span>
+<span class="c1"># Let&#39;s generate RCT data</span>
+<span class="n">rct_df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
 
 <span class="c1"># Create a CausalData object</span>
 <span class="n">sample_causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">sample_df</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;conversion&#39;</span><span class="p">,</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
+    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span>
+    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -584,12 +577,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="getting-started.html"
+       href="../user-guide.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Getting Started with CausalKit</p>
+        <p class="prev-next-title">User Guide</p>
       </div>
     </a>
     <a class="right-next"

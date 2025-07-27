@@ -17,23 +17,18 @@ This organization makes it easier to perform causal inference analyses and ensur
 You can create a `CausalData` object by passing a pandas DataFrame along with column specifications:
 
 ```python
-from causalkit.data import CausalData
+from causalkit.data import generate_rct_data, CausalData
 import pandas as pd
 
-# Create a sample DataFrame
-sample_df = pd.DataFrame({
-    'user_id': range(100),
-    'age': [20 + i % 40 for i in range(100)],
-    'treatment': [i % 2 for i in range(100)],
-    'conversion': [0.1 + 0.05 * (i % 2) + 0.001 * i for i in range(100)]
-})
+# Let's generate RCT data
+rct_df = generate_rct_data()
 
 # Create a CausalData object
 sample_causal_data = CausalData(
-    df=sample_df,
-    target='conversion',
+    df=rct_df,
+    target='target',
     treatment='treatment',
-    cofounders=['age']
+    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 ```
 
