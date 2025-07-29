@@ -343,7 +343,7 @@ document.write(`
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas.api.types</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pdtypes</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 
 <div class="viewcode-block" id="CausalData">
@@ -505,9 +505,9 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">get_df</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">include_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
             <span class="n">include_target</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="n">include_cofounders</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="n">include_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">include_cofounders</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a DataFrame from the CausalData object with specified columns.</span>
@@ -520,12 +520,12 @@ document.write(`
 <span class="sd">            specified by the include parameters.</span>
 <span class="sd">            If None, columns will be determined solely by the include parameters.</span>
 <span class="sd">            If None and no include parameters are True, returns the entire DataFrame.</span>
+<span class="sd">        include_treatment : bool, default True</span>
+<span class="sd">            Whether to include treatment column(s) in the returned DataFrame.</span>
 <span class="sd">        include_target : bool, default True</span>
 <span class="sd">            Whether to include target column(s) in the returned DataFrame.</span>
 <span class="sd">        include_cofounders : bool, default True</span>
 <span class="sd">            Whether to include cofounder column(s) in the returned DataFrame.</span>
-<span class="sd">        include_treatment : bool, default True</span>
-<span class="sd">            Whether to include treatment column(s) in the returned DataFrame.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -550,9 +550,6 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Get specific columns</span>
 <span class="sd">        &gt;&gt;&gt; causal_data.get_df(columns=[&#39;age&#39;])</span>
-<span class="sd">        &gt;&gt;&gt;</span>
-<span class="sd">        &gt;&gt;&gt; # Get target and treatment columns</span>
-<span class="sd">        &gt;&gt;&gt; causal_data.get_df(include_target=True, include_treatment=True)</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Get all columns</span>
 <span class="sd">        &gt;&gt;&gt; causal_data.get_df()</span>
@@ -599,9 +596,9 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;CausalData(df=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;treatment=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;target=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39;, &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;cofounders=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span><span class="si">}</span><span class="s2">, &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;treatment=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
         <span class="p">)</span></div>
 </div>
 
