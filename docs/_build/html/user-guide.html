@@ -45,10 +45,12 @@
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with CausalData" href="user-guide/causaldata.html" />
+    <link rel="next" title="Causal Inference Intuition" href="user-guide/causal_inference_fundamentals.html" />
     <link rel="prev" title="CausalKit" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -295,6 +297,9 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">Working with CausalData</a></li>
 </ul>
 </div>
@@ -352,15 +357,21 @@ document.write(`
                   
   <section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
-<p>This guide will help you get started with CausalKit and understand its core concepts.</p>
+<p>This guide will help you get started with Causal Inference and CausalKit and understand its core concepts.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#formalization">Formalization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#estimation">Estimation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#ite-and-cate">ITE (and CATE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#att-average-treatment-effect-on-the-treated">ATT (Average Treatment effect on the Treated)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#ate-average-treatment-effect">ATE (Average Treatment Effect)</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">Working with CausalData</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#creating-a-causaldata-object">Creating a CausalData Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#accessing-data">Accessing Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#working-with-generated-data">Working with Generated Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#multiple-targets-and-treatments">Multiple Targets and Treatments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#best-practices">Best Practices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#next-steps">Next Steps</a></li>
 </ul>
@@ -389,11 +400,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="user-guide/causaldata.html"
+       href="user-guide/causal_inference_fundamentals.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with CausalData</p>
+        <p class="prev-next-title">Causal Inference Intuition</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

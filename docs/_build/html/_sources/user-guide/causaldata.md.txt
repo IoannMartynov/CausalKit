@@ -18,16 +18,15 @@ You can create a `CausalData` object by passing a pandas DataFrame along with co
 
 ```python
 from causalkit.data import generate_rct_data, CausalData
-import pandas as pd
 
 # Let's generate RCT data
 rct_df = generate_rct_data()
 
 # Create a CausalData object
-sample_causal_data = CausalData(
+causal_data = CausalData(
     df=rct_df,
-    target='target',
     treatment='treatment',
+    target='target',
     cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 ```
@@ -49,57 +48,46 @@ Once you've created a `CausalData` object, you can access the data in several wa
 ### Accessing the Full DataFrame
 
 ```python
-from causalkit.data import CausalData
-import pandas as pd
+from causalkit.data import generate_rct_data, CausalData
 
-# Create a sample DataFrame and CausalData object
-sample_df = pd.DataFrame({
-    'user_id': range(100),
-    'age': [20 + i % 40 for i in range(100)],
-    'treatment': [i % 2 for i in range(100)],
-    'conversion': [0.1 + 0.05 * (i % 2) + 0.001 * i for i in range(100)]
-})
+# Let's generate RCT data
+rct_df = generate_rct_data()
 
-sample_causal_data = CausalData(
-    df=sample_df,
-    target='conversion',
+# Create a CausalData object
+causal_data = CausalData(
+    df=rct_df,
     treatment='treatment',
-    cofounders=['age']
+    target='target',
+    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 
 # Get the full DataFrame
-full_df = sample_causal_data.df
+full_df = causal_data.df
+# Another way to get the full DataFrame
+full_df = causal_data.get_df()
 ```
 
-### Accessing Specific Column Types
+### Accessing Treatment, Target, and Cofounders
 
 ```python
-from causalkit.data import CausalData
-import pandas as pd
+from causalkit.data import generate_rct_data, CausalData
 
-# Create a sample DataFrame and CausalData object
-sample_df = pd.DataFrame({
-    'user_id': range(100),
-    'age': [20 + i % 40 for i in range(100)],
-    'treatment': [i % 2 for i in range(100)],
-    'conversion': [0.1 + 0.05 * (i % 2) + 0.001 * i for i in range(100)]
-})
+# Let's generate RCT data
+rct_df = generate_rct_data()
 
-sample_causal_data = CausalData(
-    df=sample_df,
-    target='conversion',
+# Create a CausalData object
+causal_data = CausalData(
+    df=rct_df,
     treatment='treatment',
-    cofounders=['age']
+    target='target',
+    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
-
-# Get the target variable(s)
-target = sample_causal_data.target
-
-# Get the treatment variable(s)
-treatment = sample_causal_data.treatment
-
-# Get the cofounders/covariates
-cofounders = sample_causal_data.cofounders
+# Access treatment
+causal_data.treatment
+# Access target
+causal_data.target
+# Access cofounders
+causal_data.cofounders
 ```
 
 If you specified multiple columns for any category (e.g., multiple target columns), the corresponding property will return a DataFrame. If you specified a single column, it will return a Series.
@@ -109,91 +97,23 @@ If you specified multiple columns for any category (e.g., multiple target column
 The `get_df()` method allows you to retrieve specific columns or column categories:
 
 ```python
-from causalkit.data import CausalData
-import pandas as pd
-
-# Create a sample DataFrame and CausalData object
-sample_df = pd.DataFrame({
-    'user_id': range(100),
-    'age': [20 + i % 40 for i in range(100)],
-    'treatment': [i % 2 for i in range(100)],
-    'conversion': [0.1 + 0.05 * (i % 2) + 0.001 * i for i in range(100)]
-})
-
-sample_causal_data = CausalData(
-    df=sample_df,
-    target='conversion',
-    treatment='treatment',
-    cofounders=['age']
-)
-
-# Get specific columns by name
-specific_cols = sample_causal_data.get_df(columns=['user_id', 'age'])
-
-# Get target and treatment columns
-target_treatment = sample_causal_data.get_df(include_target=True, include_treatment=True)
-
-# Get all columns except cofounders
-no_cofounders = sample_causal_data.get_df(include_target=True, include_treatment=True, columns=['user_id'])
-```
-
-## Working with Generated Data
-
-`CausalData` works seamlessly with CausalKit's data generation functions:
-
-```python
 from causalkit.data import generate_rct_data, CausalData
 
-# Generate RCT data
+# Let's generate RCT data
 rct_df = generate_rct_data()
 
 # Create a CausalData object
-rct_causal_data = CausalData(
+causal_data = CausalData(
     df=rct_df,
-    target='target',
     treatment='treatment',
-    cofounders=['age', 'invited_friend']
+    target='target',
+    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
+# Get specific columns
+causal_data.get_df(columns=['age'])
 
-# Now you can use this for inference
-print(rct_causal_data.target.mean())
-print(rct_causal_data.treatment.value_counts())
 ```
 
-## Multiple Targets and Treatments
-
-`CausalData` supports multiple target and treatment columns:
-
-```python
-from causalkit.data import CausalData
-import pandas as pd
-
-# Create a sample DataFrame with multiple targets and treatments
-multi_df = pd.DataFrame({
-    'user_id': range(100),
-    'age': [20 + i % 40 for i in range(100)],
-    'country': ['US' if i % 3 == 0 else 'UK' if i % 3 == 1 else 'CA' for i in range(100)],
-    'previous_purchases': [i % 10 for i in range(100)],
-    'email_campaign': [i % 2 for i in range(100)],
-    'app_notification': [i % 3 == 0 for i in range(100)],
-    'conversion': [0.1 + 0.05 * (i % 2) + 0.001 * i for i in range(100)],
-    'revenue': [10 * (i % 5) + 0.5 * i for i in range(100)]
-})
-
-# Create a CausalData object with multiple targets and treatments
-multi_causal_data = CausalData(
-    df=multi_df,
-    target=['conversion', 'revenue'],
-    treatment=['email_campaign', 'app_notification'],
-    cofounders=['age', 'previous_purchases']
-)
-
-# Access multiple targets (returns a DataFrame)
-targets = multi_causal_data.target
-
-# Access multiple treatments (returns a DataFrame)
-treatments = multi_causal_data.treatment
-```
 
 ## Best Practices
 
@@ -214,5 +134,3 @@ Now that you understand how to use the `CausalData` class, you can:
 - Explore the [API Reference](../api/data.md) for detailed documentation
 - Check out the [RCT Analysis Example](../examples/rct_analysis.ipynb) for more complex use cases
 - Learn about analysis techniques in the [Analysis API](../api/analysis.md)
-
-For any questions or issues, please visit the [GitHub repository](https://github.com/ioannmartynov/causalkit).
