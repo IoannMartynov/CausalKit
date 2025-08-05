@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 project = 'CausalKit'
 copyright = f'{datetime.now().year}, CausalKit Team'
-author = 'CausalKit Team'
+author = 'Ioann Martynov'
 
 # -- General configuration ---------------------------------------------------
 extensions = [

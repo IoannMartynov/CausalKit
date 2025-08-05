@@ -22,6 +22,8 @@ dependencies = [
     "pandas",
     "scipy",
     "statsmodels",
+    "scikit-learn",
+    "doubleml",
 ]
 
 [project.optional-dependencies]

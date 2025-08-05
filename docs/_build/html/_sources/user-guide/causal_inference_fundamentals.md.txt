@@ -88,6 +88,3 @@ $$ \text{ATE} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\,\right] $$
 
 Use when: policy decisions affecting the whole eligible population; 
 headline effect sizes.
-
-
-* RCT vs Observational data. Write about ladder
