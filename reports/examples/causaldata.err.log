@@ -28,7 +28,7 @@ df == df_test
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mValueError[0m                                Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2229/2734448559.py[0m in [0;36m?[0;34m()[0m
+[0;32m/tmp/ipykernel_2264/2734448559.py[0m in [0;36m?[0;34m()[0m
 [0;32m----> 1[0;31m [0mdf[0m [0;34m==[0m [0mdf_test[0m[0;34m[0m[0;34m[0m[0m
 [0m
 [0;32m/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/ops/common.py[0m in [0;36m?[0;34m(self, other)[0m
