@@ -347,6 +347,52 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">design</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">inference</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1.0&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;design&quot;</span><span class="p">,</span> <span class="s2">&quot;analysis&quot;</span><span class="p">]</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="sd"> Analysis module for causalkit.</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd"> This module provides statistical inference tools for causal inference.</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ttest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttest</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml</span> <span class="k">as</span> <span class="n">dml</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.causalforestdml</span><span class="w"> </span><span class="kn">import</span> <span class="n">causalforestdml</span> <span class="k">as</span> <span class="n">causalforestdml</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.att.dml</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml</span> <span class="k">as</span> <span class="n">dml_att</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="sd"> Average Treatment Effect (ATE) inference methods for causalkit.</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd"> This module provides methods for estimating average treatment effects.</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.causalforestdml</span><span class="w"> </span><span class="kn">import</span> <span class="n">causalforestdml</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dml&#39;</span><span class="p">,</span> <span class="s1">&#39;causalforestdml&#39;</span><span class="p">]</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="n">dml</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">12</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">import</span><span class="w"> </span><span class="nn">doubleml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">doubleml</span>
+<span class="ne">---&gt; </span><span class="mi">12</span> <span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">CatBoostClassifier</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;catboost&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -371,7 +417,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CausalData(df=(20000, 4), treatment=&#39;treatment&#39;)target=&#39;target&#39;, cofounders=[&#39;age&#39;, &#39;platform_Android&#39;], 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CausalData(df=(20000, 4), target=&#39;target&#39;, cofounders=[&#39;age&#39;, &#39;platform_Android&#39;], treatment=&#39;treatment&#39;)
 </pre></div>
 </div>
 </div>
@@ -482,22 +528,22 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">/tmp/ipykernel_2264/2734448559.py</span> in <span class="ni">?</span><span class="nt">()</span>
+<span class="nn">/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_97568/468092360.py</span> in <span class="ni">?</span><span class="nt">()</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">==</span> <span class="n">df_test</span>
 
-<span class="nn">/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/ops/common.py</span> in <span class="ni">?</span><span class="nt">(self, other)</span>
+<span class="nn">~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/ops/common.py</span> in <span class="ni">?</span><span class="nt">(self, other)</span>
 <span class="g g-Whitespace">     </span><span class="mi">72</span>                     <span class="k">return</span> <span class="bp">NotImplemented</span>
 <span class="g g-Whitespace">     </span><span class="mi">73</span> 
 <span class="g g-Whitespace">     </span><span class="mi">74</span>         <span class="n">other</span> <span class="o">=</span> <span class="n">item_from_zerodim</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">75</span> 
 <span class="ne">---&gt; </span><span class="mi">76</span>         <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
 
-<span class="nn">/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/arraylike.py</span> in <span class="ni">?</span><span class="nt">(self, other)</span>
+<span class="nn">~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/arraylike.py</span> in <span class="ni">?</span><span class="nt">(self, other)</span>
 <span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="nd">@unpack_zerodim_and_defer</span><span class="p">(</span><span class="s2">&quot;__eq__&quot;</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="ne">---&gt; </span><span class="mi">40</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmp_method</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">eq</span><span class="p">)</span>
 
-<span class="nn">/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/frame.py</span> in <span class="ni">?</span><span class="nt">(self, other, op)</span>
+<span class="nn">~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/frame.py</span> in <span class="ni">?</span><span class="nt">(self, other, op)</span>
 <span class="g g-Whitespace">   </span><span class="mi">7901</span>     <span class="k">def</span><span class="w"> </span><span class="nf">_cmp_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
 <span class="g g-Whitespace">   </span><span class="mi">7902</span>         <span class="n">axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># only relevant for Series other case</span>
 <span class="g g-Whitespace">   </span><span class="mi">7903</span> 
@@ -506,7 +552,7 @@ document.write(`
 <span class="g g-Whitespace">   </span><span class="mi">7906</span>         <span class="c1"># See GH#4537 for discussion of scalar op behavior</span>
 <span class="g g-Whitespace">   </span><span class="mi">7907</span>         <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_frame_op</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
 
-<span class="nn">/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/frame.py</span> in <span class="ni">?</span><span class="nt">(self, other, axis, flex, level)</span>
+<span class="nn">~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/frame.py</span> in <span class="ni">?</span><span class="nt">(self, other, axis, flex, level)</span>
 <span class="g g-Whitespace">   </span><span class="mi">8199</span>                     <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">left</span><span class="o">.</span><span class="n">align</span><span class="p">(</span>
 <span class="g g-Whitespace">   </span><span class="mi">8200</span>                         <span class="n">right</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span>
 <span class="g g-Whitespace">   </span><span class="mi">8201</span>                     <span class="p">)</span>

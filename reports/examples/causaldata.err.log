@@ -22,45 +22,51 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-df == df_test
+from causalkit.data import generate_rct_data, CausalData
+from causalkit.data import CausalData
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2264/2734448559.py[0m in [0;36m?[0;34m()[0m
-[0;32m----> 1[0;31m [0mdf[0m [0;34m==[0m [0mdf_test[0m[0;34m[0m[0;34m[0m[0m
-[0m
-[0;32m/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/ops/common.py[0m in [0;36m?[0;34m(self, other)[0m
-[1;32m     72[0m                     [0;32mreturn[0m [0mNotImplemented[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     73[0m [0;34m[0m[0m
-[1;32m     74[0m         [0mother[0m [0;34m=[0m [0mitem_from_zerodim[0m[0;34m([0m[0mother[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     75[0m [0;34m[0m[0m
-[0;32m---> 76[0;31m         [0;32mreturn[0m [0mmethod[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mother[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m
-[0;32m/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/arraylike.py[0m in [0;36m?[0;34m(self, other)[0m
-[1;32m     38[0m     [0;34m@[0m[0munpack_zerodim_and_defer[0m[0;34m([0m[0;34m"__eq__"[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     39[0m     [0;32mdef[0m [0m__eq__[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mother[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m---> 40[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0m_cmp_method[0m[0;34m([0m[0mother[0m[0;34m,[0m [0moperator[0m[0;34m.[0m[0meq[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m
-[0;32m/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/frame.py[0m in [0;36m?[0;34m(self, other, op)[0m
-[1;32m   7901[0m     [0;32mdef[0m [0m_cmp_method[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mother[0m[0;34m,[0m [0mop[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   7902[0m         [0maxis[0m[0;34m:[0m [0mLiteral[0m[0;34m[[0m[0;36m1[0m[0;34m][0m [0;34m=[0m [0;36m1[0m  [0;31m# only relevant for Series other case[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   7903[0m [0;34m[0m[0m
-[0;32m-> 7904[0;31m         [0mself[0m[0;34m,[0m [0mother[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_align_for_op[0m[0;34m([0m[0mother[0m[0;34m,[0m [0maxis[0m[0;34m,[0m [0mflex[0m[0;34m=[0m[0;32mFalse[0m[0;34m,[0m [0mlevel[0m[0;34m=[0m[0;32mNone[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m   7905[0m [0;34m[0m[0m
-[1;32m   7906[0m         [0;31m# See GH#4537 for discussion of scalar op behavior[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   7907[0m         [0mnew_data[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_dispatch_frame_op[0m[0;34m([0m[0mother[0m[0;34m,[0m [0mop[0m[0;34m,[0m [0maxis[0m[0;34m=[0m[0maxis[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
+Cell [0;32mIn[1], line 1[0m
+[0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m generate_rct_data, CausalData
+[1;32m      2[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalData
 
-[0;32m/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/pandas/core/frame.py[0m in [0;36m?[0;34m(self, other, axis, flex, level)[0m
-[1;32m   8199[0m                     left, right = left.align(
-[1;32m   8200[0m                         [0mright[0m[0;34m,[0m [0mjoin[0m[0;34m=[0m[0;34m"outer"[0m[0;34m,[0m [0mlevel[0m[0;34m=[0m[0mlevel[0m[0;34m,[0m [0mcopy[0m[0;34m=[0m[0;32mFalse[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   8201[0m                     )
-[1;32m   8202[0m                 [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m-> 8203[0;31m                     raise ValueError(
-[0m[1;32m   8204[0m                         [0;34m"Can only compare identically-labeled (both index and columns) "[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   8205[0m                         [0;34m"DataFrame objects"[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   8206[0m                     )
+File [0;32m~/work/CausalKit/CausalKit/causalkit/__init__.py:7[0m
+[1;32m      5[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m data
+[1;32m      6[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m design
+[0;32m----> 7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m inference
+[1;32m      9[0m __version__ [38;5;241m=[39m [38;5;124m"[39m[38;5;124m0.1.0[39m[38;5;124m"[39m
+[1;32m     10[0m __all__ [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mdata[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mdesign[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124manalysis[39m[38;5;124m"[39m]
 
-[0;31mValueError[0m: Can only compare identically-labeled (both index and columns) DataFrame objects
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/__init__.py:8[0m
+[1;32m      1[0m [38;5;124;03m"""[39;00m
+[1;32m      2[0m [38;5;124;03mAnalysis module for causalkit.[39;00m
+[1;32m      3[0m 
+[1;32m      4[0m [38;5;124;03mThis module provides statistical inference tools for causal inference.[39;00m
+[1;32m      5[0m [38;5;124;03m"""[39;00m
+[1;32m      7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mttest[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ttest
+[0;32m----> 8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml [38;5;28;01mas[39;00m dml
+[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausalforestdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m causalforestdml [38;5;28;01mas[39;00m causalforestdml
+[1;32m     10[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml [38;5;28;01mas[39;00m dml_att
+
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/__init__.py:7[0m
+[1;32m      1[0m [38;5;124;03m"""[39;00m
+[1;32m      2[0m [38;5;124;03mAverage Treatment Effect (ATE) inference methods for causalkit.[39;00m
+[1;32m      3[0m 
+[1;32m      4[0m [38;5;124;03mThis module provides methods for estimating average treatment effects.[39;00m
+[1;32m      5[0m [38;5;124;03m"""[39;00m
+[0;32m----> 7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml
+[1;32m      8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausalforestdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m causalforestdml
+[1;32m     10[0m __all__ [38;5;241m=[39m [[38;5;124m'[39m[38;5;124mdml[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mcausalforestdml[39m[38;5;124m'[39m]
+
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/dml.py:12[0m
+[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Dict, Any, Optional, Union, List, Tuple
+[1;32m     11[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m
+[0;32m---> 12[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcatboost[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CatBoostRegressor, CatBoostClassifier
+[1;32m     13[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mensemble[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m RandomForestRegressor, RandomForestClassifier
+[1;32m     15[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausaldata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalData
+
+[0;31mModuleNotFoundError[0m: No module named 'catboost'
 
