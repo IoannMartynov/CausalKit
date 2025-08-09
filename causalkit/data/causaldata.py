@@ -22,7 +22,7 @@ class CausalData:
         Column name representing the treatment variable.
     target : str
         Column name representing the target/outcome variable.
-    cofounders : Union[str, List[str]], optional
+    confounders : Union[str, List[str]], optional
         Column name(s) representing the cofounders/covariates.
 
     Examples
@@ -38,7 +38,7 @@ class CausalData:
     ...     df=df,
     ...     treatment='treatment',
     ...     target='target',
-    ...     cofounders=['age', 'invited_friend']
+    ...     confounders=['age', 'invited_friend']
     ... )
     >>>
     >>> # Access data
