@@ -75,7 +75,7 @@ def test_generate_continuous_outcome(basic_generator):
     assert df["y"].dtype == np.float64
     assert df["t"].isin([0.0, 1.0]).all()
     
-    # Check treatment rate is close to target
+    # Check treatment rate is close to outcome
     assert abs(df["t"].mean() - 0.35) < 0.1
     
     # Check CATE calculation

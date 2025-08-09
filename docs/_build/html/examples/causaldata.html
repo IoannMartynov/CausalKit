@@ -347,6 +347,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -358,7 +364,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-                         <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">],</span>
+                         <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">],</span>
                          <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -371,7 +377,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CausalData(df=(20000, 4), treatment=&#39;treatment&#39;)target=&#39;target&#39;, cofounders=[&#39;age&#39;, &#39;platform_Android&#39;], 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CausalData(df=(20000, 4), treatment=&#39;treatment&#39;)outcome=&#39;outcome&#39;, cofounders=[&#39;age&#39;, &#39;platform_Android&#39;], 
 </pre></div>
 </div>
 </div>
@@ -482,7 +488,7 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_25202/2734448559.py</span> in <span class="ni">?</span><span class="nt">()</span>
+<span class="nn">/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_18107/2734448559.py</span> in <span class="ni">?</span><span class="nt">()</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">==</span> <span class="n">df_test</span>
 
 <span class="nn">~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/ops/common.py</span> in <span class="ni">?</span><span class="nt">(self, other)</span>

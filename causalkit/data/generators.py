@@ -51,11 +51,11 @@ def generate_rct_data(
 ) -> pd.DataFrame:
     """
     Create synthetic RCT data with
-        • three possible target distributions (binary, continuous-normal,
+        • three possible outcome distributions (binary, continuous-normal,
           continuous-non-normal),
         • five covariates   ─ age, cnt_trans, platform_Android, platform_iOS,
                               invited_friend
-          that are generated *conditional on the target* but remain independent
+          that are generated *conditional on the outcome* but remain independent
           of the treatment group (groups are perfectly randomised).
 
     Parameters
@@ -78,7 +78,7 @@ def generate_rct_data(
     Returns
     -------
     pd.DataFrame
-        Columns: user_id, treatment, target, age, cnt_trans,
+        Columns: user_id, treatment, outcome, age, cnt_trans,
                  platform_Android, platform_iOS, invited_friend.
     """
     # ------------------------------------------------------------------ #
@@ -108,7 +108,7 @@ def generate_rct_data(
     frames = []
 
     for grp, n in n_samples.items():
-        # -------- target ------------------------------------------------
+        # -------- outcome ------------------------------------------------
         if target_type == "binary":
             target = rng.binomial(1, target_params["p"][grp], n)
         elif target_type == "normal":
@@ -118,7 +118,7 @@ def generate_rct_data(
             k, theta = target_params["shape"], target_params["scale"][grp]
             target = rng.gamma(k, theta, n)
 
-        # -------- covariates (all depend on `target`, never on `grp`) ----
+        # -------- covariates (all depend on `outcome`, never on `grp`) ----
         age = rng.normal(35 + 4 * target, 8, n).round().clip(18, 90).astype(int)
 
         cnt_trans = rng.poisson(1.5 + 2 * target, n).astype(int)
@@ -128,8 +128,8 @@ def generate_rct_data(
         platform_android = rng.binomial(1, p_android, n)
         platform_ios = 1 - platform_android
 
-        # Invited a friend → more likely for larger target values
-        # Normalise target into [0,1] to keep probabilities valid
+        # Invited a friend → more likely for larger outcome values
+        # Normalise outcome into [0,1] to keep probabilities valid
         t_norm = (target - target.min()) / (target.max() - target.min() + 1e-8)
         invited_friend = rng.binomial(1, 0.05 + 0.25 * t_norm, n)
 
@@ -144,7 +144,7 @@ def generate_rct_data(
             {
                 "user_id": user_ids,
                 "treatment": [treatment] * n,
-                "target": target,
+                "outcome": target,
                 "age": age,
                 "cnt_trans": cnt_trans,
                 "platform_Android": platform_android,
@@ -323,7 +323,7 @@ class CausalDatasetGenerator:
         Custom sampler (n, k, seed) -> X ndarray of shape (n,k). Overrides `confounder_specs` and `k`.
 
     target_t_rate : float in (0,1), optional
-        If set, calibrates `alpha_t` via bisection so that mean propensity ≈ target.
+        If set, calibrates `alpha_t` via bisection so that mean propensity ≈ outcome.
 
     u_strength_t : float, default=0.0
         Strength of the unobserved confounder U in treatment assignment.
@@ -482,7 +482,7 @@ class CausalDatasetGenerator:
         return loc
 
     def _calibrate_alpha_t(self, X: np.ndarray, U: np.ndarray, target: float) -> float:
-        # Bisection on alpha_t so that mean propensity ~ target
+        # Bisection on alpha_t so that mean propensity ~ outcome
         lo, hi = -50.0, 50.0  # Use a wider range to handle extreme cases
         for _ in range(100):  # Increase iterations for better precision
             mid = 0.5*(lo+hi)
@@ -602,4 +602,4 @@ class CausalDatasetGenerator:
             cofounder_cols = cofounders
             
         # Create and return CausalData object
-        return CausalData(df=df, treatment='t', target='y', cofounders=cofounder_cols)
+        return CausalData(df=df, treatment='t', outcome='y', cofounders=cofounder_cols)

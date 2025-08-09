@@ -16,7 +16,7 @@ def make_synth(n=200, seed=0):
     # outcome depends on t and covariates
     y = 0.5 * t + 0.02 * age + 0.3 * invited_friend + rng.normal(0, 1, size=n)
     df = pd.DataFrame({
-        'target': y,
+        'outcome': y,
         'treatment': t,
         'age': age,
         'invited_friend': invited_friend.astype(float),  # keep numeric to satisfy CausalData
@@ -26,7 +26,7 @@ def make_synth(n=200, seed=0):
 
 def test_design_report_and_core_metrics():
     df = make_synth()
-    cd = CausalData(df=df, treatment='treatment', target='target', cofounders=['age', 'invited_friend'])
+    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
 
     eda = CausalEDA(cd)
     report = eda.design_report()
@@ -54,7 +54,7 @@ def test_design_report_and_core_metrics():
 
 def test_fit_propensity_and_balance_table_direct_calls():
     df = make_synth(seed=42)
-    cd = CausalData(df=df, treatment='treatment', target='target', cofounders=['age', 'invited_friend'])
+    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
 
     eda = CausalEDA(cd)
     ps = eda.fit_propensity()

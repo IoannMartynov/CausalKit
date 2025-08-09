@@ -29,7 +29,7 @@ def conv_test_data(random_seed):
 
     df = pd.DataFrame({
         'treatment': treatment,
-        'target': target,
+        'outcome': target,
         'age': np.random.randint(18, 70, size=n)
     })
 
@@ -45,7 +45,7 @@ def conv_test_data(random_seed):
 def causal_data(conv_test_data):
     return CausalData(
         df=conv_test_data['df'],
-        target='target',
+        outcome='outcome',
         treatment='treatment',
         cofounders=['age']
     )
@@ -93,15 +93,15 @@ def test_confidence_levels_change_width(causal_data):
 def test_errors_non_binary_treatment(conv_test_data):
     df = conv_test_data['df'].copy()
     df['treatment'] = np.random.choice([0, 1, 2], size=conv_test_data['n'])
-    ck = CausalData(df=df, target='target', treatment='treatment', cofounders=['age'])
+    ck = CausalData(df=df, outcome='outcome', treatment='treatment', cofounders=['age'])
     with pytest.raises(ValueError):
         conversion_z_test(ck)
 
 
 def test_errors_non_binary_target(conv_test_data):
     df = conv_test_data['df'].copy()
-    # make the target non-binary
-    df['target'] = np.random.normal(size=conv_test_data['n'])
-    ck = CausalData(df=df, target='target', treatment='treatment', cofounders=['age'])
+    # make the outcome non-binary
+    df['outcome'] = np.random.normal(size=conv_test_data['n'])
+    ck = CausalData(df=df, outcome='outcome', treatment='treatment', cofounders=['age'])
     with pytest.raises(ValueError):
         conversion_z_test(ck)

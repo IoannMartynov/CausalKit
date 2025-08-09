@@ -32,7 +32,7 @@ def cate_esimand(
     Parameters
     ----------
     data : CausalData
-        A CausalData object with defined target (outcome), treatment (binary 0/1), and confounders.
+        A CausalData object with defined outcome (outcome), treatment (binary 0/1), and confounders.
     ml_g : estimator, optional
         ML learner for outcome regression g(D, X) = E[Y | D, X] supporting fit/predict.
         Defaults to CatBoostRegressor if None.
@@ -65,7 +65,7 @@ def cate_esimand(
     if data.treatment is None:
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
-        raise ValueError("CausalData object must have a target variable defined")
+        raise ValueError("CausalData object must have a outcome variable defined")
     if data.cofounders is None:
         raise ValueError("CausalData object must have cofounders variables defined")
 

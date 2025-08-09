@@ -20,7 +20,7 @@ class CausalData:
         Only columns specified in target, treatment, and cofounders will be stored.
     treatment : str
         Column name representing the treatment variable.
-    target : str
+    outcome : str
         Column name representing the target/outcome variable.
     confounders : Union[str, List[str]], optional
         Column name(s) representing the cofounders/covariates.
@@ -37,7 +37,7 @@ class CausalData:
     >>> causal_data = CausalData(
     ...     df=df,
     ...     treatment='treatment',
-    ...     target='target',
+    ...     outcome='outcome',
     ...     confounders=['age', 'invited_friend']
     ... )
     >>>
@@ -54,15 +54,23 @@ class CausalData:
             self,
             df: pd.DataFrame,
             treatment: str,
-            target: str,
+            outcome: str,
             cofounders: Optional[Union[str, List[str]]] = None,
+            confounders: Optional[Union[str, List[str]]] = None,
     ):
         """
         Initialize a CausalData object.
         """
         self._treatment = treatment
-        self._target = target
-        self._cofounders = self._ensure_list(cofounders) if cofounders is not None else []
+        self._target = outcome
+        # Accept both spellings; merge if both provided
+        cof_list = self._ensure_list(cofounders) if cofounders is not None else []
+        conf_list = self._ensure_list(confounders) if confounders is not None else []
+        merged = []
+        for v in cof_list + conf_list:
+            if v not in merged:
+                merged.append(v)
+        self._cofounders = merged
         
         # Validate column names
         self._validate_columns(df)
@@ -82,7 +90,7 @@ class CausalData:
     def _validate_columns(self, df):
         """
         Validate that all specified columns exist in the DataFrame and that the DataFrame does not contain NaN values.
-        Also validate that target, cofounders, and treatment columns contain only int or float values.
+        Also validate that outcome, cofounders, and treatment columns contain only int or float values.
         """
         # Check for NaN values in the DataFrame
         if df.isna().any().any():
@@ -90,13 +98,13 @@ class CausalData:
 
         all_columns = set(df.columns)
 
-        # Validate target column
+        # Validate outcome column
         if self._target not in all_columns:
-            raise ValueError(f"Column '{self._target}' specified as target does not exist in the DataFrame.")
+            raise ValueError(f"Column '{self._target}' specified as outcome does not exist in the DataFrame.")
 
-        # Check if target column contains only int or float values
+        # Check if outcome column contains only int or float values
         if not pdtypes.is_numeric_dtype(df[self._target]):
-            raise ValueError(f"Column '{self._target}' specified as target must contain only int or float values.")
+            raise ValueError(f"Column '{self._target}' specified as outcome must contain only int or float values.")
 
         # Validate treatment column
         if self._treatment not in all_columns:
@@ -119,14 +127,19 @@ class CausalData:
     @property
     def target(self) -> pd.Series:
         """
-        Get the target/outcome variable.
+        Get the outcome/outcome variable.
 
         Returns
         -------
         pd.Series
-            The target column as a pandas Series.
+            The outcome column as a pandas Series.
         """
         return self.df[self._target]
+
+    # Backwards-compat alias expected by CausalEDA: expose `.outcome` as a Series
+    @property
+    def outcome(self) -> pd.Series:
+        return self.target
 
     @property
     def cofounders(self) -> pd.DataFrame:
@@ -142,6 +155,11 @@ class CausalData:
             return None
 
         return self.df[self._cofounders]
+
+    # Backwards-compat spelling expected by some callers: return list of names
+    @property
+    def confounders(self) -> Optional[List[str]]:
+        return list(self._cofounders) if self._cofounders else []
 
     @property
     def treatment(self) -> pd.Series:
@@ -198,7 +216,7 @@ class CausalData:
         >>> causal_data = CausalData(
         ...     df=df,
         ...     treatment='treatment',
-        ...     target='target',
+        ...     outcome='outcome',
         ...     cofounders=['age', 'invited_friend']
         ... )
         >>>
@@ -248,6 +266,6 @@ class CausalData:
         return (
             f"CausalData(df={self.df.shape}, "
             f"treatment='{self._treatment}')"
-            f"target='{self._target}', "
+            f"outcome='{self._target}', "
             f"cofounders={self._cofounders}, "
         )

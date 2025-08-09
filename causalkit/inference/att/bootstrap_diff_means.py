@@ -39,7 +39,7 @@ def bootstrap_diff_means(
     Parameters
     ----------
     data : CausalData
-        The CausalData object containing treatment and target variables.
+        The CausalData object containing treatment and outcome variables.
     confidence_level : float, default 0.95
         Confidence level for the percentile confidence interval (0 < level < 1).
     n_simul : int, default 10000
@@ -68,7 +68,7 @@ def bootstrap_diff_means(
     if not isinstance(treatment, pd.Series) or treatment.empty:
         raise ValueError("causaldata object must have a treatment variable defined")
     if not isinstance(target, pd.Series) or target.empty:
-        raise ValueError("causaldata object must have a target variable defined")
+        raise ValueError("causaldata object must have a outcome variable defined")
 
     uniq = treatment.unique()
     if len(uniq) != 2:

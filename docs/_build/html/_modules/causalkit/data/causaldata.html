@@ -361,9 +361,9 @@ document.write(`
 <span class="sd">        Only columns specified in target, treatment, and cofounders will be stored.</span>
 <span class="sd">    treatment : str</span>
 <span class="sd">        Column name representing the treatment variable.</span>
-<span class="sd">    target : str</span>
+<span class="sd">    outcome : str</span>
 <span class="sd">        Column name representing the target/outcome variable.</span>
-<span class="sd">    cofounders : Union[str, List[str]], optional</span>
+<span class="sd">    confounders : Union[str, List[str]], optional</span>
 <span class="sd">        Column name(s) representing the cofounders/covariates.</span>
 
 <span class="sd">    Examples</span>
@@ -378,8 +378,8 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; causal_data = CausalData(</span>
 <span class="sd">    ...     df=df,</span>
 <span class="sd">    ...     treatment=&#39;treatment&#39;,</span>
-<span class="sd">    ...     target=&#39;target&#39;,</span>
-<span class="sd">    ...     cofounders=[&#39;age&#39;, &#39;invited_friend&#39;]</span>
+<span class="sd">    ...     outcome=&#39;outcome&#39;,</span>
+<span class="sd">    ...     confounders=[&#39;age&#39;, &#39;invited_friend&#39;]</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Access data</span>
@@ -397,15 +397,23 @@ document.write(`
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
             <span class="n">treatment</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-            <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">outcome</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">cofounders</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">confounders</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a CausalData object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span> <span class="o">=</span> <span class="n">treatment</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">target</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_list</span><span class="p">(</span><span class="n">cofounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">cofounders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">outcome</span>
+        <span class="c1"># Accept both spellings; merge if both provided</span>
+        <span class="n">cof_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_list</span><span class="p">(</span><span class="n">cofounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">cofounders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">conf_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_list</span><span class="p">(</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">confounders</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cof_list</span> <span class="o">+</span> <span class="n">conf_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">merged</span><span class="p">:</span>
+                <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span> <span class="o">=</span> <span class="n">merged</span>
         
         <span class="c1"># Validate column names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -426,7 +434,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validate that all specified columns exist in the DataFrame and that the DataFrame does not contain NaN values.</span>
-<span class="sd">        Also validate that target, cofounders, and treatment columns contain only int or float values.</span>
+<span class="sd">        Also validate that outcome, cofounders, and treatment columns contain only int or float values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check for NaN values in the DataFrame</span>
         <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -434,13 +442,13 @@ document.write(`
 
         <span class="n">all_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
-        <span class="c1"># Validate target column</span>
+        <span class="c1"># Validate outcome column</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as target does not exist in the DataFrame.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome does not exist in the DataFrame.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Check if target column contains only int or float values</span>
+        <span class="c1"># Check if outcome column contains only int or float values</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as target must contain only int or float values.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome must contain only int or float values.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Validate treatment column</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
@@ -463,14 +471,19 @@ document.write(`
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the target/outcome variable.</span>
+<span class="sd">        Get the outcome/outcome variable.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        pd.Series</span>
-<span class="sd">            The target column as a pandas Series.</span>
+<span class="sd">            The outcome column as a pandas Series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span>
+
+    <span class="c1"># Backwards-compat alias expected by CausalEDA: expose `.outcome` as a Series</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">outcome</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">cofounders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -486,6 +499,11 @@ document.write(`
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span><span class="p">]</span>
+
+    <span class="c1"># Backwards-compat spelling expected by some callers: return list of names</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">confounders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span> <span class="k">else</span> <span class="p">[]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">treatment</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
@@ -544,7 +562,7 @@ document.write(`
 <span class="sd">        &gt;&gt;&gt; causal_data = CausalData(</span>
 <span class="sd">        ...     df=df,</span>
 <span class="sd">        ...     treatment=&#39;treatment&#39;,</span>
-<span class="sd">        ...     target=&#39;target&#39;,</span>
+<span class="sd">        ...     outcome=&#39;outcome&#39;,</span>
 <span class="sd">        ...     cofounders=[&#39;age&#39;, &#39;invited_friend&#39;]</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt;</span>
@@ -597,7 +615,7 @@ document.write(`
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;CausalData(df=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;treatment=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;target=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39;, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;outcome=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39;, &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;cofounders=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_cofounders</span><span class="si">}</span><span class="s2">, &quot;</span>
         <span class="p">)</span></div>
 </div>
