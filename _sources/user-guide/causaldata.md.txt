@@ -26,7 +26,7 @@ rct_df = generate_rct_data()
 causal_data = CausalData(
     df=rct_df,
     treatment='treatment',
-    target='target',
+    outcome='outcome',
     cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 ```
@@ -57,7 +57,7 @@ rct_df = generate_rct_data()
 causal_data = CausalData(
     df=rct_df,
     treatment='treatment',
-    target='target',
+    outcome='outcome',
     cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 
@@ -79,12 +79,12 @@ rct_df = generate_rct_data()
 causal_data = CausalData(
     df=rct_df,
     treatment='treatment',
-    target='target',
+    outcome='outcome',
     cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 # Access treatment
 causal_data.treatment
-# Access target
+# Access outcome
 causal_data.target
 # Access cofounders
 causal_data.cofounders
@@ -106,7 +106,7 @@ rct_df = generate_rct_data()
 causal_data = CausalData(
     df=rct_df,
     treatment='treatment',
-    target='target',
+    outcome='outcome',
     cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 # Get specific columns

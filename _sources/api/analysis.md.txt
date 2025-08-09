@@ -48,7 +48,7 @@ df = generate_rct_data(
 # Create causaldata object
 ck = CausalData(
     df=df,
-    target='target',
+    outcome='outcome',
     treatment='treatment'
 )
 

@@ -386,7 +386,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
@@ -416,7 +416,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 
@@ -438,12 +438,12 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="c1"># Access treatment</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">treatment</span>
-<span class="c1"># Access target</span>
+<span class="c1"># Access outcome</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">target</span>
 <span class="c1"># Access cofounders</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">cofounders</span>
@@ -463,7 +463,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="c1"># Get specific columns</span>

@@ -435,7 +435,7 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdata</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span>
        <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">],</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span>
@@ -476,7 +476,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatment&#39;</span><span class="p">)[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatment&#39;</span><span class="p">)[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -517,8 +517,8 @@ Name: target, dtype: float64
     <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">),</span>
 <span class="p">})</span>
 
-<span class="c1"># Generate target variable with treatment effect</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+<span class="c1"># Generate outcome variable with treatment effect</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;outcome&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;treatment&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">treatment_mean</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">),</span>  <span class="c1"># Treatment group</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">control_mean</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>     <span class="c1"># Control group</span>
@@ -527,7 +527,7 @@ Name: target, dtype: float64
 <span class="c1"># Create a causaldata object</span>
 <span class="n">ck</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">],</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span>
 <span class="p">)</span>
@@ -593,7 +593,7 @@ Name: target, dtype: float64
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test 6: Error handling - no treatment&quot;</span><span class="p">)</span>
 <span class="n">ck_no_treatment</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
@@ -603,8 +603,8 @@ Name: target, dtype: float64
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Success: Correctly raised ValueError: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 
-<span class="c1"># Test 7: Error handling - no target</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test 7: Error handling - no target&quot;</span><span class="p">)</span>
+<span class="c1"># Test 7: Error handling - no outcome</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test 7: Error handling - no outcome&quot;</span><span class="p">)</span>
 <span class="n">ck_no_target</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">],</span>
@@ -623,7 +623,7 @@ Name: target, dtype: float64
 <span class="n">df_multi</span><span class="p">[</span><span class="s1">&#39;treatment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
 <span class="n">ck_multi</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df_multi</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">],</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span>
 <span class="p">)</span>

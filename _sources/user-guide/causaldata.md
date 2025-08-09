@@ -31,7 +31,7 @@ sample_df = pd.DataFrame({
 # Create a CausalData object
 sample_causal_data = CausalData(
     df=sample_df,
-    target='conversion',
+    outcome='conversion',
     treatment='treatment',
     cofounders=['age']
 )
@@ -67,7 +67,7 @@ sample_df = pd.DataFrame({
 
 sample_causal_data = CausalData(
     df=sample_df,
-    target='conversion',
+    outcome='conversion',
     treatment='treatment',
     cofounders=['age']
 )
@@ -92,12 +92,12 @@ sample_df = pd.DataFrame({
 
 sample_causal_data = CausalData(
     df=sample_df,
-    target='conversion',
+    outcome='conversion',
     treatment='treatment',
     cofounders=['age']
 )
 
-# Get the target variable(s)
+# Get the outcome variable(s)
 target = sample_causal_data.target
 
 # Get the treatment variable(s)
@@ -127,7 +127,7 @@ sample_df = pd.DataFrame({
 
 sample_causal_data = CausalData(
     df=sample_df,
-    target='conversion',
+    outcome='conversion',
     treatment='treatment',
     cofounders=['age']
 )
@@ -135,7 +135,7 @@ sample_causal_data = CausalData(
 # Get specific columns by name
 specific_cols = sample_causal_data.get_df(columns=['user_id', 'age'])
 
-# Get target and treatment columns
+# Get outcome and treatment columns
 target_treatment = sample_causal_data.get_df(include_target=True, include_treatment=True)
 
 # Get all columns except cofounders
@@ -155,7 +155,7 @@ rct_df = generate_rct_data()
 # Create a CausalData object
 rct_causal_data = CausalData(
     df=rct_df,
-    target='target',
+    outcome='outcome',
     treatment='treatment',
     cofounders=['age', 'invited_friend']
 )
@@ -188,7 +188,7 @@ multi_df = pd.DataFrame({
 # Create a CausalData object with multiple targets and treatments
 multi_causal_data = CausalData(
     df=multi_df,
-    target=['conversion', 'revenue'],
+    outcome=['conversion', 'revenue'],
     treatment=['email_campaign', 'app_notification'],
     cofounders=['age', 'previous_purchases']
 )
