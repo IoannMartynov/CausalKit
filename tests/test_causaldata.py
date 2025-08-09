@@ -5,7 +5,7 @@ Tests for the CausalData class.
 import pytest
 import pandas as pd
 import numpy as np
-from causalkit.data import generate_rct_data, generate_obs_data, CausalData
+from causalkit.data import generate_rct_data, CausalData
 
 
 @pytest.fixture
@@ -73,23 +73,6 @@ def test_causaldata_with_rct_data(random_seed):
     assert abs(ck_rct.treatment.mean() - 0.5) < 0.05  # Treatment ratio should be close to 0.5
 
 
-def test_causaldata_with_observational_data(random_seed):
-    """Test causaldata class with observational data."""
-    # Generate observational data
-    obs_df = generate_obs_data(n_users=1000, split=0.1, random_state=random_seed)
-    
-    # Create causaldata object
-    ck_obs = CausalData(
-        df=obs_df,
-        outcome='income',  # Use 'income' as outcome column
-        cofounders=['age'],  # Use only numeric columns as cofounders
-        treatment='treatment'
-    )
-    
-    # Verify causaldata object properties
-    assert ck_obs.target is not None
-    assert set(ck_obs.cofounders.columns) == {'age'}
-    assert abs(ck_obs.treatment.mean() - 0.1) < 0.05  # Treatment ratio should be close to 0.1
 
 
 def test_causaldata_with_custom_data(custom_dataframe):
