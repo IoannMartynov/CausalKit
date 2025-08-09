@@ -14,7 +14,8 @@ from causalkit.data.causaldata import CausalData
 
 def _sigmoid(z):
     """
-    Sigmoid function: 1 / (1 + exp(-z))
+    Numerically stable sigmoid: 1 / (1 + exp(-z))
+    Handles large positive/negative z without overflow warnings.
     
     Parameters
     ----------
@@ -26,7 +27,19 @@ def _sigmoid(z):
     array-like
         Sigmoid of input values
     """
-    return 1 / (1 + np.exp(-z))
+    z = np.asarray(z, dtype=float)
+    # Use a stable formulation to avoid overflow for large |z|
+    # expit(z) = 0.5 * (1 + tanh(z/2)) is stable, but tanh can be slower.
+    # Implement a piecewise stable computation directly.
+    out = np.empty_like(z, dtype=float)
+    pos_mask = z >= 0
+    neg_mask = ~pos_mask
+    # For positive z: 1 / (1 + exp(-z))
+    out[pos_mask] = 1.0 / (1.0 + np.exp(-z[pos_mask]))
+    # For negative z: exp(z) / (1 + exp(z)) to avoid exp(-z) overflow
+    ez = np.exp(z[neg_mask])
+    out[neg_mask] = ez / (1.0 + ez)
+    return out
 
 
 def generate_rct_data(
@@ -431,25 +444,41 @@ class CausalDatasetGenerator:
     # ---------- Helpers ----------
 
     def _treatment_score(self, X: np.ndarray, U: np.ndarray) -> np.ndarray:
-        lin = np.zeros(X.shape[0])
+        # Ensure numeric, finite arrays
+        Xf = np.asarray(X, dtype=float)
+        lin = np.zeros(Xf.shape[0], dtype=float)
         if self.beta_t is not None:
-            lin += X @ self.beta_t
+            bt = np.asarray(self.beta_t, dtype=float)
+            if bt.ndim != 1:
+                bt = bt.reshape(-1)
+            if bt.shape[0] != Xf.shape[1]:
+                raise ValueError(f"beta_t shape {bt.shape} is incompatible with X shape {Xf.shape}")
+            lin += np.sum(Xf * bt, axis=1)
         if self.g_t is not None:
-            lin += self.g_t(X)
+            lin += np.asarray(self.g_t(Xf), dtype=float)
         if self.u_strength_t != 0:
-            lin += self.u_strength_t * U
+            lin += self.u_strength_t * np.asarray(U, dtype=float)
         return lin
 
     def _outcome_location(self, X: np.ndarray, T: np.ndarray, U: np.ndarray, tau_x: np.ndarray) -> np.ndarray:
         # location on natural scale for continuous; on logit/log scale for binary/poisson
-        loc = self.alpha_y
+        Xf = np.asarray(X, dtype=float)
+        Tf = np.asarray(T, dtype=float)
+        Uf = np.asarray(U, dtype=float)
+        taux = np.asarray(tau_x, dtype=float)
+        loc = float(self.alpha_y)
         if self.beta_y is not None:
-            loc += X @ self.beta_y
+            by = np.asarray(self.beta_y, dtype=float)
+            if by.ndim != 1:
+                by = by.reshape(-1)
+            if by.shape[0] != Xf.shape[1]:
+                raise ValueError(f"beta_y shape {by.shape} is incompatible with X shape {Xf.shape}")
+            loc += np.sum(Xf * by, axis=1)
         if self.g_y is not None:
-            loc += self.g_y(X)
+            loc += np.asarray(self.g_y(Xf), dtype=float)
         if self.u_strength_y != 0:
-            loc += self.u_strength_y * U
-        loc += T * tau_x
+            loc += self.u_strength_y * Uf
+        loc += Tf * taux
         return loc
 
     def _calibrate_alpha_t(self, X: np.ndarray, U: np.ndarray, target: float) -> float:
