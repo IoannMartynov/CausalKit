@@ -719,7 +719,7 @@ specified in treatment, cofounders, and target.</p>
 Only columns specified in target, treatment, and cofounders will be stored.</p></li>
 <li><p><strong>treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Column name representing the treatment variable.</p></li>
 <li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Column name representing the target/outcome variable.</p></li>
-<li><p><strong>cofounders</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Column name(s) representing the cofounders/covariates.</p></li>
+<li><p><strong>confounders</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Column name(s) representing the cofounders/covariates.</p></li>
 </ul>
 </dd>
 </dl>
@@ -735,7 +735,7 @@ Only columns specified in target, treatment, and cofounders will be stored.</p><
 <span class="gp">... </span>    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access data</span>

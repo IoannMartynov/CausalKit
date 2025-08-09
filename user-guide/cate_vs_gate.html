@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Causal Inference Intuition &#8212; CausalKit  documentation</title>
+    <title>Short answer &#8212; CausalKit  documentation</title>
   
   
   
@@ -47,11 +47,11 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/causal_inference_fundamentals';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/cate_vs_gate';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working with CausalData" href="causaldata.html" />
-    <link rel="prev" title="User Guide" href="../user-guide.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="Working with CausalData" href="causaldata.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -297,11 +297,11 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Causal Inference Intuition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="causaldata.html">Working with CausalData</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cate_vs_gate.html">Short answer</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Short answer</a></li>
 
 
 
@@ -346,7 +346,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Causal...</li>
+    <li class="breadcrumb-item active" aria-current="page">Short answer</li>
   </ul>
 </nav>
 </div>
@@ -363,128 +363,88 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="causal-inference-intuition">
-<h1>Causal Inference Intuition<a class="headerlink" href="#causal-inference-intuition" title="Link to this heading">#</a></h1>
-<p>As humans, we intuitively understand cause and effect relationships.
-Without this understanding, we would not have been able to survive
-and achieve our current level of development.</p>
-<p>How do we usually think about whether a given impact is a cause?</p>
-<ul class="simple">
-<li><p>It’s simple, in our heads we check whether the impact was there
-before we saw the effect</p></li>
-<li><p>We also check whether the impact has a large force capable of
-influencing the effect. In other words, are there other factors
-that have had a stronger effect than the impact?</p></li>
+  <p>Here’s your explanation rewritten cleanly in Markdown with proper LaTeX formatting:</p>
+<hr class="docutils" />
+<section id="short-answer">
+<h1>Short answer<a class="headerlink" href="#short-answer" title="Link to this heading">#</a></h1>
+<p><strong>GATE = Group Average Treatment Effect.</strong>
+It’s the <strong>average causal effect within a subgroup</strong> (defined by <em>pre-treatment</em> covariates).
+Yes—you can think of it as “ATE on a part of the data,” <strong>provided</strong> the group is defined by baseline variables and estimated correctly.</p>
+<hr class="docutils" />
+</section>
+<section id="what-it-is-formally">
+<h1>What it is (formally)<a class="headerlink" href="#what-it-is-formally" title="Link to this heading">#</a></h1>
+<ul>
+<li><p><strong>CATE:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+  \tau(x) = \mathbb{E}[Y(1) - Y(0) \mid X = x]
+  \]</div>
+</li>
+<li><p><strong>GATE for group <span class="math notranslate nohighlight">\(g\)</span>:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+  \text{GATE}(g) = \mathbb{E}[Y(1) - Y(0) \mid G(X) = g]  
+  = \mathbb{E}[\tau(X) \mid G(X) = g]
+  \]</div>
+</li>
 </ul>
-<p>Now you have a simple model of casual inference in your head.</p>
+<p>If your groups <span class="math notranslate nohighlight">\(G(X)\)</span> partition the sample, the overall ATE is the <strong>prevalence-weighted average</strong> of the GATEs.</p>
+<hr class="docutils" />
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="formalization">
-<h1>Formalization<a class="headerlink" href="#formalization" title="Link to this heading">#</a></h1>
-<p>In both industry and academia, the use of universal notation
-for causal inference serves as a critical tool for enhancing
-communication among researchers and practitioners.</p>
-<p><strong>Units</strong> are typically the people, companies or households on
-which we are analyzing the impact.</p>
-<div class="math notranslate nohighlight">
-\[ i = 1, \ldots, n \]</div>
-<p><strong>Treatment</strong> is an effect, in data we usually see it as 1 if
-it was there and 0 if it was not there. (This generalizes to
-multi-valued or continuous treatments.)</p>
-<div class="math notranslate nohighlight">
-\[ T_i \in \{0, 1\} \]</div>
-<p><strong>Outcome</strong> is the variable by which we measure the effect. For example,
-temperature, if we are testing a drug, or the probability of buying a
-product if we are changing the landing page</p>
-<div class="math notranslate nohighlight">
-\[ Y_i \]</div>
-<p><strong>Covariates or cofounders</strong>. These are variables that influence the
-propensity to receive a treatment and simultaneously predict the target,
-thereby causing bias in the estimate.</p>
-<div class="math notranslate nohighlight">
-\[ X_i \]</div>
-<p>It could look like this in a data</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Client</p></th>
-<th class="head"><p>Treatment</p></th>
-<th class="head"><p>Outcome</p></th>
-<th class="head"><p>Cofounder_1</p></th>
-<th class="head"><p>Cofounder_2</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>1</p></td>
-<td><p>100</p></td>
-<td><p>1</p></td>
-<td><p>13</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>0</p></td>
-<td><p>90</p></td>
-<td><p>0</p></td>
-<td><p>14</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>1</p></td>
-<td><p>110</p></td>
-<td><p>1</p></td>
-<td><p>51</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>1</p></td>
-<td><p>97</p></td>
-<td><p>1</p></td>
-<td><p>63</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>0</p></td>
-<td><p>80</p></td>
-<td><p>0</p></td>
-<td><p>34</p></td>
-</tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>0</p></td>
-<td><p>85</p></td>
-<td><p>0</p></td>
-<td><p>53</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<section id="how-people-estimate-it-two-common-ways">
+<h1>How people estimate it (two common ways)<a class="headerlink" href="#how-people-estimate-it-two-common-ways" title="Link to this heading">#</a></h1>
+<section id="subgroup-ate-just-ate-on-a-subset">
+<h2>1. <strong>Subgroup ATE (“just ATE on a subset”)</strong><a class="headerlink" href="#subgroup-ate-just-ate-on-a-subset" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Restrict to units with <span class="math notranslate nohighlight">\(G(X) = g\)</span> and estimate the ATE there.</p></li>
+<li><p><strong>In an RCT:</strong> difference in means within the group.</p></li>
+<li><p><strong>In observational data:</strong> use IPW / matching / doubly robust (AIPW) <strong>within the group</strong> and check overlap.</p></li>
+</ul>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="estimation">
-<h1>Estimation<a class="headerlink" href="#estimation" title="Link to this heading">#</a></h1>
-<p>To understand how to evaluate effects, you need to understand the
-estimands.</p>
-<section id="ite-and-cate">
-<h2>ITE (and CATE)<a class="headerlink" href="#ite-and-cate" title="Link to this heading">#</a></h2>
-<p>Question: What is the effect for an individual (ITE) or for people
-like this (CATE)?</p>
+<section id="plug-in-from-cates-causal-ml-route">
+<h2>2. <strong>Plug-in from CATEs (causal ML route)</strong><a class="headerlink" href="#plug-in-from-cates-causal-ml-route" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>First estimate <span class="math notranslate nohighlight">\(\hat{\tau}(X)\)</span> with a method you like
+(e.g., causal forests, T-/X-/R-/DR-learners).</p></li>
+<li><p>Then compute:</p>
 <div class="math notranslate nohighlight">
-\[ \text{ITE}_i \;=\; Y_i(1) - Y_i(0) \]</div>
-<p>ITE is fundamentally unobservable for any single unit; we estimate
-its conditional average:)</p>
-<div class="math notranslate nohighlight">
-\[ \tau(x) \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid X=x\,\right] \quad \text{(CATE)} \]</div>
-<p>Use when: personalization, uplift targeting, heterogeneous effects.</p>
+\[
+  \widehat{\text{GATE}}(g) = \frac{1}{n_g} \sum_{i : G(X_i) = g} \hat{\tau}(X_i)
+  \]</div>
+</li>
+<li><p>Use <strong>honesty</strong> or <strong>cross-fitting</strong> to avoid overfitting.</p></li>
+</ul>
+<hr class="docutils" />
 </section>
-<section id="att-average-treatment-effect-on-the-treated">
-<h2>ATT (Average Treatment effect on the Treated)<a class="headerlink" href="#att-average-treatment-effect-on-the-treated" title="Link to this heading">#</a></h2>
-<p>Question: What was the effect on those who actually received treatment?</p>
-<div class="math notranslate nohighlight">
-\[ \text{ATT} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid T=1\,\right] \]</div>
-<p>Use when: evaluating past rollouts, “did it work for the treated?”, program
-evaluation where treatment assignment was selective.</p>
 </section>
-<section id="ate-average-treatment-effect">
-<h2>ATE (Average Treatment Effect)<a class="headerlink" href="#ate-average-treatment-effect" title="Link to this heading">#</a></h2>
-<p>Question: What is the overall average effect in the population?</p>
-<div class="math notranslate nohighlight">
-\[ \text{ATE} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\,\right] \]</div>
-<p>Use when: policy decisions affecting the whole eligible population;
-headline effect sizes.</p>
+<section id="gotchas">
+<h1>Gotchas<a class="headerlink" href="#gotchas" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><strong>Groups must be pre-treatment.</strong>
+If you define groups by a post-treatment variable, it’s no longer a GATE problem
+(think principal stratification / complier effects).</p></li>
+<li><p><strong>Overlap within groups.</strong>
+You still need <span class="math notranslate nohighlight">\(0 &lt; e(X) &lt; 1\)</span> in each group.</p></li>
+<li><p><strong>Data snooping.</strong>
+If you choose groups by looking at outcomes, correct for multiple testing or use sample splitting.</p></li>
+<li><p><strong>Standard errors.</strong>
+For AIPW: use influence-function SEs.
+For plug-in CATE averages: use bootstrap or forest-provided variance (with honesty).</p></li>
+</ul>
+<hr class="docutils" />
 </section>
+<section id="intuition">
+<h1>Intuition<a class="headerlink" href="#intuition" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><strong>ATE:</strong> average effect for everyone.</p></li>
+<li><p><strong>CATE:</strong> how effect varies with <span class="math notranslate nohighlight">\(X\)</span>.</p></li>
+<li><p><strong>GATE:</strong> take any slice of the population (by age band, risk score quintile, predicted uplift band, etc.) and average the CATEs over that slice.</p></li>
+</ul>
+<hr class="docutils" />
+<p>If you tell me how you’re defining the groups (e.g., age bins, risk deciles, predicted uplift bands) and whether it’s an RCT or observational study, I can give you the <strong>exact estimator and SE formula</strong> you should use.</p>
+<hr class="docutils" />
+<p>Do you want me to rewrite the <strong>age 45–60 example</strong> in the same style so it matches this format? That would make the two explanations consistent.</p>
 </section>
 
 
@@ -498,20 +458,20 @@ headline effect sizes.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../user-guide.html"
+       href="causaldata.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">User Guide</p>
+        <p class="prev-next-title">Working with CausalData</p>
       </div>
     </a>
     <a class="right-next"
-       href="causaldata.html"
+       href="../examples.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with CausalData</p>
+        <p class="prev-next-title">Examples</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -533,14 +493,15 @@ headline effect sizes.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Causal Inference Intuition</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#formalization">Formalization</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">Estimation</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ite-and-cate">ITE (and CATE)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#att-average-treatment-effect-on-the-treated">ATT (Average Treatment effect on the Treated)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ate-average-treatment-effect">ATE (Average Treatment Effect)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Short answer</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-is-formally">What it is (formally)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subgroup-ate-just-ate-on-a-subset">1. <strong>Subgroup ATE (“just ATE on a subset”)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plug-in-from-cates-causal-ml-route">2. <strong>Plug-in from CATEs (causal ML route)</strong></a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gotchas">Gotchas</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#intuition">Intuition</a></li>
 </ul>
 
   </nav></div>
@@ -548,7 +509,7 @@ headline effect sizes.</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/user-guide/causal_inference_fundamentals.md.txt">
+    <a href="../_sources/user-guide/cate_vs_gate.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
