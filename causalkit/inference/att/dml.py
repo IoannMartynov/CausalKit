@@ -70,7 +70,7 @@ def dml(
     >>> # Create causaldata object
     >>> ck = CausalData(
     ...     df=df,
-    ...     target='target',
+    ...     outcome='outcome',
     ...     treatment='treatment',
     ...     cofounders=['age', 'invited_friend']
     ... )
@@ -86,7 +86,7 @@ def dml(
     if data.treatment is None:
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
-        raise ValueError("CausalData object must have a target variable defined")
+        raise ValueError("CausalData object must have a outcome variable defined")
     if data.cofounders is None:
         raise ValueError("CausalData object must have cofounders variables defined")
     

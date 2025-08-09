@@ -48,7 +48,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/causaldata';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="next" title="Short answer" href="cate_vs_gate.html" />
     <link rel="prev" title="Causal Inference Intuition" href="causal_inference_fundamentals.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -299,6 +299,11 @@ document.write(`
 
 
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with CausalData</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cate_vs_gate.html">Short answer</a></li>
+
+
+
+
 </ul>
 </div>
 </nav></div>
@@ -381,7 +386,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
@@ -411,7 +416,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 
@@ -433,12 +438,12 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="c1"># Access treatment</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">treatment</span>
-<span class="c1"># Access target</span>
+<span class="c1"># Access outcome</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">target</span>
 <span class="c1"># Access cofounders</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">cofounders</span>
@@ -458,7 +463,7 @@ document.write(`
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
     <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="c1"># Get specific columns</span>
@@ -509,11 +514,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="../examples.html"
+       href="cate_vs_gate.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title">Short answer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -12,13 +12,13 @@ from causalkit.data.causaldata import CausalData
 
 def ttest(data: CausalData, confidence_level: float = 0.95) -> Dict[str, Any]:
     """
-    Perform a t-test on a CausalData object to compare the target variable between
+    Perform a t-test on a CausalData object to compare the outcome variable between
     treated (T=1) and control (T=0) groups. Returns differences and confidence intervals.
     
     Parameters
     ----------
     data : CausalData
-        The CausalData object containing treatment and target variables.
+        The CausalData object containing treatment and outcome variables.
     confidence_level : float, default 0.95
         The confidence level for calculating confidence intervals (between 0 and 1).
         
@@ -35,17 +35,17 @@ def ttest(data: CausalData, confidence_level: float = 0.95) -> Dict[str, Any]:
     Raises
     ------
     ValueError
-        If the CausalData object doesn't have both treatment and target variables defined,
+        If the CausalData object doesn't have both treatment and outcome variables defined,
         or if the treatment variable is not binary.
     """
-    # Basic validation: ensure treatment and target are proper Series and non-empty
+    # Basic validation: ensure treatment and outcome are proper Series and non-empty
     treatment_var = data.treatment
     target_var = data.target
 
     if not isinstance(treatment_var, pd.Series) or treatment_var.empty:
         raise ValueError("causaldata object must have a treatment variable defined")
     if not isinstance(target_var, pd.Series) or target_var.empty:
-        raise ValueError("causaldata object must have a target variable defined")
+        raise ValueError("causaldata object must have a outcome variable defined")
 
     # Ensure binary treatment
     unique_treatments = treatment_var.unique()

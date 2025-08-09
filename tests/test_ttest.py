@@ -32,8 +32,8 @@ def test_data(random_seed):
         'gender': np.random.choice([0, 1], size=n),  # Numeric gender: 0 for 'M', 1 for 'F'
     })
     
-    # Generate target variable with treatment effect
-    df['target'] = np.where(
+    # Generate outcome variable with treatment effect
+    df['outcome'] = np.where(
         df['treatment'] == 1,
         np.random.normal(control_mean + treatment_effect, 2.0, size=n),  # Treatment group
         np.random.normal(control_mean, 2.0, size=n)                      # Control group
@@ -52,7 +52,7 @@ def causal_data(test_data):
     """Fixture to provide a causaldata object."""
     return CausalData(
         df=test_data['df'],
-        target='target',
+        outcome='outcome',
         cofounders=['age', 'gender'],
         treatment='treatment'
     )
@@ -135,7 +135,7 @@ def test_ttest_error_no_treatment(test_data):
     # Create CausalData with required parameters
     ck_no_treatment = CausalData(
         df=test_data['df'],
-        target='target',
+        outcome='outcome',
         treatment='treatment',
         cofounders=['age', 'gender']
     )
@@ -148,16 +148,16 @@ def test_ttest_error_no_treatment(test_data):
 
 
 def test_ttest_error_no_target(test_data):
-    """Test error handling when no target is specified."""
+    """Test error handling when no outcome is specified."""
     # Create CausalData with required parameters
     ck_no_target = CausalData(
         df=test_data['df'],
-        target='target',
+        outcome='outcome',
         treatment='treatment',
         cofounders=['age', 'gender']
     )
     
-    # Manually set _target to empty list to simulate no target
+    # Manually set _target to empty list to simulate no outcome
     ck_no_target._target = []
     
     with pytest.raises(ValueError):
@@ -171,7 +171,7 @@ def test_ttest_error_non_binary_treatment(test_data):
     
     ck_multi = CausalData(
         df=df_multi,
-        target='target',
+        outcome='outcome',
         cofounders=['age', 'gender'],
         treatment='treatment'
     )

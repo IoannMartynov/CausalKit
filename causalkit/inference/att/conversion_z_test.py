@@ -17,12 +17,12 @@ from causalkit.data.causaldata import CausalData
 
 def conversion_z_test(data: CausalData, confidence_level: float = 0.95) -> Dict[str, Any]:
     """
-    Perform a two-proportion z-test on a CausalData object with a binary target (conversion).
+    Perform a two-proportion z-test on a CausalData object with a binary outcome (conversion).
 
     Parameters
     ----------
     data : CausalData
-        The CausalData object containing treatment and target variables.
+        The CausalData object containing treatment and outcome variables.
     confidence_level : float, default 0.95
         The confidence level for calculating confidence intervals (between 0 and 1).
 
@@ -39,7 +39,7 @@ def conversion_z_test(data: CausalData, confidence_level: float = 0.95) -> Dict[
     Raises
     ------
     ValueError
-        If treatment/target are missing, treatment is not binary, target is not binary,
+        If treatment/outcome are missing, treatment is not binary, outcome is not binary,
         groups are empty, or confidence_level is outside (0, 1).
     """
     # Basic validation
@@ -49,7 +49,7 @@ def conversion_z_test(data: CausalData, confidence_level: float = 0.95) -> Dict[
     if not isinstance(treatment_var, pd.Series) or treatment_var.empty:
         raise ValueError("causaldata object must have a treatment variable defined")
     if not isinstance(target_var, pd.Series) or target_var.empty:
-        raise ValueError("causaldata object must have a target variable defined")
+        raise ValueError("causaldata object must have a outcome variable defined")
 
     # Treatment must be binary 0/1
     tr_unique = treatment_var.unique()
@@ -73,7 +73,7 @@ def conversion_z_test(data: CausalData, confidence_level: float = 0.95) -> Dict[
     if n0 < 1 or n1 < 1:
         raise ValueError("Not enough observations in one of the groups for z-test (need at least 1 per group)")
 
-    # Counts of conversions (assumes 0/1 coding for target)
+    # Counts of conversions (assumes 0/1 coding for outcome)
     x0 = float(control.sum())
     x1 = float(treat.sum())
 

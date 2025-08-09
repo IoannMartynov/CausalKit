@@ -48,7 +48,7 @@ def test_dml_att():
     causal_data = CausalData(
         df=df,
         treatment='treatment',
-        target='outcome',
+        outcome='outcome',
         cofounders=['age', 'smoker', 'bmi']
     )
     

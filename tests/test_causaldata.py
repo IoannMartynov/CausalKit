@@ -37,7 +37,7 @@ def test_dataframe(random_seed):
         'age': np.random.randint(18, 65, size=100),
         'gender': np.random.choice(['M', 'F'], size=100),
         'invited_friend': np.random.choice([0, 1], size=100),
-        'target': np.random.normal(0, 1, size=100)
+        'outcome': np.random.normal(0, 1, size=100)
     })
 
 
@@ -46,7 +46,7 @@ def causal_data(test_dataframe):
     """Fixture to provide a causaldata object."""
     return CausalData(
         df=test_dataframe,
-        target='target',
+        outcome='outcome',
         cofounders=['age', 'invited_friend'],
         treatment='treatment'
     )
@@ -61,7 +61,7 @@ def test_causaldata_with_rct_data(random_seed):
     # Create causaldata object
     ck_rct = CausalData(
         df=rct_df,
-        target='target',
+        outcome='outcome',
         cofounders=['age', 'invited_friend'],
         treatment='treatment'
     )
@@ -81,7 +81,7 @@ def test_causaldata_with_observational_data(random_seed):
     # Create causaldata object
     ck_obs = CausalData(
         df=obs_df,
-        target='income',  # Use 'income' as target column
+        outcome='income',  # Use 'income' as outcome column
         cofounders=['age'],  # Use only numeric columns as cofounders
         treatment='treatment'
     )
@@ -97,7 +97,7 @@ def test_causaldata_with_custom_data(custom_dataframe):
     # Create causaldata object
     ck_custom = CausalData(
         df=custom_dataframe,
-        target='ltv',
+        outcome='ltv',
         cofounders=['age', 'invited_friend'],
         treatment='treatment'
     )
@@ -109,7 +109,7 @@ def test_causaldata_with_custom_data(custom_dataframe):
 
 
 def test_causaldata_missing_target(custom_dataframe):
-    """Test that an error is raised when target is not provided."""
+    """Test that an error is raised when outcome is not provided."""
     with pytest.raises(TypeError):
         CausalData(
             df=custom_dataframe,
@@ -123,7 +123,7 @@ def test_causaldata_missing_treatment(custom_dataframe):
     with pytest.raises(TypeError):
         CausalData(
             df=custom_dataframe,
-            target='ltv',
+            outcome='ltv',
             cofounders=['age', 'invited_friend']
         )
 
@@ -142,7 +142,7 @@ def test_causaldata_with_nan_values():
     with pytest.raises(ValueError) as excinfo:
         CausalData(
             df=df_with_nan,
-            target='ltv',
+            outcome='ltv',
             cofounders=['age', 'invited_friend'],
             treatment='treatment'
         )
@@ -151,11 +151,11 @@ def test_causaldata_with_nan_values():
 
 
 def test_causaldata_with_non_numeric_target():
-    """Test that an error is raised when target column is not numeric."""
-    # Create a DataFrame with non-numeric target column
+    """Test that an error is raised when outcome column is not numeric."""
+    # Create a DataFrame with non-numeric outcome column
     df_with_non_numeric_target = pd.DataFrame({
         'user_id': [f'user_{i}' for i in range(5)],
-        'target': ['high', 'low', 'medium', 'high', 'low'],  # Non-numeric target
+        'outcome': ['high', 'low', 'medium', 'high', 'low'],  # Non-numeric outcome
         'age': [25, 30, 35, 40, 45],
         'invited_friend': [1, 0, 1, 0, 1],
         'treatment': [1, 0, 1, 0, 1]
@@ -164,13 +164,13 @@ def test_causaldata_with_non_numeric_target():
     with pytest.raises(ValueError) as excinfo:
         CausalData(
             df=df_with_non_numeric_target,
-            target='target',
+            outcome='outcome',
             cofounders=['age', 'invited_friend'],
             treatment='treatment'
         )
     
     assert "must contain only int or float values" in str(excinfo.value)
-    assert "target" in str(excinfo.value)
+    assert "outcome" in str(excinfo.value)
 
 
 def test_causaldata_with_non_numeric_cofounders():
@@ -178,7 +178,7 @@ def test_causaldata_with_non_numeric_cofounders():
     # Create a DataFrame with non-numeric cofounders column
     df_with_non_numeric_cofounders = pd.DataFrame({
         'user_id': [f'user_{i}' for i in range(5)],
-        'target': [100, 200, 150, 300, 250],
+        'outcome': [100, 200, 150, 300, 250],
         'age': [25, 30, 35, 40, 45],
         'category': ['A', 'B', 'C', 'A', 'B'],  # Non-numeric cofounder
         'treatment': [1, 0, 1, 0, 1]
@@ -187,7 +187,7 @@ def test_causaldata_with_non_numeric_cofounders():
     with pytest.raises(ValueError) as excinfo:
         CausalData(
             df=df_with_non_numeric_cofounders,
-            target='target',
+            outcome='outcome',
             cofounders=['age', 'category'],
             treatment='treatment'
         )
@@ -201,7 +201,7 @@ def test_causaldata_with_non_numeric_treatment():
     # Create a DataFrame with non-numeric treatment column
     df_with_non_numeric_treatment = pd.DataFrame({
         'user_id': [f'user_{i}' for i in range(5)],
-        'target': [100, 200, 150, 300, 250],
+        'outcome': [100, 200, 150, 300, 250],
         'age': [25, 30, 35, 40, 45],
         'invited_friend': [1, 0, 1, 0, 1],
         'treatment': ['A', 'B', 'A', 'B', 'A']  # Non-numeric treatment
@@ -210,7 +210,7 @@ def test_causaldata_with_non_numeric_treatment():
     with pytest.raises(ValueError) as excinfo:
         CausalData(
             df=df_with_non_numeric_treatment,
-            target='target',
+            outcome='outcome',
             cofounders=['age', 'invited_friend'],
             treatment='treatment'
         )
@@ -220,11 +220,11 @@ def test_causaldata_with_non_numeric_treatment():
 
 
 def test_causaldata_truncated_dataframe(custom_dataframe):
-    """Test that CausalData stores only the relevant columns (target, treatment, cofounders)."""
+    """Test that CausalData stores only the relevant columns (outcome, treatment, cofounders)."""
     # Create causaldata object
     ck = CausalData(
         df=custom_dataframe,
-        target='ltv',
+        outcome='ltv',
         cofounders=['age', 'invited_friend'],
         treatment='treatment'
     )
@@ -246,7 +246,7 @@ def test_causaldata_truncated_dataframe(custom_dataframe):
     # Test __repr__ format
     repr_str = repr(ck)
     assert "df=(5, 4)" in repr_str
-    assert "target='ltv'" in repr_str
+    assert "outcome='ltv'" in repr_str
     assert "cofounders=['age', 'invited_friend']" in repr_str
     assert "treatment='treatment'" in repr_str
 
@@ -256,8 +256,8 @@ def test_get_df_default(causal_data):
     """Test get_df with default parameters."""
     result_df = causal_data.get_df()
     
-    # Should include all columns in the CausalData object (target, treatment, cofounders)
-    expected_columns = {'target', 'treatment', 'age', 'invited_friend'}
+    # Should include all columns in the CausalData object (outcome, treatment, cofounders)
+    expected_columns = {'outcome', 'treatment', 'age', 'invited_friend'}
     assert set(result_df.columns) == expected_columns
     assert result_df.shape[0] == 100
     assert result_df is not causal_data.df  # Should be a copy
@@ -284,7 +284,7 @@ def test_get_df_include_target_only(causal_data):
         include_treatment=False
     )
     
-    assert set(result_df.columns) == {'target'}
+    assert set(result_df.columns) == {'outcome'}
     assert result_df.shape[0] == 100
 
 
@@ -321,21 +321,21 @@ def test_get_df_combination(causal_data):
         include_treatment=True
     )
     
-    assert set(result_df.columns) == {'age', 'target', 'treatment'}
+    assert set(result_df.columns) == {'age', 'outcome', 'treatment'}
     assert result_df.shape[0] == 100
 
 
 def test_get_df_duplicate_columns(causal_data):
     """Test get_df with duplicate columns."""
     result_df = causal_data.get_df(
-        columns=['age', 'target'],
+        columns=['age', 'outcome'],
         include_target=True,
         include_cofounders=True,
         include_treatment=False
     )
     
     # Each column should appear only once
-    assert set(result_df.columns) == {'age', 'target', 'invited_friend'}
+    assert set(result_df.columns) == {'age', 'outcome', 'invited_friend'}
     assert result_df.shape[0] == 100
     assert len(result_df.columns) == 3  # No duplicates
 
@@ -350,7 +350,7 @@ def test_get_df_no_columns_no_includes(causal_data):
     )
     
     # Should return the entire DataFrame
-    expected_columns = {'target', 'treatment', 'age', 'invited_friend'}
+    expected_columns = {'outcome', 'treatment', 'age', 'invited_friend'}
     assert set(result_df.columns) == expected_columns
     assert result_df.shape[0] == 100
 

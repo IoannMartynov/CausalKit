@@ -32,7 +32,7 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
     # Direct dataclass-like attributes
     df = getattr(data_obj, "df")
     treatment_attr = getattr(data_obj, "treatment")
-    target_attr = getattr(data_obj, "target")
+    target_attr = getattr(data_obj, "outcome")
     # If these are Series (as in causalkit.data.CausalData properties), convert to column names
     if isinstance(treatment_attr, pd.Series):
         treatment = treatment_attr.name
@@ -55,16 +55,16 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
         else:
             confs = list(cofs) if cofs is not None else []
     else:
-        # Last resort: assume all columns except treatment/target are confounders
+        # Last resort: assume all columns except treatment/outcome are confounders
         confs = [c for c in df.columns if c not in {treatment, target}]
 
-    return {"df": df, "treatment": treatment, "target": target, "confounders": confs}
+    return {"df": df, "treatment": treatment, "outcome": target, "confounders": confs}
 
 
 class CausalEDA:
     def __init__(self, data: Any, ps_model: Optional[Any] = None, n_splits: int = 5, random_state: int = 42):
         roles = _extract_roles(data)
-        self.d = CausalDataLite(df=roles["df"], treatment=roles["treatment"], target=roles["target"], confounders=roles["confounders"])
+        self.d = CausalDataLite(df=roles["df"], treatment=roles["treatment"], target=roles["outcome"], confounders=roles["confounders"])
         self.n_splits = n_splits
         self.random_state = random_state
         self.ps_model = ps_model or LogisticRegression(max_iter=200)
@@ -250,6 +250,102 @@ class CausalEDA:
             "ESS_control": float(ess(w0[t == 0])),
             "w_all_quantiles": np.quantile(w_all, [0.5, 0.9, 0.95, 0.99, 1.0]).tolist(),
         }
+
+    def plot_target_by_treatment(self,
+                                 treatment: Optional[str] = None,
+                                 target: Optional[str] = None,
+                                 bins: int = 30,
+                                 density: bool = True,
+                                 alpha: float = 0.5,
+                                 figsize: Tuple[float, float] = (7, 4),
+                                 sharex: bool = True) -> Tuple[plt.Figure, plt.Figure]:
+        """
+        Plot the distribution of the outcome for every treatment on one plot,
+        and also produce a boxplot by treatment to visualize outliers.
+
+        Parameters
+        ----------
+        treatment : Optional[str]
+            Treatment column name. Defaults to the treatment stored in the CausalEDA data.
+        target : Optional[str]
+            Target/outcome column name. Defaults to the outcome stored in the CausalEDA data.
+        bins : int
+            Number of bins for histograms when the outcome is numeric.
+        density : bool
+            Whether to normalize histograms to form a density.
+        alpha : float
+            Transparency for overlaid histograms.
+        figsize : tuple
+            Figure size for the plots.
+        sharex : bool
+            If True and the outcome is numeric, use the same x-limits across treatments.
+
+        Returns
+        -------
+        Tuple[matplotlib.figure.Figure, matplotlib.figure.Figure]
+            (fig_distribution, fig_boxplot)
+        """
+        df = self.d.df
+        t_col = treatment or self.d.treatment
+        y_col = target or self.d.target
+
+        if t_col not in df.columns or y_col not in df.columns:
+            raise ValueError("Specified treatment/outcome columns not found in DataFrame.")
+
+        # Determine unique treatments preserving natural sort
+        treatments = pd.unique(df[t_col])
+
+        # Distribution plot (overlayed)
+        fig1 = plt.figure(figsize=figsize)
+        ax1 = fig1.gca()
+
+        # Only support numeric outcome for histogram/boxplot in this minimal implementation
+        if not pd.api.types.is_numeric_dtype(df[y_col]):
+            # Fallback: draw normalized bars per treatment for categorical outcome
+            # Compute frequency of outcome values per treatment and stack them side-by-side
+            vals = pd.unique(df[y_col])
+            vals_sorted = sorted(vals, key=lambda v: (str(type(v)), v))
+            width = 0.8 / max(1, len(treatments))
+            x = np.arange(len(vals_sorted))
+            for i, tr in enumerate(treatments):
+                sub = df[df[t_col] == tr][y_col]
+                counts = pd.Series(sub).value_counts(normalize=True)
+                heights = [counts.get(v, 0.0) for v in vals_sorted]
+                ax1.bar(x + i * width, heights, width=width, alpha=alpha, label=str(tr))
+            ax1.set_xticks(x + (len(treatments) - 1) * width / 2)
+            ax1.set_xticklabels([str(v) for v in vals_sorted])
+            ax1.set_ylabel("Proportion")
+            ax1.set_xlabel(str(y_col))
+            ax1.set_title("Target distribution by treatment (categorical)")
+            ax1.legend(title=str(t_col))
+        else:
+            # Numeric outcome: overlay histograms/density
+            # Determine common x-limits if sharex
+            xmin, xmax = None, None
+            if sharex:
+                xmin = float(df[y_col].min())
+                xmax = float(df[y_col].max())
+            for tr in treatments:
+                y_vals = df.loc[df[t_col] == tr, y_col].dropna().values
+                if len(y_vals) == 0:
+                    continue
+                ax1.hist(y_vals, bins=bins, density=density, alpha=alpha, label=str(tr), range=(xmin, xmax) if sharex else None)
+            ax1.set_xlabel(str(y_col))
+            ax1.set_ylabel("Density" if density else "Count")
+            ax1.set_title("Target distribution by treatment")
+            ax1.legend(title=str(t_col))
+
+        # Boxplot by treatment
+        fig2 = plt.figure(figsize=figsize)
+        ax2 = fig2.gca()
+        # Create data in order of treatments
+        data = [df.loc[df[t_col] == tr, y_col].dropna().values for tr in treatments]
+        ax2.boxplot(data, labels=[str(tr) for tr in treatments], showfliers=True)
+        ax2.set_xlabel(str(t_col))
+        ax2.set_ylabel(str(y_col))
+        ax2.set_title("Target by treatment (boxplot)")
+
+        return fig1, fig2
 
     # ---------- one-shot driver ----------
     def design_report(self) -> Dict[str, Any]:

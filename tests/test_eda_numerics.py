@@ -22,7 +22,7 @@ def test_design_report_no_runtime_warnings():
         ],
     )
     df = gen.generate(4000)
-    cd = CausalData(df=df, treatment="t", target="y", confounders=["age", "smoker", "bmi"])
+    cd = CausalData(df=df, treatment="t", outcome="y", confounders=["age", "smoker", "bmi"])
 
     eda = CausalEDA(cd)
     with warnings.catch_warnings(record=True) as w:
@@ -43,7 +43,7 @@ def test_fit_propensity_produces_valid_ps():
         {"name": "x2", "dist": "bernoulli", "p": 0.4},
     ], target_t_rate=0.3)
     df = gen.generate(1000)
-    cd = CausalData(df=df, treatment="t", target="y", confounders=["x1", "x2"])
+    cd = CausalData(df=df, treatment="t", outcome="y", confounders=["x1", "x2"])
     eda = CausalEDA(cd)
 
     ps = eda.fit_propensity()

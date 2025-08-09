@@ -44,7 +44,7 @@ def test_dml():
     causal_data = CausalData(
         df=df,
         treatment='treatment',
-        target='outcome',
+        outcome='outcome',
         cofounders=['age', 'smoker', 'bmi']
     )
     
