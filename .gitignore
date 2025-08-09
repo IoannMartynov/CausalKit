@@ -20,7 +20,7 @@ wheels/
 .installed.cfg
 *.egg
 /catboost_info
-
+temp_script.py
 # MkDocs
 site/
 

@@ -16,6 +16,7 @@ from typing import Any, Optional, Union
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
+import warnings
 
 import doubleml as dml
 from catboost import CatBoostRegressor, CatBoostClassifier
@@ -50,7 +51,15 @@ def _fit_doubleml_irm(
         n_folds=n_folds,
         n_rep=n_rep,
         score="ATE",
-    ).fit()
+    )
+    # Suppress scikit-learn FutureWarning about 'force_all_finite' rename during fit
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*'force_all_finite' was renamed to 'ensure_all_finite'.*",
+            category=FutureWarning,
+        )
+        obj.fit()
     return obj, df
 
 

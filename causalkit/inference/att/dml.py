@@ -4,12 +4,12 @@ DoubleML implementation for estimating average treatment effects on the treated.
 This module provides a function to estimate average treatment effects on the treated using DoubleML.
 """
 
+import warnings
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, Optional, Union, List, Tuple
 
 import doubleml as doubleml
-from catboost import CatBoostRegressor, CatBoostClassifier
 
 from causalkit.data.causaldata import CausalData
 
@@ -104,10 +104,18 @@ def dml(
         raise ValueError("confidence_level must be between 0 and 1 (exclusive)")
     
     # Set default ML models if not provided
-    if ml_g is None:
-        ml_g = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
-    if ml_m is None:
-        ml_m = CatBoostClassifier(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
+    if ml_g is None or ml_m is None:
+        # Lazy import CatBoost only if defaults are needed
+        try:
+            from catboost import CatBoostRegressor, CatBoostClassifier  # type: ignore
+        except ImportError as e:
+            raise ImportError(
+                "CatBoost is required for default learners. Install 'catboost' or provide ml_g and ml_m."
+            ) from e
+        if ml_g is None:
+            ml_g = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
+        if ml_m is None:
+            ml_m = CatBoostClassifier(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
     
     # Get data from CausalData object
     df = data.get_df()
@@ -130,10 +138,16 @@ def dml(
         score="ATTE"  # Use ATTE score for ATT estimation
     )
     
-    dml_irm_obj.fit()
+    # Suppress scikit-learn FutureWarning about 'force_all_finite' rename during fit
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*'force_all_finite' was renamed to 'ensure_all_finite'.*",
+            category=FutureWarning,
+        )
+        dml_irm_obj.fit()
     
     # Calculate confidence interval
-    alpha = 1 - confidence_level
     ci = dml_irm_obj.confint(level=confidence_level)
     
     # Extract confidence interval values (handling different return types)
