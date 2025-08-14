@@ -1,3 +1,37 @@
+"""EDA utilities for causal analysis (propensity, overlap, balance, weights).
+
+This module provides a lightweight CausalEDA class to quickly assess whether a
+binary treatment problem is suitable for causal effect estimation. The outputs
+focus on interpretability: treatment predictability, overlap/positivity,
+covariate balance before/after weighting, and basic data health.
+
+What the main outputs mean
+- missingness_report(): DataFrame with per-column missing_rate (fraction of NaNs)
+  and n_missing. High missingness may require imputation or dropping columns.
+- data_health_check(): Dict with constant_columns (uninformative features),
+  n_duplicates (potential data leakage or repetition), and n_rows.
+- summaries(): Dict with treatment_rate (share of treated),
+  outcome_by_treatment (count/mean/std within treatment groups), and
+  naive_diff (treated mean minus control mean; a biased estimate if confounding exists).
+- fit_propensity(): Numpy array of cross-validated propensity scores P(T=1|X).
+- treatment_predictability_auc(): Float AUC of treatment vs. propensity score.
+  Higher AUC implies treatment is predictable from X (more confounding risk).
+- positivity_check(): Dict with bounds, share_below, share_above, and flag.
+  It reports what share of units have PS outside [low, high]; a large share
+  signals poor overlap (violated positivity).
+- plot_ps_overlap(): Overlaid histograms of PS for treated vs control.
+- balance_table(): DataFrame with standardized mean differences (SMD) for each
+  covariate before and after IPTW weighting (SMD_unweighted, SMD_weighted) and
+  boolean flags if |SMD|>0.1.
+- love_plot(): Visual comparison of SMDs pre/post weighting for top covariates.
+- weight_diagnostics(): Dict including effective sample sizes (ESS_all,
+  ESS_treated, ESS_control) and quantiles of all IPTW weights (w_all_quantiles).
+- design_report(): One-shot dict aggregating all of the above, convenient for
+  quick inspection and logging.
+
+Note: The class accepts either the project’s CausalData object (duck-typed) or a
+CausalDataLite with explicit fields.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -18,6 +52,14 @@ import matplotlib.pyplot as plt
 # supports the existing causalkit.data.CausalData which uses `cofounders`.
 @dataclass
 class CausalDataLite:
+    """A minimal container for dataset roles used by CausalEDA.
+
+    Attributes
+    - df: The full pandas DataFrame containing treatment, outcome and covariates.
+    - treatment: Column name of the binary treatment indicator (0/1).
+    - target: Column name of the outcome variable.
+    - confounders: List of covariate column names used to model treatment.
+    """
     df: pd.DataFrame
     treatment: str
     target: str
@@ -25,14 +67,25 @@ class CausalDataLite:
 
 
 def _extract_roles(data_obj: Any) -> Dict[str, Any]:
-    """Extract roles from either CausalDataLite, the project's CausalData, or a
-    duck-typed object with similar attributes. Supports both `confounders` and
-    `cofounders` spellings.
+    """Extract dataset roles from various supported data containers.
+
+    Accepts:
+    - CausalDataLite
+    - Project's CausalData (duck-typed: attributes df, treatment, outcome,
+      and either confounders or cofounders)
+    - Any object exposing the same attributes/properties
+
+    Returns a dict with keys: df, treatment, outcome, confounders.
+    If both confounders/cofounders are absent, it assumes all columns except
+    treatment/outcome are confounders.
     """
     # Direct dataclass-like attributes
     df = getattr(data_obj, "df")
     treatment_attr = getattr(data_obj, "treatment")
-    target_attr = getattr(data_obj, "outcome")
+    # Support both 'outcome' (project's CausalData) and 'target' (CausalDataLite)
+    target_attr = getattr(data_obj, "outcome", None)
+    if target_attr is None:
+        target_attr = getattr(data_obj, "target")
     # If these are Series (as in causalkit.data.CausalData properties), convert to column names
     if isinstance(treatment_attr, pd.Series):
         treatment = treatment_attr.name
@@ -42,7 +95,6 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
         target = target_attr.name
     else:
         target = target_attr
-
 
     if hasattr(data_obj, "confounders") and getattr(data_obj, "confounders") is not None:
         confs = list(getattr(data_obj, "confounders"))
@@ -62,6 +114,18 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
 
 
 class CausalEDA:
+    """Exploratory diagnostics for causal designs with binary treatment.
+
+    The class exposes methods to:
+    - Check data health and missingness.
+    - Summarize outcome by treatment and naive mean difference.
+    - Estimate cross-validated propensity scores and assess treatment
+      predictability (AUC) and positivity/overlap.
+    - Inspect covariate balance via standardized mean differences (SMD)
+      before/after IPTW weighting; visualize with a love plot.
+    - Inspect weight distributions and effective sample size (ESS).
+    - Produce a one-shot design_report() that aggregates the above.
+    """
     def __init__(self, data: Any, ps_model: Optional[Any] = None, n_splits: int = 5, random_state: int = 42):
         roles = _extract_roles(data)
         self.d = CausalDataLite(df=roles["df"], treatment=roles["treatment"], target=roles["outcome"], confounders=roles["confounders"])
@@ -88,18 +152,39 @@ class CausalEDA:
 
     # ---------- basics ----------
     def missingness_report(self) -> pd.DataFrame:
+        """Report per-column missingness.
+
+        Returns a DataFrame indexed by column with:
+        - missing_rate: fraction of NaNs per column
+        - n_missing: count of NaNs per column
+        Sorted by missing_rate descending.
+        """
         df = self.d.df
         miss = df.isna().mean().rename("missing_rate").to_frame()
         miss["n_missing"] = df.isna().sum()
         return miss.sort_values("missing_rate", ascending=False)
 
     def data_health_check(self) -> Dict[str, Any]:
+        """Basic data health indicators.
+
+        Returns a dict with:
+        - constant_columns: list of columns with <=1 unique value (uninformative)
+        - n_duplicates: number of duplicated rows
+        - n_rows: total number of rows
+        """
         df = self.d.df
         const = [c for c in df.columns if df[c].nunique(dropna=False) <= 1]
         dups = int(df.duplicated().sum())
         return {"constant_columns": const, "n_duplicates": dups, "n_rows": len(df)}
 
     def summaries(self) -> Dict[str, Any]:
+        """Outcome summaries by treatment.
+
+        Returns a dict with:
+        - treatment_rate: share of treated units (mean of 0/1 treatment)
+        - outcome_by_treatment: pandas DataFrame with count/mean/std of outcome per treatment group
+        - naive_diff: treated mean minus control mean (unadjusted, potentially biased)
+        """
         df, t, y = self.d.df, self.d.treatment, self.d.target
         if not pd.api.types.is_numeric_dtype(df[t]):
             raise ValueError("Treatment must be numeric 0/1 for summaries().")
@@ -115,6 +200,12 @@ class CausalEDA:
 
     # ---------- propensity & overlap ----------
     def fit_propensity(self) -> np.ndarray:
+        """Estimate cross-validated propensity scores P(T=1|X).
+
+        Uses a preprocessing+logistic regression pipeline with stratified K-fold
+        cross_val_predict to generate out-of-fold probabilities. Returns a
+        numpy array of shape (n_rows,) with values clipped to (1e-6, 1-1e-6).
+        """
         df = self.d.df
         X = df[self.d.confounders]
         t = df[self.d.treatment].astype(int).values
@@ -131,6 +222,12 @@ class CausalEDA:
         return ps
 
     def treatment_predictability_auc(self, ps: Optional[np.ndarray] = None) -> float:
+        """Compute AUC of treatment assignment vs. estimated propensity score.
+
+        Interpretation: Higher AUC means treatment is more predictable from X,
+        indicating stronger systematic differences between groups (potential
+        confounding). Values near 0.5 suggest random-like assignment.
+        """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
@@ -140,6 +237,14 @@ class CausalEDA:
         return float(roc_auc_score(t, ps))
 
     def positivity_check(self, ps: Optional[np.ndarray] = None, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
+        """Check overlap/positivity based on propensity score thresholds.
+
+        Returns a dict with:
+        - bounds: (low, high) thresholds used
+        - share_below: fraction with PS < low
+        - share_above: fraction with PS > high
+        - flag: heuristic boolean True if the tails collectively exceed ~2%
+        """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
@@ -151,6 +256,11 @@ class CausalEDA:
         return {"bounds": bounds, "share_below": share_low, "share_above": share_high, "flag": bool(flag)}
 
     def plot_ps_overlap(self, ps: Optional[np.ndarray] = None):
+        """Plot overlaid histograms of propensity scores for treated vs control.
+
+        Useful to visually assess group overlap. Does not return data; it draws
+        on the current matplotlib figure.
+        """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
@@ -174,6 +284,13 @@ class CausalEDA:
         return m, v
 
     def _iptw_weights(self, ps: np.ndarray, estimand: str = "ATE") -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Compute IPTW weights for a given estimand.
+
+        Returns (w_t, w_1, w_0):
+        - w_t: per-row overall weight for the estimand
+        - w_1: weights to reweight the treated group
+        - w_0: weights to reweight the control group
+        """
         t = self.d.df[self.d.treatment].astype(int).values
         if estimand.upper() == "ATE":
             w_t = t / ps + (1 - t) / (1 - ps)
@@ -188,6 +305,16 @@ class CausalEDA:
         return w_t, w_1, w_0
 
     def balance_table(self, ps: Optional[np.ndarray] = None, estimand: str = "ATE") -> pd.DataFrame:
+        """Compute standardized mean differences (SMD) pre/post IPTW.
+
+        Returns a DataFrame with columns:
+        - covariate: (possibly one-hot) covariate name
+        - SMD_unweighted: standardized mean difference before weighting
+        - SMD_weighted: standardized mean difference after IPTW
+        - flag_unw: True if |SMD_unweighted| > 0.1
+        - flag_w: True if |SMD_weighted| > 0.1
+        Lower |SMD| indicates better balance between treated and control.
+        """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
@@ -218,6 +345,12 @@ class CausalEDA:
         return tab
 
     def love_plot(self, balance_df: pd.DataFrame, top_n: int = 25):
+        """Create a love plot comparing pre/post weighting SMDs.
+
+        Parameters
+        - balance_df: output of balance_table()
+        - top_n: show up to this many covariates (sorted by |SMD_unweighted|)
+        """
         d = balance_df.copy().head(top_n)
         plt.figure()
         y = np.arange(len(d))[::-1]
@@ -233,6 +366,15 @@ class CausalEDA:
         plt.title("Love plot")
 
     def weight_diagnostics(self, ps: Optional[np.ndarray] = None, estimand: str = "ATE") -> Dict[str, Any]:
+        """Summary stats for IPTW weights and effective sample size (ESS).
+
+        Returns a dict with:
+        - ESS_all: effective sample size using overall weights
+        - ESS_treated: ESS within the treated group
+        - ESS_control: ESS within the control group
+        - w_all_quantiles: list with [50%, 90%, 95%, 99%, 100%] quantiles of overall weights
+        Larger tails imply a few samples dominate, which can inflate variance.
+        """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
@@ -349,6 +491,18 @@ class CausalEDA:
 
     # ---------- one-shot driver ----------
     def design_report(self) -> Dict[str, Any]:
+        """Run a full set of diagnostics and return a consolidated report.
+
+        Returns a dict with keys:
+        - health: output of data_health_check()
+        - missing: output of missingness_report()
+        - summaries: output of summaries()
+        - treat_auc: float from treatment_predictability_auc()
+        - positivity: output of positivity_check()
+        - balance: output of balance_table()
+        - weights: output of weight_diagnostics()
+        Useful for quick inspection and logging in notebooks or pipelines.
+        """
         ps = self.fit_propensity()
         return {
             "health": self.data_health_check(),
