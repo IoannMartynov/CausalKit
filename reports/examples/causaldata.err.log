@@ -40,33 +40,29 @@ File [0;32m~/work/CausalKit/CausalKit/causalkit/__init__.py:21[0m
 [1;32m     23[0m __version__ [38;5;241m=[39m [38;5;124m"[39m[38;5;124m0.1.0[39m[38;5;124m"[39m
 [1;32m     24[0m __all__ [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mdata[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mdesign[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124manalysis[39m[38;5;124m"[39m]
 
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/__init__.py:7[0m
-[1;32m      1[0m [38;5;124;03m"""[39;00m
-[1;32m      2[0m [38;5;124;03mAnalysis module for causalkit.[39;00m
-[1;32m      3[0m 
-[1;32m      4[0m [38;5;124;03mThis module provides statistical inference tools for causal inference.[39;00m
-[1;32m      5[0m [38;5;124;03m"""[39;00m
-[0;32m----> 7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mttest[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ttest
-[1;32m      8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mconversion_z_test[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m conversion_z_test
-[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbootstrap_diff_means[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m bootstrap_diff_means
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/__init__.py:11[0m
+[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mconversion_z_test[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m conversion_z_test
+[1;32m     10[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbootstrap_diff_means[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m bootstrap_diff_means
+[0;32m---> 11[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml [38;5;28;01mas[39;00m dml
+[1;32m     12[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausalforestdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m causalforestdml [38;5;28;01mas[39;00m causalforestdml
+[1;32m     13[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml [38;5;28;01mas[39;00m dml_att
 
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/att/__init__.py:8[0m
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/__init__.py:7[0m
 [1;32m      1[0m [38;5;124;03m"""[39;00m
-[1;32m      2[0m [38;5;124;03mAverage Treatment Effect on the Treated (ATT) inference methods for causalkit.[39;00m
+[1;32m      2[0m [38;5;124;03mAverage Treatment Effect (ATE) inference methods for causalkit.[39;00m
 [1;32m      3[0m 
-[1;32m      4[0m [38;5;124;03mThis module provides methods for estimating average treatment effects on the treated.[39;00m
+[1;32m      4[0m [38;5;124;03mThis module provides methods for estimating average treatment effects.[39;00m
 [1;32m      5[0m [38;5;124;03m"""[39;00m
-[1;32m      7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml
-[0;32m----> 8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausalforestdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m causalforestdml
-[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mttest[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m ttest
-[1;32m     10[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mconversion_z_test[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m conversion_z_test
+[0;32m----> 7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml
+[1;32m      8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausalforestdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m causalforestdml
+[1;32m     10[0m __all__ [38;5;241m=[39m [[38;5;124m'[39m[38;5;124mdml[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mcausalforestdml[39m[38;5;124m'[39m]
 
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/att/causalforestdml.py:11[0m
-[1;32m      8[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mpd[39;00m
+File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/dml.py:12[0m
 [1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Dict, Any, Optional, Union, List, Tuple
-[0;32m---> 11[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01meconml[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalForestDML
-[1;32m     12[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcatboost[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CatBoostRegressor, CatBoostClassifier
-[1;32m     14[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausaldata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalData
+[1;32m     11[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m
+[0;32m---> 12[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcatboost[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CatBoostRegressor, CatBoostClassifier
+[1;32m     13[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mensemble[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m RandomForestRegressor, RandomForestClassifier
+[1;32m     15[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausaldata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalData
 
-[0;31mModuleNotFoundError[0m: No module named 'econml'
+[0;31mModuleNotFoundError[0m: No module named 'catboost'
 
