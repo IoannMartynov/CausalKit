@@ -11,4 +11,10 @@ Official documentation https://ioannmartynov.github.io/CausalKit/
 ```bash
 pip install git+https://github.com/ioannmartynov/causalkit.git
 ```
-
+# Scenarios
+| Is RCT        | Treatment | Outcome    | EDA | Estimands | Docs, Examples | Synthetic tests |
+|---------------|-----------|------------|-----|-----------|----------------|-----------------|
+| Observational | Binary    | Continuous | Yes | No        | No             | No              |
+| Observational | Binary    | Continuous | Yes | No        | No             | No              |
+|               |           |            |     |           |                |                 |
+|               |           |            |     |           |                |                 |
