@@ -116,9 +116,9 @@ def causalforestdml(
     
     # Set default ML models if not provided
     if model_y is None:
-        model_y = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
+        model_y = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
     if model_t is None:
-        model_t = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False)
+        model_t = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
     
     # Get data from CausalData object
     Y = data.target.values
