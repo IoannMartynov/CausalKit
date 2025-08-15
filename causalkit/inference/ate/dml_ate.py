@@ -1,7 +1,7 @@
 """
-DoubleML implementation for estimating average treatment effects on the treated.
+DoubleML implementation for estimating average treatment effects.
 
-This module provides a function to estimate average treatment effects on the treated using DoubleML.
+This module provides a function to estimate average treatment effects using DoubleML.
 """
 
 import warnings
@@ -10,20 +10,23 @@ import pandas as pd
 from typing import Dict, Any, Optional, Union, List, Tuple
 
 import doubleml as doubleml
+from catboost import CatBoostRegressor, CatBoostClassifier
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data.causaldata import CausalData
 
 
-def dml(
+def dml_ate(
     data: CausalData,
     ml_g: Optional[Any] = None,
     ml_m: Optional[Any] = None,
     n_folds: int = 5,
     n_rep: int = 1,
+    score: str = "ATE",
     confidence_level: float = 0.95,
 ) -> Dict[str, Any]:
     """
-    Estimate average treatment effects on the treated using DoubleML's interactive regression model (IRM).
+    Estimate average treatment effects using DoubleML's interactive regression model (IRM).
     
     Parameters
     ----------
@@ -39,6 +42,8 @@ def dml(
         Number of folds for cross-fitting.
     n_rep : int, default 1
         Number of repetitions for the sample splitting.
+    score : str, default "ATE"
+        A str ("ATE" or "ATTE") specifying the score function.
     confidence_level : float, default 0.95
         The confidence level for calculating confidence intervals (between 0 and 1).
         
@@ -46,7 +51,7 @@ def dml(
     -------
     Dict[str, Any]
         A dictionary containing:
-        - coefficient: The estimated average treatment effect on the treated
+        - coefficient: The estimated average treatment effect
         - std_error: The standard error of the estimate
         - p_value: The p-value for the null hypothesis that the effect is zero
         - confidence_interval: Tuple of (lower, upper) bounds for the confidence interval
@@ -62,7 +67,7 @@ def dml(
     --------
     >>> from causalkit.data import generate_rct_data
     >>> from causalkit.data import CausalData
-    >>> from causalkit.inference.att import dml
+    >>> from causalkit.inference.ate import dml_ate
     >>> 
     >>> # Generate data
     >>> df = generate_rct_data()
@@ -75,9 +80,9 @@ def dml(
     ...     cofounders=['age', 'invited_friend']
     ... )
     >>> 
-    >>> # Estimate ATT using DoubleML
-    >>> results = dml(ck)
-    >>> print(f"ATT: {results['coefficient']:.4f}")
+    >>> # Estimate ATE using DoubleML
+    >>> results = dml_ate(ck)
+    >>> print(f"ATE: {results['coefficient']:.4f}")
     >>> print(f"Standard Error: {results['std_error']:.4f}")
     >>> print(f"P-value: {results['p_value']:.4f}")
     >>> print(f"Confidence Interval: {results['confidence_interval']}")
@@ -104,18 +109,10 @@ def dml(
         raise ValueError("confidence_level must be between 0 and 1 (exclusive)")
     
     # Set default ML models if not provided
-    if ml_g is None or ml_m is None:
-        # Lazy import CatBoost only if defaults are needed
-        try:
-            from catboost import CatBoostRegressor, CatBoostClassifier  # type: ignore
-        except ImportError as e:
-            raise ImportError(
-                "CatBoost is required for default learners. Install 'catboost' or provide ml_g and ml_m."
-            ) from e
-        if ml_g is None:
-            ml_g = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
-        if ml_m is None:
-            ml_m = CatBoostClassifier(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
+    if ml_g is None:
+        ml_g = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
+    if ml_m is None:
+        ml_m = CatBoostClassifier(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
     
     # Get data from CausalData object
     df = data.get_df()
@@ -128,14 +125,14 @@ def dml(
         x_cols=data._cofounders
     )
     
-    # Create and fit DoubleMLIRM object with score="ATTE" for ATT estimation
+    # Create and fit DoubleMLIRM object
     dml_irm_obj = doubleml.DoubleMLIRM(
         data_dml,
         ml_g=ml_g,
         ml_m=ml_m,
         n_folds=n_folds,
         n_rep=n_rep,
-        score="ATTE"  # Use ATTE score for ATT estimation
+        score=score
     )
     
     # Suppress scikit-learn FutureWarning about 'force_all_finite' rename during fit
@@ -148,6 +145,7 @@ def dml(
         dml_irm_obj.fit()
     
     # Calculate confidence interval
+    alpha = 1 - confidence_level
     ci = dml_irm_obj.confint(level=confidence_level)
     
     # Extract confidence interval values (handling different return types)

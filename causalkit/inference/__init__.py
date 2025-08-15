@@ -8,9 +8,9 @@ This module provides statistical inference tools for causal inference.
 from causalkit.inference.att.ttest import ttest
 from causalkit.inference.att.conversion_z_test import conversion_z_test
 from causalkit.inference.att.bootstrap_diff_means import bootstrap_diff_means
-from causalkit.inference.ate.dml import dml as dml
+from causalkit.inference.ate.dml_ate import dml_ate as dml
 from causalkit.inference.ate.causalforestdml import causalforestdml as causalforestdml
-from causalkit.inference.att.dml import dml as dml_att
+from causalkit.inference.att.dml_att import dml_att as dml_att
 from causalkit.inference.cate import cate_esimand
 from causalkit.inference.gate import gate_esimand
 

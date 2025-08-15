@@ -429,19 +429,18 @@ class CausalDatasetGenerator:
         return loc
 
     def _calibrate_alpha_t(self, X: np.ndarray, U: np.ndarray, target: float) -> float:
-        # Bisection on alpha_t so that mean propensity ~ outcome
+        # Bisection on alpha_t so that mean propensity ~ target
         lo, hi = -50.0, 50.0  # Use a wider range to handle extreme cases
         for _ in range(100):  # Increase iterations for better precision
             mid = 0.5*(lo+hi)
             p = _sigmoid(mid + self._treatment_score(X, U))
             m = p.mean()
-            if m > target:
-                hi = mid
-            else:
-                lo = mid
-            # Early stopping if we're close enough
             if abs(m - target) < 0.001:
                 break
+            if m > target:
+                hi = mid  # Current rate too high, decrease alpha_t
+            else:
+                lo = mid  # Current rate too low, increase alpha_t
         return 0.5*(lo+hi)
 
     # ---------- Public API ----------

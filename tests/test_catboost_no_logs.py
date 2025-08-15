@@ -28,7 +28,7 @@ def _make_small_causaldata(n=100, seed=0):
 
 
 @pytest.mark.parametrize("module_path, func_name", [
-    ("causalkit.inference.ate.dml", "dml"),
+    ("causalkit.inference.ate.dml_ate", "dml_ate"),
     ("causalkit.inference.att.dml", "dml"),
 ])
 def test_catboost_dml_does_not_write_files(module_path, func_name):
