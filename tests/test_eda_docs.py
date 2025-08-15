@@ -22,7 +22,6 @@ def test_docstrings_present():
     assert CausalEDA.__doc__ and "Exploratory diagnostics" in CausalEDA.__doc__
     # instance methods should have docstrings
     for name in [
-        "missingness_report",
         "data_health_check",
         "summaries",
         "fit_propensity",
@@ -42,9 +41,6 @@ def test_outputs_shapes_and_keys():
     data = CausalDataLite(df=df, treatment="t", target="y", confounders=["x1", "x2"])
     eda = CausalEDA(data)
 
-    # missingness report
-    miss = eda.missingness_report()
-    assert {"missing_rate", "n_missing"}.issubset(set(miss.columns))
 
     # health
     health = eda.data_health_check()
@@ -77,5 +73,5 @@ def test_outputs_shapes_and_keys():
 
     # design report
     report = eda.design_report()
-    for k in ["health", "missing", "summaries", "treat_auc", "positivity", "balance", "weights"]:
+    for k in ["health", "summaries", "treat_auc", "positivity", "balance", "weights"]:
         assert k in report

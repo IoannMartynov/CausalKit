@@ -14,9 +14,15 @@ from .placebo import (
     refute_placebo_treatment,
     refute_subset,
 )
+from .sensitivity import (
+    sensitivity_analysis,
+    get_sensitivity_summary,
+)
 
 __all__ = [
     "refute_placebo_outcome",
     "refute_placebo_treatment",
     "refute_subset",
+    "sensitivity_analysis",
+    "get_sensitivity_summary",
 ]
