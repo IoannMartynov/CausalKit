@@ -69,7 +69,7 @@ def test_dml_suppresses_force_all_finite_warning(monkeypatch, recwarn):
     # Import module and monkeypatch its doubleml reference
     import importlib
     dml_module = importlib.import_module('causalkit.inference.att.dml')
-    from causalkit.inference.att import dml as dml_func
+    from causalkit.inference.att import dml_att as dml_func
 
     fake_doubleml = types.SimpleNamespace(DoubleMLData=FakeDoubleMLData, DoubleMLIRM=FakeDoubleMLIRM)
     monkeypatch.setattr(dml_module, "doubleml", fake_doubleml, raising=True)

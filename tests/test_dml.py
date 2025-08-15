@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data import CausalData
-from causalkit.inference.ate import dml
+from causalkit.inference.ate import dml_ate
 
 
 def test_dml():
@@ -53,7 +53,7 @@ def test_dml():
     ml_m = RandomForestClassifier(n_estimators=100, max_features=3, max_depth=5, min_samples_leaf=2, random_state=42)
     
     # Run DML
-    results = dml(
+    results = dml_ate(
         data=causal_data,
         ml_g=ml_g,
         ml_m=ml_m,
