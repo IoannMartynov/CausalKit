@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Scenario 1 &#8212; CausalKit  documentation</title>
+    <title>&lt;no title&gt; &#8212; CausalKit  documentation</title>
   
   
   
@@ -45,7 +45,7 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/scenario_1';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/eda_test';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -321,7 +321,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Scenario 1</li>
+    <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li>
   </ul>
 </nav>
 </div>
@@ -338,36 +338,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="scenario-1">
-<h1>Scenario 1<a class="headerlink" href="#scenario-1" title="Link to this heading">#</a></h1>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Is RCT</p></th>
-<th class="head"><p>Treatment</p></th>
-<th class="head"><p>Outcome</p></th>
-<th class="head"><p>EDA</p></th>
-<th class="head"><p>Estimands</p></th>
-<th class="head"><p>Refutation</p></th>
-<th class="head"><p>Docs, Examples</p></th>
-<th class="head"><p>Synthetic tests</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Observational</p></td>
-<td><p>Binary</p></td>
-<td><p>Continuous</p></td>
-<td><p>No</p></td>
-<td><p>No</p></td>
-<td><p>No</p></td>
-<td><p>No</p></td>
-<td><p>No</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<section id="generate-data">
-<h2>Generate data<a class="headerlink" href="#generate-data" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
+  <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -490,292 +461,17 @@ document.write(`
 </div>
 </div>
 </div>
-</section>
-<section id="eda">
-<h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Simple outcome/treatment summaries</span>
-<span class="n">summ</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">summaries</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Share treated:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;treatment_rate&quot;</span><span class="p">]),</span> <span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Naive diff (treated - control):&quot;</span><span class="p">,</span>
-      <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">]),</span> <span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">])</span> <span class="k">else</span> <span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Outcome by treatment:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;outcome_by_treatment&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Share treated: 0.3412
-Naive diff (treated - control): 2.4398
-
-Outcome by treatment:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>count</th>
-      <th>mean</th>
-      <th>std</th>
-    </tr>
-    <tr>
-      <th>t</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0.0</th>
-      <td>3294</td>
-      <td>6.049281</td>
-      <td>3.961794</td>
-    </tr>
-    <tr>
-      <th>1.0</th>
-      <td>1706</td>
-      <td>8.489068</td>
-      <td>3.937085</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summ</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;treatment_rate&#39;: np.float64(0.3412),
- &#39;outcome_by_treatment&#39;:      count      mean       std
- t                             
- 0.0   3294  6.049281  3.961794
- 1.0   1706  8.489068  3.937085,
- &#39;naive_diff&#39;: np.float64(2.4397874992846997)}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity, predictability (AUC), and positivity</span>
-<span class="n">ps</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
-<span class="n">auc</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">treatment_predictability_auc</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
-<span class="n">pos</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treatment predictability AUC:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">auc</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check:&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Treatment predictability AUC: 0.5964
-Positivity check: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Treatment feature importance (which features drive treatment assignment)</span>
-<span class="n">features_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">treatment_features</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Feature importance for treatment prediction:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">features_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Feature importance for treatment prediction:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>feature</th>
-      <th>shap_mean</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>tenure_months</td>
-      <td>0.000929</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>avg_sessions_week</td>
-      <td>-0.000339</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>spend_last_month</td>
-      <td>-0.000290</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>premium_user</td>
-      <td>-0.000271</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>urban_resident</td>
-      <td>-0.000030</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3) Balance diagnostics (SMD) for covariate assessment</span>
-<span class="n">balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">balance_table</span><span class="p">()</span>
-<span class="n">display</span><span class="p">(</span><span class="n">balance_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>covariate</th>
-      <th>SMD</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>3</th>
-      <td>premium_user</td>
-      <td>0.329364</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>avg_sessions_week</td>
-      <td>0.198836</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>tenure_months</td>
-      <td>0.172035</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>urban_resident</td>
-      <td>0.100418</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>spend_last_month</td>
-      <td>0.080595</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 4) Propensity score overlap</span>
-<span class="c1"># Overlap plot (treated vs control propensity distributions)</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">plot_ps_overlap</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/62938b2015a8e004cea8965b49e2b6d837bbe69b781ca73523ba0c42c7892c99.png" src="../_images/62938b2015a8e004cea8965b49e2b6d837bbe69b781ca73523ba0c42c7892c99.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5) Outcome distribution by treatment (hist + boxplot)</span>
-<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">plot_target_by_treatment</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/fd192c75164746a05f30ce7bce670417379e904ba02181f8bc191c7f881c4509.png" src="../_images/fd192c75164746a05f30ce7bce670417379e904ba02181f8bc191c7f881c4509.png" />
-<img alt="../_images/fc168f871735e7f2e0b5184362a81f728d8f29af770cac6837844263e0cfac2c.png" src="../_images/fc168f871735e7f2e0b5184362a81f728d8f29af770cac6837844263e0cfac2c.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5) One-shot consolidated report (if you prefer a single call)</span>
-<span class="n">report</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">design_report</span><span class="p">()</span>
-<span class="c1"># Example: access parts</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AUC:&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;treat_auc&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity:&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;positivity&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Balance variables:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s2">&quot;balance&quot;</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AUC: 0.5964160208870297
-Positivity: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
-Balance variables: 5
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">design_report</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -793,24 +489,106 @@ Balance variables: 5
   0.0   3294  6.049281  3.961794
   1.0   1706  8.489068  3.937085,
   &#39;naive_diff&#39;: np.float64(2.4397874992846997)},
- &#39;treat_auc&#39;: 0.5964160208870297,
+ &#39;treat_auc&#39;: 0.6230451330387909,
  &#39;positivity&#39;: {&#39;bounds&#39;: (0.05, 0.95),
-  &#39;share_below&#39;: 0.002,
+  &#39;share_below&#39;: 0.0,
   &#39;share_above&#39;: 0.0,
   &#39;flag&#39;: False},
- &#39;balance&#39;:            covariate       SMD
- 3       premium_user  0.329364
- 1  avg_sessions_week  0.198836
- 0      tenure_months  0.172035
- 4     urban_resident  0.100418
- 2   spend_last_month  0.080595}
+ &#39;balance&#39;:            covariate  SMD_unweighted  SMD_weighted  flag_unw  flag_w
+ 3       premium_user        0.329364     -0.001253      True   False
+ 1  avg_sessions_week        0.198836      0.005637      True   False
+ 0      tenure_months        0.172035      0.000315      True   False
+ 4     urban_resident        0.100418     -0.000195      True   False
+ 2   spend_last_month        0.080595     -0.003427     False   False,
+ &#39;weights&#39;: {&#39;ESS_all&#39;: 4209.562077633034,
+  &#39;ESS_treated&#39;: 1567.5385411996365,
+  &#39;ESS_control&#39;: 3201.610599855847,
+  &#39;w_all_quantiles&#39;: [1.6055703363251397,
+   3.351207269981197,
+   3.8397035367001444,
+   4.783347714944799,
+   7.673993949733509]}}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DIRECT CHAINING EXAMPLE ===&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of using the new summary() method for beautiful text output</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DESIGN REPORT SUMMARY ===&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== DESIGN REPORT SUMMARY ===
+============================================================
+CAUSAL DESIGN REPORT SUMMARY
+============================================================
+
+📊 TREATMENT &amp; OUTCOME SUMMARY
+------------------------------
+Treatment Rate: 34.1%
+Naive Difference (Treated - Control): 2.4398
+
+Outcome by Treatment:
+     count    mean     std
+t                         
+0.0   3294  6.0493  3.9618
+1.0   1706  8.4891  3.9371
+
+🎯 TREATMENT PREDICTABILITY
+------------------------------
+Treatment AUC: 0.6230
+  ✅ Low predictability - minimal confounding risk
+
+🔄 POSITIVITY/OVERLAP ASSESSMENT
+------------------------------
+Propensity Score Bounds: (0.05, 0.95)
+Share Below Lower Bound: 0.0%
+Share Above Upper Bound: 0.0%
+Total in Extreme Regions: 0.0%
+  ✅ Good overlap - positivity assumption satisfied
+
+⚖️  COVARIATE BALANCE ASSESSMENT
+------------------------------
+Total Variables: 5
+Imbalanced Before Weighting: 4
+Imbalanced After Weighting: 0
+  ✅ Perfect balance achieved after weighting
+
+Worst Imbalanced Variables (Before Weighting):
+  premium_user: 0.329 → -0.001
+  avg_sessions_week: 0.199 → 0.006
+  tenure_months: 0.172 → 0.000
+
+⚖️  WEIGHT DIAGNOSTICS
+------------------------------
+Effective Sample Size (All): 4209.6
+Effective Sample Size (Treated): 1567.5
+Effective Sample Size (Control): 3201.6
+
+Weight Distribution (Quantiles):
+  50%: 1.61
+  90%: 3.35
+  95%: 3.84
+  99%: 4.78
+  100%: 7.67
+  ✅ Reasonable weight distribution
+
+📋 OVERALL ASSESSMENT
+------------------------------
+✅ Design looks good for causal inference!
+   All key assumptions appear to be satisfied.
+============================================================
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alternative: direct chaining syntax</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DIRECT CHAINING EXAMPLE ===&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">eda</span><span class="o">.</span><span class="n">design_report</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -834,244 +612,52 @@ t
 
 🎯 TREATMENT PREDICTABILITY
 ------------------------------
-Treatment AUC: 0.5964
+Treatment AUC: 0.6230
   ✅ Low predictability - minimal confounding risk
 
 🔄 POSITIVITY/OVERLAP ASSESSMENT
 ------------------------------
 Propensity Score Bounds: (0.05, 0.95)
-Share Below Lower Bound: 0.2%
+Share Below Lower Bound: 0.0%
 Share Above Upper Bound: 0.0%
-Total in Extreme Regions: 0.2%
+Total in Extreme Regions: 0.0%
   ✅ Good overlap - positivity assumption satisfied
 
 ⚖️  COVARIATE BALANCE ASSESSMENT
 ------------------------------
 Total Variables: 5
-Imbalanced Variables: 4
-  ⚠️  Poor balance - many imbalanced variables
+Imbalanced Before Weighting: 4
+Imbalanced After Weighting: 0
+  ✅ Perfect balance achieved after weighting
 
-Most Imbalanced Variables:
-  premium_user: 0.329
-  avg_sessions_week: 0.199
-  tenure_months: 0.172
+Worst Imbalanced Variables (Before Weighting):
+  premium_user: 0.329 → -0.001
+  avg_sessions_week: 0.199 → 0.006
+  tenure_months: 0.172 → 0.000
+
+⚖️  WEIGHT DIAGNOSTICS
+------------------------------
+Effective Sample Size (All): 4209.6
+Effective Sample Size (Treated): 1567.5
+Effective Sample Size (Control): 3201.6
+
+Weight Distribution (Quantiles):
+  50%: 1.61
+  90%: 3.35
+  95%: 3.84
+  99%: 4.78
+  100%: 7.67
+  ✅ Reasonable weight distribution
 
 📋 OVERALL ASSESSMENT
 ------------------------------
-⚠️  Design has potential issues:
-   - Poor covariate balance
-   Consider additional robustness checks or sensitivity analysis.
+✅ Design looks good for causal inference!
+   All key assumptions appear to be satisfied.
 ============================================================
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import inference methods</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.att</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_att</span>
-
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== ORIGINAL CAUSAL ESTIMATES ===&quot;</span><span class="p">)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE Estimate: </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE 95% CI: [</span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE p-value: </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True effect: </span><span class="si">{</span><span class="n">gen</span><span class="o">.</span><span class="n">theta</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== ORIGINAL CAUSAL ESTIMATES ===
-ATE Estimate: 1.849
-ATE 95% CI: [1.615, 2.084]
-ATE p-value: 0.000000
-True effect: 1.800
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="refutation">
-<h2>Refutation<a class="headerlink" href="#refutation" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import refutation utilities</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">refute_placebo_outcome</span><span class="p">,</span>
-    <span class="n">refute_placebo_treatment</span><span class="p">,</span>
-    <span class="n">refute_subset</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Placebo Outcome Test ---&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shuffling outcome variable (breaking outcome-treatment link)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected: θ ≈ 0, large p-value</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Test with ATE estimator</span>
-<span class="n">ate_placebo_outcome</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE with shuffled outcome:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  θ = </span><span class="si">{</span><span class="n">ate_placebo_outcome</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  p-value = </span><span class="si">{</span><span class="n">ate_placebo_outcome</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Placebo Outcome Test ---
-Shuffling outcome variable (breaking outcome-treatment link)
-Expected: θ ≈ 0, large p-value
-
-ATE with shuffled outcome:
-  θ = -0.0046
-  p-value = 0.4901
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Placebo Treatment Test ---&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shuffling treatment variable (breaking treatment-outcome link)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected: θ ≈ 0, large p-value</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Test with ATE estimator</span>
-<span class="n">ate_placebo_treatment</span> <span class="o">=</span> <span class="n">refute_placebo_treatment</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE with shuffled treatment:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  θ = </span><span class="si">{</span><span class="n">ate_placebo_treatment</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  p-value = </span><span class="si">{</span><span class="n">ate_placebo_treatment</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Placebo Treatment Test ---
-Shuffling treatment variable (breaking treatment-outcome link)
-Expected: θ ≈ 0, large p-value
-
-ATE with shuffled treatment:
-  θ = 0.1105
-  p-value = 0.3445
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Subset Robustness Test ---&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing stability on random subsets of data&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Expected: θ similar to original estimate</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Test multiple subset sizes</span>
-<span class="n">subset_fractions</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ATE Subset Tests:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original ATE: </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="n">ate_subset_results</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">fraction</span> <span class="ow">in</span> <span class="n">subset_fractions</span><span class="p">:</span>
-    <span class="n">subset_result</span> <span class="o">=</span> <span class="n">refute_subset</span><span class="p">(</span>
-        <span class="n">dml_ate</span><span class="p">,</span>
-        <span class="n">causal_data</span><span class="p">,</span>
-        <span class="n">fraction</span><span class="o">=</span><span class="n">fraction</span><span class="p">,</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-    <span class="p">)</span>
-    <span class="n">ate_subset_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_result</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">fraction</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% subset: θ = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Subset Robustness Test ---
-Testing stability on random subsets of data
-Expected: θ similar to original estimate
-
-ATE Subset Tests:
-Original ATE: 1.8494
-  60% subset: θ = 1.7803, p = 0.0000
-  80% subset: θ = 1.8781, p = 0.0000
-  90% subset: θ = 1.7714, p = 0.0000
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import sensitivity analysis functions</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">get_sensitivity_summary</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Basic Sensitivity Analysis ---&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing robustness to unobserved confounding</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Perform sensitivity analysis with moderate confounding assumptions</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scenario 1: Moderate unobserved confounding&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cf_y=0.03 (outcome confounding), cf_d=0.03 (treatment confounding)&quot;</span><span class="p">)</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="c1"># Run sensitivity analysis on our ATE result</span>
-    <span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
-        <span class="n">ate_result</span><span class="p">,</span>
-        <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
-        <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
-        <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
-    <span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report_1</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Note: Sensitivity analysis requires the model object to support it.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">This feature works best with DoubleML models that have sensitivity analysis capabilities.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Basic Sensitivity Analysis ---
-Testing robustness to unobserved confounding
-
-Scenario 1: Moderate unobserved confounding
-cf_y=0.03 (outcome confounding), cf_d=0.03 (treatment confounding)
-================== Sensitivity Analysis ==================
-
------------------- Scenario          ------------------
-Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.03; cf_d=0.03, rho=1.0
-
------------------- Bounds with CI    ------------------
-   CI lower  theta lower    theta  theta upper  CI upper
-t  1.410706     1.607674  1.84936     2.091046  2.287668
-
------------------- Robustness Values ------------------
-   H_0     RV (%)    RVa (%)
-t  0.0  20.749473  18.725578
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-</section>
 
 
                 </article>
@@ -1100,18 +686,15 @@ t  0.0  20.749473  18.725578
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-data">Generate data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a></li>
+    <ul class="simple visible nav section-nav flex-column">
 </ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/examples/scenario_1.ipynb.txt">
+    <a href="../_sources/examples/eda_test.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
