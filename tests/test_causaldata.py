@@ -21,7 +21,7 @@ def custom_dataframe():
         'user_id': [f'user_{i}' for i in range(5)],
         'ltv': [100, 200, 150, 300, 250],
         'age': [25, 30, 35, 40, 45],
-        'invited_friend': [1, 0, 1, 0, 1],
+        'invited_friend': [0, 1, 0, 1, 0],  # Different pattern from treatment
         'treatment': [1, 0, 1, 0, 1]
     })
 

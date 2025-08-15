@@ -5,6 +5,7 @@ CKit class for storing DataFrame and column metadata for causal inference.
 import pandas as pd
 import pandas.api.types as pdtypes
 from typing import Union, List, Optional
+import warnings
 
 
 class CausalData:
@@ -91,6 +92,7 @@ class CausalData:
         """
         Validate that all specified columns exist in the DataFrame and that the DataFrame does not contain NaN values.
         Also validate that outcome, cofounders, and treatment columns contain only int or float values.
+        Also validate that no columns are constant (have zero variance).
         """
         # Check for NaN values in the DataFrame
         if df.isna().any().any():
@@ -106,6 +108,10 @@ class CausalData:
         if not pdtypes.is_numeric_dtype(df[self._target]):
             raise ValueError(f"Column '{self._target}' specified as outcome must contain only int or float values.")
 
+        # Check if outcome column is constant (zero variance or single value)
+        if df[self._target].std() == 0 or pd.isna(df[self._target].std()):
+            raise ValueError(f"Column '{self._target}' specified as outcome is constant (has zero variance), which is not allowed for causal inference.")
+
         # Validate treatment column
         if self._treatment not in all_columns:
             raise ValueError(f"Column '{self._treatment}' specified as treatment does not exist in the DataFrame.")
@@ -115,6 +121,10 @@ class CausalData:
             raise ValueError(
                 f"Column '{self._treatment}' specified as treatment must contain only int or float values.")
 
+        # Check if treatment column is constant (zero variance or single value)
+        if df[self._treatment].std() == 0 or pd.isna(df[self._treatment].std()):
+            raise ValueError(f"Column '{self._treatment}' specified as treatment is constant (has zero variance), which is not allowed for causal inference.")
+
         # Validate cofounders columns
         for col in self._cofounders:
             if col not in all_columns:
@@ -123,6 +133,78 @@ class CausalData:
             # Check if column contains only int or float values
             if not pdtypes.is_numeric_dtype(df[col]):
                 raise ValueError(f"Column '{col}' specified as cofounders must contain only int or float values.")
+
+            # Check if confounder column is constant (zero variance or single value)
+            if df[col].std() == 0 or pd.isna(df[col].std()):
+                raise ValueError(f"Column '{col}' specified as cofounders is constant (has zero variance), which is not allowed for causal inference.")
+
+        # Check for duplicate column values across all used columns
+        self._check_duplicate_column_values(df)
+        
+        # Check for duplicate rows and issue warning if found
+        self._check_duplicate_rows(df)
+
+    def _check_duplicate_column_values(self, df):
+        """
+        Check for duplicate column values across all used columns.
+        Raises ValueError if any two columns have identical values.
+        """
+        # Get all columns that will be used in CausalData
+        columns_to_check = [self._target, self._treatment] + self._cofounders
+        
+        # Compare each pair of columns
+        for i, col1 in enumerate(columns_to_check):
+            for j, col2 in enumerate(columns_to_check):
+                if i < j:  # Only check each pair once
+                    # Check if the two columns have identical values (using element-wise comparison)
+                    # This handles cases where dtypes differ but values are the same (e.g., int vs float)
+                    if (df[col1] == df[col2]).all():
+                        # Determine the types of columns for better error message
+                        col1_type = self._get_column_type(col1)
+                        col2_type = self._get_column_type(col2)
+                        raise ValueError(
+                            f"Columns '{col1}' ({col1_type}) and '{col2}' ({col2_type}) have identical values, "
+                            f"which is not allowed for causal inference. Only column names differ."
+                        )
+
+    def _check_duplicate_rows(self, df):
+        """
+        Check for duplicate rows in the DataFrame and issue a warning if found.
+        Only checks the columns that will be used in CausalData.
+        """
+        # Get only the columns that will be used in CausalData
+        columns_to_check = [self._target, self._treatment] + self._cofounders
+        df_subset = df[columns_to_check]
+        
+        # Find duplicate rows
+        duplicated_mask = df_subset.duplicated()
+        num_duplicates = duplicated_mask.sum()
+        
+        if num_duplicates > 0:
+            total_rows = len(df_subset)
+            unique_rows = total_rows - num_duplicates
+            
+            warnings.warn(
+                f"Found {num_duplicates} duplicate rows out of {total_rows} total rows in the DataFrame. "
+                f"This leaves {unique_rows} unique rows for analysis. "
+                f"Duplicate rows may affect the quality of causal inference results. "
+                f"Consider removing duplicates if they are not intentional.",
+                UserWarning,
+                stacklevel=3
+            )
+
+    def _get_column_type(self, column_name):
+        """
+        Determine the type/role of a column (treatment, outcome, or confounder).
+        """
+        if column_name == self._target:
+            return "outcome"
+        elif column_name == self._treatment:
+            return "treatment"
+        elif column_name in self._cofounders:
+            return "confounder"
+        else:
+            return "unknown"
 
     @property
     def target(self) -> pd.Series:

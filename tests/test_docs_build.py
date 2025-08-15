@@ -22,7 +22,6 @@ def install_docs_dependencies():
     subprocess.run([sys.executable, "-m", "pip", "install", "-e", ".[docs]"], check=True)
 
 
-@pytest.mark.docs
 def test_docs_build():
     """Test that the documentation can be built."""
     # Skip docs build by default to keep tests fast and decoupled from docs content changes

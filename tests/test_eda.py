@@ -31,8 +31,8 @@ def test_design_report_and_core_metrics():
     eda = CausalEDA(cd)
     report = eda.design_report()
 
-    # basic keys present
-    assert set(['health', 'summaries', 'treat_auc', 'positivity', 'balance', 'weights']).issubset(set(report.keys()))
+    # basic keys present (simplified version without health and weights)
+    assert set(['summaries', 'treat_auc', 'positivity', 'balance']).issubset(set(report.keys()))
 
     # AUC is between 0.5 and 1 (should be > 0.5 given signal)
     auc = report['treat_auc']
@@ -42,14 +42,10 @@ def test_design_report_and_core_metrics():
     pos = report['positivity']
     assert 'share_below' in pos and 'share_above' in pos and 'bounds' in pos
 
-    # balance table columns
+    # balance table columns (simplified version without flag)
     bal = report['balance']
-    for col in ['covariate', 'SMD_unweighted', 'SMD_weighted', 'flag_unw', 'flag_w']:
+    for col in ['covariate', 'SMD']:
         assert col in bal.columns
-
-    # weights diagnostics
-    wdiag = report['weights']
-    assert 'ESS_all' in wdiag and 'ESS_treated' in wdiag and 'ESS_control' in wdiag and 'w_all_quantiles' in wdiag
 
 
 def test_fit_propensity_and_balance_table_direct_calls():
@@ -64,5 +60,60 @@ def test_fit_propensity_and_balance_table_direct_calls():
     auc = eda.treatment_predictability_auc(ps)
     assert 0.5 <= auc <= 1.0
 
-    bal = eda.balance_table(ps)
+    bal = eda.balance_table()  # simplified version takes no parameters
     assert not bal.empty
+    # verify simplified columns
+    assert set(['covariate', 'SMD']).issubset(bal.columns)
+
+
+def test_treatment_features():
+    """Test the treatment_features() method with CatBoost (default) model."""
+    df = make_synth(seed=42)
+    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
+
+    eda = CausalEDA(cd)
+    
+    # Test error case: calling treatment_features() before fit_propensity()
+    try:
+        eda.treatment_features()
+        assert False, "Should raise RuntimeError when no model is fitted"
+    except RuntimeError as e:
+        assert "No fitted propensity model found" in str(e)
+    
+    # Fit propensity model first
+    ps = eda.fit_propensity()
+    
+    # Now test successful feature importance/SHAP extraction
+    features_df = eda.treatment_features()
+    
+    # Check return type and structure
+    assert isinstance(features_df, pd.DataFrame)
+    assert 'feature' in features_df.columns
+    
+    # Check for either 'importance' (sklearn models) or 'shap_mean' (CatBoost models)
+    value_columns = [col for col in features_df.columns if col in ['importance', 'shap_mean']]
+    assert len(value_columns) == 1, f"Expected exactly one value column, got {value_columns}"
+    value_column = value_columns[0]
+    
+    # Check that we have the expected features
+    expected_features = {'age', 'invited_friend'}
+    actual_features = set(features_df['feature'].tolist())
+    assert expected_features.issubset(actual_features), f"Expected {expected_features}, got {actual_features}"
+    
+    # Check that values are numeric
+    assert features_df[value_column].dtype in [np.float64, np.float32, float]
+    
+    # Check validation based on column type
+    if value_column == 'importance':
+        # Regular importance values should be non-negative
+        assert (features_df[value_column] >= 0).all()
+        # Check that results are sorted by importance (descending)
+        values = features_df[value_column].tolist()
+        assert values == sorted(values, reverse=True)
+    elif value_column == 'shap_mean':
+        # SHAP values can be negative - check that results are sorted by absolute value (descending)
+        abs_values = features_df[value_column].abs().tolist()
+        assert abs_values == sorted(abs_values, reverse=True)
+    
+    # Check that we have some reasonable number of features (at least our 2 input features)
+    assert len(features_df) >= 2
