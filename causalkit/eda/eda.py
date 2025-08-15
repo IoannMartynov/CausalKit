@@ -151,27 +151,6 @@ class CausalEDA:
         self.ps_pipe = Pipeline([("prep", self.preproc), ("clf", self.ps_model)])
 
     # ---------- basics ----------
-    def missingness_report(self) -> pd.DataFrame:
-        """Report per-column missingness.
-
-        Returns a DataFrame indexed by column with:
-        - missing_rate: fraction of NaNs per column
-        - n_missing: count of NaNs per column
-        Also includes a 'total_missing' attribute for accessing the total missing count.
-        Sorted by missing_rate descending.
-        """
-        df = self.d.df
-        miss = df.isna().mean().rename("missing_rate").to_frame()
-        miss["n_missing"] = df.isna().sum()
-        result = miss.sort_values("missing_rate", ascending=False)
-        
-        # Add total_missing as an attribute that can be accessed with bracket notation
-        total_missing = int(df.isna().sum().sum())
-        result.__class__ = type('MissingnessDataFrame', (pd.DataFrame,), {
-            '__getitem__': lambda self, key: total_missing if key == 'total_missing' else pd.DataFrame.__getitem__(self, key)
-        })
-        
-        return result
 
     def data_health_check(self) -> Dict[str, Any]:
         """Basic data health indicators.
@@ -504,7 +483,6 @@ class CausalEDA:
 
         Returns a dict with keys:
         - health: output of data_health_check()
-        - missing: output of missingness_report()
         - summaries: output of summaries()
         - treat_auc: float from treatment_predictability_auc()
         - positivity: output of positivity_check()
@@ -515,7 +493,6 @@ class CausalEDA:
         ps = self.fit_propensity()
         return {
             "health": self.data_health_check(),
-            "missing": self.missingness_report(),
             "summaries": self.summaries(),
             "treat_auc": self.treatment_predictability_auc(ps),
             "positivity": self.positivity_check(ps),

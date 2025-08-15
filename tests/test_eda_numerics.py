@@ -32,7 +32,7 @@ def test_design_report_no_runtime_warnings():
     assert not any(isinstance(wi.message, RuntimeWarning) for wi in w)
 
     # Sanity checks on report keys
-    assert set(report.keys()) == {"health", "missing", "summaries", "treat_auc", "positivity", "balance", "weights"}
+    assert set(report.keys()) == {"health", "summaries", "treat_auc", "positivity", "balance", "weights"}
     assert 0 <= report["treat_auc"] <= 1
 
 

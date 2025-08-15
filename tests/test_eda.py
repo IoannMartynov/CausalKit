@@ -32,7 +32,7 @@ def test_design_report_and_core_metrics():
     report = eda.design_report()
 
     # basic keys present
-    assert set(['health', 'missing', 'summaries', 'treat_auc', 'positivity', 'balance', 'weights']).issubset(set(report.keys()))
+    assert set(['health', 'summaries', 'treat_auc', 'positivity', 'balance', 'weights']).issubset(set(report.keys()))
 
     # AUC is between 0.5 and 1 (should be > 0.5 given signal)
     auc = report['treat_auc']
