@@ -6,20 +6,17 @@ focus on interpretability: treatment predictability, overlap/positivity,
 covariate balance before/after weighting, and basic data health.
 
 What the main outputs mean
-- summaries(): Dict with treatment_rate (share of treated),
-  outcome_by_treatment (count/mean/std within treatment groups), and
-  naive_diff (treated mean minus control mean; a biased estimate if confounding exists).
+- outcome_stats(): DataFrame with comprehensive statistics (count, mean, std, 
+  percentiles, min/max) for outcome grouped by treatment.
 - fit_propensity(): Numpy array of cross-validated propensity scores P(T=1|X).
-- treatment_predictability_auc(): Float AUC of treatment vs. propensity score.
-  Higher AUC implies treatment is predictable from X (more confounding risk).
+- confounders_roc_auc(): Float ROC AUC of treatment vs. propensity score.
+  Higher AUC implies treatment is predictable from confounders (more confounding risk).
 - positivity_check(): Dict with bounds, share_below, share_above, and flag.
   It reports what share of units have PS outside [low, high]; a large share
   signals poor overlap (violated positivity).
 - plot_ps_overlap(): Overlaid histograms of PS for treated vs control.
-- balance_table(): DataFrame with standardized mean differences (SMD) for each
-  covariate and boolean flags if |SMD|>0.1 indicating imbalance.
-- design_report(): One-shot dict aggregating all of the above, convenient for
-  quick inspection and logging.
+- confounders_means(): DataFrame with comprehensive balance assessment including
+  means by treatment group, absolute differences, and standardized mean differences (SMD).
 
 Note: The class accepts either the project’s CausalData object (duck-typed) or a
 CausalDataLite with explicit fields.
@@ -31,166 +28,402 @@ from typing import List, Optional, Dict, Any, Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import StratifiedKFold, cross_val_predict
-from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import StratifiedKFold, cross_val_predict, KFold
+from sklearn.metrics import roc_auc_score, mean_squared_error, mean_absolute_error
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LogisticRegression
-from catboost import CatBoostClassifier
+from catboost import CatBoostClassifier, CatBoostRegressor
 import matplotlib.pyplot as plt
 
 
-class DesignReport(dict):
-    """A dictionary-like container for design report data with a summary() method.
+class PropensityModel:
+    """A model for propensity scores and related diagnostics.
     
-    This class extends the standard dict to provide a summary() method that formats
-    the design report data into beautiful, readable text while maintaining full
-    backward compatibility with dictionary operations.
+    This class encapsulates propensity scores and provides methods for:
+    - Computing ROC AUC
+    - Extracting SHAP values
+    - Plotting propensity score overlap
+    - Checking positivity/overlap
+    
+    The class is returned by CausalEDA.fit_propensity() and provides a cleaner
+    interface for propensity score analysis.
     """
     
-    def summary(self) -> str:
-        """Generate a beautiful text summary of the design report.
+    def __init__(self, 
+                 propensity_scores: np.ndarray,
+                 treatment_values: np.ndarray,
+                 fitted_model: Any,
+                 feature_names: List[str],
+                 X_for_shap: Optional[np.ndarray] = None,
+                 cat_features_for_shap: Optional[List[int]] = None):
+        """Initialize PropensityModel with fitted model artifacts.
+        
+        Parameters
+        ----------
+        propensity_scores : np.ndarray
+            Array of propensity scores P(T=1|X)
+        treatment_values : np.ndarray
+            Array of actual treatment assignments (0/1)
+        fitted_model : Any
+            The fitted propensity score model
+        feature_names : List[str]
+            Names of features used in the model
+        X_for_shap : Optional[np.ndarray]
+            Preprocessed feature matrix for SHAP computation
+        cat_features_for_shap : Optional[List[int]]
+            Categorical feature indices for SHAP computation
+        """
+        self.propensity_scores = propensity_scores
+        self.treatment_values = treatment_values
+        self.fitted_model = fitted_model
+        self.feature_names = feature_names
+        self.X_for_shap = X_for_shap
+        self.cat_features_for_shap = cat_features_for_shap
+    
+    @property
+    def roc_auc(self) -> float:
+        """Compute ROC AUC of treatment assignment vs. propensity scores.
+        
+        Higher AUC means treatment is more predictable from confounders,
+        indicating stronger systematic differences between groups (potential
+        confounding). Values near 0.5 suggest random-like assignment.
         
         Returns
         -------
-        str
-            A formatted text summary of all diagnostic information in the report.
+        float
+            ROC AUC score between 0 and 1
         """
-        lines = []
-        lines.append("=" * 60)
-        lines.append("CAUSAL DESIGN REPORT SUMMARY")
-        lines.append("=" * 60)
+        return float(roc_auc_score(self.treatment_values, self.propensity_scores))
+    
+    @property
+    def shap(self) -> pd.DataFrame:
+        """Return SHAP values from the fitted propensity score model.
         
-        # 1. Treatment and Outcome Summary
-        if 'summaries' in self:
-            summ = self['summaries']
-            lines.append("\n📊 TREATMENT & OUTCOME SUMMARY")
-            lines.append("-" * 30)
-            
-            treatment_rate = summ.get('treatment_rate', 'N/A')
-            if isinstance(treatment_rate, (int, float)):
-                lines.append(f"Treatment Rate: {treatment_rate:.1%}")
-            else:
-                lines.append(f"Treatment Rate: {treatment_rate}")
-            
-            naive_diff = summ.get('naive_diff', 'N/A')
-            if isinstance(naive_diff, (int, float)) and not pd.isna(naive_diff):
-                lines.append(f"Naive Difference (Treated - Control): {naive_diff:.4f}")
-            else:
-                lines.append(f"Naive Difference: {naive_diff}")
-            
-            # Outcome by treatment table
-            if 'outcome_by_treatment' in summ:
-                outcome_table = summ['outcome_by_treatment']
-                if isinstance(outcome_table, pd.DataFrame) and not outcome_table.empty:
-                    lines.append("\nOutcome by Treatment:")
-                    lines.append(str(outcome_table.round(4)))
+        SHAP values show the directional contribution of each feature to 
+        treatment assignment prediction, where positive values increase 
+        treatment probability and negative values decrease it.
         
-        # 2. Treatment Predictability
-        if 'treat_auc' in self:
-            auc = self['treat_auc']
-            lines.append(f"\n🎯 TREATMENT PREDICTABILITY")
-            lines.append("-" * 30)
-            if isinstance(auc, (int, float)):
-                lines.append(f"Treatment AUC: {auc:.4f}")
-                if auc > 0.8:
-                    lines.append("  ⚠️  High predictability - strong confounding risk")
-                elif auc > 0.65:
-                    lines.append("  ⚡ Moderate predictability - some confounding risk")
+        Returns
+        -------
+        pd.DataFrame
+            For CatBoost models: DataFrame with columns 'feature' and 'shap_mean',
+            where 'shap_mean' represents the mean SHAP value across all samples.
+            
+            For sklearn models: DataFrame with columns 'feature' and 'importance'
+            (absolute coefficient values, for backward compatibility).
+            
+        Raises
+        ------
+        RuntimeError
+            If the fitted model does not support SHAP values extraction.
+        """
+        # Extract SHAP values or feature importance based on model type
+        if isinstance(self.fitted_model, CatBoostClassifier):
+            # Use CatBoost's SHAP values for directional feature contributions
+            try:
+                # Import Pool for SHAP computation
+                from catboost import Pool
+                
+                # Check if we have the required data for SHAP computation
+                if self.X_for_shap is None:
+                    raise RuntimeError("Preprocessed data for SHAP computation not available.")
+                
+                # Create Pool object for SHAP computation
+                shap_pool = Pool(data=self.X_for_shap, cat_features=self.cat_features_for_shap)
+                
+                # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
+                # where the last column is the bias term
+                shap_values = self.fitted_model.get_feature_importance(type='ShapValues', data=shap_pool)
+                
+                # Remove bias term (last column) and compute mean SHAP values across samples
+                # This gives us the average directional contribution of each feature
+                shap_values_no_bias = shap_values[:, :-1]  # Remove bias column
+                importance_values = np.mean(shap_values_no_bias, axis=0)  # Mean across samples
+                
+                feature_names = self.feature_names
+                column_name = 'shap_mean'  # Use different column name to indicate SHAP values
+                
+            except Exception as e:
+                raise RuntimeError(f"Failed to extract SHAP values from CatBoost model: {e}")
+        
+        elif hasattr(self.fitted_model, 'named_steps') and hasattr(self.fitted_model.named_steps.get('clf'), 'coef_'):
+            # Handle sklearn pipeline with logistic regression
+            try:
+                clf = self.fitted_model.named_steps['clf']
+                # For logistic regression, use absolute coefficients as importance
+                importance_values = np.abs(clf.coef_[0])
+                
+                # Need to map back to original feature names through preprocessing
+                # For simplicity, if we have preprocessed features, we'll use the original feature names
+                # and aggregate importance for one-hot encoded categorical features
+                prep = self.fitted_model.named_steps.get('prep')
+                if hasattr(prep, 'get_feature_names_out'):
+                    try:
+                        # Try to get feature names from preprocessor
+                        transformed_names = prep.get_feature_names_out()
+                        feature_names = [str(name) for name in transformed_names]
+                    except:
+                        # Fallback to original feature names if transformation fails
+                        feature_names = self.feature_names
+                        if len(importance_values) != len(feature_names):
+                            # If lengths don't match due to one-hot encoding, we can't map back easily
+                            # Just use indices as feature names
+                            feature_names = [f"feature_{i}" for i in range(len(importance_values))]
                 else:
-                    lines.append("  ✅ Low predictability - minimal confounding risk")
-            else:
-                lines.append(f"Treatment AUC: {auc}")
-        
-        # 3. Positivity/Overlap Assessment
-        if 'positivity' in self:
-            pos = self['positivity']
-            lines.append(f"\n🔄 POSITIVITY/OVERLAP ASSESSMENT")
-            lines.append("-" * 30)
-            
-            bounds = pos.get('bounds', 'N/A')
-            share_below = pos.get('share_below', 'N/A')
-            share_above = pos.get('share_above', 'N/A')
-            flag = pos.get('flag', False)
-            
-            lines.append(f"Propensity Score Bounds: {bounds}")
-            if isinstance(share_below, (int, float)) and isinstance(share_above, (int, float)):
-                lines.append(f"Share Below Lower Bound: {share_below:.1%}")
-                lines.append(f"Share Above Upper Bound: {share_above:.1%}")
-                total_extreme = share_below + share_above
-                lines.append(f"Total in Extreme Regions: {total_extreme:.1%}")
+                    feature_names = self.feature_names
                 
-                if flag:
-                    lines.append("  ⚠️  Poor overlap detected - positivity violation risk")
-                else:
-                    lines.append("  ✅ Good overlap - positivity assumption satisfied")
-            else:
-                lines.append(f"Share Below: {share_below}, Share Above: {share_above}")
+                column_name = 'importance'  # Keep backward compatibility for sklearn models
+                    
+            except Exception as e:
+                raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
         
-        # 4. Balance Assessment
-        if 'balance' in self:
-            balance = self['balance']
-            lines.append(f"\n⚖️  COVARIATE BALANCE ASSESSMENT")
-            lines.append("-" * 30)
-            
-            if isinstance(balance, pd.DataFrame) and not balance.empty:
-                # Summary statistics - calculate imbalanced variables from SMD values
-                imbalanced_count = (balance['SMD'].abs() > 0.1).sum() if 'SMD' in balance.columns else 0
-                total_vars = len(balance)
-                
-                lines.append(f"Total Variables: {total_vars}")
-                lines.append(f"Imbalanced Variables: {imbalanced_count}")
-                
-                if imbalanced_count == 0:
-                    lines.append("  ✅ Perfect balance - all variables well balanced")
-                elif imbalanced_count <= total_vars * 0.2:
-                    lines.append("  ⚡ Good balance - few imbalanced variables")
-                else:
-                    lines.append("  ⚠️  Poor balance - many imbalanced variables")
-                
-                # Show worst balanced variables
-                balance_abs = balance.copy()
-                balance_abs['SMD_abs'] = balance['SMD'].abs()
-                worst_imbalanced = balance_abs.nlargest(3, 'SMD_abs', keep='first')
-                if not worst_imbalanced.empty:
-                    lines.append("\nMost Imbalanced Variables:")
-                    for _, row in worst_imbalanced.iterrows():
-                        smd = row.get('SMD', 'N/A')
-                        var_name = row.get('covariate', 'Unknown')
-                        if isinstance(smd, (int, float)):
-                            lines.append(f"  {var_name}: {smd:.3f}")
-                        else:
-                            lines.append(f"  {var_name}: {smd}")
-        
-        # Summary and recommendations
-        lines.append(f"\n📋 OVERALL ASSESSMENT")
-        lines.append("-" * 30)
-        
-        # Simple scoring system for overall quality
-        issues = []
-        if 'treat_auc' in self and isinstance(self['treat_auc'], (int, float)) and self['treat_auc'] > 0.8:
-            issues.append("High treatment predictability")
-        if 'positivity' in self and self['positivity'].get('flag', False):
-            issues.append("Poor overlap/positivity")
-        if 'balance' in self and isinstance(self['balance'], pd.DataFrame):
-            balance_df = self['balance']
-            imbalanced_count = (balance_df['SMD'].abs() > 0.1).sum() if 'SMD' in balance_df.columns else 0
-            if imbalanced_count > len(balance_df) * 0.2:  # More than 20% still imbalanced
-                issues.append("Poor covariate balance")
-        
-        if not issues:
-            lines.append("✅ Design looks good for causal inference!")
-            lines.append("   All key assumptions appear to be satisfied.")
         else:
-            lines.append("⚠️  Design has potential issues:")
-            for issue in issues:
-                lines.append(f"   - {issue}")
-            lines.append("   Consider additional robustness checks or sensitivity analysis.")
+            raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self.fitted_model)}")
         
-        lines.append("=" * 60)
+        # Ensure we have matching lengths
+        if len(importance_values) != len(feature_names):
+            # This can happen with preprocessing transformations
+            # Create generic feature names if needed
+            if len(importance_values) > len(feature_names):
+                feature_names = feature_names + [f"transformed_feature_{i}" for i in range(len(feature_names), len(importance_values))]
+            else:
+                feature_names = feature_names[:len(importance_values)]
         
-        return "\n".join(lines)
+        # Create DataFrame with appropriate column name
+        result_df = pd.DataFrame({
+            'feature': feature_names,
+            column_name: importance_values
+        })
+        
+        # Sort appropriately: by absolute value for SHAP values (to show most impactful features),
+        # by value for regular importance (higher is better)
+        if column_name == 'shap_mean':
+            # For SHAP values, sort by absolute value to show most impactful features first
+            result_df = result_df.reindex(result_df[column_name].abs().sort_values(ascending=False).index)
+        else:
+            # For regular importance, sort by value (descending)
+            result_df = result_df.sort_values(column_name, ascending=False)
+        
+        result_df = result_df.reset_index(drop=True)
+        return result_df
+    
+    def ps_graph(self):
+        """Plot overlaid histograms of propensity scores for treated vs control.
+        
+        Useful to visually assess group overlap. Does not return data; it draws
+        on the current matplotlib figure.
+        """
+        plt.figure()
+        t = self.treatment_values
+        ps = self.propensity_scores
+        plt.hist(ps[t == 1], bins=30, alpha=0.5, density=True, label="treated")
+        plt.hist(ps[t == 0], bins=30, alpha=0.5, density=True, label="control")
+        plt.xlabel("Propensity score")
+        plt.ylabel("Density")
+        plt.legend()
+        plt.title("PS overlap")
+    
+    def positivity_check(self, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
+        """Check overlap/positivity based on propensity score thresholds.
+        
+        Parameters
+        ----------
+        bounds : Tuple[float, float], default (0.05, 0.95)
+            Lower and upper thresholds for positivity check
+        
+        Returns
+        -------
+        Dict[str, Any]
+            Dictionary with:
+            - bounds: (low, high) thresholds used
+            - share_below: fraction with PS < low
+            - share_above: fraction with PS > high
+            - flag: heuristic boolean True if the tails collectively exceed ~2%
+        """
+        low, high = bounds
+        ps = self.propensity_scores
+        share_low = float((ps < low).mean())
+        share_high = float((ps > high).mean())
+        flag = (share_low + share_high) > 0.02  # heuristic
+        return {"bounds": bounds, "share_below": share_low, "share_above": share_high, "flag": bool(flag)}
+
+
+class OutcomeModel:
+    """A model for outcome prediction and related diagnostics.
+    
+    This class encapsulates outcome predictions and provides methods for:
+    - Computing RMSE and MAE regression metrics
+    - Extracting SHAP values for outcome prediction
+    
+    The class is returned by CausalEDA.outcome_fit() and provides a cleaner
+    interface for outcome model analysis.
+    """
+    
+    def __init__(self, 
+                 predicted_outcomes: np.ndarray,
+                 actual_outcomes: np.ndarray,
+                 fitted_model: Any,
+                 feature_names: List[str],
+                 X_for_shap: Optional[np.ndarray] = None,
+                 cat_features_for_shap: Optional[List[int]] = None):
+        """Initialize OutcomeModel with fitted model artifacts.
+        
+        Parameters
+        ----------
+        predicted_outcomes : np.ndarray
+            Array of predicted outcome values
+        actual_outcomes : np.ndarray
+            Array of actual outcome values
+        fitted_model : Any
+            The fitted outcome prediction model
+        feature_names : List[str]
+            Names of features used in the model (confounders only)
+        X_for_shap : Optional[np.ndarray]
+            Preprocessed feature matrix for SHAP computation
+        cat_features_for_shap : Optional[List[int]]
+            Categorical feature indices for SHAP computation
+        """
+        self.predicted_outcomes = predicted_outcomes
+        self.actual_outcomes = actual_outcomes
+        self.fitted_model = fitted_model
+        self.feature_names = feature_names
+        self.X_for_shap = X_for_shap
+        self.cat_features_for_shap = cat_features_for_shap
+    
+    @property
+    def scores(self) -> Dict[str, float]:
+        """Compute regression metrics (RMSE and MAE) for outcome predictions.
+        
+        Returns
+        -------
+        Dict[str, float]
+            Dictionary containing:
+            - 'rmse': Root Mean Squared Error
+            - 'mae': Mean Absolute Error
+        """
+        mse = mean_squared_error(self.actual_outcomes, self.predicted_outcomes)
+        rmse = np.sqrt(mse)
+        mae = mean_absolute_error(self.actual_outcomes, self.predicted_outcomes)
+        
+        return {
+            'rmse': float(rmse),
+            'mae': float(mae)
+        }
+    
+    @property
+    def shap(self) -> pd.DataFrame:
+        """Return SHAP values from the fitted outcome prediction model.
+        
+        SHAP values show the directional contribution of each feature to 
+        outcome prediction, where positive values increase the predicted 
+        outcome and negative values decrease it.
+        
+        Returns
+        -------
+        pd.DataFrame
+            For CatBoost models: DataFrame with columns 'feature' and 'shap_mean',
+            where 'shap_mean' represents the mean SHAP value across all samples.
+            
+            For sklearn models: DataFrame with columns 'feature' and 'importance'
+            (absolute coefficient values, for backward compatibility).
+            
+        Raises
+        ------
+        RuntimeError
+            If the fitted model does not support SHAP values extraction.
+        """
+        # Extract SHAP values or feature importance based on model type
+        if isinstance(self.fitted_model, CatBoostRegressor):
+            # Use CatBoost's SHAP values for directional feature contributions
+            try:
+                # Import Pool for SHAP computation
+                from catboost import Pool
+                
+                # Check if we have the required data for SHAP computation
+                if self.X_for_shap is None:
+                    raise RuntimeError("Preprocessed data for SHAP computation not available.")
+                
+                # Create Pool object for SHAP computation
+                shap_pool = Pool(data=self.X_for_shap, cat_features=self.cat_features_for_shap)
+                
+                # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
+                # where the last column is the bias term
+                shap_values = self.fitted_model.get_feature_importance(type='ShapValues', data=shap_pool)
+                
+                # Remove bias term (last column) and compute mean SHAP values across samples
+                # This gives us the average directional contribution of each feature
+                shap_values_no_bias = shap_values[:, :-1]  # Remove bias column
+                importance_values = np.mean(shap_values_no_bias, axis=0)  # Mean across samples
+                
+                feature_names = self.feature_names
+                column_name = 'shap_mean'  # Use different column name to indicate SHAP values
+                
+            except Exception as e:
+                raise RuntimeError(f"Failed to extract SHAP values from CatBoost model: {e}")
+        
+        elif hasattr(self.fitted_model, 'named_steps') and hasattr(self.fitted_model.named_steps.get('clf'), 'coef_'):
+            # Handle sklearn pipeline with linear regression
+            try:
+                clf = self.fitted_model.named_steps['clf']
+                # For linear regression, use absolute coefficients as importance
+                importance_values = np.abs(clf.coef_)
+                
+                # Need to map back to original feature names through preprocessing
+                # For simplicity, if we have preprocessed features, we'll use the original feature names
+                # and aggregate importance for one-hot encoded categorical features
+                prep = self.fitted_model.named_steps.get('prep')
+                if hasattr(prep, 'get_feature_names_out'):
+                    try:
+                        # Try to get feature names from preprocessor
+                        transformed_names = prep.get_feature_names_out()
+                        feature_names = [str(name) for name in transformed_names]
+                    except:
+                        # Fallback to original feature names if transformation fails
+                        feature_names = self.feature_names
+                        if len(importance_values) != len(feature_names):
+                            # If lengths don't match due to one-hot encoding, we can't map back easily
+                            # Just use indices as feature names
+                            feature_names = [f"feature_{i}" for i in range(len(importance_values))]
+                else:
+                    feature_names = self.feature_names
+                
+                column_name = 'importance'  # Keep backward compatibility for sklearn models
+                    
+            except Exception as e:
+                raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
+        
+        else:
+            raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self.fitted_model)}")
+        
+        # Ensure we have matching lengths
+        if len(importance_values) != len(feature_names):
+            # This can happen with preprocessing transformations
+            # Create generic feature names if needed
+            if len(importance_values) > len(feature_names):
+                feature_names = feature_names + [f"transformed_feature_{i}" for i in range(len(feature_names), len(importance_values))]
+            else:
+                feature_names = feature_names[:len(importance_values)]
+        
+        # Create DataFrame with appropriate column name
+        result_df = pd.DataFrame({
+            'feature': feature_names,
+            column_name: importance_values
+        })
+        
+        # Sort appropriately: by absolute value for SHAP values (to show most impactful features),
+        # by value for regular importance (higher is better)
+        if column_name == 'shap_mean':
+            # For SHAP values, sort by absolute value to show most impactful features first
+            result_df = result_df.reindex(result_df[column_name].abs().sort_values(ascending=False).index)
+        else:
+            # For regular importance, sort by value (descending)
+            result_df = result_df.sort_values(column_name, ascending=False)
+        
+        result_df = result_df.reset_index(drop=True)
+        return result_df
+
+
 
 
 # Optional lightweight dataclass for standalone usage, but CausalEDA also
@@ -268,7 +501,6 @@ class CausalEDA:
     - Inspect covariate balance via standardized mean differences (SMD)
       before/after IPTW weighting; visualize with a love plot.
     - Inspect weight distributions and effective sample size (ESS).
-    - Produce a one-shot design_report() that aggregates the above.
     """
     def __init__(self, data: Any, ps_model: Optional[Any] = None, n_splits: int = 5, random_state: int = 42):
         roles = _extract_roles(data)
@@ -321,36 +553,120 @@ class CausalEDA:
 
     # ---------- basics ----------
 
-
-    def summaries(self) -> Dict[str, Any]:
-        """Outcome summaries by treatment.
+    def data_shape(self) -> Dict[str, int]:
+        """Return the shape information of the causal dataset.
 
         Returns a dict with:
-        - treatment_rate: share of treated units (mean of 0/1 treatment)
-        - outcome_by_treatment: pandas DataFrame with count/mean/std of outcome per treatment group
-        - naive_diff: treated mean minus control mean (unadjusted, potentially biased)
+        - n_rows: number of rows (observations) in the dataset
+        - n_columns: number of columns (features) in the dataset
+        
+        This provides a quick overview of the dataset dimensions for 
+        exploratory analysis and reporting purposes.
+        
+        Returns
+        -------
+        Dict[str, int]
+            Dictionary containing 'n_rows' and 'n_columns' keys with 
+            corresponding integer values representing the dataset dimensions.
+        
+        Examples
+        --------
+        >>> eda = CausalEDA(causal_data)
+        >>> shape_info = eda.data_shape()
+        >>> print(f"Dataset has {shape_info['n_rows']} rows and {shape_info['n_columns']} columns")
+        """
+        df = self.d.df
+        n_rows, n_columns = df.shape
+        return {"n_rows": n_rows, "n_columns": n_columns}
+
+
+    def outcome_stats(self) -> pd.DataFrame:
+        """Comprehensive outcome statistics grouped by treatment.
+
+        Returns a DataFrame with detailed outcome statistics for each treatment group,
+        including count, mean, std, min, various percentiles, and max.
+        This method provides comprehensive outcome analysis and returns
+        data in a clean DataFrame format suitable for reporting.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with treatment groups as index and the following columns:
+            - count: number of observations in each group
+            - mean: average outcome value
+            - std: standard deviation of outcome
+            - min: minimum outcome value
+            - p10: 10th percentile
+            - p25: 25th percentile (Q1)
+            - median: 50th percentile (median)
+            - p75: 75th percentile (Q3)
+            - p90: 90th percentile
+            - max: maximum outcome value
+
+        Examples
+        --------
+        >>> eda = CausalEDA(causal_data)
+        >>> stats = eda.outcome_stats()
+        >>> print(stats)
+                count      mean       std       min       p10       p25    median       p75       p90       max
+        treatment                                                                                                
+        0        3000  5.123456  2.345678  0.123456  2.345678  3.456789  5.123456  6.789012  7.890123  9.876543
+        1        2000  6.789012  2.456789  0.234567  3.456789  4.567890  6.789012  8.901234  9.012345  10.987654
         """
         df, t, y = self.d.df, self.d.treatment, self.d.target
+        
+        # Ensure treatment is numeric for grouping
         if not pd.api.types.is_numeric_dtype(df[t]):
-            raise ValueError("Treatment must be numeric 0/1 for summaries().")
-        treat_rate = df[t].mean()
-        grp = df.groupby(t)[y].agg(["count", "mean", "std"])
-        # If either group missing, fill with nan-safe
-        naive_diff = np.nan
-        try:
-            naive_diff = grp.loc[1, "mean"] - grp.loc[0, "mean"]
-        except Exception:
-            pass
-        return {"treatment_rate": treat_rate, "outcome_by_treatment": grp, "naive_diff": naive_diff}
+            raise ValueError("Treatment must be numeric 0/1 for outcome_stats().")
+        
+        # Create grouped object for multiple operations
+        grouped = df.groupby(t)[y]
+        
+        # Calculate basic statistics using built-in methods
+        basic_stats = grouped.agg(['count', 'mean', 'std', 'min', 'median', 'max'])
+        
+        # Calculate percentiles separately to avoid pandas aggregation mixing issues
+        p10 = grouped.quantile(0.10)
+        p25 = grouped.quantile(0.25) 
+        p75 = grouped.quantile(0.75)
+        p90 = grouped.quantile(0.90)
+        
+        # Combine all statistics into a single DataFrame
+        stats_df = pd.DataFrame({
+            'count': basic_stats['count'],
+            'mean': basic_stats['mean'],
+            'std': basic_stats['std'],
+            'min': basic_stats['min'],
+            'p10': p10,
+            'p25': p25,
+            'median': basic_stats['median'],
+            'p75': p75,
+            'p90': p90,
+            'max': basic_stats['max']
+        })
+        
+        # Ensure the index is named appropriately
+        stats_df.index.name = 'treatment'
+        
+        return stats_df
 
     # ---------- propensity & overlap ----------
-    def fit_propensity(self) -> np.ndarray:
+    def fit_propensity(self) -> 'PropensityModel':
         """Estimate cross-validated propensity scores P(T=1|X).
 
         Uses a preprocessing+CatBoost classifier pipeline with stratified K-fold
         cross_val_predict to generate out-of-fold probabilities. CatBoost uses
         all available threads and handles categorical features natively. Returns a
-        numpy array of shape (n_rows,) with values clipped to (1e-6, 1-1e-6).
+        PropensityModel instance containing propensity scores and diagnostic methods.
+        
+        Returns
+        -------
+        PropensityModel
+            A PropensityModel instance with methods for:
+            - roc_auc: ROC AUC score property
+            - shap: SHAP values DataFrame property  
+            - ps_graph(): method to plot propensity score overlap
+            - positivity_check(): method to check positivity/overlap
         """
         df = self.d.df
         X = df[self.d.confounders]
@@ -446,19 +762,197 @@ class CausalEDA:
             self._fitted_model = self.ps_pipe
             self._feature_names = X.columns.tolist()
         
-        return ps
+        # Create and return PropensityModel instance
+        return PropensityModel(
+            propensity_scores=ps,
+            treatment_values=t,
+            fitted_model=self._fitted_model,
+            feature_names=self._feature_names,
+            X_for_shap=getattr(self, '_X_for_shap', None),
+            cat_features_for_shap=getattr(self, '_cat_features_for_shap', None)
+        )
 
-    def treatment_predictability_auc(self, ps: Optional[np.ndarray] = None) -> float:
-        """Compute AUC of treatment assignment vs. estimated propensity score.
+    def outcome_fit(self, outcome_model: Optional[Any] = None) -> 'OutcomeModel':
+        """Fit a regression model to predict outcome from confounders only.
 
-        Interpretation: Higher AUC means treatment is more predictable from X,
+        Uses a preprocessing+CatBoost regressor pipeline with K-fold
+        cross_val_predict to generate out-of-fold predictions. CatBoost uses
+        all available threads and handles categorical features natively. Returns an
+        OutcomeModel instance containing predicted outcomes and diagnostic methods.
+        
+        The outcome model predicts the baseline outcome from confounders only,
+        excluding treatment. This is essential for proper causal analysis.
+        
+        Parameters
+        ----------
+        outcome_model : Optional[Any]
+            Custom regression model to use. If None, uses CatBoostRegressor.
+            
+        Returns
+        -------
+        OutcomeModel
+            An OutcomeModel instance with methods for:
+            - scores: RMSE and MAE regression metrics
+            - shap: SHAP values DataFrame property for outcome prediction
+        """
+        df = self.d.df
+        # Features: confounders only (treatment excluded for proper causal analysis)
+        X = df[self.d.confounders]
+        y = df[self.d.target].values
+        cv = KFold(n_splits=self.n_splits, shuffle=True, random_state=self.random_state)
+        
+        # Default to CatBoostRegressor if no custom model provided
+        if outcome_model is None:
+            outcome_model = CatBoostRegressor(
+                thread_count=-1,
+                random_seed=self.random_state,
+                verbose=False
+            )
+        
+        # Identify categorical features for native CatBoost handling
+        num_features = X.select_dtypes(include=[np.number]).columns.tolist()
+        cat_features = [c for c in X.columns if c not in num_features]
+        cat_features_indices = [X.columns.get_loc(c) for c in cat_features] if cat_features else None
+        
+        # Setup preprocessing similar to propensity model
+        if isinstance(outcome_model, CatBoostRegressor):
+            # Only scale numeric features, keep categoricals as-is for CatBoost
+            if num_features:
+                num_transformer = Pipeline(steps=[
+                    ("scaler", StandardScaler(with_mean=True, with_std=True))
+                ])
+                preproc = ColumnTransformer(
+                    transformers=[
+                        ("num", num_transformer, num_features),
+                        ("cat", "passthrough", cat_features),
+                    ],
+                    remainder="drop",
+                )
+            else:
+                # All categorical, no preprocessing needed
+                preproc = "passthrough"
+        else:
+            # Fallback preprocessing for other models
+            num_transformer = Pipeline(steps=[
+                ("scaler", StandardScaler(with_mean=True, with_std=True))
+            ])
+            preproc = ColumnTransformer(
+                transformers=[
+                    ("num", num_transformer, num_features),
+                    ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat_features),
+                ],
+                remainder="drop",
+            )
+        
+        # Special handling for CatBoost to properly pass categorical features
+        if isinstance(outcome_model, CatBoostRegressor):
+            import warnings
+            
+            predictions = np.zeros(len(X))
+            
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    
+                    for train_idx, test_idx in cv.split(X, y):
+                        # Prepare data for this fold
+                        X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+                        y_train = y[train_idx]
+                        
+                        # Apply preprocessing
+                        X_train_prep = preproc.fit_transform(X_train)
+                        X_test_prep = preproc.transform(X_test)
+                        
+                        # Create and train CatBoost model for this fold
+                        model = CatBoostRegressor(
+                            thread_count=-1,
+                            random_seed=self.random_state,
+                            verbose=False
+                        )
+                        
+                        # Identify categorical features after preprocessing
+                        if cat_features_indices is not None:
+                            # Map original categorical feature indices to preprocessed data
+                            num_features_count = len(num_features)
+                            cat_features_prep = list(range(num_features_count, X_train_prep.shape[1]))
+                        else:
+                            cat_features_prep = None
+                        
+                        model.fit(X_train_prep, y_train, cat_features=cat_features_prep)
+                        predictions[test_idx] = model.predict(X_test_prep)
+        else:
+            # Use standard sklearn pipeline for non-CatBoost models
+            pipeline = Pipeline([("prep", preproc), ("reg", outcome_model)])
+            import warnings
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    predictions = cross_val_predict(pipeline, X, y, cv=cv)
+        
+        self._outcome_predictions = predictions
+        
+        # Train a final model on the full dataset for SHAP computation
+        if isinstance(outcome_model, CatBoostRegressor):
+            # Apply preprocessing to full dataset
+            X_full_prep = preproc.fit_transform(X)
+            
+            # Create and train final model
+            final_model = CatBoostRegressor(
+                thread_count=-1,
+                random_seed=self.random_state,
+                verbose=False
+            )
+            
+            # Identify categorical features after preprocessing
+            if cat_features_indices is not None:
+                # Map original categorical feature indices to preprocessed data
+                num_features_count = len(num_features)
+                cat_features_prep = list(range(num_features_count, X_full_prep.shape[1]))
+            else:
+                cat_features_prep = None
+            
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    final_model.fit(X_full_prep, y, cat_features=cat_features_prep)
+            
+            # Store the trained model and data needed for SHAP computation
+            self._outcome_fitted_model = final_model
+            self._outcome_feature_names = X.columns.tolist()
+            self._outcome_X_for_shap = X_full_prep  # Store preprocessed data for SHAP
+            self._outcome_cat_features_for_shap = cat_features_prep  # Store categorical features info
+        else:
+            # For non-CatBoost models, fit the pipeline on full data
+            pipeline = Pipeline([("prep", preproc), ("reg", outcome_model)])
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    pipeline.fit(X, y)
+            self._outcome_fitted_model = pipeline
+            self._outcome_feature_names = X.columns.tolist()
+        
+        # Create and return OutcomeModel instance
+        return OutcomeModel(
+            predicted_outcomes=predictions,
+            actual_outcomes=y,
+            fitted_model=self._outcome_fitted_model,
+            feature_names=self._outcome_feature_names,
+            X_for_shap=getattr(self, '_outcome_X_for_shap', None),
+            cat_features_for_shap=getattr(self, '_outcome_cat_features_for_shap', None)
+        )
+
+    def confounders_roc_auc(self, ps: Optional[np.ndarray] = None) -> float:
+        """Compute ROC AUC of treatment assignment vs. estimated propensity score.
+
+        Interpretation: Higher AUC means treatment is more predictable from confounders,
         indicating stronger systematic differences between groups (potential
         confounding). Values near 0.5 suggest random-like assignment.
         """
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
-                ps = self.fit_propensity()
+                ps_model = self.fit_propensity()
+                ps = ps_model.propensity_scores
         # AUC against actual treatment
         t = self.d.df[self.d.treatment].astype(int).values
         return float(roc_auc_score(t, ps))
@@ -475,7 +969,8 @@ class CausalEDA:
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
-                ps = self.fit_propensity()
+                ps_model = self.fit_propensity()
+                ps = ps_model.propensity_scores
         low, high = bounds
         share_low = float((ps < low).mean())
         share_high = float((ps > high).mean())
@@ -491,7 +986,8 @@ class CausalEDA:
         if ps is None:
             ps = getattr(self, "_ps", None)
             if ps is None:
-                ps = self.fit_propensity()
+                ps_model = self.fit_propensity()
+                ps = ps_model.propensity_scores
         df = self.d.df
         t = df[self.d.treatment].astype(int).values
         plt.figure()
@@ -504,44 +1000,98 @@ class CausalEDA:
 
     # ---------- balance ----------
 
-    def balance_table(self) -> pd.DataFrame:
-        """Compute standardized mean differences (SMD) for covariate balance assessment.
+    def confounders_means(self) -> pd.DataFrame:
+        """Comprehensive confounders balance assessment with means by treatment group.
 
-        Returns a DataFrame with columns:
-        - covariate: (possibly one-hot) covariate name
-        - SMD: standardized mean difference between treated and control groups
+        Returns a DataFrame with detailed balance information including:
+        - Mean values of each confounder for control group (treatment=0)
+        - Mean values of each confounder for treated group (treatment=1)
+        - Absolute difference between treatment groups
+        - Standardized Mean Difference (SMD) for formal balance assessment
         
-        Lower |SMD| indicates better balance between treated and control groups.
+        This method provides a comprehensive view of confounder balance by showing
+        the actual mean values alongside the standardized differences, making it easier
+        to understand both the magnitude and direction of imbalances.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with confounders as index and the following columns:
+            - mean_t_0: mean value for control group (treatment=0)
+            - mean_t_1: mean value for treated group (treatment=1)  
+            - abs_diff: absolute difference |mean_t_1 - mean_t_0|
+            - smd: standardized mean difference (Cohen's d)
+            
+        Notes
+        -----
         SMD values > 0.1 in absolute value typically indicate meaningful imbalance.
+        Categorical variables are automatically converted to dummy variables.
+        
+        Examples
+        --------
+        >>> eda = CausalEDA(causal_data)
+        >>> balance = eda.confounders_means()
+        >>> print(balance.head())
+                     mean_t_0  mean_t_1  abs_diff       smd
+        confounders                                       
+        age              29.5      31.2      1.7     0.085
+        income        45000.0   47500.0   2500.0     0.125
+        education         0.25      0.35      0.1     0.215
         """
         df = self.d.df
         X = df[self.d.confounders]
         t = df[self.d.treatment].astype(int).values
-        # convert cats to dummies for SMDs
+        
+        # Convert categorical variables to dummy variables for analysis
         X_num = pd.get_dummies(X, drop_first=False)
+        
         rows = []
         for col in X_num.columns:
             x = X_num[col].values.astype(float)
-            # compute unweighted SMD
-            m1 = x[t == 1].mean()
-            v1 = x[t == 1].var(ddof=1)
-            m0 = x[t == 0].mean()
-            v0 = x[t == 0].var(ddof=1)
-            smd = (m1 - m0) / np.sqrt((v1 + v0) / 2) if (v1 + v0) > 0 else 0.0
-            rows.append({"covariate": col, "SMD": smd})
-        tab = pd.DataFrame(rows).sort_values("SMD", key=lambda s: s.abs(), ascending=False)
-        return tab
+            
+            # Calculate means for each treatment group
+            mean_t_0 = x[t == 0].mean()
+            mean_t_1 = x[t == 1].mean()
+            
+            # Calculate absolute difference
+            abs_diff = abs(mean_t_1 - mean_t_0)
+            
+            # Calculate standardized mean difference (SMD)
+            v_control = x[t == 0].var(ddof=1) if len(x[t == 0]) > 1 else 0.0
+            v_treated = x[t == 1].var(ddof=1) if len(x[t == 1]) > 1 else 0.0
+            pooled_std = np.sqrt((v_control + v_treated) / 2)
+            smd = (mean_t_1 - mean_t_0) / pooled_std if pooled_std > 0 else 0.0
+            
+            rows.append({
+                "confounders": col,
+                "mean_t_0": mean_t_0,
+                "mean_t_1": mean_t_1, 
+                "abs_diff": abs_diff,
+                "smd": smd
+            })
+        
+        # Create DataFrame and set confounders as index
+        balance_df = pd.DataFrame(rows)
+        balance_df = balance_df.set_index("confounders")
+        
+        # Sort by absolute SMD value (most imbalanced first)
+        balance_df = balance_df.reindex(
+            balance_df['smd'].abs().sort_values(ascending=False).index
+        )
+        
+        return balance_df
 
 
 
-    def plot_target_by_treatment(self,
-                                 treatment: Optional[str] = None,
-                                 target: Optional[str] = None,
-                                 bins: int = 30,
-                                 density: bool = True,
-                                 alpha: float = 0.5,
-                                 figsize: Tuple[float, float] = (7, 4),
-                                 sharex: bool = True) -> Tuple[plt.Figure, plt.Figure]:
+
+    def outcome_plots(self,
+                      treatment: Optional[str] = None,
+                      target: Optional[str] = None,
+                      bins: int = 30,
+                      density: bool = True,
+                      alpha: float = 0.5,
+                      figsize: Tuple[float, float] = (7, 4),
+                      sharex: bool = True) -> Tuple[plt.Figure, plt.Figure]:
         """
         Plot the distribution of the outcome for every treatment on one plot,
         and also produce a boxplot by treatment to visualize outliers.
@@ -763,29 +1313,3 @@ class CausalEDA:
         result_df = result_df.reset_index(drop=True)
         return result_df
 
-    # ---------- one-shot driver ----------
-    def design_report(self) -> DesignReport:
-        """Run a full set of diagnostics and return a consolidated report.
-
-        Returns a DesignReport (dict-like) with keys:
-        - summaries: output of summaries()
-        - treat_auc: float from treatment_predictability_auc()
-        - positivity: output of positivity_check()
-        - balance: output of balance_table()
-        
-        The returned object supports .summary() for beautiful text formatting
-        and behaves like a regular dictionary for backward compatibility.
-        Useful for quick inspection and logging in notebooks or pipelines.
-        
-        Example:
-            report = eda.design_report()
-            print(report.summary())  # Beautiful formatted text
-            print(report['treat_auc'])  # Access like a dictionary
-        """
-        ps = self.fit_propensity()
-        return DesignReport({
-            "summaries": self.summaries(),
-            "treat_auc": self.treatment_predictability_auc(ps),
-            "positivity": self.positivity_check(ps),
-            "balance": self.balance_table(),
-        })

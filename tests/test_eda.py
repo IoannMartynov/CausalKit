@@ -24,46 +24,49 @@ def make_synth(n=200, seed=0):
     return df
 
 
-def test_design_report_and_core_metrics():
-    df = make_synth()
-    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
-
-    eda = CausalEDA(cd)
-    report = eda.design_report()
-
-    # basic keys present (simplified version without health and weights)
-    assert set(['summaries', 'treat_auc', 'positivity', 'balance']).issubset(set(report.keys()))
-
-    # AUC is between 0.5 and 1 (should be > 0.5 given signal)
-    auc = report['treat_auc']
-    assert 0.5 <= auc <= 1.0
-
-    # positivity dict fields
-    pos = report['positivity']
-    assert 'share_below' in pos and 'share_above' in pos and 'bounds' in pos
-
-    # balance table columns (simplified version without flag)
-    bal = report['balance']
-    for col in ['covariate', 'SMD']:
-        assert col in bal.columns
 
 
-def test_fit_propensity_and_balance_table_direct_calls():
+def test_fit_propensity_and_confounders_means_direct_calls():
     df = make_synth(seed=42)
     cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
 
     eda = CausalEDA(cd)
-    ps = eda.fit_propensity()
+    ps_model = eda.fit_propensity()
+    
+    # Test that fit_propensity returns a PropensityModel
+    from causalkit.eda.eda import PropensityModel
+    assert isinstance(ps_model, PropensityModel)
+    
+    # Test propensity scores are accessible and valid
+    ps = ps_model.propensity_scores
     assert ps.shape[0] == df.shape[0]
     assert np.all(ps > 0) and np.all(ps < 1)
-
-    auc = eda.treatment_predictability_auc(ps)
+    
+    # Test PropensityModel methods work
+    auc = ps_model.roc_auc
     assert 0.5 <= auc <= 1.0
+    
+    # Test positivity check
+    pos_check = ps_model.positivity_check()
+    assert 'bounds' in pos_check and 'share_below' in pos_check and 'share_above' in pos_check
+    
+    # Test SHAP values property
+    shap_df = ps_model.shap
+    assert isinstance(shap_df, pd.DataFrame)
+    assert 'feature' in shap_df.columns
+    
+    # Test old interface still works (backward compatibility)
+    auc_old = eda.confounders_roc_auc(ps)
+    assert 0.5 <= auc_old <= 1.0
+    assert abs(auc - auc_old) < 1e-10  # Should be the same
 
-    bal = eda.balance_table()  # simplified version takes no parameters
+    bal = eda.confounders_means()
     assert not bal.empty
-    # verify simplified columns
-    assert set(['covariate', 'SMD']).issubset(bal.columns)
+    # verify comprehensive balance columns with new names
+    expected_columns = {'mean_t_0', 'mean_t_1', 'abs_diff', 'smd'}
+    assert expected_columns.issubset(set(bal.columns))
+    # verify that index contains confounders names
+    assert bal.index.name == 'confounders'
 
 
 def test_treatment_features():
@@ -81,7 +84,7 @@ def test_treatment_features():
         assert "No fitted propensity model found" in str(e)
     
     # Fit propensity model first
-    ps = eda.fit_propensity()
+    ps_model = eda.fit_propensity()
     
     # Now test successful feature importance/SHAP extraction
     features_df = eda.treatment_features()
