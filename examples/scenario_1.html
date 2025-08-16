@@ -372,7 +372,6 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
 
 <span class="c1"># Reproducibility</span>
@@ -434,11 +433,6 @@ document.write(`
 <span class="p">]</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> observations&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True causal effect: </span><span class="si">{</span><span class="n">gen</span><span class="o">.</span><span class="n">theta</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Treatment rate: </span><span class="si">{</span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average outcome: </span><span class="si">{</span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
 <span class="c1"># Show first few rows</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -447,12 +441,12 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Reproducibility</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># Reproducibility</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">28</span>
 <span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span>
@@ -496,37 +490,34 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="general">
+<h3>General<a class="headerlink" href="#general" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Simple outcome/treatment summaries</span>
-<span class="n">summ</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">summaries</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Share treated:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;treatment_rate&quot;</span><span class="p">]),</span> <span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Naive diff (treated - control):&quot;</span><span class="p">,</span>
-      <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">]),</span> <span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">])</span> <span class="k">else</span> <span class="n">summ</span><span class="p">[</span><span class="s2">&quot;naive_diff&quot;</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Outcome by treatment:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">summ</span><span class="p">[</span><span class="s2">&quot;outcome_by_treatment&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Share treated: 0.3412
-Naive diff (treated - control): 2.4398
-
-Outcome by treatment:
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 5000, &#39;n_columns&#39;: 7}
 </pre></div>
 </div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Comprehensive outcome statistics by treatment</span>
+<span class="c1"># Provides detailed statistics including count, mean, std, min, percentiles, and max</span>
+<span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -548,9 +539,23 @@ Outcome by treatment:
       <th>count</th>
       <th>mean</th>
       <th>std</th>
+      <th>min</th>
+      <th>p10</th>
+      <th>p25</th>
+      <th>median</th>
+      <th>p75</th>
+      <th>p90</th>
+      <th>max</th>
     </tr>
     <tr>
-      <th>t</th>
+      <th>treatment</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -562,12 +567,26 @@ Outcome by treatment:
       <td>3294</td>
       <td>6.049281</td>
       <td>3.961794</td>
+      <td>-8.248459</td>
+      <td>1.020819</td>
+      <td>3.316924</td>
+      <td>6.024034</td>
+      <td>8.713549</td>
+      <td>11.168524</td>
+      <td>22.141834</td>
     </tr>
     <tr>
       <th>1.0</th>
       <td>1706</td>
       <td>8.489068</td>
       <td>3.937085</td>
+      <td>-2.920828</td>
+      <td>3.368318</td>
+      <td>5.684483</td>
+      <td>8.556497</td>
+      <td>11.121632</td>
+      <td>13.640342</td>
+      <td>22.031603</td>
     </tr>
   </tbody>
 </table>
@@ -575,51 +594,118 @@ Outcome by treatment:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summ</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot) - using new outcome_plots() method</span>
+<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;treatment_rate&#39;: np.float64(0.3412),
- &#39;outcome_by_treatment&#39;:      count      mean       std
- t                             
- 0.0   3294  6.049281  3.961794
- 1.0   1706  8.489068  3.937085,
- &#39;naive_diff&#39;: np.float64(2.4397874992846997)}
-</pre></div>
+<img alt="../_images/69b6e18cd6085b3ead4db415e92bd639f5e5a3edc139cc24031af36775d07f06.png" src="../_images/69b6e18cd6085b3ead4db415e92bd639f5e5a3edc139cc24031af36775d07f06.png" />
+<img alt="../_images/c22ba3d1a57a6c70f9c44cd5a82fd1e9b9dd1d20cdd84e07cd494649ded4b880.png" src="../_images/c22ba3d1a57a6c70f9c44cd5a82fd1e9b9dd1d20cdd84e07cd494649ded4b880.png" />
 </div>
 </div>
-</div>
+</section>
+<section id="confounders">
+<h3>Confounders<a class="headerlink" href="#confounders" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity, predictability (AUC), and positivity</span>
-<span class="n">ps</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
-<span class="n">auc</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">treatment_predictability_auc</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
-<span class="n">pos</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means for control/treated groups, absolute differences, and SMD values</span>
+<span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
+<span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treatment predictability AUC:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">auc</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check:&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+<span class="c1"># NEW: PropensityModel - fit_propensity() now returns a PropensityModel with built-in methods</span>
+<span class="c1"># The PropensityModel encapsulates propensity scores and provides diagnostic methods</span>
+<span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
+
+<span class="c1"># 1) ROC AUC - shows how predictable treatment is from confounders</span>
+<span class="n">roc_auc_score</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ROC AUC from PropensityModel:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># 2) Positivity check - assess overlap between treatment groups</span>
+<span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
+
+<span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
+<span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
+
+<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Treatment predictability AUC: 0.5964
-Positivity check: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Treatment feature importance (which features drive treatment assignment)</span>
-<span class="n">features_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">treatment_features</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Feature importance for treatment prediction:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">features_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Feature importance for treatment prediction:
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean_t_0</th>
+      <th>mean_t_1</th>
+      <th>abs_diff</th>
+      <th>smd</th>
+    </tr>
+    <tr>
+      <th>confounders</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>premium_user</th>
+      <td>0.206436</td>
+      <td>0.352286</td>
+      <td>0.145850</td>
+      <td>0.329364</td>
+    </tr>
+    <tr>
+      <th>avg_sessions_week</th>
+      <td>4.862366</td>
+      <td>5.262098</td>
+      <td>0.399732</td>
+      <td>0.198836</td>
+    </tr>
+    <tr>
+      <th>tenure_months</th>
+      <td>23.059536</td>
+      <td>25.116802</td>
+      <td>2.057266</td>
+      <td>0.172035</td>
+    </tr>
+    <tr>
+      <th>urban_resident</th>
+      <td>0.584699</td>
+      <td>0.633646</td>
+      <td>0.048947</td>
+      <td>0.100418</td>
+    </tr>
+    <tr>
+      <th>spend_last_month</th>
+      <td>98.980583</td>
+      <td>103.578775</td>
+      <td>4.598192</td>
+      <td>0.080595</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.5964
+Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -672,17 +758,31 @@ Positivity check: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002,
     </tr>
   </tbody>
 </table>
-</div></div></div>
+</div></div><img alt="../_images/44cdf167d178ba1d24b234369fadbc37c274f1540bea5722ac2abc52080d7681.png" src="../_images/44cdf167d178ba1d24b234369fadbc37c274f1540bea5722ac2abc52080d7681.png" />
 </div>
+</div>
+</section>
+<section id="outcome">
+<h3>Outcome<a class="headerlink" href="#outcome" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3) Balance diagnostics (SMD) for covariate assessment</span>
-<span class="n">balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">balance_table</span><span class="p">()</span>
-<span class="n">display</span><span class="p">(</span><span class="n">balance_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The OutcomeModel encapsulates outcome predictions and provides diagnostic methods</span>
+<span class="n">outcome_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
+
+<span class="c1"># 1) Regression scores - shows how well we can predict the outcome from confounders only</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outcome_model</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
+
+
+<span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
+<span class="n">shap_outcome_df</span> <span class="o">=</span> <span class="n">outcome_model</span><span class="o">.</span><span class="n">shap</span>
+<span class="n">display</span><span class="p">(</span><span class="n">shap_outcome_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.7652134139034956, &#39;mae&#39;: 3.0068231531256497}
+</pre></div>
+</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -701,171 +801,41 @@ Positivity check: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002,
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>covariate</th>
-      <th>SMD</th>
+      <th>feature</th>
+      <th>shap_mean</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>3</th>
-      <td>premium_user</td>
-      <td>0.329364</td>
+      <th>0</th>
+      <td>tenure_months</td>
+      <td>0.003588</td>
     </tr>
     <tr>
       <th>1</th>
       <td>avg_sessions_week</td>
-      <td>0.198836</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>tenure_months</td>
-      <td>0.172035</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>urban_resident</td>
-      <td>0.100418</td>
+      <td>-0.002121</td>
     </tr>
     <tr>
       <th>2</th>
+      <td>premium_user</td>
+      <td>-0.001632</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>urban_resident</td>
+      <td>0.000613</td>
+    </tr>
+    <tr>
+      <th>4</th>
       <td>spend_last_month</td>
-      <td>0.080595</td>
+      <td>-0.000448</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 4) Propensity score overlap</span>
-<span class="c1"># Overlap plot (treated vs control propensity distributions)</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">plot_ps_overlap</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/62938b2015a8e004cea8965b49e2b6d837bbe69b781ca73523ba0c42c7892c99.png" src="../_images/62938b2015a8e004cea8965b49e2b6d837bbe69b781ca73523ba0c42c7892c99.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5) Outcome distribution by treatment (hist + boxplot)</span>
-<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">plot_target_by_treatment</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/fd192c75164746a05f30ce7bce670417379e904ba02181f8bc191c7f881c4509.png" src="../_images/fd192c75164746a05f30ce7bce670417379e904ba02181f8bc191c7f881c4509.png" />
-<img alt="../_images/fc168f871735e7f2e0b5184362a81f728d8f29af770cac6837844263e0cfac2c.png" src="../_images/fc168f871735e7f2e0b5184362a81f728d8f29af770cac6837844263e0cfac2c.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5) One-shot consolidated report (if you prefer a single call)</span>
-<span class="n">report</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">design_report</span><span class="p">()</span>
-<span class="c1"># Example: access parts</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AUC:&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;treat_auc&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity:&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;positivity&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Balance variables:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s2">&quot;balance&quot;</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AUC: 0.5964160208870297
-Positivity: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
-Balance variables: 5
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;summaries&#39;: {&#39;treatment_rate&#39;: np.float64(0.3412),
-  &#39;outcome_by_treatment&#39;:      count      mean       std
-  t                             
-  0.0   3294  6.049281  3.961794
-  1.0   1706  8.489068  3.937085,
-  &#39;naive_diff&#39;: np.float64(2.4397874992846997)},
- &#39;treat_auc&#39;: 0.5964160208870297,
- &#39;positivity&#39;: {&#39;bounds&#39;: (0.05, 0.95),
-  &#39;share_below&#39;: 0.002,
-  &#39;share_above&#39;: 0.0,
-  &#39;flag&#39;: False},
- &#39;balance&#39;:            covariate       SMD
- 3       premium_user  0.329364
- 1  avg_sessions_week  0.198836
- 0      tenure_months  0.172035
- 4     urban_resident  0.100418
- 2   spend_last_month  0.080595}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== DIRECT CHAINING EXAMPLE ===&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">eda</span><span class="o">.</span><span class="n">design_report</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== DIRECT CHAINING EXAMPLE ===
-============================================================
-CAUSAL DESIGN REPORT SUMMARY
-============================================================
-
-📊 TREATMENT &amp; OUTCOME SUMMARY
-------------------------------
-Treatment Rate: 34.1%
-Naive Difference (Treated - Control): 2.4398
-
-Outcome by Treatment:
-     count    mean     std
-t                         
-0.0   3294  6.0493  3.9618
-1.0   1706  8.4891  3.9371
-
-🎯 TREATMENT PREDICTABILITY
-------------------------------
-Treatment AUC: 0.5964
-  ✅ Low predictability - minimal confounding risk
-
-🔄 POSITIVITY/OVERLAP ASSESSMENT
-------------------------------
-Propensity Score Bounds: (0.05, 0.95)
-Share Below Lower Bound: 0.2%
-Share Above Upper Bound: 0.0%
-Total in Extreme Regions: 0.2%
-  ✅ Good overlap - positivity assumption satisfied
-
-⚖️  COVARIATE BALANCE ASSESSMENT
-------------------------------
-Total Variables: 5
-Imbalanced Variables: 4
-  ⚠️  Poor balance - many imbalanced variables
-
-Most Imbalanced Variables:
-  premium_user: 0.329
-  avg_sessions_week: 0.199
-  tenure_months: 0.172
-
-📋 OVERALL ASSESSMENT
-------------------------------
-⚠️  Design has potential issues:
-   - Poor covariate balance
-   Consider additional robustness checks or sensitivity analysis.
-============================================================
-</pre></div>
-</div>
-</div>
-</div>
+</section>
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
@@ -1102,7 +1072,12 @@ t  0.0  20.749473  18.725578
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-data">Generate data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confounders">Confounders</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome">Outcome</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a></li>
 </ul>

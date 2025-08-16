@@ -227,58 +227,10 @@
     }
    },
    "cell_type": "code",
-   "source": "report = eda.design_report()",
+   "source": "",
    "id": "7d5cd09ceeb33bfc",
    "outputs": [],
    "execution_count": 3
-  },
-  {
-   "metadata": {
-    "ExecuteTime": {
-     "end_time": "2025-08-15T16:12:23.877417Z",
-     "start_time": "2025-08-15T16:12:23.873855Z"
-    }
-   },
-   "cell_type": "code",
-   "source": "report",
-   "id": "bb1ada16b02d8e9a",
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "{'summaries': {'treatment_rate': np.float64(0.3412),\n",
-       "  'outcome_by_treatment':      count      mean       std\n",
-       "  t                             \n",
-       "  0.0   3294  6.049281  3.961794\n",
-       "  1.0   1706  8.489068  3.937085,\n",
-       "  'naive_diff': np.float64(2.4397874992846997)},\n",
-       " 'treat_auc': 0.6230451330387909,\n",
-       " 'positivity': {'bounds': (0.05, 0.95),\n",
-       "  'share_below': 0.0,\n",
-       "  'share_above': 0.0,\n",
-       "  'flag': False},\n",
-       " 'balance':            covariate  SMD_unweighted  SMD_weighted  flag_unw  flag_w\n",
-       " 3       premium_user        0.329364     -0.001253      True   False\n",
-       " 1  avg_sessions_week        0.198836      0.005637      True   False\n",
-       " 0      tenure_months        0.172035      0.000315      True   False\n",
-       " 4     urban_resident        0.100418     -0.000195      True   False\n",
-       " 2   spend_last_month        0.080595     -0.003427     False   False,\n",
-       " 'weights': {'ESS_all': 4209.562077633034,\n",
-       "  'ESS_treated': 1567.5385411996365,\n",
-       "  'ESS_control': 3201.610599855847,\n",
-       "  'w_all_quantiles': [1.6055703363251397,\n",
-       "   3.351207269981197,\n",
-       "   3.8397035367001444,\n",
-       "   4.783347714944799,\n",
-       "   7.673993949733509]}}"
-      ]
-     },
-     "execution_count": 4,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "execution_count": 4
   },
   {
    "metadata": {
@@ -363,90 +315,6 @@
     }
    ],
    "execution_count": 5
-  },
-  {
-   "metadata": {
-    "ExecuteTime": {
-     "end_time": "2025-08-15T16:12:23.931348Z",
-     "start_time": "2025-08-15T16:12:23.905486Z"
-    }
-   },
-   "cell_type": "code",
-   "source": [
-    "# Alternative: direct chaining syntax\n",
-    "print(\"=== DIRECT CHAINING EXAMPLE ===\")\n",
-    "print(eda.design_report().summary())"
-   ],
-   "id": "9d16dded5c1a14df",
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "=== DIRECT CHAINING EXAMPLE ===\n",
-      "============================================================\n",
-      "CAUSAL DESIGN REPORT SUMMARY\n",
-      "============================================================\n",
-      "\n",
-      "📊 TREATMENT & OUTCOME SUMMARY\n",
-      "------------------------------\n",
-      "Treatment Rate: 34.1%\n",
-      "Naive Difference (Treated - Control): 2.4398\n",
-      "\n",
-      "Outcome by Treatment:\n",
-      "     count    mean     std\n",
-      "t                         \n",
-      "0.0   3294  6.0493  3.9618\n",
-      "1.0   1706  8.4891  3.9371\n",
-      "\n",
-      "🎯 TREATMENT PREDICTABILITY\n",
-      "------------------------------\n",
-      "Treatment AUC: 0.6230\n",
-      "  ✅ Low predictability - minimal confounding risk\n",
-      "\n",
-      "🔄 POSITIVITY/OVERLAP ASSESSMENT\n",
-      "------------------------------\n",
-      "Propensity Score Bounds: (0.05, 0.95)\n",
-      "Share Below Lower Bound: 0.0%\n",
-      "Share Above Upper Bound: 0.0%\n",
-      "Total in Extreme Regions: 0.0%\n",
-      "  ✅ Good overlap - positivity assumption satisfied\n",
-      "\n",
-      "⚖️  COVARIATE BALANCE ASSESSMENT\n",
-      "------------------------------\n",
-      "Total Variables: 5\n",
-      "Imbalanced Before Weighting: 4\n",
-      "Imbalanced After Weighting: 0\n",
-      "  ✅ Perfect balance achieved after weighting\n",
-      "\n",
-      "Worst Imbalanced Variables (Before Weighting):\n",
-      "  premium_user: 0.329 → -0.001\n",
-      "  avg_sessions_week: 0.199 → 0.006\n",
-      "  tenure_months: 0.172 → 0.000\n",
-      "\n",
-      "⚖️  WEIGHT DIAGNOSTICS\n",
-      "------------------------------\n",
-      "Effective Sample Size (All): 4209.6\n",
-      "Effective Sample Size (Treated): 1567.5\n",
-      "Effective Sample Size (Control): 3201.6\n",
-      "\n",
-      "Weight Distribution (Quantiles):\n",
-      "  50%: 1.61\n",
-      "  90%: 3.35\n",
-      "  95%: 3.84\n",
-      "  99%: 4.78\n",
-      "  100%: 7.67\n",
-      "  ✅ Reasonable weight distribution\n",
-      "\n",
-      "📋 OVERALL ASSESSMENT\n",
-      "------------------------------\n",
-      "✅ Design looks good for causal inference!\n",
-      "   All key assumptions appear to be satisfied.\n",
-      "============================================================\n"
-     ]
-    }
-   ],
-   "execution_count": 6
   },
   {
    "metadata": {
