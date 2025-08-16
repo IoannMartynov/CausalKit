@@ -76,7 +76,7 @@ gen = CausalDatasetGenerator(
 
 # Create dataset
 causal_data = gen.to_causal_data(
-    n=5000,
+    n=50000,
     cofounders = [
     "tenure_months",
     "avg_sessions_week",

@@ -423,7 +423,7 @@ document.write(`
 
 <span class="c1"># Create dataset</span>
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>
     <span class="n">cofounders</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
     <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
@@ -504,7 +504,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 5000, &#39;n_columns&#39;: 7}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 50000, &#39;n_columns&#39;: 7}
 </pre></div>
 </div>
 </div>
@@ -564,29 +564,29 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>3294</td>
-      <td>6.049281</td>
-      <td>3.961794</td>
-      <td>-8.248459</td>
-      <td>1.020819</td>
-      <td>3.316924</td>
-      <td>6.024034</td>
-      <td>8.713549</td>
-      <td>11.168524</td>
-      <td>22.141834</td>
+      <td>32599</td>
+      <td>6.030044</td>
+      <td>3.927121</td>
+      <td>-10.036046</td>
+      <td>1.021363</td>
+      <td>3.409317</td>
+      <td>6.016423</td>
+      <td>8.654023</td>
+      <td>11.085462</td>
+      <td>22.216914</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>1706</td>
-      <td>8.489068</td>
-      <td>3.937085</td>
-      <td>-2.920828</td>
-      <td>3.368318</td>
-      <td>5.684483</td>
-      <td>8.556497</td>
-      <td>11.121632</td>
-      <td>13.640342</td>
-      <td>22.031603</td>
+      <td>17401</td>
+      <td>8.545813</td>
+      <td>3.971549</td>
+      <td>-6.248371</td>
+      <td>3.436976</td>
+      <td>5.852603</td>
+      <td>8.542448</td>
+      <td>11.223197</td>
+      <td>13.631587</td>
+      <td>24.516679</td>
     </tr>
   </tbody>
 </table>
@@ -601,8 +601,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/69b6e18cd6085b3ead4db415e92bd639f5e5a3edc139cc24031af36775d07f06.png" src="../_images/69b6e18cd6085b3ead4db415e92bd639f5e5a3edc139cc24031af36775d07f06.png" />
-<img alt="../_images/c22ba3d1a57a6c70f9c44cd5a82fd1e9b9dd1d20cdd84e07cd494649ded4b880.png" src="../_images/c22ba3d1a57a6c70f9c44cd5a82fd1e9b9dd1d20cdd84e07cd494649ded4b880.png" />
+<img alt="../_images/033b2d0c48217075c7ed4f722a54d9f74e94d9947465b2af37afd50ad7e145fa.png" src="../_images/033b2d0c48217075c7ed4f722a54d9f74e94d9947465b2af37afd50ad7e145fa.png" />
+<img alt="../_images/0dd55d9352803a2b3ee855d667edf900a78fbab608f4f96708605212b741d18b.png" src="../_images/0dd55d9352803a2b3ee855d667edf900a78fbab608f4f96708605212b741d18b.png" />
 </div>
 </div>
 </section>
@@ -669,43 +669,43 @@ document.write(`
   <tbody>
     <tr>
       <th>premium_user</th>
-      <td>0.206436</td>
-      <td>0.352286</td>
-      <td>0.145850</td>
-      <td>0.329364</td>
+      <td>0.199485</td>
+      <td>0.342509</td>
+      <td>0.143024</td>
+      <td>0.326023</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>4.862366</td>
-      <td>5.262098</td>
-      <td>0.399732</td>
-      <td>0.198836</td>
+      <td>4.854119</td>
+      <td>5.227690</td>
+      <td>0.373571</td>
+      <td>0.186733</td>
     </tr>
     <tr>
       <th>tenure_months</th>
-      <td>23.059536</td>
-      <td>25.116802</td>
-      <td>2.057266</td>
-      <td>0.172035</td>
+      <td>23.294194</td>
+      <td>25.303966</td>
+      <td>2.009772</td>
+      <td>0.167721</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.584699</td>
-      <td>0.633646</td>
-      <td>0.048947</td>
-      <td>0.100418</td>
+      <td>0.573116</td>
+      <td>0.637032</td>
+      <td>0.063917</td>
+      <td>0.131030</td>
     </tr>
     <tr>
       <th>spend_last_month</th>
-      <td>98.980583</td>
-      <td>103.578775</td>
-      <td>4.598192</td>
-      <td>0.080595</td>
+      <td>97.853328</td>
+      <td>103.457644</td>
+      <td>5.604315</td>
+      <td>0.097330</td>
     </tr>
   </tbody>
 </table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.5964
-Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6121
+Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.00096, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -734,31 +734,31 @@ Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;sha
     <tr>
       <th>0</th>
       <td>tenure_months</td>
-      <td>0.000929</td>
+      <td>0.000326</td>
     </tr>
     <tr>
       <th>1</th>
       <td>avg_sessions_week</td>
-      <td>-0.000339</td>
+      <td>-0.000279</td>
     </tr>
     <tr>
       <th>2</th>
       <td>spend_last_month</td>
-      <td>-0.000290</td>
+      <td>-0.000148</td>
     </tr>
     <tr>
       <th>3</th>
       <td>premium_user</td>
-      <td>-0.000271</td>
+      <td>0.000056</td>
     </tr>
     <tr>
       <th>4</th>
       <td>urban_resident</td>
-      <td>-0.000030</td>
+      <td>0.000045</td>
     </tr>
   </tbody>
 </table>
-</div></div><img alt="../_images/44cdf167d178ba1d24b234369fadbc37c274f1540bea5722ac2abc52080d7681.png" src="../_images/44cdf167d178ba1d24b234369fadbc37c274f1540bea5722ac2abc52080d7681.png" />
+</div></div><img alt="../_images/a63bc83dc14cae34b8263b2e0fc0400cb4e094916a2a5c0fec9eb9bf46fbcd07.png" src="../_images/a63bc83dc14cae34b8263b2e0fc0400cb4e094916a2a5c0fec9eb9bf46fbcd07.png" />
 </div>
 </div>
 </section>
@@ -780,7 +780,7 @@ Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;sha
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.7652134139034956, &#39;mae&#39;: 3.0068231531256497}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.6348456765609427, &#39;mae&#39;: 2.893847375791019}
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -808,28 +808,28 @@ Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;sha
   <tbody>
     <tr>
       <th>0</th>
-      <td>tenure_months</td>
-      <td>0.003588</td>
+      <td>avg_sessions_week</td>
+      <td>0.000649</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>avg_sessions_week</td>
-      <td>-0.002121</td>
+      <td>tenure_months</td>
+      <td>-0.000342</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>premium_user</td>
-      <td>-0.001632</td>
+      <td>spend_last_month</td>
+      <td>-0.000305</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>urban_resident</td>
-      <td>0.000613</td>
+      <td>premium_user</td>
+      <td>-0.000061</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>spend_last_month</td>
-      <td>-0.000448</td>
+      <td>urban_resident</td>
+      <td>0.000059</td>
     </tr>
   </tbody>
 </table>
@@ -846,21 +846,24 @@ Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;sha
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.att</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_att</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== ORIGINAL CAUSAL ESTIMATES ===&quot;</span><span class="p">)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE Estimate: </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE 95% CI: [</span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE p-value: </span><span class="si">{</span><span class="n">ate_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;True effect: </span><span class="si">{</span><span class="n">gen</span><span class="o">.</span><span class="n">theta</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_result</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== ORIGINAL CAUSAL ESTIMATES ===
-ATE Estimate: 1.849
-ATE 95% CI: [1.615, 2.084]
-ATE p-value: 0.000000
-True effect: 1.800
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: np.float64(1.8047837219688228),
+ &#39;std_error&#39;: np.float64(0.03568165113834074),
+ &#39;p_value&#39;: np.float64(0.0),
+ &#39;confidence_interval&#39;: (np.float64(1.7348489708287522),
+  np.float64(1.8747184731088933)),
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x12b16f890&gt;}
 </pre></div>
 </div>
 </div>
@@ -875,6 +878,7 @@ True effect: 1.800
     <span class="n">refute_placebo_outcome</span><span class="p">,</span>
     <span class="n">refute_placebo_treatment</span><span class="p">,</span>
     <span class="n">refute_subset</span><span class="p">,</span>
+    <span class="n">refute_irm_orthogonality</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -905,8 +909,8 @@ Shuffling outcome variable (breaking outcome-treatment link)
 Expected: θ ≈ 0, large p-value
 
 ATE with shuffled outcome:
-  θ = -0.0046
-  p-value = 0.4901
+  θ = 0.0014
+  p-value = 0.4878
 </pre></div>
 </div>
 </div>
@@ -936,8 +940,8 @@ Shuffling treatment variable (breaking treatment-outcome link)
 Expected: θ ≈ 0, large p-value
 
 ATE with shuffled treatment:
-  θ = 0.1105
-  p-value = 0.3445
+  θ = -0.0449
+  p-value = 0.1963
 </pre></div>
 </div>
 </div>
@@ -974,10 +978,817 @@ Testing stability on random subsets of data
 Expected: θ similar to original estimate
 
 ATE Subset Tests:
-Original ATE: 1.8494
-  60% subset: θ = 1.7803, p = 0.0000
-  80% subset: θ = 1.8781, p = 0.0000
-  90% subset: θ = 1.7714, p = 0.0000
+Original ATE: 1.8048
+  60% subset: θ = 1.8186, p = 0.0000
+  80% subset: θ = 1.8099, p = 0.0000
+  90% subset: θ = 1.8315, p = 0.0000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="orthogonality">
+<h1>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ate_ortho_check</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 1.8018642155181877,
+ &#39;oos_moment_test&#39;: {&#39;fold_results&#39;:    fold      n  psi_mean    psi_var
+  0     0  10000 -0.041580  63.689179
+  1     1  10000  0.123151  60.082212
+  2     2  10000  0.095555  64.122321
+  3     3  10000 -0.105544  62.945267
+  4     4  10000 -0.090244  63.587698,
+  &#39;tstat&#39;: -0.10525083126795791,
+  &#39;pvalue&#39;: 0.916176777153225,
+  &#39;interpretation&#39;: &#39;Should be ≈ 0 if moment condition holds&#39;},
+ &#39;orthogonality_derivatives&#39;: {&#39;full_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
+  0      0 -0.020920  0.006928 -3.019624  0.005909  0.003471  1.702466   
+  1      1 -0.438562  0.170228 -2.576319  0.174943  0.100904  1.733758   
+  2      2 -0.090883  0.034073 -2.667285  0.033535  0.020046  1.672908   
+  
+          d_g      se_g       t_g  
+  0 -0.057769  0.131319 -0.439910  
+  1  0.893241  3.110135  0.287203  
+  2 -0.085988  0.584861 -0.147023  ,
+  &#39;trimmed_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
+  0      0 -0.019685  0.006817 -2.887516  0.005929  0.003471  1.708257   
+  1      1 -0.447197  0.170012 -2.630380  0.174807  0.100906  1.732376   
+  2      2 -0.090214  0.034067 -2.648097  0.033547  0.020047  1.673450   
+  
+          d_g      se_g       t_g  
+  0 -0.038635  0.129920 -0.297375  
+  1  0.759712  3.107329  0.244490  
+  2 -0.075598  0.584781 -0.129276  ,
+  &#39;problematic_full&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
+  0      0 -0.020920  0.006928 -3.019624  0.005909  0.003471  1.702466   
+  1      1 -0.438562  0.170228 -2.576319  0.174943  0.100904  1.733758   
+  2      2 -0.090883  0.034073 -2.667285  0.033535  0.020046  1.672908   
+  
+          d_g      se_g       t_g  
+  0 -0.057769  0.131319 -0.439910  
+  1  0.893241  3.110135  0.287203  
+  2 -0.085988  0.584861 -0.147023  ,
+  &#39;problematic_trimmed&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
+  0      0 -0.019685  0.006817 -2.887516  0.005929  0.003471  1.708257   
+  1      1 -0.447197  0.170012 -2.630380  0.174807  0.100906  1.732376   
+  2      2 -0.090214  0.034067 -2.648097  0.033547  0.020047  1.673450   
+  
+          d_g      se_g       t_g  
+  0 -0.038635  0.129920 -0.297375  
+  1  0.759712  3.107329  0.244490  
+  2 -0.075598  0.584781 -0.129276  ,
+  &#39;interpretation&#39;: &#39;Large |t-stats| (&gt;2) indicate calibration issues&#39;},
+ &#39;influence_diagnostics&#39;: {&#39;full_sample&#39;: {&#39;se_plugin&#39;: 0.03546447121592381,
+   &#39;kurtosis&#39;: 8.916919291482913,
+   &#39;p99_over_med&#39;: 6.072948157376655,
+   &#39;top_influential&#39;:        i         psi         g      res_t  res_c
+   0  20387  136.241190  0.085617  11.977468    0.0
+   1  24643   76.577955  0.111867   8.768497    0.0
+   2  34037  -74.076646  0.088655  -6.537696   -0.0
+   3   7960  -73.599099  0.110099  -8.319739   -0.0
+   4  13297   73.497787  0.136394  10.001563    0.0
+   5   6848  -69.020979  0.152402 -10.746125   -0.0
+   6  10815   67.332351  0.157869  10.569262    0.0
+   7   9047  -64.997905  0.075897  -4.941403   -0.0
+   8    236   64.839614  0.109513   7.260651    0.0
+   9  16095  -64.579329  0.091667  -5.991942   -0.0},
+  &#39;trimmed_sample&#39;: {&#39;se_plugin&#39;: 0.03546424720032873,
+   &#39;kurtosis&#39;: 8.917552900502693,
+   &#39;p99_over_med&#39;: 6.073018677510254,
+   &#39;top_influential&#39;:        i         psi         g      res_t  res_c
+   0  20387  136.241190  0.085617  11.977468    0.0
+   1  24643   76.577955  0.111867   8.768497    0.0
+   2  34037  -74.076646  0.088655  -6.537696   -0.0
+   3   7960  -73.599099  0.110099  -8.319739   -0.0
+   4  13297   73.497787  0.136394  10.001563    0.0
+   5   6848  -69.020979  0.152402 -10.746125   -0.0
+   6  10815   67.332351  0.157869  10.569262    0.0
+   7   9047  -64.997905  0.075897  -4.941403   -0.0
+   8    236   64.839614  0.109513   7.260651    0.0
+   9  16095  -64.579329  0.091667  -5.991942   -0.0},
+  &#39;interpretation&#39;: &#39;Heavy tails or extreme kurtosis suggest instability&#39;},
+ &#39;trimming_info&#39;: {&#39;bounds&#39;: (0.02, 0.98),
+  &#39;n_trimmed&#39;: 1,
+  &#39;pct_trimmed&#39;: 0.002},
+ &#39;diagnostic_conditions&#39;: {&#39;oos_moment_ok&#39;: True,
+  &#39;derivs_full_ok&#39;: False,
+  &#39;derivs_trim_ok&#39;: False,
+  &#39;se_reasonable&#39;: np.True_,
+  &#39;no_extreme_influence&#39;: True,
+  &#39;trimming_reasonable&#39;: np.True_},
+ &#39;overall_assessment&#39;: &#39;CAUTION: Most conditions satisfied&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Out-of-sample moment check</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 1. Out-of-Sample Moment Check ---&quot;</span><span class="p">)</span>
+<span class="n">oos_test</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-statistic: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;pvalue&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fold-wise results:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;fold_results&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
+T-statistic: -0.1053
+P-value: 0.9162
+Interpretation: Should be ≈ 0 if moment condition holds
+
+Fold-wise results:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>fold</th>
+      <th>n</th>
+      <th>psi_mean</th>
+      <th>psi_var</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>10000</td>
+      <td>-0.041580</td>
+      <td>63.689179</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>10000</td>
+      <td>0.123151</td>
+      <td>60.082212</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>10000</td>
+      <td>0.095555</td>
+      <td>64.122321</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>10000</td>
+      <td>-0.105544</td>
+      <td>62.945267</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>10000</td>
+      <td>-0.090244</td>
+      <td>63.587698</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Orthogonality derivatives</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 2. Orthogonality (Gateaux Derivative) Tests ---&quot;</span><span class="p">)</span>
+<span class="n">ortho_derivs</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample derivatives:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample derivatives:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (full sample):&quot;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in full sample&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (trimmed sample):&quot;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in trimmed sample&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 2. Orthogonality (Gateaux Derivative) Tests ---
+Interpretation: Large |t-stats| (&gt;2) indicate calibration issues
+
+Full sample derivatives:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>basis</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>-0.020920</td>
+      <td>0.006928</td>
+      <td>-3.019624</td>
+      <td>0.005909</td>
+      <td>0.003471</td>
+      <td>1.702466</td>
+      <td>-0.057769</td>
+      <td>0.131319</td>
+      <td>-0.439910</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>-0.438562</td>
+      <td>0.170228</td>
+      <td>-2.576319</td>
+      <td>0.174943</td>
+      <td>0.100904</td>
+      <td>1.733758</td>
+      <td>0.893241</td>
+      <td>3.110135</td>
+      <td>0.287203</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>-0.090883</td>
+      <td>0.034073</td>
+      <td>-2.667285</td>
+      <td>0.033535</td>
+      <td>0.020046</td>
+      <td>1.672908</td>
+      <td>-0.085988</td>
+      <td>0.584861</td>
+      <td>-0.147023</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trimmed sample derivatives:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>basis</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>-0.019685</td>
+      <td>0.006817</td>
+      <td>-2.887516</td>
+      <td>0.005929</td>
+      <td>0.003471</td>
+      <td>1.708257</td>
+      <td>-0.038635</td>
+      <td>0.129920</td>
+      <td>-0.297375</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>-0.447197</td>
+      <td>0.170012</td>
+      <td>-2.630380</td>
+      <td>0.174807</td>
+      <td>0.100906</td>
+      <td>1.732376</td>
+      <td>0.759712</td>
+      <td>3.107329</td>
+      <td>0.244490</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>-0.090214</td>
+      <td>0.034067</td>
+      <td>-2.648097</td>
+      <td>0.033547</td>
+      <td>0.020047</td>
+      <td>1.673450</td>
+      <td>-0.075598</td>
+      <td>0.584781</td>
+      <td>-0.129276</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>⚠ PROBLEMATIC derivatives (full sample):
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>basis</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>-0.020920</td>
+      <td>0.006928</td>
+      <td>-3.019624</td>
+      <td>0.005909</td>
+      <td>0.003471</td>
+      <td>1.702466</td>
+      <td>-0.057769</td>
+      <td>0.131319</td>
+      <td>-0.439910</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>-0.438562</td>
+      <td>0.170228</td>
+      <td>-2.576319</td>
+      <td>0.174943</td>
+      <td>0.100904</td>
+      <td>1.733758</td>
+      <td>0.893241</td>
+      <td>3.110135</td>
+      <td>0.287203</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>-0.090883</td>
+      <td>0.034073</td>
+      <td>-2.667285</td>
+      <td>0.033535</td>
+      <td>0.020046</td>
+      <td>1.672908</td>
+      <td>-0.085988</td>
+      <td>0.584861</td>
+      <td>-0.147023</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>⚠ PROBLEMATIC derivatives (trimmed sample):
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>basis</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>-0.019685</td>
+      <td>0.006817</td>
+      <td>-2.887516</td>
+      <td>0.005929</td>
+      <td>0.003471</td>
+      <td>1.708257</td>
+      <td>-0.038635</td>
+      <td>0.129920</td>
+      <td>-0.297375</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>-0.447197</td>
+      <td>0.170012</td>
+      <td>-2.630380</td>
+      <td>0.174807</td>
+      <td>0.100906</td>
+      <td>1.732376</td>
+      <td>0.759712</td>
+      <td>3.107329</td>
+      <td>0.244490</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>-0.090214</td>
+      <td>0.034067</td>
+      <td>-2.648097</td>
+      <td>0.033547</td>
+      <td>0.020047</td>
+      <td>1.673450</td>
+      <td>-0.075598</td>
+      <td>0.584781</td>
+      <td>-0.129276</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Influence diagnostics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 3. Influence Diagnostics ---&quot;</span><span class="p">)</span>
+<span class="n">influence</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample influence metrics:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample influence metrics:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Top influential observations (full sample):&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;top_influential&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 3. Influence Diagnostics ---
+Interpretation: Heavy tails or extreme kurtosis suggest instability
+
+Full sample influence metrics:
+  Plugin SE: 0.0355
+  Kurtosis: 8.92
+  P99/Median ratio: 6.07
+
+Trimmed sample influence metrics:
+  Plugin SE: 0.0355
+  Kurtosis: 8.92
+  P99/Median ratio: 6.07
+
+Top influential observations (full sample):
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>i</th>
+      <th>psi</th>
+      <th>g</th>
+      <th>res_t</th>
+      <th>res_c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20387</td>
+      <td>136.241190</td>
+      <td>0.085617</td>
+      <td>11.977468</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>24643</td>
+      <td>76.577955</td>
+      <td>0.111867</td>
+      <td>8.768497</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>34037</td>
+      <td>-74.076646</td>
+      <td>0.088655</td>
+      <td>-6.537696</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7960</td>
+      <td>-73.599099</td>
+      <td>0.110099</td>
+      <td>-8.319739</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>13297</td>
+      <td>73.497787</td>
+      <td>0.136394</td>
+      <td>10.001563</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6848</td>
+      <td>-69.020979</td>
+      <td>0.152402</td>
+      <td>-10.746125</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10815</td>
+      <td>67.332351</td>
+      <td>0.157869</td>
+      <td>10.569262</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>9047</td>
+      <td>-64.997905</td>
+      <td>0.075897</td>
+      <td>-4.941403</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>236</td>
+      <td>64.839614</td>
+      <td>0.109513</td>
+      <td>7.260651</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>16095</td>
+      <td>-64.579329</td>
+      <td>0.091667</td>
+      <td>-5.991942</td>
+      <td>-0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trimming information</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Propensity Score Trimming ---&quot;</span><span class="p">)</span>
+<span class="n">trim_info</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;trimming_info&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trimming bounds: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observations trimmed: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;n_trimmed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;pct_trimmed&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Propensity Score Trimming ---
+Trimming bounds: (0.02, 0.98)
+Observations trimmed: 1 (0.0%)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Diagnostic conditions breakdown</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Diagnostic Conditions Assessment ---&quot;</span><span class="p">)</span>
+<span class="n">conditions</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Individual condition checks:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">condition</span><span class="p">,</span> <span class="n">passed</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ PASS&quot;</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">&quot;✗ FAIL&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overall: </span><span class="si">{</span><span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Diagnostic Conditions Assessment ---
+Individual condition checks:
+  oos_moment_ok: ✓ PASS
+  derivs_full_ok: ✗ FAIL
+  derivs_trim_ok: ✗ FAIL
+  se_reasonable: ✓ PASS
+  no_extreme_influence: ✓ PASS
+  trimming_reasonable: ✓ PASS
+
+Overall: CAUTION: Most conditions satisfied
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Also test with ATT estimation for comparison</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- ATT Orthogonality Diagnostics (Summary) ---&quot;</span><span class="p">)</span>
+<span class="n">att_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_att</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATT estimate: </span><span class="si">{</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OOS moment t-stat: </span><span class="si">{</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">][</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Problematic derivatives (full): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">][</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Problematic derivatives (trimmed): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">][</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Influence SE: </span><span class="si">{</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">][</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Assessment: </span><span class="si">{</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- ATT Orthogonality Diagnostics (Summary) ---
+ATT estimate: 1.7752
+OOS moment t-stat: 0.1340
+Problematic derivatives (full): 3
+Problematic derivatives (trimmed): 3
+Influence SE: 0.0355
+Assessment: CAUTION: Most conditions satisfied
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Interpretation guide for new diagnostics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- New Diagnostics Interpretation Guide ---&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔍 OUT-OF-SAMPLE MOMENT CHECK:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - T-stat ≈ 0 (|t| &lt; 2): ✓ Moment condition satisfied&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Large |t-stat| (|t| &gt; 2): ⚠ Potential moment condition violation&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - This avoids tautological results by testing on held-out data&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔍 ORTHOGONALITY DERIVATIVES:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - |t-stats| &lt; 2 for all basis functions: ✓ Good calibration&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Large |t-stats| (&gt;2) for constant (basis=0): ⚠ Calibration issues&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * t_m1 large: Treated outcome model miscalibrated&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * t_m0 large: Control outcome model miscalibrated&quot;</span><span class="p">)</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * t_g large: Propensity model miscalibrated&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Large |t-stats| for covariates: ⚠ Covariate-specific issues&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔍 INFLUENCE DIAGNOSTICS:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Plugin SE similar to DoubleML SE: ✓ Consistent uncertainty quantification&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Low kurtosis (&lt;10): ✓ Stable influence function&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - P99/Median ratio &lt;10: ✓ No extreme influential observations&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - High kurtosis or extreme ratios: ⚠ Unstable estimates&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📊 ACTIONABLE INSIGHTS:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Large derivatives → Revisit ML models, add regularization&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - High influence metrics → Check for outliers, consider trimming&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Failed OOS moment → Potential fundamental misspecification&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Multiple failures → Consider different estimation approach&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- New Diagnostics Interpretation Guide ---
+🔍 OUT-OF-SAMPLE MOMENT CHECK:
+  - T-stat ≈ 0 (|t| &lt; 2): ✓ Moment condition satisfied
+  - Large |t-stat| (|t| &gt; 2): ⚠ Potential moment condition violation
+  - This avoids tautological results by testing on held-out data
+
+🔍 ORTHOGONALITY DERIVATIVES:
+  - |t-stats| &lt; 2 for all basis functions: ✓ Good calibration
+  - Large |t-stats| (&gt;2) for constant (basis=0): ⚠ Calibration issues
+    * t_m1 large: Treated outcome model miscalibrated
+    * t_m0 large: Control outcome model miscalibrated
+    * t_g large: Propensity model miscalibrated
+  - Large |t-stats| for covariates: ⚠ Covariate-specific issues
+
+🔍 INFLUENCE DIAGNOSTICS:
+  - Plugin SE similar to DoubleML SE: ✓ Consistent uncertainty quantification
+  - Low kurtosis (&lt;10): ✓ Stable influence function
+  - P99/Median ratio &lt;10: ✓ No extreme influential observations
+  - High kurtosis or extreme ratios: ⚠ Unstable estimates
+
+📊 ACTIONABLE INSIGHTS:
+  - Large derivatives → Revisit ML models, add regularization
+  - High influence metrics → Check for outliers, consider trimming
+  - Failed OOS moment → Potential fundamental misspecification
+  - Multiple failures → Consider different estimation approach
 </pre></div>
 </div>
 </div>
@@ -1030,17 +1841,16 @@ Significance Level: level=0.95
 Sensitivity parameters: cf_y=0.03; cf_d=0.03, rho=1.0
 
 ------------------ Bounds with CI    ------------------
-   CI lower  theta lower    theta  theta upper  CI upper
-t  1.410706     1.607674  1.84936     2.091046  2.287668
+   CI lower  theta lower     theta  theta upper  CI upper
+t  1.514031     1.572741  1.804784     2.036826  2.095547
 
 ------------------ Robustness Values ------------------
    H_0     RV (%)    RVa (%)
-t  0.0  20.749473  18.725578
+t  0.0  21.050746  20.430468
 </pre></div>
 </div>
 </div>
 </div>
-</section>
 </section>
 
 
@@ -1071,6 +1881,7 @@ t  0.0  20.749473  18.725578
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Scenario 1</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-data">Generate data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
@@ -1081,6 +1892,10 @@ t  0.0  20.749473  18.725578
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">Orthogonality</a></li>
+</ul>
+
   </nav></div>
 
   <div class="sidebar-secondary-item">
