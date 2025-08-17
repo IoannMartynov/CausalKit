@@ -858,12 +858,11 @@ Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;sha
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: np.float64(1.8047837219688228),
- &#39;std_error&#39;: np.float64(0.03568165113834074),
- &#39;p_value&#39;: np.float64(0.0),
- &#39;confidence_interval&#39;: (np.float64(1.7348489708287522),
-  np.float64(1.8747184731088933)),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x12b16f890&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.8047837219688228,
+ &#39;std_error&#39;: 0.03568165113834074,
+ &#39;p_value&#39;: 0.0,
+ &#39;confidence_interval&#39;: (1.7348489708287522, 1.8747184731088933),
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x1632ef380&gt;}
 </pre></div>
 </div>
 </div>
@@ -1000,6 +999,10 @@ Original ATE: 1.8048
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 1.8018642155181877,
+ &#39;params&#39;: {&#39;target&#39;: &#39;ATE&#39;,
+  &#39;clip_eps&#39;: 0.01,
+  &#39;strict_oos_requested&#39;: False,
+  &#39;strict_oos_applied&#39;: False},
  &#39;oos_moment_test&#39;: {&#39;fold_results&#39;:    fold      n  psi_mean    psi_var
   0     0  10000 -0.041580  63.689179
   1     1  10000  0.123151  60.082212
@@ -1011,40 +1014,32 @@ Original ATE: 1.8048
   &#39;interpretation&#39;: &#39;Should be ≈ 0 if moment condition holds&#39;},
  &#39;orthogonality_derivatives&#39;: {&#39;full_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
   0      0 -0.020920  0.006928 -3.019624  0.005909  0.003471  1.702466   
-  1      1 -0.438562  0.170228 -2.576319  0.174943  0.100904  1.733758   
-  2      2 -0.090883  0.034073 -2.667285  0.033535  0.020046  1.672908   
+  1      1  0.005269  0.008004  0.658313  0.002757  0.003614  0.762900   
+  2      2  0.006662  0.007934  0.839665  0.002033  0.003586  0.566894   
   
           d_g      se_g       t_g  
   0 -0.057769  0.131319 -0.439910  
-  1  0.893241  3.110135  0.287203  
-  2 -0.085988  0.584861 -0.147023  ,
+  1  0.189448  0.190462  0.994678  
+  2  0.100489  0.186679  0.538298  ,
   &#39;trimmed_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
   0      0 -0.019685  0.006817 -2.887516  0.005929  0.003471  1.708257   
-  1      1 -0.447197  0.170012 -2.630380  0.174807  0.100906  1.732376   
-  2      2 -0.090214  0.034067 -2.648097  0.033547  0.020047  1.673450   
+  1      1  0.002087  0.007344  0.284201  0.002706  0.003614  0.748729   
+  2      2  0.003930  0.007449  0.527634  0.001989  0.003586  0.554612   
   
           d_g      se_g       t_g  
   0 -0.038635  0.129920 -0.297375  
-  1  0.759712  3.107329  0.244490  
-  2 -0.075598  0.584781 -0.129276  ,
-  &#39;problematic_full&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
-  0      0 -0.020920  0.006928 -3.019624  0.005909  0.003471  1.702466   
-  1      1 -0.438562  0.170228 -2.576319  0.174943  0.100904  1.733758   
-  2      2 -0.090883  0.034073 -2.667285  0.033535  0.020046  1.672908   
+  1  0.140192  0.183986  0.761973  
+  2  0.058204  0.181830  0.320098  ,
+  &#39;problematic_full&#39;:    basis     d_m1     se_m1      t_m1      d_m0     se_m0      t_m0       d_g  \
+  0      0 -0.02092  0.006928 -3.019624  0.005909  0.003471  1.702466 -0.057769   
   
-          d_g      se_g       t_g  
-  0 -0.057769  0.131319 -0.439910  
-  1  0.893241  3.110135  0.287203  
-  2 -0.085988  0.584861 -0.147023  ,
+         se_g      t_g  
+  0  0.131319 -0.43991  ,
   &#39;problematic_trimmed&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
   0      0 -0.019685  0.006817 -2.887516  0.005929  0.003471  1.708257   
-  1      1 -0.447197  0.170012 -2.630380  0.174807  0.100906  1.732376   
-  2      2 -0.090214  0.034067 -2.648097  0.033547  0.020047  1.673450   
   
-          d_g      se_g       t_g  
-  0 -0.038635  0.129920 -0.297375  
-  1  0.759712  3.107329  0.244490  
-  2 -0.075598  0.584781 -0.129276  ,
+          d_g     se_g       t_g  
+  0 -0.038635  0.12992 -0.297375  ,
   &#39;interpretation&#39;: &#39;Large |t-stats| (&gt;2) indicate calibration issues&#39;},
  &#39;influence_diagnostics&#39;: {&#39;full_sample&#39;: {&#39;se_plugin&#39;: 0.03546447121592381,
    &#39;kurtosis&#39;: 8.916919291482913,
@@ -1081,9 +1076,9 @@ Original ATE: 1.8048
  &#39;diagnostic_conditions&#39;: {&#39;oos_moment_ok&#39;: True,
   &#39;derivs_full_ok&#39;: False,
   &#39;derivs_trim_ok&#39;: False,
-  &#39;se_reasonable&#39;: np.True_,
+  &#39;se_reasonable&#39;: True,
   &#39;no_extreme_influence&#39;: True,
-  &#39;trimming_reasonable&#39;: np.True_},
+  &#39;trimming_reasonable&#39;: True},
  &#39;overall_assessment&#39;: &#39;CAUTION: Most conditions satisfied&#39;}
 </pre></div>
 </div>
@@ -1256,28 +1251,28 @@ Full sample derivatives:
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>-0.438562</td>
-      <td>0.170228</td>
-      <td>-2.576319</td>
-      <td>0.174943</td>
-      <td>0.100904</td>
-      <td>1.733758</td>
-      <td>0.893241</td>
-      <td>3.110135</td>
-      <td>0.287203</td>
+      <td>0.005269</td>
+      <td>0.008004</td>
+      <td>0.658313</td>
+      <td>0.002757</td>
+      <td>0.003614</td>
+      <td>0.762900</td>
+      <td>0.189448</td>
+      <td>0.190462</td>
+      <td>0.994678</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>-0.090883</td>
-      <td>0.034073</td>
-      <td>-2.667285</td>
-      <td>0.033535</td>
-      <td>0.020046</td>
-      <td>1.672908</td>
-      <td>-0.085988</td>
-      <td>0.584861</td>
-      <td>-0.147023</td>
+      <td>0.006662</td>
+      <td>0.007934</td>
+      <td>0.839665</td>
+      <td>0.002033</td>
+      <td>0.003586</td>
+      <td>0.566894</td>
+      <td>0.100489</td>
+      <td>0.186679</td>
+      <td>0.538298</td>
     </tr>
   </tbody>
 </table>
@@ -1331,28 +1326,28 @@ Full sample derivatives:
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>-0.447197</td>
-      <td>0.170012</td>
-      <td>-2.630380</td>
-      <td>0.174807</td>
-      <td>0.100906</td>
-      <td>1.732376</td>
-      <td>0.759712</td>
-      <td>3.107329</td>
-      <td>0.244490</td>
+      <td>0.002087</td>
+      <td>0.007344</td>
+      <td>0.284201</td>
+      <td>0.002706</td>
+      <td>0.003614</td>
+      <td>0.748729</td>
+      <td>0.140192</td>
+      <td>0.183986</td>
+      <td>0.761973</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>-0.090214</td>
-      <td>0.034067</td>
-      <td>-2.648097</td>
-      <td>0.033547</td>
-      <td>0.020047</td>
-      <td>1.673450</td>
-      <td>-0.075598</td>
-      <td>0.584781</td>
-      <td>-0.129276</td>
+      <td>0.003930</td>
+      <td>0.007449</td>
+      <td>0.527634</td>
+      <td>0.001989</td>
+      <td>0.003586</td>
+      <td>0.554612</td>
+      <td>0.058204</td>
+      <td>0.181830</td>
+      <td>0.320098</td>
     </tr>
   </tbody>
 </table>
@@ -1393,7 +1388,7 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.020920</td>
+      <td>-0.02092</td>
       <td>0.006928</td>
       <td>-3.019624</td>
       <td>0.005909</td>
@@ -1401,33 +1396,7 @@ Full sample derivatives:
       <td>1.702466</td>
       <td>-0.057769</td>
       <td>0.131319</td>
-      <td>-0.439910</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>-0.438562</td>
-      <td>0.170228</td>
-      <td>-2.576319</td>
-      <td>0.174943</td>
-      <td>0.100904</td>
-      <td>1.733758</td>
-      <td>0.893241</td>
-      <td>3.110135</td>
-      <td>0.287203</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>-0.090883</td>
-      <td>0.034073</td>
-      <td>-2.667285</td>
-      <td>0.033535</td>
-      <td>0.020046</td>
-      <td>1.672908</td>
-      <td>-0.085988</td>
-      <td>0.584861</td>
-      <td>-0.147023</td>
+      <td>-0.43991</td>
     </tr>
   </tbody>
 </table>
@@ -1475,34 +1444,8 @@ Full sample derivatives:
       <td>0.003471</td>
       <td>1.708257</td>
       <td>-0.038635</td>
-      <td>0.129920</td>
+      <td>0.12992</td>
       <td>-0.297375</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>-0.447197</td>
-      <td>0.170012</td>
-      <td>-2.630380</td>
-      <td>0.174807</td>
-      <td>0.100906</td>
-      <td>1.732376</td>
-      <td>0.759712</td>
-      <td>3.107329</td>
-      <td>0.244490</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>-0.090214</td>
-      <td>0.034067</td>
-      <td>-2.648097</td>
-      <td>0.033547</td>
-      <td>0.020047</td>
-      <td>1.673450</td>
-      <td>-0.075598</td>
-      <td>0.584781</td>
-      <td>-0.129276</td>
     </tr>
   </tbody>
 </table>
@@ -1724,8 +1667,8 @@ Overall: CAUTION: Most conditions satisfied
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- ATT Orthogonality Diagnostics (Summary) ---
 ATT estimate: 1.7752
 OOS moment t-stat: 0.1340
-Problematic derivatives (full): 3
-Problematic derivatives (trimmed): 3
+Problematic derivatives (full): 1
+Problematic derivatives (trimmed): 1
 Influence SE: 0.0355
 Assessment: CAUTION: Most conditions satisfied
 </pre></div>
