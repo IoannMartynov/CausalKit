@@ -60,7 +60,7 @@ def dml_ate(
     Raises
     ------
     ValueError
-        If the causaldata object doesn't have treatment, target, and cofounders variables defined,
+        If the causaldata object doesn't have treatment, target, and confounders variables defined,
         or if the treatment variable is not binary.
         
     Examples
@@ -77,7 +77,7 @@ def dml_ate(
     ...     df=df,
     ...     outcome='outcome',
     ...     treatment='treatment',
-    ...     cofounders=['age', 'invited_friend']
+    ...     confounders=['age', 'invited_friend']
     ... )
     >>> 
     >>> # Estimate ATE using DoubleML

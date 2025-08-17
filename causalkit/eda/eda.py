@@ -427,7 +427,7 @@ class OutcomeModel:
 
 
 # Optional lightweight dataclass for standalone usage, but CausalEDA also
-# supports the existing causalkit.data.CausalData which uses `cofounders`.
+# supports the existing causalkit.data.CausalData which uses `confounders`.
 @dataclass
 class CausalDataLite:
     """A minimal container for dataset roles used by CausalEDA.
@@ -450,11 +450,11 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
     Accepts:
     - CausalDataLite
     - Project's CausalData (duck-typed: attributes df, treatment, outcome,
-      and either confounders or cofounders)
+      and either confounders or confounders)
     - Any object exposing the same attributes/properties
 
     Returns a dict with keys: df, treatment, outcome, confounders.
-    If both confounders/cofounders are absent, it assumes all columns except
+    If both confounders/confounders are absent, it assumes all columns except
     treatment/outcome are confounders.
     """
     # Direct dataclass-like attributes
@@ -476,10 +476,10 @@ def _extract_roles(data_obj: Any) -> Dict[str, Any]:
 
     if hasattr(data_obj, "confounders") and getattr(data_obj, "confounders") is not None:
         confs = list(getattr(data_obj, "confounders"))
-    elif hasattr(data_obj, "cofounders") and getattr(data_obj, "cofounders") is not None:
-        # causalkit.data.CausalData.cofounders returns a DataFrame or None; if it's a
+    elif hasattr(data_obj, "confounders") and getattr(data_obj, "confounders") is not None:
+        # causalkit.data.CausalData.confounders returns a DataFrame or None; if it's a
         # DataFrame, use its columns; if it's a list/iterable, cast to list.
-        cofs = getattr(data_obj, "cofounders")
+        cofs = getattr(data_obj, "confounders")
         if isinstance(cofs, pd.DataFrame):
             confs = list(cofs.columns)
         else:

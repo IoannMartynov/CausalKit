@@ -44,7 +44,7 @@ def test_causalforestdml():
         df=df,
         treatment='treatment',
         outcome='outcome',
-        cofounders=['age', 'smoker', 'bmi']
+        confounders=['age', 'smoker', 'bmi']
     )
     
     # Run CausalForestDML

@@ -32,7 +32,7 @@ def causalforestdml(
     Parameters
     ----------
     data : CausalData
-        The causaldata object containing treatment, target, and cofounders variables.
+        The causaldata object containing treatment, target, and confounders variables.
     model_y : estimator, optional
         The model for fitting the outcome variable. If None, a CatBoostRegressor configured to use all CPU cores is used.
     model_t : estimator, optional
@@ -66,7 +66,7 @@ def causalforestdml(
     Raises
     ------
     ValueError
-        If the causaldata object doesn't have treatment, target, and cofounders variables defined,
+        If the causaldata object doesn't have treatment, target, and confounders variables defined,
         or if the treatment variable is not binary.
         
     Examples
@@ -83,7 +83,7 @@ def causalforestdml(
     ...     df=df,
     ...     outcome='outcome',
     ...     treatment='treatment',
-    ...     cofounders=['age', 'invited_friend']
+    ...     confounders=['age', 'invited_friend']
     ... )
     >>> 
     >>> # Estimate ATE using CausalForestDML
@@ -98,8 +98,8 @@ def causalforestdml(
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
         raise ValueError("CausalData object must have a outcome variable defined")
-    if data.cofounders is None:
-        raise ValueError("CausalData object must have cofounders variables defined")
+    if data.confounders is None:
+        raise ValueError("CausalData object must have confounders variables defined")
     
     # # Check if treatment is binary
     # unique_treatments = data.treatment.unique()
@@ -118,12 +118,17 @@ def causalforestdml(
     if model_y is None:
         model_y = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
     if model_t is None:
-        model_t = CatBoostRegressor(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
+        # For binary treatments, a classifier is more appropriate
+        model_t = CatBoostClassifier(iterations=100, depth=5, thread_count=-1, verbose=False, allow_writing_files=False)
     
     # Get data from CausalData object
     Y = data.target.values
     T = data.treatment.values
-    X = data.cofounders.values if data.cofounders is not None else None
+    conf_list = data.confounders
+    if conf_list:
+        X = data.get_df(include_treatment=False, include_target=False, include_confounders=True).values
+    else:
+        X = None
     
     # Create and fit CausalForestDML model
     model = CausalForestDML(
@@ -133,41 +138,32 @@ def causalforestdml(
         max_depth=max_depth,
         min_samples_leaf=min_samples_leaf,
         cv=cv,
-        n_jobs=n_jobs,
+        discrete_treatment=True,
         random_state=random_state,
     )
     
     model.fit(Y, T, X=X)
     
-    # Calculate individual treatment effects
-    individual_effects = model.effect(X=X)
-    
-    # Calculate ATE (average of individual effects)
-    ate = np.mean(individual_effects)
-    
-    # Calculate confidence interval for each individual
+    # Compute ATE and its confidence interval using EconML's built-in methods
     alpha = 1 - confidence_level
-    ci_lower_individual, ci_upper_individual = model.effect_interval(X=X, alpha=alpha)
+    ate = float(model.ate(X=X))
+    ci_lower, ci_upper = model.ate_interval(X=X, alpha=alpha)
+    ci_lower = float(ci_lower)
+    ci_upper = float(ci_upper)
     
-    # Calculate average confidence interval
-    ci_lower = np.mean(ci_lower_individual)
-    ci_upper = np.mean(ci_upper_individual)
-    
-    # Calculate standard error
-    # Standard error can be derived from the confidence interval and the normal distribution quantile
+    # Derive standard error from CI width assuming normal approximation
     from scipy import stats
     z_score = stats.norm.ppf(1 - alpha/2)
-    std_error = (ci_upper - ci_lower) / (2 * z_score)
+    std_error = (ci_upper - ci_lower) / (2 * z_score) if z_score > 0 else 0.0
     
-    # Calculate p-value
-    z_value = abs(ate) / std_error
-    p_value = 2 * (1 - stats.norm.cdf(z_value))
+    # Compute two-sided p-value for H0: ate = 0
+    z_value = abs(ate) / std_error if std_error > 0 else np.inf
+    p_value = 2 * (1 - stats.norm.cdf(z_value)) if np.isfinite(z_value) else 0.0
     
-    # Return results as a dictionary
     return {
-        "coefficient": float(ate),
+        "coefficient": ate,
         "std_error": float(std_error),
         "p_value": float(p_value),
-        "confidence_interval": (float(ci_lower), float(ci_upper)),
+        "confidence_interval": (ci_lower, ci_upper),
         "model": model
     }

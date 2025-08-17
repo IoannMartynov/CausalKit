@@ -66,8 +66,8 @@ def cate_esimand(
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
         raise ValueError("CausalData object must have a outcome variable defined")
-    if data.cofounders is None:
-        raise ValueError("CausalData object must have cofounders variables defined")
+    if data.confounders is None:
+        raise ValueError("CausalData object must have confounders variables defined")
 
     # Check binary treatment with explicit {0,1}
     unique_treatments = pd.Series(data.treatment).unique()
@@ -88,7 +88,7 @@ def cate_esimand(
         df,
         y_col=data._target,
         d_cols=data._treatment,
-        x_cols=data._cofounders,
+        x_cols=data.confounders,
     )
 
     # Fit DoubleML IRM
@@ -106,7 +106,7 @@ def cate_esimand(
         if X_new is None:
             raise ValueError("X_new must be provided when use_blp=True")
         # Ensure columns match the confounders order
-        X_cols = list(data._cofounders)
+        X_cols = list(data._confounders)
         missing = [c for c in X_cols if c not in X_new.columns]
         if missing:
             raise ValueError(f"X_new is missing required columns: {missing}")

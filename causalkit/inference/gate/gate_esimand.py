@@ -41,7 +41,7 @@ def _fit_doubleml_irm(
         df,
         y_col=data._target,
         d_cols=data._treatment,
-        x_cols=data._cofounders,
+        x_cols=data._confounders,
     )
 
     obj = dml.DoubleMLIRM(
@@ -126,8 +126,8 @@ def gate_esimand(
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
         raise ValueError("CausalData object must have a outcome variable defined")
-    if data.cofounders is None:
-        raise ValueError("CausalData object must have cofounders variables defined")
+    if data.confounders is None:
+        raise ValueError("CausalData object must have confounders variables defined")
 
     # Binary treatment check {0,1}
     unique_treatments = pd.Series(data.treatment).unique()

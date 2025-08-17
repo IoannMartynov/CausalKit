@@ -206,15 +206,15 @@ def test_to_causal_data(basic_generator):
     # Check that it has the correct columns
     assert causal_data._target == "y"
     assert causal_data._treatment == "t"
-    assert set(causal_data._cofounders) == {"age", "smoker", "bmi"}
+    assert set(causal_data.confounders) == {"age", "smoker", "bmi"}
     
     # Check that the data is accessible
     assert causal_data.df.shape[0] == 100
     assert set(causal_data.df.columns) == {"y", "t", "age", "smoker", "bmi"}
     
-    # Test with specific cofounders
-    causal_data_specific = basic_generator.to_causal_data(100, cofounders=["age"])
-    assert causal_data_specific._cofounders == ["age"]
+    # Test with specific confounders
+    causal_data_specific = basic_generator.to_causal_data(100, confounders=["age"])
+    assert causal_data_specific.confounders == ["age"]
     assert set(causal_data_specific.df.columns) == {"y", "t", "age"}
 
 

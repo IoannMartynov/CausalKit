@@ -44,7 +44,7 @@ def sample_data():
         df=df,
         treatment='treatment',
         outcome='outcome',
-        cofounders=['x1', 'x2']
+        confounders=['x1', 'x2']
     )
 
 
@@ -365,7 +365,7 @@ def test_binary_outcome_placebo_test():
         df=df,
         treatment='treatment',
         outcome='outcome',
-        cofounders=['x1', 'x2']
+        confounders=['x1', 'x2']
     )
     
     # Mock inference function
