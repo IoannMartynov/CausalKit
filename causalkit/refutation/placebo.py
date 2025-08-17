@@ -169,7 +169,7 @@ def refute_placebo_outcome(
         df=df_mod,
         treatment=data._treatment,
         outcome=data._target,
-        cofounders=data._cofounders,
+        confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)
 
@@ -198,7 +198,7 @@ def refute_placebo_treatment(
         df=df_mod,
         treatment=data._treatment,
         outcome=data._target,
-        cofounders=data._cofounders,
+        confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)
 
@@ -230,6 +230,6 @@ def refute_subset(
         df=df_mod,
         treatment=data._treatment,
         outcome=data._target,
-        cofounders=data._cofounders,
+        confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)

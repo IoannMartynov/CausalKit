@@ -520,7 +520,7 @@ class CausalDatasetGenerator:
         df["cate"] = mu1 - mu0
         return df
     
-    def to_causal_data(self, n: int, cofounders: Optional[Union[str, List[str]]] = None) -> CausalData:
+    def to_causal_data(self, n: int, confounders: Optional[Union[str, List[str]]] = None) -> CausalData:
         """
         Generate a dataset and convert it to a CausalData object.
         
@@ -528,8 +528,8 @@ class CausalDatasetGenerator:
         ----------
         n : int
             Number of observations to simulate.
-        cofounders : Union[str, List[str]], optional
-            Column name(s) to use as cofounders. If None, all confounder columns are used.
+        confounders : Union[str, List[str]], optional
+            Column name(s) to use as confounders. If None, all confounder columns are used.
             
         Returns
         -------
@@ -538,14 +538,14 @@ class CausalDatasetGenerator:
         """
         df = self.generate(n)
         
-        # Determine cofounders to use
-        if cofounders is None:
+        # Determine confounders to use
+        if confounders is None:
             # Use all confounder columns (exclude y, t, propensity, mu0, mu1, cate)
             all_cols = set(df.columns)
             exclude_cols = {'y', 't', 'propensity', 'mu0', 'mu1', 'cate'}
-            cofounder_cols = list(all_cols - exclude_cols)
+            confounder_cols = list(all_cols - exclude_cols)
         else:
-            cofounder_cols = cofounders
+            confounder_cols = confounders
             
         # Create and return CausalData object
-        return CausalData(df=df, treatment='t', outcome='y', cofounders=cofounder_cols)
+        return CausalData(df=df, treatment='t', outcome='y', confounders=confounder_cols)
