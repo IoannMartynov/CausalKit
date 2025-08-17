@@ -90,15 +90,6 @@ def dml_att(
     if data.cofounders is None:
         raise ValueError("CausalData object must have cofounders variables defined")
     
-    # Check if treatment is binary
-    unique_treatments = data.treatment.unique()
-    if len(unique_treatments) != 2:
-        raise ValueError("Treatment variable must be binary (have exactly 2 unique values)")
-    
-    # Check if treatment values are 0 and 1
-    if not set(unique_treatments) == {0, 1}:
-        raise ValueError("Treatment variable must have values 0 and 1")
-    
     # Check confidence level
     if not 0 < confidence_level < 1:
         raise ValueError("confidence_level must be between 0 and 1 (exclusive)")
@@ -117,15 +108,27 @@ def dml_att(
         if ml_m is None:
             ml_m = CatBoostClassifier(iterations=100, depth=5, min_data_in_leaf=2, thread_count=-1, verbose=False, allow_writing_files=False)
     
-    # Get data from CausalData object
-    df = data.get_df()
+    # Prepare DataFrame and normalize treatment
+    df = data.get_df().copy()
+    tname = data.treatment.name
+    yname = data.target.name
+    xnames = list(data.confounders)
+
+    t = df[tname].values
+    if df[tname].dtype == bool:
+        df[tname] = t.astype(int)
+    else:
+        uniq = np.unique(t)
+        if not np.array_equal(np.sort(uniq), np.array([0, 1])) and not np.array_equal(np.sort(uniq), np.array([0.0, 1.0])):
+            raise ValueError(f"Treatment must be binary 0/1 or boolean; found {uniq}.")
+        df[tname] = df[tname].astype(int)
     
-    # Create DoubleMLData object
+    # Create DoubleMLData object using public names
     data_dml = doubleml.DoubleMLData(
         df,
-        y_col=data._target,
-        d_cols=data._treatment,
-        x_cols=data._cofounders
+        y_col=yname,
+        d_cols=tname,
+        x_cols=xnames
     )
     
     # Create and fit DoubleMLIRM object with score="ATTE" for ATT estimation
@@ -150,21 +153,24 @@ def dml_att(
     # Calculate confidence interval
     ci = dml_irm_obj.confint(level=confidence_level)
     
-    # Extract confidence interval values (handling different return types)
+    # Extract confidence interval values robustly
     if isinstance(ci, pd.DataFrame):
-        # If ci is a DataFrame, extract the values for the first row
-        ci_lower = ci.iloc[0, 0]
-        ci_upper = ci.iloc[0, 1]
+        pct_cols = [c for c in ci.columns if "%" in c]
+        if len(pct_cols) >= 2:
+            ci_lower = float(ci.iloc[0][pct_cols[0]])
+            ci_upper = float(ci.iloc[0][pct_cols[1]])
+        else:
+            ci_lower = float(ci.iloc[0, 0])
+            ci_upper = float(ci.iloc[0, 1])
     else:
-        # If ci is a numpy array
-        ci_lower = ci[0, 0]
-        ci_upper = ci[0, 1]
+        ci_lower = float(ci[0, 0])
+        ci_upper = float(ci[0, 1])
     
     # Return results as a dictionary
     return {
-        "coefficient": dml_irm_obj.coef[0],
-        "std_error": dml_irm_obj.se[0],
-        "p_value": dml_irm_obj.pval[0],
+        "coefficient": float(dml_irm_obj.coef[0]),
+        "std_error": float(dml_irm_obj.se[0]),
+        "p_value": float(dml_irm_obj.pval[0]),
         "confidence_interval": (ci_lower, ci_upper),
         "model": dml_irm_obj
     }
