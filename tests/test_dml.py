@@ -45,7 +45,7 @@ def test_dml():
         df=df,
         treatment='treatment',
         outcome='outcome',
-        cofounders=['age', 'smoker', 'bmi']
+        confounders=['age', 'smoker', 'bmi']
     )
     
     # Set up ML models

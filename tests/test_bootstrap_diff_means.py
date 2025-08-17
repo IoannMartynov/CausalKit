@@ -50,7 +50,7 @@ def causal_data(cont_test_data):
         df=cont_test_data['df'],
         outcome='outcome',
         treatment='treatment',
-        cofounders=['age']
+        confounders=['age']
     )
 
 
@@ -89,7 +89,7 @@ def test_confidence_levels_change_width(causal_data):
 def test_errors_non_binary_treatment(cont_test_data):
     df = cont_test_data['df'].copy()
     df['treatment'] = np.random.choice([0, 1, 2], size=cont_test_data['n'])
-    ck = CausalData(df=df, outcome='outcome', treatment='treatment', cofounders=['age'])
+    ck = CausalData(df=df, outcome='outcome', treatment='treatment', confounders=['age'])
     with pytest.raises(ValueError):
         bootstrap_diff_means(ck, n_simul=1000)
 

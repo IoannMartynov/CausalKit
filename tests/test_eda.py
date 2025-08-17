@@ -28,7 +28,7 @@ def make_synth(n=200, seed=0):
 
 def test_fit_propensity_and_confounders_means_direct_calls():
     df = make_synth(seed=42)
-    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
+    cd = CausalData(df=df, treatment='treatment', outcome='outcome', confounders=['age', 'invited_friend'])
 
     eda = CausalEDA(cd)
     ps_model = eda.fit_propensity()
@@ -72,7 +72,7 @@ def test_fit_propensity_and_confounders_means_direct_calls():
 def test_treatment_features():
     """Test the treatment_features() method with CatBoost (default) model."""
     df = make_synth(seed=42)
-    cd = CausalData(df=df, treatment='treatment', outcome='outcome', cofounders=['age', 'invited_friend'])
+    cd = CausalData(df=df, treatment='treatment', outcome='outcome', confounders=['age', 'invited_friend'])
 
     eda = CausalEDA(cd)
     

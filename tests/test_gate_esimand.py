@@ -29,8 +29,8 @@ def test_gate_esimand_with_custom_groups_matches_group_counts():
     cd = gen.to_causal_data(n=500)
 
     # Create a simple custom grouping by a confounder (e.g., x1 median split)
-    X_cols = list(cd._cofounders)
-    X = cd.get_df(columns=X_cols, include_treatment=False, include_target=False, include_cofounders=True)
+    X_cols = list(cd.confounders)
+    X = cd.get_df(columns=X_cols, include_treatment=False, include_target=False, include_confounders=True)
     median = X.iloc[:, 0].median()
     g = (X.iloc[:, 0] > median).astype(int)
 

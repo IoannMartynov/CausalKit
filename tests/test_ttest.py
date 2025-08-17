@@ -53,7 +53,7 @@ def causal_data(test_data):
     return CausalData(
         df=test_data['df'],
         outcome='outcome',
-        cofounders=['age', 'gender'],
+        confounders=['age', 'gender'],
         treatment='treatment'
     )
 
@@ -137,7 +137,7 @@ def test_ttest_error_no_treatment(test_data):
         df=test_data['df'],
         outcome='outcome',
         treatment='treatment',
-        cofounders=['age', 'gender']
+        confounders=['age', 'gender']
     )
     
     # Manually set _treatment to empty list to simulate no treatment
@@ -154,7 +154,7 @@ def test_ttest_error_no_target(test_data):
         df=test_data['df'],
         outcome='outcome',
         treatment='treatment',
-        cofounders=['age', 'gender']
+        confounders=['age', 'gender']
     )
     
     # Manually set _target to empty list to simulate no outcome
@@ -172,7 +172,7 @@ def test_ttest_error_non_binary_treatment(test_data):
     ck_multi = CausalData(
         df=df_multi,
         outcome='outcome',
-        cofounders=['age', 'gender'],
+        confounders=['age', 'gender'],
         treatment='treatment'
     )
     

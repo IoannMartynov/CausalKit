@@ -333,7 +333,7 @@ def refute_irm_orthogonality(
     inference_fn: Callable[..., Dict[str, Any]],
     data: CausalData,
     trim_propensity: Tuple[float, float] = (0.02, 0.98),
-    n_basis_funcs: int = 3,
+    n_basis_funcs: Optional[int] = None,
     n_folds_oos: int = 5,
     target: str = "ATE",
     clip_eps: float = 0.01,
@@ -356,8 +356,9 @@ def refute_irm_orthogonality(
         The causal data object
     trim_propensity : Tuple[float, float], default (0.02, 0.98)
         Propensity score trimming bounds (min, max) to avoid extreme weights
-    n_basis_funcs : int, default 3
-        Number of basis functions for orthogonality derivative tests (constant + covariates)
+    n_basis_funcs : Optional[int], default None (len(confounders)+1)
+        Number of basis functions for orthogonality derivative tests (constant + covariates).
+        If None, defaults to the number of confounders in `data` plus 1 for the constant term.
     n_folds_oos : int, default 5
         Number of folds for out-of-sample moment check
     **inference_kwargs : dict
@@ -476,6 +477,10 @@ def refute_irm_orthogonality(
     # Create basis functions: constant + first few standardized confounders
     if data.confounders is None or len(data.confounders) == 0:
         raise ValueError("CausalData object must have confounders defined for orthogonality diagnostics")
+
+    # If n_basis_funcs is not provided, default to (number of confounders + 1) for the constant term
+    if n_basis_funcs is None:
+        n_basis_funcs = len(data.confounders) + 1
     
     X = data.get_df()[list(data.confounders)].values
     n_covs = min(max(n_basis_funcs - 1, 0), X.shape[1])  # -1 for constant term
