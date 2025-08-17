@@ -31,7 +31,7 @@ def dml_ate(
     Parameters
     ----------
     data : CausalData
-        The causaldata object containing treatment, target, and cofounders variables.
+        The causaldata object containing treatment, target, and confounders variables.
     ml_g : estimator, optional
         A machine learner implementing ``fit()`` and ``predict()`` methods for the nuisance function g_0(D,X) = E[Y|X,D].
         If None, a CatBoostRegressor configured to use all CPU cores is used.
@@ -92,8 +92,8 @@ def dml_ate(
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
         raise ValueError("CausalData object must have a outcome variable defined")
-    if data.cofounders is None:
-        raise ValueError("CausalData object must have cofounders variables defined")
+    if not data.confounders:
+        raise ValueError("CausalData object must have confounders variables defined")
     
     # Check confidence level
     if not 0 < confidence_level < 1:

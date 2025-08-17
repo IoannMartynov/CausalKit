@@ -449,7 +449,7 @@ def refute_irm_orthogonality(
             df=df_full.iloc[train_idx].copy(),
             treatment=data.treatment.name,
             outcome=data.target.name,
-            cofounders=list(data.confounders) if data.confounders else None
+            confounders=list(data.confounders) if data.confounders else None
         )
         # Fit model on training fold to get theta
         fold_result = inference_fn(train_data, **inference_kwargs)

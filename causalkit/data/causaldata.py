@@ -12,19 +12,19 @@ class CausalData:
     """
     A class that wraps a pandas DataFrame and stores metadata about columns
     for causal inference. The DataFrame is truncated to only include columns
-    specified in treatment, cofounders, and target.
+    specified in treatment, confounders, and target.
 
     Parameters
     ----------
     df : pd.DataFrame
         The DataFrame containing the data. Cannot contain NaN values.
-        Only columns specified in target, treatment, and cofounders will be stored.
+        Only columns specified in target, treatment, and confounders will be stored.
     treatment : str
         Column name representing the treatment variable.
     outcome : str
         Column name representing the target/outcome variable.
     confounders : Union[str, List[str]], optional
-        Column name(s) representing the cofounders/covariates.
+        Column name(s) representing the confounders/covariates.
 
     Examples
     --------
@@ -47,7 +47,7 @@ class CausalData:
     >>>
     >>> # Access columns by role
     >>> causal_data.target
-    >>> causal_data.cofounders
+    >>> causal_data.confounders
     >>> causal_data.treatment
     """
 
@@ -56,7 +56,6 @@ class CausalData:
             df: pd.DataFrame,
             treatment: str,
             outcome: str,
-            cofounders: Optional[Union[str, List[str]]] = None,
             confounders: Optional[Union[str, List[str]]] = None,
     ):
         """
@@ -64,20 +63,19 @@ class CausalData:
         """
         self._treatment = treatment
         self._target = outcome
-        # Accept both spellings; merge if both provided
-        cof_list = self._ensure_list(cofounders) if cofounders is not None else []
+        # Store confounders as a list of unique names (preserve order)
         conf_list = self._ensure_list(confounders) if confounders is not None else []
-        merged = []
-        for v in cof_list + conf_list:
+        merged: List[str] = []
+        for v in conf_list:
             if v not in merged:
                 merged.append(v)
-        self._cofounders = merged
+        self._confounders = merged
         
         # Validate column names
         self._validate_columns(df)
         
         # Store only the relevant columns
-        columns_to_keep = [self._target, self._treatment] + self._cofounders
+        columns_to_keep = [self._target, self._treatment] + self._confounders
         self.df = df[columns_to_keep].copy()
 
     def _ensure_list(self, value: Union[str, List[str]]) -> List[str]:
@@ -91,7 +89,7 @@ class CausalData:
     def _validate_columns(self, df):
         """
         Validate that all specified columns exist in the DataFrame and that the DataFrame does not contain NaN values.
-        Also validate that outcome, cofounders, and treatment columns contain only int or float values.
+        Also validate that outcome, confounders, and treatment columns contain only int or float values.
         Also validate that no columns are constant (have zero variance).
         """
         # Check for NaN values in the DataFrame
@@ -125,18 +123,18 @@ class CausalData:
         if df[self._treatment].std() == 0 or pd.isna(df[self._treatment].std()):
             raise ValueError(f"Column '{self._treatment}' specified as treatment is constant (has zero variance), which is not allowed for causal inference.")
 
-        # Validate cofounders columns
-        for col in self._cofounders:
+        # Validate confounders columns
+        for col in self._confounders:
             if col not in all_columns:
-                raise ValueError(f"Column '{col}' specified as cofounders does not exist in the DataFrame.")
+                raise ValueError(f"Column '{col}' specified as confounders does not exist in the DataFrame.")
 
             # Check if column contains only int or float values
             if not pdtypes.is_numeric_dtype(df[col]):
-                raise ValueError(f"Column '{col}' specified as cofounders must contain only int or float values.")
+                raise ValueError(f"Column '{col}' specified as confounders must contain only int or float values.")
 
             # Check if confounder column is constant (zero variance or single value)
             if df[col].std() == 0 or pd.isna(df[col].std()):
-                raise ValueError(f"Column '{col}' specified as cofounders is constant (has zero variance), which is not allowed for causal inference.")
+                raise ValueError(f"Column '{col}' specified as confounders is constant (has zero variance), which is not allowed for causal inference.")
 
         # Check for duplicate column values across all used columns
         self._check_duplicate_column_values(df)
@@ -150,7 +148,7 @@ class CausalData:
         Raises ValueError if any two columns have identical values.
         """
         # Get all columns that will be used in CausalData
-        columns_to_check = [self._target, self._treatment] + self._cofounders
+        columns_to_check = [self._target, self._treatment] + self._confounders
         
         # Compare each pair of columns
         for i, col1 in enumerate(columns_to_check):
@@ -173,7 +171,7 @@ class CausalData:
         Only checks the columns that will be used in CausalData.
         """
         # Get only the columns that will be used in CausalData
-        columns_to_check = [self._target, self._treatment] + self._cofounders
+        columns_to_check = [self._target, self._treatment] + self._confounders
         df_subset = df[columns_to_check]
         
         # Find duplicate rows
@@ -201,7 +199,7 @@ class CausalData:
             return "outcome"
         elif column_name == self._treatment:
             return "treatment"
-        elif column_name in self._cofounders:
+        elif column_name in self._confounders:
             return "confounder"
         else:
             return "unknown"
@@ -223,25 +221,11 @@ class CausalData:
     def outcome(self) -> pd.Series:
         return self.target
 
+
     @property
-    def cofounders(self) -> pd.DataFrame:
-        """
-        Get the cofounders/covariates.
-
-        Returns
-        -------
-        pd.DataFrame
-            DataFrame containing the cofounder columns.
-        """
-        if not self._cofounders:
-            return None
-
-        return self.df[self._cofounders]
-
-    # Backwards-compat spelling expected by some callers: return list of names
-    @property
-    def confounders(self) -> Optional[List[str]]:
-        return list(self._cofounders) if self._cofounders else []
+    def confounders(self) -> List[str]:
+        """List of confounder column names."""
+        return list(self._confounders) if self._confounders else []
 
     @property
     def treatment(self) -> pd.Series:
@@ -261,7 +245,7 @@ class CausalData:
             columns: Optional[List[str]] = None,
             include_treatment: bool = True,
             include_target: bool = True,
-            include_cofounders: bool = True
+            include_confounders: bool = True
     ) -> pd.DataFrame:
         """
         Get a DataFrame from the CausalData object with specified columns.
@@ -278,8 +262,8 @@ class CausalData:
             Whether to include treatment column(s) in the returned DataFrame.
         include_target : bool, default True
             Whether to include target column(s) in the returned DataFrame.
-        include_cofounders : bool, default True
-            Whether to include cofounder column(s) in the returned DataFrame.
+        include_confounders : bool, default True
+            Whether to include confounder column(s) in the returned DataFrame.
 
         Returns
         -------
@@ -299,7 +283,7 @@ class CausalData:
         ...     df=df,
         ...     treatment='treatment',
         ...     outcome='outcome',
-        ...     cofounders=['age', 'invited_friend']
+        ...     confounders=['age', 'invited_friend']
         ... )
         >>>
         >>> # Get specific columns
@@ -317,15 +301,15 @@ class CausalData:
 
         # If no specific columns are provided and no include parameters are True,
         # return the entire DataFrame
-        if columns is None and not any([include_target, include_cofounders, include_treatment]):
+        if columns is None and not any([include_target, include_confounders, include_treatment]):
             return self.df.copy()
 
         # Add columns based on include parameters
         if include_target:
             cols_to_include.append(self._target)
 
-        if include_cofounders:
-            cols_to_include.extend(self._cofounders)
+        if include_confounders:
+            cols_to_include.extend(self._confounders)
 
         if include_treatment:
             cols_to_include.append(self._treatment)
@@ -347,7 +331,7 @@ class CausalData:
         """
         return (
             f"CausalData(df={self.df.shape}, "
-            f"treatment='{self._treatment}')"
+            f"treatment='{self._treatment}', "
             f"outcome='{self._target}', "
-            f"cofounders={self._cofounders}, "
+            f"confounders={self._confounders})"
         )

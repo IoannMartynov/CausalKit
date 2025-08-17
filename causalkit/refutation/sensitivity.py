@@ -65,7 +65,7 @@ def sensitivity_analysis(
     >>> # Generate data and estimate effect
     >>> df = generate_rct_data()
     >>> ck = CausalData(df=df, outcome='outcome', treatment='treatment', 
-    ...                 cofounders=['age', 'invited_friend'])
+    ...                 confounders=['age', 'invited_friend'])
     >>> results = dml_ate(ck)
     >>> 
     >>> # Perform sensitivity analysis

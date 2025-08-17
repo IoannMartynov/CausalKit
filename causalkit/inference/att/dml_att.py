@@ -28,7 +28,7 @@ def dml_att(
     Parameters
     ----------
     data : CausalData
-        The causaldata object containing treatment, target, and cofounders variables.
+        The causaldata object containing treatment, target, and confounders variables.
     ml_g : estimator, optional
         A machine learner implementing ``fit()`` and ``predict()`` methods for the nuisance function g_0(D,X) = E[Y|X,D].
         If None, a CatBoostRegressor configured to use all CPU cores is used.
@@ -55,7 +55,7 @@ def dml_att(
     Raises
     ------
     ValueError
-        If the causaldata object doesn't have treatment, target, and cofounders variables defined,
+        If the causaldata object doesn't have treatment, target, and confounders variables defined,
         or if the treatment variable is not binary.
         
     Examples
@@ -72,7 +72,7 @@ def dml_att(
     ...     df=df,
     ...     outcome='outcome',
     ...     treatment='treatment',
-    ...     cofounders=['age', 'invited_friend']
+    ...     confounders=['age', 'invited_friend']
     ... )
     >>> 
     >>> # Estimate ATT using DoubleML
@@ -87,8 +87,8 @@ def dml_att(
         raise ValueError("CausalData object must have a treatment variable defined")
     if data.target is None:
         raise ValueError("CausalData object must have a outcome variable defined")
-    if data.cofounders is None:
-        raise ValueError("CausalData object must have cofounders variables defined")
+    if not data.confounders:
+        raise ValueError("CausalData object must have confounders variables defined")
     
     # Check confidence level
     if not 0 < confidence_level < 1:
