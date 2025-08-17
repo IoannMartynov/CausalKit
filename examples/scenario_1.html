@@ -897,7 +897,7 @@ document.write(`
  &#39;std_error&#39;: 0.08120639822820347,
  &#39;p_value&#39;: 1.4835396169728733e-103,
  &#39;confidence_interval&#39;: (1.5956138000077407, 1.913937031690733),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x1599e30e0&gt;}
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x155ea30e0&gt;}
 </pre></div>
 </div>
 </div>
@@ -988,7 +988,7 @@ document.write(`
 <h3>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">,</span> <span class="n">n_basis_funcs</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1008,8 +1008,8 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: 0.3617
-P-value: 0.7176
+T-statistic: -0.2935
+P-value: 0.7691
 Interpretation: Should be ≈ 0 if moment condition holds
 
 Fold-wise results:
@@ -1044,36 +1044,36 @@ Fold-wise results:
       <th>0</th>
       <td>0</td>
       <td>2000</td>
-      <td>0.142070</td>
-      <td>64.367381</td>
+      <td>0.121945</td>
+      <td>67.549758</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>2000</td>
-      <td>0.114837</td>
-      <td>71.748247</td>
+      <td>0.016122</td>
+      <td>71.579845</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>2000</td>
-      <td>0.106751</td>
-      <td>65.548761</td>
+      <td>0.043603</td>
+      <td>66.921966</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>2000</td>
-      <td>0.091285</td>
-      <td>62.569903</td>
+      <td>0.106776</td>
+      <td>60.331550</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
       <td>2000</td>
-      <td>-0.307471</td>
-      <td>68.208318</td>
+      <td>-0.408346</td>
+      <td>67.373343</td>
     </tr>
   </tbody>
 </table>
@@ -1089,54 +1089,6 @@ Fold-wise results:
 </ul>
 </li>
 </ul>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;full_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
- 0      0 -0.027778  0.015464 -1.796300  0.009315  0.007849  1.186833   
- 1      1  0.005088  0.016336  0.311467  0.003259  0.008088  0.402935   
- 2      2  0.003129  0.016049  0.194959  0.000922  0.008162  0.112934   
- 3      3 -0.001588  0.014938 -0.106328 -0.000145  0.008205 -0.017732   
- 4      4 -0.000312  0.012767 -0.024401  0.002863  0.009497  0.301462   
- 5      5  0.000451  0.015937  0.028314 -0.001855  0.007660 -0.242168   
- 
-         d_g      se_g       t_g  
- 0 -0.103516  0.296654 -0.348945  
- 1  0.137892  0.322104  0.428097  
- 2  0.028325  0.385094  0.073553  
- 3  0.021827  0.282692  0.077210  
- 4 -0.019862  0.231095 -0.085947  
- 5  0.138553  0.316203  0.438177  ,
- &#39;trimmed_sample&#39;:    basis      d_m1     se_m1      t_m1      d_m0     se_m0      t_m0  \
- 0      0 -0.027778  0.015464 -1.796300  0.009315  0.007849  1.186833   
- 1      1  0.005088  0.016336  0.311467  0.003259  0.008088  0.402935   
- 2      2  0.003129  0.016049  0.194959  0.000922  0.008162  0.112934   
- 3      3 -0.001588  0.014938 -0.106328 -0.000145  0.008205 -0.017732   
- 4      4 -0.000312  0.012767 -0.024401  0.002863  0.009497  0.301462   
- 5      5  0.000451  0.015937  0.028314 -0.001855  0.007660 -0.242168   
- 
-         d_g      se_g       t_g  
- 0 -0.103516  0.296654 -0.348945  
- 1  0.137892  0.322104  0.428097  
- 2  0.028325  0.385094  0.073553  
- 3  0.021827  0.282692  0.077210  
- 4 -0.019862  0.231095 -0.085947  
- 5  0.138553  0.316203  0.438177  ,
- &#39;problematic_full&#39;: Empty DataFrame
- Columns: [basis, d_m1, se_m1, t_m1, d_m0, se_m0, t_m0, d_g, se_g, t_g]
- Index: [],
- &#39;problematic_trimmed&#39;: Empty DataFrame
- Columns: [basis, d_m1, se_m1, t_m1, d_m0, se_m0, t_m0, d_g, se_g, t_g]
- Index: [],
- &#39;interpretation&#39;: &#39;Large |t-stats| (&gt;2) indicate calibration issues&#39;}
-</pre></div>
-</div>
-</div>
-</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Orthogonality derivatives</span>
@@ -1205,80 +1157,80 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
+      <td>-0.028659</td>
+      <td>0.015525</td>
+      <td>-1.846000</td>
+      <td>0.008770</td>
+      <td>0.007853</td>
+      <td>1.116676</td>
+      <td>0.065293</td>
+      <td>0.298551</td>
+      <td>0.218701</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
+      <td>0.007178</td>
+      <td>0.016692</td>
+      <td>0.430040</td>
+      <td>0.005184</td>
+      <td>0.008282</td>
+      <td>0.625969</td>
+      <td>-0.410594</td>
+      <td>0.388405</td>
+      <td>-1.057128</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
+      <td>0.002917</td>
+      <td>0.015850</td>
+      <td>0.184037</td>
+      <td>-0.000388</td>
+      <td>0.008126</td>
+      <td>-0.047712</td>
+      <td>-0.141921</td>
+      <td>0.331053</td>
+      <td>-0.428696</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
+      <td>0.001734</td>
+      <td>0.015161</td>
+      <td>0.114367</td>
+      <td>0.001365</td>
+      <td>0.008172</td>
+      <td>0.167076</td>
+      <td>-0.040393</td>
+      <td>0.299372</td>
+      <td>-0.134927</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
+      <td>0.002475</td>
+      <td>0.012814</td>
+      <td>0.193169</td>
+      <td>0.003807</td>
+      <td>0.009539</td>
+      <td>0.399112</td>
+      <td>-0.092788</td>
+      <td>0.242391</td>
+      <td>-0.382801</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
+      <td>0.002650</td>
+      <td>0.016026</td>
+      <td>0.165385</td>
+      <td>-0.001285</td>
+      <td>0.007651</td>
+      <td>-0.167916</td>
+      <td>-0.037567</td>
+      <td>0.317139</td>
+      <td>-0.118457</td>
     </tr>
   </tbody>
 </table>
@@ -1319,80 +1271,80 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
+      <td>-0.028659</td>
+      <td>0.015525</td>
+      <td>-1.846000</td>
+      <td>0.008770</td>
+      <td>0.007853</td>
+      <td>1.116676</td>
+      <td>0.065293</td>
+      <td>0.298551</td>
+      <td>0.218701</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
+      <td>0.007178</td>
+      <td>0.016692</td>
+      <td>0.430040</td>
+      <td>0.005184</td>
+      <td>0.008282</td>
+      <td>0.625969</td>
+      <td>-0.410594</td>
+      <td>0.388405</td>
+      <td>-1.057128</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
+      <td>0.002917</td>
+      <td>0.015850</td>
+      <td>0.184037</td>
+      <td>-0.000388</td>
+      <td>0.008126</td>
+      <td>-0.047712</td>
+      <td>-0.141921</td>
+      <td>0.331053</td>
+      <td>-0.428696</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
+      <td>0.001734</td>
+      <td>0.015161</td>
+      <td>0.114367</td>
+      <td>0.001365</td>
+      <td>0.008172</td>
+      <td>0.167076</td>
+      <td>-0.040393</td>
+      <td>0.299372</td>
+      <td>-0.134927</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
+      <td>0.002475</td>
+      <td>0.012814</td>
+      <td>0.193169</td>
+      <td>0.003807</td>
+      <td>0.009539</td>
+      <td>0.399112</td>
+      <td>-0.092788</td>
+      <td>0.242391</td>
+      <td>-0.382801</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
+      <td>0.002650</td>
+      <td>0.016026</td>
+      <td>0.165385</td>
+      <td>-0.001285</td>
+      <td>0.007651</td>
+      <td>-0.167916</td>
+      <td>-0.037567</td>
+      <td>0.317139</td>
+      <td>-0.118457</td>
     </tr>
   </tbody>
 </table>
@@ -1609,21 +1561,15 @@ Overall: PASS: Strong evidence for orthogonality
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scenario 1: Moderate unobserved confounding&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cf_y=0.03 (outcome confounding), cf_d=0.03 (treatment confounding)&quot;</span><span class="p">)</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="c1"># Run sensitivity analysis on our ATE result</span>
-    <span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
-        <span class="n">ate_result</span><span class="p">,</span>
-        <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
-        <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
-        <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
-    <span class="p">)</span>
+<span class="c1"># Run sensitivity analysis on our ATE result</span>
+<span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
+    <span class="n">ate_result</span><span class="p">,</span>
+    <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
+    <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
+    <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
+<span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report_1</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Note: Sensitivity analysis requires the model object to support it.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">This feature works best with DoubleML models that have sensitivity analysis capabilities.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report_1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1650,6 +1596,35 @@ t  0.0  20.106836  18.701604
 </div>
 </div>
 </div>
+<p>Here’s how to read your sensitivity analysis output.
+What was tested</p>
+<ul class="simple">
+<li><p>Assumed moderate unobserved confounding: cf_y=0.03 on the outcome, cf_d=0.03 on the treatment, perfectly aligned (rho=1.0).</p></li>
+<li><p>Target parameter: ATE.</p></li>
+</ul>
+<p>Bounds and confidence intervals</p>
+<ul class="simple">
+<li><p>Point estimate under sensitivity: theta ≈ 1.755.</p></li>
+<li><p>Bounds with CI: theta lower ≈ 1.517, theta upper ≈ 1.992; CI lower ≈ 1.383, CI upper ≈ 2.126.</p></li>
+<li><p>Interpretation: Even allowing for the specified unobserved confounding, the effect remains positive, sizable, and statistically significant. The entire 95% CI stays well above 0.</p></li>
+</ul>
+<p>Robustness values</p>
+<ul class="simple">
+<li><p>RV ≈ 20.11%: This is the minimal “equal-strength” confounding (as partial R² share of residual variance, equally on Y and D and perfectly correlated, rho=1) required to move the point estimate to 0.</p></li>
+<li><p>RVa ≈ 18.70%: Minimal equal-strength confounding required to render the effect statistically indistinguishable from 0 at the chosen level (i.e., lose significance).</p></li>
+<li><p>Interpretation: An unobserved confounder would need to be quite strong—explaining roughly 19–20% of the residual variation in both outcome and treatment, after controlling for observed covariates—to overturn or de-signify the result. That’s typically considered substantial, suggesting good robustness.</p></li>
+</ul>
+<p>Bottom line</p>
+<ul class="simple">
+<li><p>Under moderate confounding (cf_y=cf_d=0.03), your ATE remains clearly positive and significant.</p></li>
+<li><p>The RVs indicate that only a fairly powerful unobserved confounder could explain the effect away.</p></li>
+</ul>
+<p>Suggested next checks</p>
+<ul class="simple">
+<li><p>Benchmarking: Compare RVs to observed confounders’ partial R² to calibrate what “20%” means in your context (you already set up a benchmarking set below).</p></li>
+<li><p>Stress test: Try higher cf_y/cf_d or rho&lt;1 to see how quickly bounds approach 0.</p></li>
+<li><p>Subgroup/overlap diagnostics: Ensure overlap and model orthogonality remain sound (your orthogonality checks looked fine).</p></li>
+</ul>
 </section>
 <section id="sensitivity-analysis-set-benchmark-observed-confounders">
 <h3>Sensitivity analysis set (benchmark observed confounders)<a class="headerlink" href="#sensitivity-analysis-set-benchmark-observed-confounders" title="Link to this heading">#</a></h3>
