@@ -17,6 +17,7 @@ from .placebo import (
 from .sensitivity import (
     sensitivity_analysis,
     get_sensitivity_summary,
+    sensitivity_analysis_set,
 )
 from .orthogonality import (
     refute_irm_orthogonality,
@@ -28,5 +29,6 @@ __all__ = [
     "refute_subset",
     "sensitivity_analysis",
     "get_sensitivity_summary",
+    "sensitivity_analysis_set",
     "refute_irm_orthogonality",
 ]

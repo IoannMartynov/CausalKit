@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import pandas as pd
 import numpy as np
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Union
 import doubleml
+import warnings
 
 
 def sensitivity_analysis(
@@ -87,7 +88,13 @@ def sensitivity_analysis(
     
     # Perform sensitivity analysis
     try:
-        model.sensitivity_analysis(cf_y=cf_y, cf_d=cf_d, rho=rho)
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                category=FutureWarning,
+                message=".*force_all_finite.*ensure_all_finite.*",
+            )
+            model.sensitivity_analysis(cf_y=cf_y, cf_d=cf_d, rho=rho)
     except Exception as e:
         raise RuntimeError(f"Failed to perform sensitivity analysis: {str(e)}")
     
@@ -222,3 +229,167 @@ def get_sensitivity_summary(effect_estimation: Dict[str, Any]) -> Optional[str]:
         return model.sensitivity_summary
     
     return None
+
+
+def sensitivity_analysis_set(
+    effect_estimation: Dict[str, Any],
+    benchmarking_set: Union[str, List[str], List[List[str]]],
+    level: float = 0.95,
+    null_hypothesis: float = 0.0,
+    **kwargs: Any,
+) -> Any:
+    """
+    Benchmark a set of observed confounders to assess robustness, mirroring
+    DoubleML's `sensitivity_benchmark` for DoubleMLIRM.
+
+    Parameters
+    ----------
+    effect_estimation : Dict[str, Any]
+        A dictionary containing the effect estimation results with a fitted DoubleML model under the 'model' key.
+    benchmarking_set : Union[str, List[str], List[List[str]]]
+        One or multiple names of observed confounders to benchmark (e.g., ["inc"], ["pira"], ["twoearn"]).
+        Accepts:
+        - a single string (benchmarks that single confounder),
+        - a list of strings (interpreted as multiple single-variable benchmarks, each run separately), or
+        - a list of lists/tuples of strings to specify explicit benchmarking groups (each inner list is run once together).
+    level : float, default 0.95
+        Confidence level used by the benchmarking procedure.
+    null_hypothesis : float, default 0.0
+        The null hypothesis value for the target parameter.
+    **kwargs : Any
+        Additional keyword arguments passed through to the underlying DoubleML `sensitivity_benchmark` method.
+
+    Returns
+    -------
+    Any
+        - If a single confounder/group is provided, returns the object from a single call to
+          `model.sensitivity_benchmark(benchmarking_set=[...])`.
+        - If multiple confounders/groups are provided, returns a dict mapping each confounder (str)
+          or group (tuple[str, ...]) to its corresponding result object.
+
+    Raises
+    ------
+    TypeError
+        If inputs have invalid types or if the model does not support sensitivity benchmarking.
+    ValueError
+        If required inputs are missing or invalid (e.g., empty benchmarking_set, invalid level).
+    RuntimeError
+        If the underlying `sensitivity_benchmark` call fails.
+    """
+    # Validate inputs
+    if not isinstance(effect_estimation, dict):
+        raise TypeError("effect_estimation must be a dictionary")
+    if 'model' not in effect_estimation:
+        raise ValueError("effect_estimation must contain a 'model' key with a fitted DoubleML object")
+
+    if not (0 < level < 1):
+        raise ValueError("level must be between 0 and 1 (exclusive)")
+
+    # Normalize/validate benchmarking_set into a list of groups (each group is a list[str])
+    groups: List[List[str]]
+    if isinstance(benchmarking_set, str):
+        groups = [[benchmarking_set]]
+    elif isinstance(benchmarking_set, list):
+        if len(benchmarking_set) == 0:
+            raise ValueError("benchmarking_set must not be empty")
+        if all(isinstance(x, str) for x in benchmarking_set):
+            # Interpret list[str] as multiple single-variable benchmarks
+            groups = [[s] for s in benchmarking_set]  # one call per confounder
+        elif all(isinstance(x, (list, tuple)) for x in benchmarking_set):
+            groups = []
+            for subset in benchmarking_set:
+                subset_list = list(subset)
+                if len(subset_list) == 0:
+                    raise ValueError("Each benchmarking subset must not be empty")
+                if not all(isinstance(y, str) for y in subset_list):
+                    raise TypeError("Each benchmarking subset must contain only strings")
+                groups.append(subset_list)
+        else:
+            raise TypeError(
+                "benchmarking_set must be a string, a list of strings, or a list of lists of strings"
+            )
+    else:
+        raise TypeError(
+            "benchmarking_set must be a string, a list of strings, or a list of lists of strings"
+        )
+
+    model = effect_estimation['model']
+
+    # Check capability
+    if not hasattr(model, 'sensitivity_benchmark'):
+        raise TypeError("The model must be a DoubleML object that supports sensitivity benchmarking via 'sensitivity_benchmark'")
+
+    import inspect
+
+    def _call_single(group: List[str]) -> Any:
+        """Call model.sensitivity_benchmark for a single group with signature adaptation."""
+        sb = getattr(model, 'sensitivity_benchmark')
+        try:
+            sig = inspect.signature(sb)
+            params = sig.parameters
+            accepts_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
+
+            call_kwargs: Dict[str, Any] = {}
+            # benchmarking_set
+            if 'benchmarking_set' in params or accepts_var_kw:
+                call_kwargs['benchmarking_set'] = group
+
+            # level vs alpha compatibility
+            if accepts_var_kw:
+                call_kwargs['level'] = level
+                call_kwargs['null_hypothesis'] = null_hypothesis
+            else:
+                if 'level' in params:
+                    call_kwargs['level'] = level
+                elif 'alpha' in params:
+                    call_kwargs['alpha'] = 1 - level
+                if 'null_hypothesis' in params:
+                    call_kwargs['null_hypothesis'] = null_hypothesis
+
+            # Extra kwargs
+            if accepts_var_kw:
+                call_kwargs.update(kwargs)
+            else:
+                for k, v in kwargs.items():
+                    if k in params:
+                        call_kwargs[k] = v
+
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore",
+                    category=FutureWarning,
+                    message=".*force_all_finite.*ensure_all_finite.*",
+                )
+                return sb(**call_kwargs)
+        except Exception as e:
+            # Fallback minimal call
+            try:
+                with warnings.catch_warnings():
+                    warnings.filterwarnings(
+                        "ignore",
+                        category=FutureWarning,
+                        message=".*force_all_finite.*ensure_all_finite.*",
+                    )
+                    return model.sensitivity_benchmark(benchmarking_set=group)
+            except Exception:
+                raise RuntimeError(f"Failed to perform sensitivity benchmarking: {str(e)}")
+
+    # Run for each group
+    results: List[Any] = []
+    for g in groups:
+        results.append(_call_single(g))
+
+    # If only one group, return the single result directly for backward compatibility
+    if len(results) == 1:
+        return results[0]
+
+    # Otherwise, return a dict mapping identifier -> result
+    out: Dict[Union[str, tuple], Any] = {}
+    for g, r in zip(groups, results):
+        key: Union[str, tuple]
+        if len(g) == 1:
+            key = g[0]
+        else:
+            key = tuple(g)
+        out[key] = r
+    return out
