@@ -83,7 +83,11 @@ source_suffix = ['.rst', '.md', '.ipynb']
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = 'pydata_sphinx_theme'
-html_theme_options = {}
+html_theme_options = {
+    'logo': {
+        'text': 'CausalKit',
+    }
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -92,6 +96,9 @@ html_static_path = ['_static']
 
 # Favicon for the site
 html_favicon = '_static/logo.svg'
+
+# Logo in the navbar (PyData Sphinx Theme)
+html_logo = '_static/logo_big.svg'
 
 # -- Options for nbsphinx output ---------------------------------------------
 nbsphinx_execute = 'auto'
