@@ -6,4 +6,4 @@ This section contains examples of how to use CausalKit for various causal infere
 .. toctree::
    :maxdepth: 2
 
-   examples/rct_analysis
+   examples/scenario_1

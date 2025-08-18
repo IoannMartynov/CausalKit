@@ -89,8 +89,8 @@ html_theme_options = {
     },
     'light_css_variables': {
         # Brand colors (links, accents)
-        'color-brand-primary': '#5AB98C',
-        'color-brand-content': '#3EAC9C',
+        'color-brand-primary': '#3EAC9C',
+        'color-brand-content': '#5AB98C',
     },
 }
 
