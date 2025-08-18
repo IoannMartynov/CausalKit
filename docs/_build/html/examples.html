@@ -49,6 +49,7 @@
     <link rel="icon" href="_static/logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic example" href="examples/scenario_1.html" />
     <link rel="prev" title="Short answer" href="user-guide/cate_vs_gate.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -302,7 +303,10 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/scenario_1.html">Basic example</a></li>
+</ul>
+</div>
 </nav></div>
     </div>
   
@@ -359,6 +363,15 @@ document.write(`
 <h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
 <p>This section contains examples of how to use CausalKit for various causal inference tasks.</p>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/scenario_1.html">Basic example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/scenario_1.html#generate-data">Generate data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/scenario_1.html#eda">EDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/scenario_1.html#inference">Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/scenario_1.html#refutation">Refutation</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
 
@@ -380,6 +393,15 @@ document.write(`
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Short answer</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="examples/scenario_1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basic example</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
