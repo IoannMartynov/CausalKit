@@ -86,7 +86,12 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'logo': {
         'text': 'CausalKit',
-    }
+    },
+    'light_css_variables': {
+        # Brand colors (links, accents)
+        'color-brand-primary': '#5AB98C',
+        'color-brand-content': '#3EAC9C',
+    },
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
