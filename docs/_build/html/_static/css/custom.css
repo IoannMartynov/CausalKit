@@ -145,6 +145,32 @@ table.docutils th {
     display: none !important;
 }
 
+/* Hide sidebar toggle buttons, checkboxes, and overlays */
+.sidebar-toggle.primary-toggle {
+    display: none !important;
+}
+
+#pst-primary-sidebar-checkbox {
+    display: none !important;
+}
+
+.overlay.overlay-primary {
+    display: none !important;
+}
+
+/* Hide sidebar header items */
+.sidebar-header-items {
+    display: none !important;
+}
+
+.sidebar-primary-items__start {
+    display: none !important;
+}
+
+.sidebar-primary-items__end {
+    display: none !important;
+}
+
 /* Ensure main content uses full width */
 .bd-main {
     width: 100% !important;
