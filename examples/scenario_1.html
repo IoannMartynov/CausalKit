@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/documentation_options.js?v=7f41d439"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -203,6 +203,22 @@ document.write(`
 `);
 </script></div>
       
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
     </div>
     
   </div>
@@ -293,6 +309,22 @@ document.write(`
   </button>
 `);
 </script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         
       </div>
     
@@ -921,7 +953,7 @@ document.write(`
  &#39;std_error&#39;: 0.08120639822820347,
  &#39;p_value&#39;: 1.4835396169728733e-103,
  &#39;confidence_interval&#39;: (1.5956138000077407, 1.913937031690733),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x155ea30e0&gt;}
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x155ee6d50&gt;}
 </pre></div>
 </div>
 </div>
@@ -1032,8 +1064,8 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: -0.2935
-P-value: 0.7691
+T-statistic: 0.3617
+P-value: 0.7176
 Interpretation: Should be ≈ 0 if moment condition holds
 
 Fold-wise results:
@@ -1068,36 +1100,36 @@ Fold-wise results:
       <th>0</th>
       <td>0</td>
       <td>2000</td>
-      <td>0.121945</td>
-      <td>67.549758</td>
+      <td>0.142070</td>
+      <td>64.367381</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>2000</td>
-      <td>0.016122</td>
-      <td>71.579845</td>
+      <td>0.114837</td>
+      <td>71.748247</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>2000</td>
-      <td>0.043603</td>
-      <td>66.921966</td>
+      <td>0.106751</td>
+      <td>65.548761</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>2000</td>
-      <td>0.106776</td>
-      <td>60.331550</td>
+      <td>0.091285</td>
+      <td>62.569903</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
       <td>2000</td>
-      <td>-0.408346</td>
-      <td>67.373343</td>
+      <td>-0.307471</td>
+      <td>68.208318</td>
     </tr>
   </tbody>
 </table>
@@ -1181,80 +1213,80 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.028659</td>
-      <td>0.015525</td>
-      <td>-1.846000</td>
-      <td>0.008770</td>
-      <td>0.007853</td>
-      <td>1.116676</td>
-      <td>0.065293</td>
-      <td>0.298551</td>
-      <td>0.218701</td>
+      <td>-0.027778</td>
+      <td>0.015464</td>
+      <td>-1.796300</td>
+      <td>0.009315</td>
+      <td>0.007849</td>
+      <td>1.186833</td>
+      <td>-0.103516</td>
+      <td>0.296654</td>
+      <td>-0.348945</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.007178</td>
-      <td>0.016692</td>
-      <td>0.430040</td>
-      <td>0.005184</td>
-      <td>0.008282</td>
-      <td>0.625969</td>
-      <td>-0.410594</td>
-      <td>0.388405</td>
-      <td>-1.057128</td>
+      <td>0.005088</td>
+      <td>0.016336</td>
+      <td>0.311467</td>
+      <td>0.003259</td>
+      <td>0.008088</td>
+      <td>0.402935</td>
+      <td>0.137892</td>
+      <td>0.322104</td>
+      <td>0.428097</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.002917</td>
-      <td>0.015850</td>
-      <td>0.184037</td>
-      <td>-0.000388</td>
-      <td>0.008126</td>
-      <td>-0.047712</td>
-      <td>-0.141921</td>
-      <td>0.331053</td>
-      <td>-0.428696</td>
+      <td>0.003129</td>
+      <td>0.016049</td>
+      <td>0.194959</td>
+      <td>0.000922</td>
+      <td>0.008162</td>
+      <td>0.112934</td>
+      <td>0.028325</td>
+      <td>0.385094</td>
+      <td>0.073553</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>0.001734</td>
-      <td>0.015161</td>
-      <td>0.114367</td>
-      <td>0.001365</td>
-      <td>0.008172</td>
-      <td>0.167076</td>
-      <td>-0.040393</td>
-      <td>0.299372</td>
-      <td>-0.134927</td>
+      <td>-0.001588</td>
+      <td>0.014938</td>
+      <td>-0.106328</td>
+      <td>-0.000145</td>
+      <td>0.008205</td>
+      <td>-0.017732</td>
+      <td>0.021827</td>
+      <td>0.282692</td>
+      <td>0.077210</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>0.002475</td>
-      <td>0.012814</td>
-      <td>0.193169</td>
-      <td>0.003807</td>
-      <td>0.009539</td>
-      <td>0.399112</td>
-      <td>-0.092788</td>
-      <td>0.242391</td>
-      <td>-0.382801</td>
+      <td>-0.000312</td>
+      <td>0.012767</td>
+      <td>-0.024401</td>
+      <td>0.002863</td>
+      <td>0.009497</td>
+      <td>0.301462</td>
+      <td>-0.019862</td>
+      <td>0.231095</td>
+      <td>-0.085947</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.002650</td>
-      <td>0.016026</td>
-      <td>0.165385</td>
-      <td>-0.001285</td>
-      <td>0.007651</td>
-      <td>-0.167916</td>
-      <td>-0.037567</td>
-      <td>0.317139</td>
-      <td>-0.118457</td>
+      <td>0.000451</td>
+      <td>0.015937</td>
+      <td>0.028314</td>
+      <td>-0.001855</td>
+      <td>0.007660</td>
+      <td>-0.242168</td>
+      <td>0.138553</td>
+      <td>0.316203</td>
+      <td>0.438177</td>
     </tr>
   </tbody>
 </table>
@@ -1295,80 +1327,80 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.028659</td>
-      <td>0.015525</td>
-      <td>-1.846000</td>
-      <td>0.008770</td>
-      <td>0.007853</td>
-      <td>1.116676</td>
-      <td>0.065293</td>
-      <td>0.298551</td>
-      <td>0.218701</td>
+      <td>-0.027778</td>
+      <td>0.015464</td>
+      <td>-1.796300</td>
+      <td>0.009315</td>
+      <td>0.007849</td>
+      <td>1.186833</td>
+      <td>-0.103516</td>
+      <td>0.296654</td>
+      <td>-0.348945</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.007178</td>
-      <td>0.016692</td>
-      <td>0.430040</td>
-      <td>0.005184</td>
-      <td>0.008282</td>
-      <td>0.625969</td>
-      <td>-0.410594</td>
-      <td>0.388405</td>
-      <td>-1.057128</td>
+      <td>0.005088</td>
+      <td>0.016336</td>
+      <td>0.311467</td>
+      <td>0.003259</td>
+      <td>0.008088</td>
+      <td>0.402935</td>
+      <td>0.137892</td>
+      <td>0.322104</td>
+      <td>0.428097</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.002917</td>
-      <td>0.015850</td>
-      <td>0.184037</td>
-      <td>-0.000388</td>
-      <td>0.008126</td>
-      <td>-0.047712</td>
-      <td>-0.141921</td>
-      <td>0.331053</td>
-      <td>-0.428696</td>
+      <td>0.003129</td>
+      <td>0.016049</td>
+      <td>0.194959</td>
+      <td>0.000922</td>
+      <td>0.008162</td>
+      <td>0.112934</td>
+      <td>0.028325</td>
+      <td>0.385094</td>
+      <td>0.073553</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>0.001734</td>
-      <td>0.015161</td>
-      <td>0.114367</td>
-      <td>0.001365</td>
-      <td>0.008172</td>
-      <td>0.167076</td>
-      <td>-0.040393</td>
-      <td>0.299372</td>
-      <td>-0.134927</td>
+      <td>-0.001588</td>
+      <td>0.014938</td>
+      <td>-0.106328</td>
+      <td>-0.000145</td>
+      <td>0.008205</td>
+      <td>-0.017732</td>
+      <td>0.021827</td>
+      <td>0.282692</td>
+      <td>0.077210</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>0.002475</td>
-      <td>0.012814</td>
-      <td>0.193169</td>
-      <td>0.003807</td>
-      <td>0.009539</td>
-      <td>0.399112</td>
-      <td>-0.092788</td>
-      <td>0.242391</td>
-      <td>-0.382801</td>
+      <td>-0.000312</td>
+      <td>0.012767</td>
+      <td>-0.024401</td>
+      <td>0.002863</td>
+      <td>0.009497</td>
+      <td>0.301462</td>
+      <td>-0.019862</td>
+      <td>0.231095</td>
+      <td>-0.085947</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.002650</td>
-      <td>0.016026</td>
-      <td>0.165385</td>
-      <td>-0.001285</td>
-      <td>0.007651</td>
-      <td>-0.167916</td>
-      <td>-0.037567</td>
-      <td>0.317139</td>
-      <td>-0.118457</td>
+      <td>0.000451</td>
+      <td>0.015937</td>
+      <td>0.028314</td>
+      <td>-0.001855</td>
+      <td>0.007660</td>
+      <td>-0.242168</td>
+      <td>0.138553</td>
+      <td>0.316203</td>
+      <td>0.438177</td>
     </tr>
   </tbody>
 </table>
@@ -1761,15 +1793,6 @@ What was tested</p>
 </li>
 </ul>
   </nav></div>
-
-  <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/examples/scenario_1.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
 
 </div></div>
               
