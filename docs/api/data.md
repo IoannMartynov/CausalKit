@@ -14,7 +14,7 @@ This module includes functions for generating:
 
 ```{eval-rst}
 .. automodule:: causalkit.data.generators
-   :members: generate_ab_test_data, generate_rct_data, generate_obs_data
+   :members:
    :undoc-members:
    :show-inheritance:
 ```
