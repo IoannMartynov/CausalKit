@@ -1,4 +1,4 @@
-# CausalKit - Modern Reproducible Causal Analysis in Python <a href="https://ioannmartynov.github.io/CausalKit/"><img src="https://raw.githubusercontent.com/IoannMartynov/CausalKit/main/docs/_static/logo_big.svg" alt="CausalKit logo" width="80" style="float: left; margin-right: 10px;" /></a>
+# CausalKit - Modern Reproducible Causal Analysis <a href="https://ioannmartynov.github.io/CausalKit/"><img src="https://raw.githubusercontent.com/IoannMartynov/CausalKit/main/docs/_static/logo_big.svg" alt="CausalKit logo" width="80" style="float: left; margin-right: 10px;" /></a>
 
 
 ## Installation
