@@ -60,4 +60,5 @@ Start using with :doc:`User Guide <user-guide>`
 References
 -----------
 https://github.com/DoubleML/doubleml-for-py
+
 https://github.com/py-why/EconML
