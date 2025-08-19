@@ -16,4 +16,4 @@ General Examples
 .. toctree::
    :maxdepth: 1
 
-   examples/scenario_1
+   examples/basic_example
