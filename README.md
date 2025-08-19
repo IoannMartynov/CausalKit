@@ -1,4 +1,4 @@
-# CausalKit  <a href="https://ioannmartynov.github.io/CausalKit/"><img src="https://raw.githubusercontent.com/IoannMartynov/CausalKit/main/docs/_static/logo_big.svg" alt="CausalKit logo" style="float:left;" width="120"></a>
+# CausalKit - Modern Reproducible Causal Analysis in Python <a href="https://ioannmartynov.github.io/CausalKit/"><img src="https://raw.githubusercontent.com/IoannMartynov/CausalKit/main/docs/_static/logo_big.svg" alt="CausalKit logo" style="float:left;" width="120"></a>
 
 
 Evaluate the impact of the treatment on the outcome metric within the sample population, while controlling 
