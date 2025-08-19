@@ -1,11 +1,8 @@
 CausalKit
 =========
 
-Evaluate the impact of the treatment on the target metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
+Evaluate the impact of the treatment on the outcome metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
 
-
-Scenarios Covered
---------
 
 CausalKit simplifies the process of conducting causal inference studies by providing:
 
@@ -36,9 +33,31 @@ Then import the library
 
     import causalkit
 
+Scenarios Covered
+--------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Is RCT
+     - Treatment
+     - Outcome
+     - EDA
+     - Estimands
+     - Refutation
+     - Docs
+   * - Observational
+     - Binary
+     - Continuous
+     - Yes
+     - ATE linear
+     - Yes
+     - Example, Synthetic tests
+
 Start using with :doc:`User Guide <user-guide>`
 ----------------------------------------------
 
 References
 -----------
 https://github.com/DoubleML/doubleml-for-py
+https://github.com/py-why/EconML
