@@ -13,8 +13,8 @@ pip install git+https://github.com/ioannmartynov/causalkit.git
 import causalkit
 ```
 # Scenarios Covered
-| Is RCT        | Treatment | Outcome    | EDA | Estimands  | Refutation | Docs                         |
-|---------------|-----------|------------|-----|------------|------------|------------------------------|
-| Observational | Binary    | Continuous | Yes | ATE linear | Yes        | Example,<br/>Synthetic tests |
+| Is RCT        | Treatment | Outcome    | EDA | Estimands      | Refutation | Docs    |
+|---------------|-----------|------------|-----|----------------|------------|---------|
+| Observational | Binary    | Continuous | Yes | ATE,ATT linear | Yes        | Example |
 
 # Don't forget to press Star ⭐️
