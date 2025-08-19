@@ -112,7 +112,7 @@ html_show_sourcelink = False
 html_copy_source = False
 
 # -- Options for nbsphinx output ---------------------------------------------
-nbsphinx_execute = 'auto'
+nbsphinx_execute = 'never'
 nbsphinx_allow_errors = False
 nbsphinx_timeout = 60
 
