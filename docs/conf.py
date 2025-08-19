@@ -87,11 +87,13 @@ html_theme_options = {
     'logo': {
         'text': 'CausalKit',
     },
-    'light_css_variables': {
-        # Brand colors (links, accents)
-        'color-brand-primary': '#3EAC9C',
-        'color-brand-content': '#5AB98C',
-    },
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/IoannMartynov/CausalKit",
+            "icon": "fa-brands fa-square-github",
+            "type": "fontawesome",
+        }]
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -104,6 +106,10 @@ html_favicon = '_static/logo.svg'
 
 # Logo in the navbar (PyData Sphinx Theme)
 html_logo = '_static/logo_big.svg'
+
+# Disable "Show Source" links across all pages
+html_show_sourcelink = False
+html_copy_source = False
 
 # -- Options for nbsphinx output ---------------------------------------------
 nbsphinx_execute = 'auto'
