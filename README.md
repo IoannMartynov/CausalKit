@@ -1,17 +1,24 @@
 # CausalKit
 
-Evaluate the impact of the treatment on the target metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
+Evaluate the impact of the treatment on the outcome metric within the sample population, while controlling 
+for confounding factors, to inform resource allocation decisions.
 Written with python.
-Official documentation https://ioannmartynov.github.io/CausalKit/
+# [Documentation](https://ioannmartynov.github.io/CausalKit/) 
 
 ## Installation
 
-### Using pip
+Install from github directly
 
 ```bash
 pip install git+https://github.com/ioannmartynov/causalkit.git
 ```
-# Scenarios
+
+```python
+import causalkit
+```
+# Scenarios Covered
 | Is RCT        | Treatment | Outcome    | EDA | Estimands  | Refutation | Docs                         |
 |---------------|-----------|------------|-----|------------|------------|------------------------------|
-| Observational | Binary    | Continuous | Yes | ATE linear | No         | Example,<br/>Synthetic tests |
+| Observational | Binary    | Continuous | Yes | ATE linear | Yes        | Example,<br/>Synthetic tests |
+
+# Don't forget to press Star ⭐️
