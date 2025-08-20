@@ -1,8 +1,4 @@
-Here’s your explanation rewritten cleanly in Markdown with proper LaTeX formatting:
-
----
-
-## Short answer
+## Cate vs Gate
 
 **GATE = Group Average Treatment Effect.**
 It’s the **average causal effect within a subgroup** (defined by *pre-treatment* covariates).

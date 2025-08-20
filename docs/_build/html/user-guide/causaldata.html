@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Working with CausalData &#8212; CausalKit  documentation</title>
+    <title>CausalData at a glance &#8212; CausalKit  documentation</title>
   
   
   
@@ -49,8 +49,8 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Short answer" href="cate_vs_gate.html" />
-    <link rel="prev" title="Causal Inference Intuition" href="causal_inference_fundamentals.html" />
+    <link rel="next" title="Exploratory Data Analysis (EDA)" href="eda.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -336,10 +336,12 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
-
-
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Working with CausalData</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CausalData at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cate_vs_gate.html">Short answer</a></li>
 
 
@@ -385,7 +387,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Working...</li>
+    <li class="breadcrumb-item active" aria-current="page">CausalData...</li>
   </ul>
 </nav>
 </div>
@@ -402,135 +404,102 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="working-with-causaldata">
-<h1>Working with CausalData<a class="headerlink" href="#working-with-causaldata" title="Link to this heading">#</a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> class is a core component of CausalKit that helps you organize and manage your data for causal inference analysis. This guide explains how to use the <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> class effectively.</p>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> class wraps a pandas DataFrame and stores metadata about columns for causal inference analysis. It categorizes your data columns into three main types:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="causaldata-at-a-glance">
+<h1>CausalData at a glance<a class="headerlink" href="#causaldata-at-a-glance" title="Link to this heading">#</a></h1>
+<p>CausalData is the light-weight input container used across CausalKit. It wraps a pandas DataFrame and records which columns are the outcome (target), the treatment, and the confounders.</p>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
+
+<span class="c1"># Example data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">(</span><span class="n">n_users</span><span class="o">=</span><span class="mi">5_000</span><span class="p">)</span>
+
+<span class="c1"># Declare column roles</span>
+<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
+    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Note: Internally, the stored DataFrame is trimmed to only these columns: [outcome, treatment, confounders].</p>
+</section>
+<section id="api-essentials">
+<h2>API essentials<a class="headerlink" href="#api-essentials" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Target</strong>: The outcome variable(s) you’re measuring</p></li>
-<li><p><strong>Treatment</strong>: The intervention or treatment variable(s)</p></li>
-<li><p><strong>Cofounders</strong>: The covariates or confounding variables</p></li>
+<li><p>Init parameters</p>
+<ul>
+<li><p>df: pandas DataFrame (no NaNs)</p></li>
+<li><p>treatment: name of the treatment column (numeric)</p></li>
+<li><p>outcome: name of the outcome/target column (numeric)</p></li>
+<li><p>confounders: one or more confounder column names (numeric)</p></li>
 </ul>
-<p>This organization makes it easier to perform causal inference analyses and ensures data quality through built-in validation.</p>
+</li>
+<li><p>Properties</p>
+<ul>
+<li><p>target: pandas Series (the outcome)</p></li>
+<li><p>outcome: alias of target</p></li>
+<li><p>treatment: pandas Series</p></li>
+<li><p>confounders: list[str] of confounder column names</p></li>
+</ul>
+</li>
+<li><p>Method</p>
+<ul>
+<li><p>get_df(columns=None, include_treatment=True, include_target=True, include_confounders=True) -&gt; DataFrame
+Selects columns by name and/or by role. Returns a copy.</p></li>
+</ul>
+</li>
+</ul>
 </section>
-<section id="creating-a-causaldata-object">
-<h2>Creating a CausalData Object<a class="headerlink" href="#creating-a-causaldata-object" title="Link to this heading">#</a></h2>
-<p>You can create a <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> object by passing a pandas DataFrame along with column specifications:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-
-<span class="c1"># Let&#39;s generate RCT data</span>
-<span class="n">rct_df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-
-<span class="c1"># Create a CausalData object</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
-    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<section id="requirements-and-validation">
-<h3>Requirements and Validation<a class="headerlink" href="#requirements-and-validation" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> class performs several validations when you create an object:</p>
+<section id="validation-on-construction">
+<h2>Validation (on construction)<a class="headerlink" href="#validation-on-construction" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>The DataFrame cannot contain NaN values</p></li>
-<li><p>All specified columns must exist in the DataFrame</p></li>
-<li><p>Target, treatment, and cofounder columns must contain only numeric values (int or float)</p></li>
-</ol>
-<p>If any of these validations fail, an error will be raised with a descriptive message.</p>
-</section>
-</section>
-<section id="accessing-data">
-<h2>Accessing Data<a class="headerlink" href="#accessing-data" title="Link to this heading">#</a></h2>
-<p>Once you’ve created a <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> object, you can access the data in several ways:</p>
-<section id="accessing-the-full-dataframe">
-<h3>Accessing the Full DataFrame<a class="headerlink" href="#accessing-the-full-dataframe" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-
-<span class="c1"># Let&#39;s generate RCT data</span>
-<span class="n">rct_df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-
-<span class="c1"># Create a CausalData object</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
-    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-
-<span class="c1"># Get the full DataFrame</span>
-<span class="n">full_df</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span>
-<span class="c1"># Another way to get the full DataFrame</span>
-<span class="n">full_df</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
-<section id="accessing-treatment-target-and-cofounders">
-<h3>Accessing Treatment, Target, and Cofounders<a class="headerlink" href="#accessing-treatment-target-and-cofounders" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-
-<span class="c1"># Let&#39;s generate RCT data</span>
-<span class="n">rct_df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-
-<span class="c1"># Create a CausalData object</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
-    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="c1"># Access treatment</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">treatment</span>
-<span class="c1"># Access outcome</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">target</span>
-<span class="c1"># Access cofounders</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">cofounders</span>
-</pre></div>
-</div>
-<p>If you specified multiple columns for any category (e.g., multiple target columns), the corresponding property will return a DataFrame. If you specified a single column, it will return a Series.</p>
-</section>
-<section id="selective-data-retrieval">
-<h3>Selective Data Retrieval<a class="headerlink" href="#selective-data-retrieval" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">get_df()</span></code> method allows you to retrieve specific columns or column categories:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-
-<span class="c1"># Let&#39;s generate RCT data</span>
-<span class="n">rct_df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-
-<span class="c1"># Create a CausalData object</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-    <span class="n">df</span><span class="o">=</span><span class="n">rct_df</span><span class="p">,</span>
-    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-    <span class="n">cofounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="c1"># Get specific columns</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">])</span>
-
-</pre></div>
-</div>
-</section>
-</section>
-<section id="best-practices">
-<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
-<p>Here are some best practices for working with <code class="docutils literal notranslate"><span class="pre">CausalData</span></code>:</p>
-<ol class="arabic simple">
-<li><p><strong>Clean your data before creating a CausalData object</strong>: Handle missing values and ensure numeric columns are properly formatted.</p></li>
-<li><p><strong>Be explicit about column roles</strong>: Clearly identify which columns are targets, treatments, and cofounders to make your analysis more interpretable.</p></li>
-<li><p><strong>Use meaningful column names</strong>: This makes your code more readable and helps prevent errors.</p></li>
-<li><p><strong>Validate your data</strong>: Even though <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> performs basic validation, it’s good practice to validate your data before analysis.</p></li>
+<li><p>No missing values anywhere in df.</p></li>
+<li><p>All referenced columns must exist.</p></li>
+<li><p>Outcome, treatment, and confounders must be numeric (int/float).</p></li>
+<li><p>None of these columns can be constant (zero variance).</p></li>
+<li><p>Any two used columns having identical values is disallowed (raises ValueError).</p></li>
+<li><p>Duplicate rows across the used columns trigger a warning (not an error).</p></li>
 </ol>
 </section>
-<section id="next-steps">
-<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
-<p>Now that you understand how to use the <code class="docutils literal notranslate"><span class="pre">CausalData</span></code> class, you can:</p>
+<section id="common-snippets">
+<h2>Common snippets<a class="headerlink" href="#common-snippets" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">(</span><span class="n">n_users</span><span class="o">=</span><span class="mi">1_000</span><span class="p">)</span>
+<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
+    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;cnt_trans&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_Android&#39;</span><span class="p">,</span> <span class="s1">&#39;platform_iOS&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Access pieces</span>
+<span class="n">causal_data</span><span class="o">.</span><span class="n">treatment</span>     <span class="c1"># Series</span>
+<span class="n">causal_data</span><span class="o">.</span><span class="n">target</span>        <span class="c1"># Series</span>
+<span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span>   <span class="c1"># list[str]</span>
+
+<span class="c1"># Full data used by CausalData</span>
+<span class="n">default_df</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span>           <span class="c1"># or equivalently</span>
+<span class="n">default_df</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+
+<span class="c1"># DataFrame of only confounders</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">(</span><span class="n">include_target</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_treatment</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span><span class="p">]</span>
+
+<span class="c1"># Select a subset by name(s)</span>
+<span class="n">small</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Explore the <a class="reference internal" href="../api/data.html"><span class="std std-doc">API Reference</span></a> for detailed documentation</p></li>
-<li><p>Check out the <a class="reference internal" href="#../examples/rct_analysis.ipynb"><span class="xref myst">RCT Analysis Example</span></a> for more complex use cases</p></li>
-<li><p>Learn about analysis techniques in the <a class="reference internal" href="../api/analysis.html"><span class="std std-doc">Analysis API</span></a></p></li>
+<li><p>For categorical confounders, encode them numerically (e.g., one-hot) before creating CausalData.</p></li>
+<li><p>If you see the duplicate-rows warning, consider deduplicating if duplicates are unintended.</p></li>
+<li><p><strong>repr</strong> shows the stored shape and declared roles for quick inspection.</p></li>
 </ul>
 </section>
 </section>
@@ -546,20 +515,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causal_inference_fundamentals.html"
+       href="installation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Causal Inference Intuition</p>
+        <p class="prev-next-title">Installation</p>
       </div>
     </a>
     <a class="right-next"
-       href="cate_vs_gate.html"
+       href="eda.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Short answer</p>
+        <p class="prev-next-title">Exploratory Data Analysis (EDA)</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -581,19 +550,11 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-causaldata-object">Creating a CausalData Object</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements-and-validation">Requirements and Validation</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-data">Accessing Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-the-full-dataframe">Accessing the Full DataFrame</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-treatment-target-and-cofounders">Accessing Treatment, Target, and Cofounders</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selective-data-retrieval">Selective Data Retrieval</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-essentials">API essentials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-on-construction">Validation (on construction)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-snippets">Common snippets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tips">Tips</a></li>
 </ul>
   </nav></div>
 

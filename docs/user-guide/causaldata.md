@@ -1,136 +1,87 @@
-# Working with CausalData
+# CausalData at a glance
 
-The `CausalData` class is a core component of CausalKit that helps you organize and manage your data for causal inference analysis. This guide explains how to use the `CausalData` class effectively.
+CausalData is the light-weight input container used across CausalKit. It wraps a pandas DataFrame and records which columns are the outcome (target), the treatment, and the confounders.
 
-## Overview
-
-The `CausalData` class wraps a pandas DataFrame and stores metadata about columns for causal inference analysis. It categorizes your data columns into three main types:
-
-- **Target**: The outcome variable(s) you're measuring
-- **Treatment**: The intervention or treatment variable(s)
-- **Cofounders**: The covariates or confounding variables
-
-This organization makes it easier to perform causal inference analyses and ensures data quality through built-in validation.
-
-## Creating a CausalData Object
-
-You can create a `CausalData` object by passing a pandas DataFrame along with column specifications:
+## Quick start
 
 ```python
 from causalkit.data import generate_rct_data, CausalData
 
-# Let's generate RCT data
-rct_df = generate_rct_data()
+# Example data
+df = generate_rct_data(n_users=5_000)
 
-# Create a CausalData object
+# Declare column roles
 causal_data = CausalData(
-    df=rct_df,
+    df=df,
     treatment='treatment',
     outcome='outcome',
-    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
+    confounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 ```
 
-### Requirements and Validation
+Note: Internally, the stored DataFrame is trimmed to only these columns: [outcome, treatment, confounders].
 
-The `CausalData` class performs several validations when you create an object:
+## API essentials
 
-1. The DataFrame cannot contain NaN values
-2. All specified columns must exist in the DataFrame
-3. Target, treatment, and cofounder columns must contain only numeric values (int or float)
+- Init parameters
+  - df: pandas DataFrame (no NaNs)
+  - treatment: name of the treatment column (numeric)
+  - outcome: name of the outcome/target column (numeric)
+  - confounders: one or more confounder column names (numeric)
 
-If any of these validations fail, an error will be raised with a descriptive message.
+- Properties
+  - target: pandas Series (the outcome)
+  - outcome: alias of target
+  - treatment: pandas Series
+  - confounders: list[str] of confounder column names
 
-## Accessing Data
+- Method
+  - get_df(columns=None, include_treatment=True, include_target=True, include_confounders=True) -> DataFrame
+    Selects columns by name and/or by role. Returns a copy.
 
-Once you've created a `CausalData` object, you can access the data in several ways:
+## Validation (on construction)
 
-### Accessing the Full DataFrame
+1) No missing values anywhere in df.
+2) All referenced columns must exist.
+3) Outcome, treatment, and confounders must be numeric (int/float).
+4) None of these columns can be constant (zero variance).
+5) Any two used columns having identical values is disallowed (raises ValueError).
+6) Duplicate rows across the used columns trigger a warning (not an error).
+
+## Common snippets
 
 ```python
 from causalkit.data import generate_rct_data, CausalData
 
-# Let's generate RCT data
-rct_df = generate_rct_data()
-
-# Create a CausalData object
+df = generate_rct_data(n_users=1_000)
 causal_data = CausalData(
-    df=rct_df,
+    df=df,
     treatment='treatment',
     outcome='outcome',
-    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
+    confounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
 )
 
-# Get the full DataFrame
-full_df = causal_data.df
-# Another way to get the full DataFrame
-full_df = causal_data.get_df()
+# Access pieces
+causal_data.treatment     # Series
+causal_data.target        # Series
+causal_data.confounders   # list[str]
+
+# Full data used by CausalData
+default_df = causal_data.df           # or equivalently
+default_df = causal_data.get_df()
+
+# DataFrame of only confounders
+X = causal_data.get_df(include_target=False, include_treatment=False)
+# or
+X = causal_data.df[causal_data.confounders]
+
+# Select a subset by name(s)
+small = causal_data.get_df(columns=['age'])
 ```
 
-### Accessing Treatment, Target, and Cofounders
+## Tips
 
-```python
-from causalkit.data import generate_rct_data, CausalData
+- For categorical confounders, encode them numerically (e.g., one-hot) before creating CausalData.
+- If you see the duplicate-rows warning, consider deduplicating if duplicates are unintended.
+- __repr__ shows the stored shape and declared roles for quick inspection.
 
-# Let's generate RCT data
-rct_df = generate_rct_data()
-
-# Create a CausalData object
-causal_data = CausalData(
-    df=rct_df,
-    treatment='treatment',
-    outcome='outcome',
-    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
-)
-# Access treatment
-causal_data.treatment
-# Access outcome
-causal_data.target
-# Access cofounders
-causal_data.cofounders
-```
-
-If you specified multiple columns for any category (e.g., multiple target columns), the corresponding property will return a DataFrame. If you specified a single column, it will return a Series.
-
-### Selective Data Retrieval
-
-The `get_df()` method allows you to retrieve specific columns or column categories:
-
-```python
-from causalkit.data import generate_rct_data, CausalData
-
-# Let's generate RCT data
-rct_df = generate_rct_data()
-
-# Create a CausalData object
-causal_data = CausalData(
-    df=rct_df,
-    treatment='treatment',
-    outcome='outcome',
-    cofounders=['age', 'cnt_trans', 'platform_Android', 'platform_iOS', 'invited_friend']
-)
-# Get specific columns
-causal_data.get_df(columns=['age'])
-
-```
-
-
-## Best Practices
-
-Here are some best practices for working with `CausalData`:
-
-1. **Clean your data before creating a CausalData object**: Handle missing values and ensure numeric columns are properly formatted.
-
-2. **Be explicit about column roles**: Clearly identify which columns are targets, treatments, and cofounders to make your analysis more interpretable.
-
-3. **Use meaningful column names**: This makes your code more readable and helps prevent errors.
-
-4. **Validate your data**: Even though `CausalData` performs basic validation, it's good practice to validate your data before analysis.
-
-## Next Steps
-
-Now that you understand how to use the `CausalData` class, you can:
-
-- Explore the [API Reference](../api/data.md) for detailed documentation
-- Check out the [RCT Analysis Example](../examples/rct_analysis.ipynb) for more complex use cases
-- Learn about analysis techniques in the [Analysis API](../api/analysis.md)
