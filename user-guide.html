@@ -51,7 +51,7 @@
     <link rel="icon" href="_static/logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Causal Inference Intuition" href="user-guide/causal_inference_fundamentals.html" />
+    <link rel="next" title="Introduction to Causal Inference" href="user-guide/causal_inference_fundamentals.html" />
     <link rel="prev" title="CausalKit" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -334,11 +334,13 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">Working with CausalData</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html">Short answer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">CausalData at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html">Cate vs Gate</a></li>
 
 
 
@@ -402,13 +404,42 @@ document.write(`
 <p>This guide will help you get started with Causal Inference and CausalKit and understand its core concepts.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#formalization">Formalization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#estimation">Estimation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">Working with CausalData</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html">Short answer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html">Introduction to Causal Inference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#why-causality">Why causality?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#the-core-idea">The core idea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#notation">Notation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#what-we-aim-to-estimate-estimands">What we aim to estimate (estimands)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causal_inference_fundamentals.html#when-are-these-estimands-credible">When are these estimands credible?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/installation.html#install-from-github-recommended">Install from GitHub (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/installation.html#optional-editable-install-for-contributors">Optional: editable install (for contributors)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/installation.html#optional-conda-environment-after-cloning-the-repo">Optional: conda environment after cloning the repo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/causaldata.html">CausalData at a glance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#quick-start">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#api-essentials">API essentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#validation-on-construction">Validation (on construction)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#common-snippets">Common snippets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/causaldata.html#tips">Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/inference.html">Inference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/inference.html#a-very-short-ate-example">A very short ATE example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html">Cate vs Gate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html#what-it-is-formally">What it is (formally)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/cate_vs_gate.html#subgroup-ate-just-ate-on-a-subset">1. <strong>Subgroup ATE (“just ATE on a subset”)</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/cate_vs_gate.html#plug-in-from-cates-causal-ml-route">2. <strong>Plug-in from CATEs (causal ML route)</strong></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html#gotchas">Gotchas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-guide/cate_vs_gate.html#intuition">Intuition</a></li>
 </ul>
@@ -439,7 +470,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Causal Inference Intuition</p>
+        <p class="prev-next-title">Introduction to Causal Inference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

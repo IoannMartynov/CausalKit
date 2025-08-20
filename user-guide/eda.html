@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CausalKit Scenarios &#8212; CausalKit  documentation</title>
+    <title>Exploratory Data Analysis (EDA) &#8212; CausalKit  documentation</title>
   
   
   
@@ -45,10 +45,12 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/scenarios';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/eda';</script>
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inference" href="inference.html" />
+    <link rel="prev" title="CausalData at a glance" href="causaldata.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -146,7 +148,7 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user-guide.html">
     User Guide
   </a>
@@ -237,10 +239,6 @@ document.write(`
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -251,9 +249,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -268,7 +264,7 @@ document.write(`
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../user-guide.html">
     User Guide
   </a>
@@ -330,6 +326,28 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causaldata.html">CausalData at a glance</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cate_vs_gate.html">Cate vs Gate</a></li>
+
+
+
+
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -362,7 +380,10 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">CausalKit Scenarios</li>
+    
+    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Exploratory...</li>
   </ul>
 </nav>
 </div>
@@ -379,68 +400,51 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="causalkit-scenarios">
-<h1>CausalKit Scenarios<a class="headerlink" href="#causalkit-scenarios" title="Link to this heading">#</a></h1>
-<section id="rct-with-binary-treatment">
-<h2>RCT with binary treatment<a class="headerlink" href="#rct-with-binary-treatment" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
-<section id="rct-with-many-treatments">
-<h2>RCT with many treatments<a class="headerlink" href="#rct-with-many-treatments" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
-<section id="rct-with-continuous-treatment">
-<h2>RCT with continuous treatment<a class="headerlink" href="#rct-with-continuous-treatment" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
-<section id="observational-data-with-binary-treatment">
-<h2>Observational data with binary treatment<a class="headerlink" href="#observational-data-with-binary-treatment" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
-<section id="observational-data-with-many-treatments">
-<h2>Observational data with many treatments<a class="headerlink" href="#observational-data-with-many-treatments" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
-<section id="observational-data-with-continuous-treatment">
-<h2>Observational data with continuous treatment<a class="headerlink" href="#observational-data-with-continuous-treatment" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Gather data</p></li>
-<li><p>make causaldata object</p></li>
-<li><p>run eda</p></li>
-<li><p>run inference</p></li>
-<li><p>do gate analysis</p></li>
-</ol>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="exploratory-data-analysis-eda">
+<h1>Exploratory Data Analysis (EDA)<a class="headerlink" href="#exploratory-data-analysis-eda" title="Link to this heading">#</a></h1>
+<p>The eda module provides quick, practical diagnostics to check whether your binary-treatment causal problem is suitable for effect estimation. It focuses on interpretability and helps you answer questions like: Do treatment and control groups overlap? Are confounders balanced? Which features drive treatment assignment and the outcome?</p>
+<p>What you can do</p>
+<ul class="simple">
+<li><p>Inspect outcome by treatment: summary statistics and simple plots</p></li>
+<li><p>Estimate propensity scores with cross‑validation and check diagnostics (ROC AUC, positivity/overlap, score overlap plot)</p></li>
+<li><p>Assess covariate balance via means and standardized mean differences (SMD)</p></li>
+<li><p>Fit a simple outcome model (confounders only) and inspect predictive accuracy and feature attributions</p></li>
+</ul>
+<p>Typical workflow</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>  <span class="c1"># optional import if you need to construct CausalData</span>
+
+<span class="c1"># Prepare your dataset (must be CausalData or compatible with df/treatment/outcome/confounders)</span>
+<span class="n">causal_data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># your CausalData object</span>
+
+<span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
+
+<span class="c1"># 1) Quick dataset checks</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>            <span class="c1"># {&#39;n_rows&#39;: ..., &#39;n_columns&#39;: ...}</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>         <span class="c1"># outcome summary by treatment</span>
+<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>    <span class="c1"># histogram + boxplot by treatment</span>
+
+<span class="c1"># 2) Propensity and overlap</span>
+<span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>              <span class="c1"># treatment predictability</span>
+<span class="n">positivity</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
+<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>                 <span class="c1"># overlap of propensity scores</span>
+<span class="n">shap_t</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>              <span class="c1"># features driving treatment</span>
+
+<span class="c1"># 3) Balance</span>
+<span class="n">balance</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>   <span class="c1"># means, abs diff, SMD</span>
+
+<span class="c1"># 4) Outcome model (confounders only)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">scores</span>                <span class="c1"># RMSE/MAE</span>
+<span class="n">shap_y</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">shap</span>                   <span class="c1"># features driving outcome</span>
+</pre></div>
+</div>
+<p>Notes</p>
+<ul class="simple">
+<li><p>By default, CatBoost models are used and categorical features are handled natively; you can provide your own models if needed.</p></li>
+<li><p>See docs/examples/basic_example.ipynb for an end‑to‑end demonstration that uses these EDA tools before inference.</p></li>
+</ul>
 </section>
 
 
@@ -453,34 +457,30 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="causaldata.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CausalData at a glance</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="inference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Inference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rct-with-binary-treatment">RCT with binary treatment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rct-with-many-treatments">RCT with many treatments</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rct-with-continuous-treatment">RCT with continuous treatment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observational-data-with-binary-treatment">Observational data with binary treatment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observational-data-with-many-treatments">Observational data with many treatments</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observational-data-with-continuous-treatment">Observational data with continuous treatment</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; CausalKit  documentation</title>
+    <title>Refutation and robustness (causalkit.refutation) &#8212; CausalKit  documentation</title>
   
   
   
@@ -45,12 +45,12 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/refutation';</script>
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CausalData at a glance" href="causaldata.html" />
-    <link rel="prev" title="Introduction to Causal Inference" href="causal_inference_fundamentals.html" />
+    <link rel="next" title="Cate vs Gate" href="cate_vs_gate.html" />
+    <link rel="prev" title="Inference" href="inference.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -239,10 +239,6 @@ document.write(`
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -337,11 +333,11 @@ document.write(`
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="causaldata.html">CausalData at a glance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eda.html">Exploratory Data Analysis (EDA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Refutation and robustness (causalkit.refutation)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cate_vs_gate.html">Cate vs Gate</a></li>
 
 
@@ -387,7 +383,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Installation</li>
+    <li class="breadcrumb-item active" aria-current="page">Refutation...</li>
   </ul>
 </nav>
 </div>
@@ -404,52 +400,35 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<p>This guide shows the quickest way to install CausalKit directly from GitHub.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="refutation-and-robustness-causalkit-refutation">
+<h1>Refutation and robustness (causalkit.refutation)<a class="headerlink" href="#refutation-and-robustness-causalkit-refutation" title="Link to this heading">#</a></h1>
+<p>The causalkit.refutation module provides quick checks to assess whether your estimated causal effect is plausible and robust. These utilities take your inference function (e.g., dml_ate) and a CausalData object, perturb the data (e.g., randomize outcome or treatment, subsample, etc.), re-run the estimator, and report the new estimate.</p>
+<p>What it includes</p>
 <ul class="simple">
-<li><p>Python 3.7+ (per project configuration)</p></li>
-<li><p>A clean virtual environment is recommended (venv or conda)</p></li>
+<li><p>Placebo checks: refute_placebo_outcome, refute_placebo_treatment (expect near-zero effect and large p-value if the design is valid)</p></li>
+<li><p>Subset robustness: refute_subset (re-estimate on a random fraction of data)</p></li>
+<li><p>Orthogonality diagnostics: refute_irm_orthogonality (EIF-based diagnostic suite)</p></li>
+<li><p>Sensitivity analysis: sensitivity_analysis, sensitivity_analysis_set (robustness to unobserved confounding)</p></li>
 </ul>
-</section>
-<section id="install-from-github-recommended">
-<h2>Install from GitHub (recommended)<a class="headerlink" href="#install-from-github-recommended" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
-pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;git+https://github.com/ioannmartynov/causalkit.git&quot;</span>
+<p>Return values</p>
+<ul class="simple">
+<li><p>Placebo/subset helpers return a small dict: {‘theta’: float, ‘p_value’: float}</p></li>
+<li><p>Orthogonality returns a diagnostics dict (keys include ‘theta’, ‘oos_moment_test’, ‘orthogonality_derivatives’, ‘influence_diagnostics’, ‘trimming_info’, ‘diagnostic_conditions’, ‘overall_assessment’)</p></li>
+<li><p>Sensitivity analysis returns a formatted text report</p></li>
+</ul>
+<p>Minimal example
+Assume you already have causal_data (see Inference guide for building it) and want to run a placebo outcome test using DoubleML ATE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">refute_placebo_outcome</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+
+<span class="c1"># Replace outcome with random noise and re-estimate</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="c1"># Example output (values will vary):</span>
+<span class="c1"># {&#39;theta&#39;: -0.0123, &#39;p_value&#39;: 0.9591}</span>
 </pre></div>
 </div>
-<section id="verify-the-installation">
-<h3>Verify the installation<a class="headerlink" href="#verify-the-installation" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import causalkit; print(causalkit.__version__)&quot;</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="optional-editable-install-for-contributors">
-<h2>Optional: editable install (for contributors)<a class="headerlink" href="#optional-editable-install-for-contributors" title="Link to this heading">#</a></h2>
-<p>If you plan to work with the source code, clone the repo and install in editable mode:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ioannmartynov/CausalKit.git
-<span class="nb">cd</span><span class="w"> </span>CausalKit
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="c1"># or include development tools</span>
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
-</pre></div>
-</div>
-</section>
-<section id="optional-conda-environment-after-cloning-the-repo">
-<h2>Optional: conda environment after cloning the repo<a class="headerlink" href="#optional-conda-environment-after-cloning-the-repo" title="Link to this heading">#</a></h2>
-<p>You can also create a conda env using the provided file (useful for local development):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
-conda<span class="w"> </span>activate<span class="w"> </span>causalkit
-</pre></div>
-</div>
-<p>You’re all set! Import the library to get started:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">causalkit</span>
-</pre></div>
-</div>
-</section>
+<p>Interpretation: Because the true outcome was replaced by noise, a well-specified design should yield theta close to 0 and a large p-value, indicating no spurious effect.</p>
 </section>
 
 
@@ -463,20 +442,20 @@ conda<span class="w"> </span>activate<span class="w"> </span>causalkit
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causal_inference_fundamentals.html"
+       href="inference.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Introduction to Causal Inference</p>
+        <p class="prev-next-title">Inference</p>
       </div>
     </a>
     <a class="right-next"
-       href="causaldata.html"
+       href="cate_vs_gate.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">CausalData at a glance</p>
+        <p class="prev-next-title">Cate vs Gate</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -486,29 +465,6 @@ conda<span class="w"> </span>activate<span class="w"> </span>causalkit
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-from-github-recommended">Install from GitHub (recommended)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-the-installation">Verify the installation</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-editable-install-for-contributors">Optional: editable install (for contributors)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-conda-environment-after-cloning-the-repo">Optional: conda environment after cloning the repo</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

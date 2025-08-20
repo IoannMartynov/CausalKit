@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Short answer &#8212; CausalKit  documentation</title>
+    <title>Cate vs Gate &#8212; CausalKit  documentation</title>
   
   
   
@@ -52,7 +52,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Examples" href="../examples.html" />
-    <link rel="prev" title="Working with CausalData" href="causaldata.html" />
+    <link rel="prev" title="Refutation and robustness (causalkit.refutation)" href="refutation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -338,11 +338,13 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="causaldata.html">Working with CausalData</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Short answer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causaldata.html">CausalData at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness (causalkit.refutation)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Cate vs Gate</a></li>
 
 
 
@@ -387,7 +389,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Short answer</li>
+    <li class="breadcrumb-item active" aria-current="page">Cate vs Gate</li>
   </ul>
 </nav>
 </div>
@@ -404,10 +406,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>Here’s your explanation rewritten cleanly in Markdown with proper LaTeX formatting:</p>
-<hr class="docutils" />
-<section id="short-answer">
-<h1>Short answer<a class="headerlink" href="#short-answer" title="Link to this heading">#</a></h1>
+  <section id="cate-vs-gate">
+<h1>Cate vs Gate<a class="headerlink" href="#cate-vs-gate" title="Link to this heading">#</a></h1>
 <p><strong>GATE = Group Average Treatment Effect.</strong>
 It’s the <strong>average causal effect within a subgroup</strong> (defined by <em>pre-treatment</em> covariates).
 Yes—you can think of it as “ATE on a part of the data,” <strong>provided</strong> the group is defined by baseline variables and estimated correctly.</p>
@@ -499,12 +499,12 @@ For plug-in CATE averages: use bootstrap or forest-provided variance (with hones
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causaldata.html"
+       href="refutation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Working with CausalData</p>
+        <p class="prev-next-title">Refutation and robustness (causalkit.refutation)</p>
       </div>
     </a>
     <a class="right-next"
@@ -534,7 +534,7 @@ For plug-in CATE averages: use bootstrap or forest-provided variance (with hones
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Short answer</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Cate vs Gate</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-is-formally">What it is (formally)</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subgroup-ate-just-ate-on-a-subset">1. <strong>Subgroup ATE (“just ATE on a subset”)</strong></a></li>
