@@ -1,90 +1,69 @@
-# Causal Inference Intuition
-As humans, we intuitively understand cause and effect relationships. 
-Without this understanding, we would not have been able to survive 
-and achieve our current level of development.
+# Introduction to Causal Inference
 
-How do we usually think about whether a given impact is a cause?
-* It's simple, in our heads we check whether the impact was there 
-before we saw the effect
-* We also check whether the impact has a large force capable of 
-influencing the effect. In other words, are there other factors 
-that have had a stronger effect than the impact?
+## Why causality?
 
-Now you have a simple model of casual inference in your head.
+We constantly reason about “what caused what.” If an ad runs and sales rise, was it the ad—or something else? Causal inference turns this intuition into a careful, testable framework so we can answer policy and product questions with data.
 
-# Formalization
+## The core idea
 
-In both industry and academia, the use of universal notation 
-for causal inference serves as a critical tool for enhancing 
-communication among researchers and practitioners.
+For any unit (a person, store, app session, etc.) we imagine two potential outcomes:
 
-**Units** are typically the people, companies or households on 
-which we are analyzing the impact.
+* $Y(1)$: what would happen **with** the treatment
+* $Y(0)$: what would happen **without** the treatment
 
-$$ i = 1, \ldots, n $$
+We only ever observe one of them. This “missing counterfactual” is the fundamental challenge of causal inference. Everything we do is about approximating the missing outcome in a principled way.
 
-**Treatment** is an effect, in data we usually see it as 1 if 
-it was there and 0 if it was not there. (This generalizes to 
-multi-valued or continuous treatments.)
+---
 
-$$ T_i \in \{0, 1\} $$
+## Notation
 
-**Outcome** is the variable by which we measure the effect. For example, 
-temperature, if we are testing a drug, or the probability of buying a 
-product if we are changing the landing page
+* **Units:** $i=1,\dots,n$
+* **Treatment:** $T_i\in\{0,1\}$ (can be multi-valued or continuous)
+* **Outcome:** $Y_i$ (what we observe)
+* **Covariates / confounders:** $X_i$ (pre-treatment features that affect both treatment and outcome)
 
-$$ Y_i $$
+Example dataset:
 
-**Covariates or cofounders**. These are variables that influence the 
-propensity to receive a treatment and simultaneously predict the target, 
-thereby causing bias in the estimate.
+| Unit | Treatment $T$ | Outcome $Y$ | Confounder\_1 | Confounder\_2 |
+| ---- | ------------- | ----------- | ------------- | ------------- |
+| 1    | 1             | 100         | 1             | 13            |
+| 2    | 0             | 90          | 0             | 14            |
+| 3    | 1             | 110         | 1             | 51            |
+| 4    | 1             | 97          | 1             | 63            |
+| 5    | 0             | 80          | 0             | 34            |
+| 6    | 0             | 85          | 0             | 53            |
 
-$$ X_i $$
+---
 
-It could look like this in a data
+## What we aim to estimate (estimands)
 
-| Client | Treatment | Outcome | Cofounder_1 | Cofounder_2 |
-|--------|-----------|---------|-------------|-------------|
-| 1      | 1         | 100     | 1           | 13          |
-| 2      | 0         | 90      | 0           | 14          |
-| 3      | 1         | 110     | 1           | 51          |
-| 4      | 1         | 97      | 1           | 63          |
-| 5      | 0         | 80      | 0           | 34          |
-| 6      | 0         | 85      | 0           | 53          |
+### ITE / CATE: individual or subgroup effect
 
-# Estimation
+* **Individual Treatment Effect (ITE):** $\text{ITE}_i = Y_i(1)-Y_i(0)$ (unobservable for a single unit)
+* **Conditional Average Treatment Effect (CATE):**
+  $\tau(x)=\mathbb{E}[Y(1)-Y(0)\mid X=x]$
+  Use when you need personalization, uplift targeting, or to study heterogeneity.
 
-To understand how to evaluate effects, you need to understand the 
-estimands.
+### ATT: effect on the treated
 
-## ITE (and CATE)
+$\text{ATT}=\mathbb{E}[Y(1)-Y(0)\mid T=1]$
+Use to answer “Did it work **for those who actually received it**?”—e.g., after a selective rollout.
 
-Question: What is the effect for an individual (ITE) or for people 
-like this (CATE)?
+### ATE: overall average effect
 
-$$ \text{ITE}_i \;=\; Y_i(1) - Y_i(0) $$
+$\text{ATE}=\mathbb{E}[Y(1)-Y(0)]$
+Use for headline impact or policy choices that affect the whole eligible population.
 
-ITE is fundamentally unobservable for any single unit; we estimate 
-its conditional average:)
+---
 
-$$ \tau(x) \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid X=x\,\right] \quad \text{(CATE)} $$
+## When are these estimands credible?
 
-Use when: personalization, uplift targeting, heterogeneous effects.
+In observational data, we typically rely on two key identification conditions:
 
-## ATT (Average Treatment effect on the Treated)
+1. **Unconfoundedness (selection on observables):** given $X$, treatment is as good as random.
+   Formally, $(Y(0),Y(1)) \perp T \mid X$.
+2. **Overlap (positivity):** each unit had a nonzero chance to receive either treatment: $0<\Pr(T=1\mid X)<1$.
 
-Question: What was the effect on those who actually received treatment?
+These assumptions won’t be true by magic; we design models and diagnostics to make them as plausible as possible.
 
-$$ \text{ATT} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid T=1\,\right] $$
-
-Use when: evaluating past rollouts, “did it work for the treated?”, program 
-evaluation where treatment assignment was selective.
-
-## ATE (Average Treatment Effect)
-
-Question: What is the overall average effect in the population?
-
-$$ \text{ATE} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\,\right] $$
-
-Use when: policy decisions affecting the whole eligible population; 
-headline effect sizes.
+---
