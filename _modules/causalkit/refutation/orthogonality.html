@@ -1,0 +1,1061 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>causalkit.refutation.orthogonality &#8212; CausalKit  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/refutation/orthogonality';</script>
+    <link rel="icon" href="../../../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">CausalKit</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">causalkit.re...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for causalkit.refutation.orthogonality</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">AIPW orthogonality diagnostics for DoubleML estimators.</span>
+
+<span class="sd">This module implements comprehensive orthogonality diagnostics for AIPW/IRM-based</span>
+<span class="sd">estimators like dml_ate and dml_att to validate the key assumptions required </span>
+<span class="sd">for valid causal inference. Based on the efficient influence function (EIF) framework.</span>
+
+<span class="sd">Key diagnostics implemented:</span>
+<span class="sd">- Out-of-sample moment check (non-tautological)</span>
+<span class="sd">- Orthogonality (Gateaux derivative) tests</span>
+<span class="sd">- Influence diagnostics</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+
+
+<div class="viewcode-block" id="aipw_score_ate">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.aipw_score_ate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aipw_score_ate</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Efficient influence function (EIF) for ATE.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">m1</span> <span class="o">-</span> <span class="n">m0</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">/</span> <span class="n">g</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g</span><span class="p">)</span> <span class="o">-</span> <span class="n">theta</span></div>
+
+
+
+<div class="viewcode-block" id="aipw_score_att">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.aipw_score_att">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aipw_score_att</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Efficient influence function (EIF) for ATT, normalized by p1 = P(D=1).</span>
+<span class="sd">    m1 enters via theta only; derivative wrt m1 is zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">g</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">p1</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="extract_nuisances">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.extract_nuisances">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_nuisances</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="n">test_indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Robustly extract nuisance function predictions from DoubleML model.</span>
+<span class="sd">    </span>
+<span class="sd">    Handles different DoubleML prediction key layouts and provides clear error messages.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dml_model : DoubleML model</span>
+<span class="sd">        Fitted DoubleML model with predictions</span>
+<span class="sd">    test_indices : np.ndarray, optional</span>
+<span class="sd">        If provided, extract predictions only for these indices</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[np.ndarray, np.ndarray, np.ndarray]</span>
+<span class="sd">        (g, m0, m1) where:</span>
+<span class="sd">        - g: propensity scores P(D=1|X) </span>
+<span class="sd">        - m0: outcome predictions E[Y|X,D=0]</span>
+<span class="sd">        - m1: outcome predictions E[Y|X,D=1]</span>
+<span class="sd">        </span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        If required prediction keys cannot be found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">dml_model</span><span class="o">.</span><span class="n">predictions</span>
+    <span class="n">available_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">preds</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reduce_to_1d</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">preds</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing predictions[&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;]; available: </span><span class="si">{</span><span class="n">available_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="c1"># Squeeze singleton dimensions first</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;predictions[&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;] is scalar; expected at least 1D, got shape </span><span class="si">{</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arr</span>
+        <span class="c1"># Average across all non-first axes to aggregate repetitions/aux dims</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+
+    <span class="c1"># Strict: require proper keys</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">_reduce_to_1d</span><span class="p">(</span><span class="s1">&#39;ml_m&#39;</span><span class="p">)</span>  <span class="c1"># P(D=1|X)</span>
+    <span class="n">m0</span> <span class="o">=</span> <span class="n">_reduce_to_1d</span><span class="p">(</span><span class="s1">&#39;ml_g0&#39;</span><span class="p">)</span>  <span class="c1"># E[Y|X,D=0]</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">_reduce_to_1d</span><span class="p">(</span><span class="s1">&#39;ml_g1&#39;</span><span class="p">)</span>  <span class="c1"># E[Y|X,D=1]</span>
+
+    <span class="c1"># Ensure arrays are 1D and extract test indices if specified</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">m0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="n">test_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">test_indices</span><span class="p">]</span>
+        <span class="n">m0</span> <span class="o">=</span> <span class="n">m0</span><span class="p">[</span><span class="n">test_indices</span><span class="p">]</span>  
+        <span class="n">m1</span> <span class="o">=</span> <span class="n">m1</span><span class="p">[</span><span class="n">test_indices</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">m1</span></div>
+
+
+
+<div class="viewcode-block" id="aipw_score">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.aipw_score">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aipw_score</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute AIPW (Augmented Inverse Propensity Weighting) scores.</span>
+<span class="sd">    </span>
+<span class="sd">    The AIPW score is the efficient influence function (EIF) for the ATE:</span>
+<span class="sd">    ψ_i(θ,η) = [m1(X_i) - m0(X_i)] + D_i(Y_i - m1(X_i))/g(X_i) - (1-D_i)(Y_i - m0(X_i))/(1-g(X_i)) - θ</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : np.ndarray</span>
+<span class="sd">        Observed outcomes</span>
+<span class="sd">    d : np.ndarray  </span>
+<span class="sd">        Binary treatment indicator (0/1)</span>
+<span class="sd">    m0 : np.ndarray</span>
+<span class="sd">        Predicted outcomes under control E[Y|X,D=0]</span>
+<span class="sd">    m1 : np.ndarray</span>
+<span class="sd">        Predicted outcomes under treatment E[Y|X,D=1] </span>
+<span class="sd">    g : np.ndarray</span>
+<span class="sd">        Propensity scores P(D=1|X)</span>
+<span class="sd">    theta_hat : float</span>
+<span class="sd">        Estimated treatment effect</span>
+<span class="sd">    eps : float, default 0.01</span>
+<span class="sd">        Clipping bound for propensity scores to avoid extreme weights</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        AIPW scores for each observation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Clip propensity scores to avoid division by zero and extreme weights</span>
+    <span class="n">g_clipped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">m1</span> <span class="o">-</span> <span class="n">m0</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">/</span> <span class="n">g_clipped</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g_clipped</span><span class="p">)</span> <span class="o">-</span> <span class="n">theta_hat</span></div>
+
+
+
+<div class="viewcode-block" id="oos_moment_check_with_fold_nuisances">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.oos_moment_check_with_fold_nuisances">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">oos_moment_check_with_fold_nuisances</span><span class="p">(</span>
+    <span class="n">fold_thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">fold_nuisances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">score_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Out-of-sample moment check using fold-specific nuisances to avoid tautological results.</span>
+<span class="sd">    </span>
+<span class="sd">    For each fold k, evaluates the AIPW score using θ fitted on other folds and </span>
+<span class="sd">    nuisance predictions from the fold-specific model, then tests if the combined </span>
+<span class="sd">    moment condition holds.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fold_thetas : List[float]</span>
+<span class="sd">        Treatment effects estimated excluding each fold</span>
+<span class="sd">    fold_indices : List[np.ndarray] </span>
+<span class="sd">        Indices for each fold</span>
+<span class="sd">    fold_nuisances : List[Tuple[np.ndarray, np.ndarray, np.ndarray]]</span>
+<span class="sd">        Fold-specific nuisance predictions (g, m0, m1) for each fold</span>
+<span class="sd">    y, d : np.ndarray</span>
+<span class="sd">        Observed outcomes and treatments</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[pd.DataFrame, float]</span>
+<span class="sd">        Fold-wise results and combined t-statistic</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">nuisances</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">)):</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">fold_thetas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">g_fold</span><span class="p">,</span> <span class="n">m0_fold</span><span class="p">,</span> <span class="n">m1_fold</span> <span class="o">=</span> <span class="n">nuisances</span>
+        
+        <span class="c1"># Compute scores using fold-specific theta and nuisances</span>
+        <span class="k">if</span> <span class="n">score_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">aipw_score_ate</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m0_fold</span><span class="p">,</span> <span class="n">m1_fold</span><span class="p">,</span> <span class="n">g_fold</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m0_fold</span><span class="p">,</span> <span class="n">m1_fold</span><span class="p">,</span> <span class="n">g_fold</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;fold&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="s2">&quot;psi_mean&quot;</span><span class="p">:</span> <span class="n">psi</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">&quot;psi_var&quot;</span><span class="p">:</span> <span class="n">psi</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)})</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_mean&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_var&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">tstat</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span> <span class="k">if</span> <span class="n">den</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tstat</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="oos_moment_check">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.oos_moment_check">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">oos_moment_check</span><span class="p">(</span>
+    <span class="n">fold_thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">score_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Out-of-sample moment check to avoid tautological results (legacy version).</span>
+<span class="sd">    </span>
+<span class="sd">    For each fold k, evaluates the AIPW score using θ fitted on other folds,</span>
+<span class="sd">    then tests if the combined moment condition holds.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fold_thetas : List[float]</span>
+<span class="sd">        Treatment effects estimated excluding each fold</span>
+<span class="sd">    fold_indices : List[np.ndarray] </span>
+<span class="sd">        Indices for each fold</span>
+<span class="sd">    y, d, m0, m1, g : np.ndarray</span>
+<span class="sd">        Data arrays (outcomes, treatment, predictions)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[pd.DataFrame, float]</span>
+<span class="sd">        Fold-wise results and combined t-statistic</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fold_indices</span><span class="p">):</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">fold_thetas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">score_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">aipw_score_ate</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m0</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m1</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">th</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m0</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">m1</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">th</span><span class="p">)</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;fold&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="s2">&quot;psi_mean&quot;</span><span class="p">:</span> <span class="n">psi</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s2">&quot;psi_var&quot;</span><span class="p">:</span> <span class="n">psi</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)})</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_mean&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_var&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">tstat</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span> <span class="k">if</span> <span class="n">den</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tstat</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="orthogonality_derivatives">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.orthogonality_derivatives">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">orthogonality_derivatives</span><span class="p">(</span><span class="n">X_basis</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                            <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute orthogonality (Gateaux derivative) tests for nuisance functions.</span>
+<span class="sd">    </span>
+<span class="sd">    Tests directional derivatives of the AIPW signal with respect to nuisances.</span>
+<span class="sd">    For true nuisances, these derivatives should be ≈ 0 for rich sets of directions.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X_basis : np.ndarray, shape (n, B)</span>
+<span class="sd">        Matrix of direction functions evaluated at X (include column of 1s for calibration)</span>
+<span class="sd">    y, d, m0, m1, g : np.ndarray</span>
+<span class="sd">        Data arrays</span>
+<span class="sd">    eps : float, default 0.01</span>
+<span class="sd">        Clipping bound for propensity scores to avoid extreme weights</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Derivative estimates, standard errors, and t-statistics for each basis function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="n">X_basis</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="c1"># Clip propensity scores to avoid division by zero and extreme weights</span>
+    <span class="n">g_clipped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    
+    <span class="c1"># m1 direction: ∂_{m1} φ̄[h1] = (1/n)∑ h1(Xi)(1 - Di/gi)</span>
+    <span class="n">dm1_terms</span> <span class="o">=</span> <span class="n">X_basis</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span> <span class="o">/</span> <span class="n">g_clipped</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">dm1</span> <span class="o">=</span> <span class="n">dm1_terms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dm1_se</span> <span class="o">=</span> <span class="n">dm1_terms</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="c1"># m0 direction: ∂_{m0} φ̄[h0] = (1/n)∑ h0(Xi)((1-Di)/(1-gi) - 1)</span>
+    <span class="n">dm0_terms</span> <span class="o">=</span> <span class="n">X_basis</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g_clipped</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">dm0</span> <span class="o">=</span> <span class="n">dm0_terms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  
+    <span class="n">dm0_se</span> <span class="o">=</span> <span class="n">dm0_terms</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="c1"># g direction: ∂_g φ̄[s] = -(1/n)∑ s(Xi)[Di(Yi-m1i)/gi² + (1-Di)(Yi-m0i)/(1-gi)²]</span>
+    <span class="n">g_summand</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">/</span> <span class="n">g_clipped</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">m0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g_clipped</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">dg_terms</span> <span class="o">=</span> <span class="o">-</span><span class="n">X_basis</span> <span class="o">*</span> <span class="n">g_summand</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">dg</span> <span class="o">=</span> <span class="n">dg_terms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dg_se</span> <span class="o">=</span> <span class="n">dg_terms</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;basis&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">B</span><span class="p">),</span>
+        <span class="s2">&quot;d_m1&quot;</span><span class="p">:</span> <span class="n">dm1</span><span class="p">,</span> <span class="s2">&quot;se_m1&quot;</span><span class="p">:</span> <span class="n">dm1_se</span><span class="p">,</span> <span class="s2">&quot;t_m1&quot;</span><span class="p">:</span> <span class="n">dm1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dm1_se</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">),</span>
+        <span class="s2">&quot;d_m0&quot;</span><span class="p">:</span> <span class="n">dm0</span><span class="p">,</span> <span class="s2">&quot;se_m0&quot;</span><span class="p">:</span> <span class="n">dm0_se</span><span class="p">,</span> <span class="s2">&quot;t_m0&quot;</span><span class="p">:</span> <span class="n">dm0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dm0_se</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">),</span>
+        <span class="s2">&quot;d_g&quot;</span><span class="p">:</span> <span class="n">dg</span><span class="p">,</span> <span class="s2">&quot;se_g&quot;</span><span class="p">:</span> <span class="n">dg_se</span><span class="p">,</span> <span class="s2">&quot;t_g&quot;</span><span class="p">:</span> <span class="n">dg</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dg_se</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">),</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<div class="viewcode-block" id="influence_summary">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.influence_summary">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">influence_summary</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">m1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                     <span class="n">g</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ATE&quot;</span><span class="p">,</span> <span class="n">clip_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute influence diagnostics showing where uncertainty comes from.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y, d, m0, m1, g : np.ndarray</span>
+<span class="sd">        Data arrays</span>
+<span class="sd">    theta_hat : float</span>
+<span class="sd">        Estimated treatment effect</span>
+<span class="sd">    k : int, default 10</span>
+<span class="sd">        Number of top influential observations to return</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, Any]</span>
+<span class="sd">        Influence diagnostics including SE, heavy-tail metrics, and top-k cases</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">target_u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s2">&quot;ATE&quot;</span><span class="p">:</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">aipw_score_ate</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s2">&quot;ATTE&quot;</span> <span class="ow">or</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s2">&quot;ATT&quot;</span><span class="p">:</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">aipw_score_att</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">)),</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;target must be &#39;ATE&#39; or &#39;ATTE&#39;&quot;</span><span class="p">)</span>
+    <span class="n">se</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">psi</span><span class="p">))</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">psi</span><span class="p">))[:</span><span class="n">k</span><span class="p">]</span>
+    
+    <span class="n">top</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">,</span> 
+        <span class="s2">&quot;psi&quot;</span><span class="p">:</span> <span class="n">psi</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> 
+        <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="n">g</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+        <span class="s2">&quot;res_t&quot;</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">m1</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span>
+        <span class="s2">&quot;res_c&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">m0</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+    <span class="p">})</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;se_plugin&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">),</span>
+        <span class="s2">&quot;kurtosis&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(((</span><span class="n">psi</span> <span class="o">-</span> <span class="n">psi</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)),</span>
+        <span class="s2">&quot;p99_over_med&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">psi</span><span class="p">),</span> <span class="mf">0.99</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">psi</span><span class="p">))</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)),</span>
+        <span class="s2">&quot;top_influential&quot;</span><span class="p">:</span> <span class="n">top</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="refute_irm_orthogonality">
+<a class="viewcode-back" href="../../../api/refutation.html#causalkit.refutation.orthogonality.refute_irm_orthogonality">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">refute_irm_orthogonality</span><span class="p">(</span>
+    <span class="n">inference_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">CausalData</span><span class="p">,</span>
+    <span class="n">trim_propensity</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">),</span>
+    <span class="n">n_basis_funcs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_folds_oos</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ATE&quot;</span><span class="p">,</span>
+    <span class="n">clip_eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">strict_oos</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Comprehensive AIPW orthogonality diagnostics for DoubleML estimators.</span>
+<span class="sd">    </span>
+<span class="sd">    Implements three key diagnostic approaches based on the efficient influence function (EIF):</span>
+<span class="sd">    1. Out-of-sample moment check (non-tautological)</span>
+<span class="sd">    2. Orthogonality (Gateaux derivative) tests  </span>
+<span class="sd">    3. Influence diagnostics</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inference_fn : Callable</span>
+<span class="sd">        The inference function (dml_ate or dml_att)</span>
+<span class="sd">    data : CausalData</span>
+<span class="sd">        The causal data object</span>
+<span class="sd">    trim_propensity : Tuple[float, float], default (0.02, 0.98)</span>
+<span class="sd">        Propensity score trimming bounds (min, max) to avoid extreme weights</span>
+<span class="sd">    n_basis_funcs : Optional[int], default None (len(confounders)+1)</span>
+<span class="sd">        Number of basis functions for orthogonality derivative tests (constant + covariates).</span>
+<span class="sd">        If None, defaults to the number of confounders in `data` plus 1 for the constant term.</span>
+<span class="sd">    n_folds_oos : int, default 5</span>
+<span class="sd">        Number of folds for out-of-sample moment check</span>
+<span class="sd">    **inference_kwargs : dict</span>
+<span class="sd">        Additional arguments passed to inference_fn</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, Any]</span>
+<span class="sd">        Dictionary containing:</span>
+<span class="sd">        - oos_moment_test: Out-of-sample moment condition results</span>
+<span class="sd">        - orthogonality_derivatives: Gateaux derivative test results</span>
+<span class="sd">        - influence_diagnostics: Influence function diagnostics</span>
+<span class="sd">        - theta: Original treatment effect estimate</span>
+<span class="sd">        - trimmed_diagnostics: Results on trimmed sample</span>
+<span class="sd">        - overall_assessment: Summary diagnostic assessment</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from causalkit.refutation import refute_irm_orthogonality</span>
+<span class="sd">    &gt;&gt;&gt; from causalkit.inference.ate import dml_ate</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; # Comprehensive orthogonality check</span>
+<span class="sd">    &gt;&gt;&gt; ortho_results = refute_irm_orthogonality(dml_ate, causal_data)</span>
+<span class="sd">    &gt;&gt;&gt; </span>
+<span class="sd">    &gt;&gt;&gt; # Check key diagnostics</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;OOS moment t-stat: {ortho_results[&#39;oos_moment_test&#39;][&#39;tstat&#39;]:.3f}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;Calibration issues: {len(ortho_results[&#39;orthogonality_derivatives&#39;].query(&#39;abs(t_g) &gt; 2&#39;))}&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;Assessment: {ortho_results[&#39;overall_assessment&#39;]}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Run inference to get fitted DoubleML model</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">inference_fn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inference function must return a dictionary with &#39;model&#39; key&quot;</span><span class="p">)</span>
+    
+    <span class="n">dml_model</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="n">theta_hat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">])</span>
+    
+    <span class="c1"># Extract cross-fitted predictions from DoubleML model using robust function</span>
+    <span class="n">g_propensity</span><span class="p">,</span> <span class="n">m0_outcomes</span><span class="p">,</span> <span class="n">m1_outcomes</span> <span class="o">=</span> <span class="n">extract_nuisances</span><span class="p">(</span><span class="n">dml_model</span><span class="p">)</span>
+    
+    <span class="c1"># Get observed data</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># Determine target automatically if requested</span>
+    <span class="n">target_u</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;AUTO&quot;</span>
+    <span class="k">if</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s2">&quot;AUTO&quot;</span><span class="p">:</span>
+        <span class="n">score_attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">score_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">score_attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="s1">&#39;_score&#39;</span><span class="p">,</span> <span class="s1">&#39;ATE&#39;</span><span class="p">)</span>
+        <span class="n">score_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">score_attr</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">target_u</span> <span class="o">=</span> <span class="s1">&#39;ATTE&#39;</span> <span class="k">if</span> <span class="s1">&#39;ATT&#39;</span> <span class="ow">in</span> <span class="n">score_str</span> <span class="k">else</span> <span class="s1">&#39;ATE&#39;</span>
+    
+    <span class="c1"># Build score function</span>
+    <span class="k">if</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s1">&#39;ATE&#39;</span><span class="p">:</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">score_fn</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">d_</span><span class="p">,</span> <span class="n">m0_</span><span class="p">,</span> <span class="n">m1_</span><span class="p">,</span> <span class="n">g_</span><span class="p">,</span> <span class="n">th_</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">aipw_score_ate</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">d_</span><span class="p">,</span> <span class="n">m0_</span><span class="p">,</span> <span class="n">m1_</span><span class="p">,</span> <span class="n">g_</span><span class="p">,</span> <span class="n">th_</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">target_u</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;ATTE&#39;</span><span class="p">,</span> <span class="s1">&#39;ATT&#39;</span><span class="p">):</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">score_fn</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">d_</span><span class="p">,</span> <span class="n">m0_</span><span class="p">,</span> <span class="n">m1_</span><span class="p">,</span> <span class="n">g_</span><span class="p">,</span> <span class="n">th_</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">aipw_score_att</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">d_</span><span class="p">,</span> <span class="n">m0_</span><span class="p">,</span> <span class="n">m1_</span><span class="p">,</span> <span class="n">g_</span><span class="p">,</span> <span class="n">th_</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">p1</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;target must be &#39;ATE&#39; or &#39;ATTE&#39;&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Apply propensity trimming</span>
+    <span class="n">trim_min</span><span class="p">,</span> <span class="n">trim_max</span> <span class="o">=</span> <span class="n">trim_propensity</span>
+    <span class="n">trim_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_propensity</span> <span class="o">&gt;=</span> <span class="n">trim_min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">g_propensity</span> <span class="o">&lt;=</span> <span class="n">trim_max</span><span class="p">)</span>
+    <span class="n">n_trimmed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">trim_mask</span><span class="p">))</span>
+    
+    <span class="c1"># Create trimmed arrays</span>
+    <span class="n">y_trim</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+    <span class="n">d_trim</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+    <span class="n">g_trim</span> <span class="o">=</span> <span class="n">g_propensity</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+    <span class="n">m0_trim</span> <span class="o">=</span> <span class="n">m0_outcomes</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+    <span class="n">m1_trim</span> <span class="o">=</span> <span class="n">m1_outcomes</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+    
+    <span class="c1"># === 1. OUT-OF-SAMPLE MOMENT CHECK ===</span>
+    <span class="n">strict_applied</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_folds_oos</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">fold_thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fold_nuisances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="n">df_full</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df_full</span><span class="p">):</span>
+        <span class="c1"># Create fold-specific data using public APIs</span>
+        <span class="n">train_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+            <span class="n">df</span><span class="o">=</span><span class="n">df_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">confounders</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="c1"># Fit model on training fold to get theta</span>
+        <span class="n">fold_result</span> <span class="o">=</span> <span class="n">inference_fn</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span>
+        <span class="n">fold_thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fold_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]))</span>
+        <span class="n">fold_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">strict_oos</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">strict_applied</span><span class="p">:</span>
+            <span class="c1"># Strict mode not implemented fully; fall back to fast nuisances but mark flag</span>
+            <span class="n">strict_applied</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="c1"># Use full-model cross-fitted nuisances indexed by test fold (fast OOS)</span>
+        <span class="n">g_fold</span> <span class="o">=</span> <span class="n">g_propensity</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+        <span class="n">m0_fold</span> <span class="o">=</span> <span class="n">m0_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+        <span class="n">m1_fold</span> <span class="o">=</span> <span class="n">m1_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+        <span class="n">fold_nuisances</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">g_fold</span><span class="p">,</span> <span class="n">m0_fold</span><span class="p">,</span> <span class="n">m1_fold</span><span class="p">))</span>
+    
+    <span class="c1"># Run out-of-sample moment check with fold-specific nuisances</span>
+    <span class="n">oos_df</span><span class="p">,</span> <span class="n">oos_tstat</span> <span class="o">=</span> <span class="n">oos_moment_check_with_fold_nuisances</span><span class="p">(</span>
+        <span class="n">fold_thetas</span><span class="p">,</span> <span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">score_fn</span><span class="o">=</span><span class="n">score_fn</span>
+    <span class="p">)</span>
+    <span class="n">oos_pvalue</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">)))</span>
+    
+    <span class="c1"># === 2. ORTHOGONALITY DERIVATIVE TESTS ===</span>
+    <span class="c1"># Create basis functions: constant + first few standardized confounders</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CausalData object must have confounders defined for orthogonality diagnostics&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If n_basis_funcs is not provided, default to (number of confounders + 1) for the constant term</span>
+    <span class="k">if</span> <span class="n">n_basis_funcs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_basis_funcs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()[</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">n_covs</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">n_basis_funcs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># -1 for constant term</span>
+    
+    <span class="k">if</span> <span class="n">n_covs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">X_selected</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n_covs</span><span class="p">]</span>
+        <span class="n">X_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_selected</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X_selected</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">X_selected</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span>
+        <span class="n">X_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="n">X_std</span><span class="p">]</span>  <span class="c1"># Constant + standardized covariates</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># Only constant term</span>
+    
+    <span class="k">if</span> <span class="n">target_u</span> <span class="o">==</span> <span class="s1">&#39;ATE&#39;</span><span class="p">:</span>
+        <span class="n">ortho_derivs_full</span> <span class="o">=</span> <span class="n">orthogonality_derivatives</span><span class="p">(</span><span class="n">X_basis</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m0_outcomes</span><span class="p">,</span> <span class="n">m1_outcomes</span><span class="p">,</span> <span class="n">g_propensity</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+        <span class="n">X_basis_trim</span> <span class="o">=</span> <span class="n">X_basis</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
+        <span class="n">ortho_derivs_trim</span> <span class="o">=</span> <span class="n">orthogonality_derivatives</span><span class="p">(</span><span class="n">X_basis_trim</span><span class="p">,</span> <span class="n">y_trim</span><span class="p">,</span> <span class="n">d_trim</span><span class="p">,</span> <span class="n">m0_trim</span><span class="p">,</span> <span class="n">m1_trim</span><span class="p">,</span> <span class="n">g_trim</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+        <span class="n">problematic_derivs_full</span> <span class="o">=</span> <span class="n">ortho_derivs_full</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_full</span><span class="p">[</span><span class="s1">&#39;t_m1&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> 
+                                                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_full</span><span class="p">[</span><span class="s1">&#39;t_m0&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> 
+                                                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_full</span><span class="p">[</span><span class="s1">&#39;t_g&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="n">problematic_derivs_trim</span> <span class="o">=</span> <span class="n">ortho_derivs_trim</span><span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_trim</span><span class="p">[</span><span class="s1">&#39;t_m1&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> 
+                                                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_trim</span><span class="p">[</span><span class="s1">&#39;t_m0&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> 
+                                                   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ortho_derivs_trim</span><span class="p">[</span><span class="s1">&#39;t_g&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)]</span>
+        <span class="n">derivs_interpretation</span> <span class="o">=</span> <span class="s1">&#39;Large |t-stats| (&gt;2) indicate calibration issues&#39;</span>
+        <span class="n">derivs_full_ok</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">problematic_derivs_full</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">derivs_trim_ok</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">problematic_derivs_trim</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># For ATT, derivative formulas differ; skip with a clear note</span>
+        <span class="n">ortho_derivs_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">ortho_derivs_trim</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">problematic_derivs_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">problematic_derivs_trim</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">derivs_interpretation</span> <span class="o">=</span> <span class="s1">&#39;ATT selected: derivative checks skipped (ATE formulas not applicable)&#39;</span>
+        <span class="n">derivs_full_ok</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">derivs_trim_ok</span> <span class="o">=</span> <span class="kc">True</span>
+    
+    <span class="c1"># === 3. INFLUENCE DIAGNOSTICS ===</span>
+    <span class="n">influence_full</span> <span class="o">=</span> <span class="n">influence_summary</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">m0_outcomes</span><span class="p">,</span> <span class="n">m1_outcomes</span><span class="p">,</span> <span class="n">g_propensity</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target_u</span><span class="p">,</span> <span class="n">clip_eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    <span class="n">influence_trim</span> <span class="o">=</span> <span class="n">influence_summary</span><span class="p">(</span><span class="n">y_trim</span><span class="p">,</span> <span class="n">d_trim</span><span class="p">,</span> <span class="n">m0_trim</span><span class="p">,</span> <span class="n">m1_trim</span><span class="p">,</span> <span class="n">g_trim</span><span class="p">,</span> <span class="n">theta_hat</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target_u</span><span class="p">,</span> <span class="n">clip_eps</span><span class="o">=</span><span class="n">clip_eps</span><span class="p">)</span>
+    
+    <span class="c1"># === DIAGNOSTIC ASSESSMENT ===</span>
+    <span class="n">model_se</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;std_error&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model_se</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">se_reasonable</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">influence_full</span><span class="p">[</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">model_se</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">model_se</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">se_reasonable</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;oos_moment_ok&#39;</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="s1">&#39;derivs_full_ok&#39;</span><span class="p">:</span> <span class="n">derivs_full_ok</span><span class="p">,</span>
+        <span class="s1">&#39;derivs_trim_ok&#39;</span><span class="p">:</span> <span class="n">derivs_trim_ok</span><span class="p">,</span>
+        <span class="s1">&#39;se_reasonable&#39;</span><span class="p">:</span> <span class="n">se_reasonable</span><span class="p">,</span>
+        <span class="s1">&#39;no_extreme_influence&#39;</span><span class="p">:</span> <span class="n">influence_full</span><span class="p">[</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s1">&#39;trimming_reasonable&#39;</span><span class="p">:</span> <span class="n">n_trimmed</span> <span class="o">&lt;</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="n">n_passed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">n_passed</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">overall_assessment</span> <span class="o">=</span> <span class="s2">&quot;PASS: Strong evidence for orthogonality&quot;</span>
+    <span class="k">elif</span> <span class="n">n_passed</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">overall_assessment</span> <span class="o">=</span> <span class="s2">&quot;CAUTION: Most conditions satisfied&quot;</span>
+    <span class="k">elif</span> <span class="n">n_passed</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">overall_assessment</span> <span class="o">=</span> <span class="s2">&quot;WARNING: Several orthogonality violations&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">overall_assessment</span> <span class="o">=</span> <span class="s2">&quot;FAIL: Major orthogonality violations detected&quot;</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;theta&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta_hat</span><span class="p">),</span>
+        <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">target_u</span><span class="p">,</span>
+            <span class="s1">&#39;clip_eps&#39;</span><span class="p">:</span> <span class="n">clip_eps</span><span class="p">,</span>
+            <span class="s1">&#39;strict_oos_requested&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strict_oos</span><span class="p">),</span>
+            <span class="s1">&#39;strict_oos_applied&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;oos_moment_test&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;fold_results&#39;</span><span class="p">:</span> <span class="n">oos_df</span><span class="p">,</span>
+            <span class="s1">&#39;tstat&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">),</span>
+            <span class="s1">&#39;pvalue&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">oos_pvalue</span><span class="p">),</span>
+            <span class="s1">&#39;interpretation&#39;</span><span class="p">:</span> <span class="s1">&#39;Should be ≈ 0 if moment condition holds&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;full_sample&#39;</span><span class="p">:</span> <span class="n">ortho_derivs_full</span><span class="p">,</span>
+            <span class="s1">&#39;trimmed_sample&#39;</span><span class="p">:</span> <span class="n">ortho_derivs_trim</span><span class="p">,</span>
+            <span class="s1">&#39;problematic_full&#39;</span><span class="p">:</span> <span class="n">problematic_derivs_full</span><span class="p">,</span>
+            <span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">:</span> <span class="n">problematic_derivs_trim</span><span class="p">,</span>
+            <span class="s1">&#39;interpretation&#39;</span><span class="p">:</span> <span class="n">derivs_interpretation</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;full_sample&#39;</span><span class="p">:</span> <span class="n">influence_full</span><span class="p">,</span>
+            <span class="s1">&#39;trimmed_sample&#39;</span><span class="p">:</span> <span class="n">influence_trim</span><span class="p">,</span>
+            <span class="s1">&#39;interpretation&#39;</span><span class="p">:</span> <span class="s1">&#39;Heavy tails or extreme kurtosis suggest instability&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;trimming_info&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;bounds&#39;</span><span class="p">:</span> <span class="n">trim_propensity</span><span class="p">,</span>
+            <span class="s1">&#39;n_trimmed&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_trimmed</span><span class="p">),</span>
+            <span class="s1">&#39;pct_trimmed&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_trimmed</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">:</span> <span class="n">conditions</span><span class="p">,</span>
+        <span class="s1">&#39;overall_assessment&#39;</span><span class="p">:</span> <span class="n">overall_assessment</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, CausalKit Team.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

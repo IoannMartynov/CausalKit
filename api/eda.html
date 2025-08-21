@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit  documentation</title>
+    <title>EDA Module &#8212; CausalKit  documentation</title>
   
   
   
@@ -18,39 +18,39 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.data.generators.generate_rct_data';</script>
-    <link rel="icon" href="../../_static/logo.svg"/>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Design Module" href="../design.html" />
-    <link rel="prev" title="causalkit.data.causaldata.CausalData" href="causalkit.data.causaldata.CausalData.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/eda';</script>
+    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inference Module" href="inference.html" />
+    <link rel="prev" title="Design Module" href="design.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -82,7 +82,7 @@
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
-      action="../../search.html"
+      action="../search.html"
       method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search"
@@ -119,7 +119,7 @@
     
   
 
-<a class="navbar-brand logo" href="../../index.html">
+<a class="navbar-brand logo" href="../index.html">
   
   
   
@@ -130,8 +130,8 @@
       
     
     
-    <img src="../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">CausalKit</p>
@@ -149,21 +149,21 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../user-guide.html">
+  <a class="nav-link nav-internal" href="../user-guide.html">
     User Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../notebooks.html">
+  <a class="nav-link nav-internal" href="../notebooks.html">
     Notebooks
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../api.html">
+  <a class="nav-link nav-internal" href="../api.html">
     API Reference
   </a>
 </li>
@@ -269,21 +269,21 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../user-guide.html">
+  <a class="nav-link nav-internal" href="../user-guide.html">
     User Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../notebooks.html">
+  <a class="nav-link nav-internal" href="../notebooks.html">
     Notebooks
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../../api.html">
+  <a class="nav-link nav-internal" href="../api.html">
     API Reference
   </a>
 </li>
@@ -336,15 +336,15 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../data.html">Data Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.data.generators.generate_rct_data</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../eda.html">EDA Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../inference.html">Inference Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../refutation.html">Refutation Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design Module</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">EDA Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation Module</a></li>
 </ul>
 </div>
 </nav></div>
@@ -378,17 +378,14 @@ document.write(`
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
-      <a href="../../index.html" class="nav-link" aria-label="Home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    
-    <li class="breadcrumb-item"><a href="../data.html" class="nav-link">Data Module</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page">causalkit.da...</li>
+    <li class="breadcrumb-item active" aria-current="page">EDA Module</li>
   </ul>
 </nav>
 </div>
@@ -405,52 +402,45 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="causalkit-data-generators-generate-rct-data">
-<h1>causalkit.data.generators.generate_rct_data<a class="headerlink" href="#causalkit-data-generators-generate-rct-data" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.data.generators.generate_rct_data">
-<span class="sig-prename descclassname"><span class="pre">causalkit.data.generators.</span></span><span class="sig-name descname"><span class="pre">generate_rct_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_users</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/generators.html#generate_rct_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.generators.generate_rct_data" title="Link to this definition">#</a></dt>
-<dd><p>Create synthetic RCT data using CausalDatasetGenerator as the core engine.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="eda-module">
+<h1>EDA Module<a class="headerlink" href="#eda-module" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">causalkit.eda</span></code> module provides exploratory diagnostics for causal designs with binary treatment. It helps assess treatment predictability, overlap/positivity, covariate balance, and outcome modeling quality before running inference.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>Key components:</p>
 <ul class="simple">
-<li><p>Treatment is randomized to approximately match <cite>split</cite> (independent of covariates).</p></li>
-<li><p>Outcome distribution is controlled by <cite>target_type</cite> and <cite>target_params</cite>.</p></li>
-<li><p>Returns a legacy-compatible schema with ancillary covariates derived from the outcome
-(age, cnt_trans, platform_Android, platform_iOS, invited_friend), plus a UUID user_id.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CausalEDA</span></code>: High-level interface for EDA on CausalData or a lightweight container</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CausalDataLite</span></code>: Minimal data container compatible with CausalEDA</p></li>
 </ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_users</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Total number of users in the dataset.</p></li>
-<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Proportion of users in the treatment group (e.g., 0.5 =&gt; 50/50).</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Seed for reproducibility.</p></li>
-<li><p><strong>target_type</strong> (<em>{&quot;binary&quot;</em><em>,</em><em>&quot;normal&quot;</em><em>,</em><em>&quot;nonnormal&quot;}</em>) – Outcome family. “nonnormal” is approximated via a Poisson mean process.</p></li>
-<li><p><strong>target_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>If None, defaults are used:</dt><dd><ul>
-<li><p>binary   : {“p”: {“A”: 0.10, “B”: 0.12}}</p></li>
-<li><p>normal   : {“mean”: {“A”: 0.00, “B”: 0.20}, “std”: 1.0}</p></li>
-<li><p>nonnormal: {“shape”: 2.0, “scale”: {“A”: 1.0, “B”: 1.1}}</p></li>
+<p>Main capabilities:</p>
+<ul class="simple">
+<li><p>Outcome group statistics by treatment</p></li>
+<li><p>Cross-validated propensity scores with ROC AUC and positivity checks</p></li>
+<li><p>Covariate balance diagnostics (means, absolute diffs, and standardized mean differences)</p></li>
+<li><p>Outcome model fit diagnostics (RMSE, MAE) and SHAP-based feature attributions for CatBoost models</p></li>
+<li><p>Visualization helpers (propensity score overlap, distributions and boxplots)</p></li>
 </ul>
-</dd>
-</dl>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Columns: user_id, treatment, outcome, age, cnt_trans,</dt><dd><p>platform_Android, platform_iOS, invited_friend.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>target_type</cite> is not one of {“binary”, “normal”, “nonnormal”}.</p>
-</dd>
-</dl>
-</dd></dl>
-
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+</tbody>
+</table>
+</div>
+<section id="causaleda">
+<h3>CausalEDA<a class="headerlink" href="#causaleda" title="Link to this heading">#</a></h3>
+<p>Selected methods:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+</tbody>
+</table>
+</div>
+</section>
+<section id="causaldatalite">
+<h3>CausalDataLite<a class="headerlink" href="#causaldatalite" title="Link to this heading">#</a></h3>
+</section>
+</section>
 </section>
 
 
@@ -464,20 +454,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causalkit.data.causaldata.CausalData.html"
+       href="design.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.data.causaldata.CausalData</p>
+        <p class="prev-next-title">Design Module</p>
       </div>
     </a>
     <a class="right-next"
-       href="../design.html"
+       href="inference.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Design Module</p>
+        <p class="prev-next-title">Inference Module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -499,7 +489,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.generators.generate_rct_data"><code class="docutils literal notranslate"><span class="pre">generate_rct_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causaleda">CausalEDA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causaldatalite">CausalDataLite</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
@@ -516,8 +511,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
