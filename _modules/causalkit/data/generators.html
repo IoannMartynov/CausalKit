@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -122,8 +122,16 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
-    <p class="title logo__title">CausalKit  documentation</p>
+  
+    <p class="title logo__title">CausalKit</p>
   
 </a></div>
     
@@ -145,8 +153,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -191,6 +199,22 @@ document.write(`
   </button>
 `);
 </script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
       
     </div>
     
@@ -247,8 +271,8 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -280,6 +304,22 @@ document.write(`
   </button>
 `);
 </script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         
       </div>
     
@@ -383,7 +423,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="generate_rct_data">
-<a class="viewcode-back" href="../../../api/data.html#causalkit.data.generators.generate_rct_data">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.data.generators.generate_rct_data.html#causalkit.data.generators.generate_rct_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_rct_data</span><span class="p">(</span>
     <span class="n">n_users</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20_000</span><span class="p">,</span>
     <span class="n">split</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
@@ -420,6 +460,11 @@ document.write(`
 <span class="sd">    pd.DataFrame</span>
 <span class="sd">        Columns: user_id, treatment, outcome, age, cnt_trans,</span>
 <span class="sd">                 platform_Android, platform_iOS, invited_friend.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If `target_type` is not one of {&quot;binary&quot;, &quot;normal&quot;, &quot;nonnormal&quot;}.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
 
