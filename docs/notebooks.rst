@@ -1,4 +1,4 @@
-Examples
+Notebooks
 ========
 
 This section contains examples of how to use CausalKit for various causal inference tasks.

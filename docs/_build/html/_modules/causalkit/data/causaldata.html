@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -122,8 +122,16 @@
   
   
   
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
-    <p class="title logo__title">CausalKit  documentation</p>
+  
+    <p class="title logo__title">CausalKit</p>
   
 </a></div>
     
@@ -145,8 +153,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -191,6 +199,22 @@ document.write(`
   </button>
 `);
 </script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
       
     </div>
     
@@ -247,8 +271,8 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../../../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -280,6 +304,22 @@ document.write(`
   </button>
 `);
 </script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
         
       </div>
     
@@ -349,24 +389,36 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalData">
-<a class="viewcode-back" href="../../../api/data.html#causalkit.data.causaldata.CausalData">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CausalData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A class that wraps a pandas DataFrame and stores metadata about columns</span>
-<span class="sd">    for causal inference. The DataFrame is truncated to only include columns</span>
-<span class="sd">    specified in treatment, confounders, and target.</span>
+<span class="sd">    Container for causal inference datasets.</span>
+
+<span class="sd">    Wraps a pandas DataFrame and stores the names of treatment, outcome, and optional confounder columns.</span>
+<span class="sd">    The stored DataFrame is restricted to only those columns.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pd.DataFrame</span>
 <span class="sd">        The DataFrame containing the data. Cannot contain NaN values.</span>
-<span class="sd">        Only columns specified in target, treatment, and confounders will be stored.</span>
+<span class="sd">        Only columns specified in outcome, treatment, and confounders will be stored.</span>
 <span class="sd">    treatment : str</span>
 <span class="sd">        Column name representing the treatment variable.</span>
 <span class="sd">    outcome : str</span>
-<span class="sd">        Column name representing the target/outcome variable.</span>
+<span class="sd">        Column name representing the outcome (target) variable.</span>
 <span class="sd">    confounders : Union[str, List[str]], optional</span>
 <span class="sd">        Column name(s) representing the confounders/covariates.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : pd.DataFrame</span>
+<span class="sd">        A copy of the original data restricted to [outcome, treatment] + confounders.</span>
+<span class="sd">    treatment : str</span>
+<span class="sd">        Name of the treatment column.</span>
+<span class="sd">    outcome : str</span>
+<span class="sd">        Name of the outcome (target) column.</span>
+<span class="sd">    confounders : list[str]</span>
+<span class="sd">        Names of the confounder columns (may be empty).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -394,7 +446,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CausalData.__init__">
-<a class="viewcode-back" href="../../../api/data.html#causalkit.data.causaldata.CausalData.__init__">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -586,7 +638,7 @@ document.write(`
         
 
 <div class="viewcode-block" id="CausalData.get_df">
-<a class="viewcode-back" href="../../../api/data.html#causalkit.data.causaldata.CausalData.get_df">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.get_df">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_df</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -674,7 +726,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalData.__repr__">
-<a class="viewcode-back" href="../../../api/data.html#causalkit.data.causaldata.CausalData.__repr__">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        String representation of the CausalData object.</span>

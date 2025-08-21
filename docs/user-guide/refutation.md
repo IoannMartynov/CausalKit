@@ -1,4 +1,4 @@
-# Refutation and robustness (causalkit.refutation)
+# Refutation and robustness
 
 The causalkit.refutation module provides quick checks to assess whether your estimated causal effect is plausible and robust. These utilities take your inference function (e.g., dml_ate) and a CausalData object, perturb the data (e.g., randomize outcome or treatment, subsample, etc.), re-run the estimator, and report the new estimate.
 

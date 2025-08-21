@@ -63,6 +63,9 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 # Autodoc settings
+autosummary_generate = True
+# Move type hints into the description for clearer parameter sections
+autodoc_typehints = "description"
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',

@@ -78,6 +78,11 @@ def generate_rct_data(
     pd.DataFrame
         Columns: user_id, treatment, outcome, age, cnt_trans,
                  platform_Android, platform_iOS, invited_friend.
+
+    Raises
+    ------
+    ValueError
+        If `target_type` is not one of {"binary", "normal", "nonnormal"}.
     """
     rng = np.random.default_rng(random_state)
 
