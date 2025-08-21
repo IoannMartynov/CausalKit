@@ -12,6 +12,9 @@ pip install git+https://github.com/ioannmartynov/causalkit.git
 ```python
 import causalkit
 ```
+
+## [DOCS](https://ioannmartynov.github.io/CausalKit/index.html)
+
 # Scenarios Covered
 | Is RCT        | Treatment | Outcome    | EDA | Estimands      | Refutation | Docs    |
 |---------------|-----------|------------|-----|----------------|------------|---------|
