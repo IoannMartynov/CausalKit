@@ -54,3 +54,4 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 /examples/
+/catboost_info/
