@@ -156,8 +156,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -272,8 +272,8 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -332,9 +332,16 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api/data.html">Data Module</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="api/design.html">Design Module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/analysis.html">Analysis Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/eda.html">EDA Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/inference.html">Inference Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/refutation.html">Refutation Module</a></li>
 </ul>
 </div>
 </nav></div>
@@ -396,7 +403,7 @@ document.write(`
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/data.html">Data Module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/data.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/data.html#module-causalkit.data.generators">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/data.html#api-reference">API Reference</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/design.html">Design Module</a><ul>
@@ -408,6 +415,28 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="api/analysis.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/analysis.html#t-test-analysis">T-Test Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/analysis.html#module-causalkit.inference.ttest">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/eda.html">EDA Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/eda.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/eda.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/inference.html">Inference Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#api-reference-package">API Reference (Package)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.att.ttest">ATT Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.ate.dml_ate">ATE Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.cate.cate_esimand">CATE Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.gate.gate_esimand">GATE Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/refutation.html">Refutation Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#api-reference-package">API Reference (Package)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.placebo">Placebo and Subset Refutation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.sensitivity">Sensitivity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.orthogonality">Orthogonality Checks</a></li>
 </ul>
 </li>
 </ul>

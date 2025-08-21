@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Short answer &#8212; CausalKit  documentation</title>
+    <title>CATE vs GATE &#8212; CausalKit  documentation</title>
   
   
   
@@ -51,8 +51,8 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../examples.html" />
-    <link rel="prev" title="Working with CausalData" href="causaldata.html" />
+    <link rel="next" title="Notebooks" href="../notebooks.html" />
+    <link rel="prev" title="Refutation and robustness" href="refutation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -158,8 +158,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -278,8 +278,8 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../examples.html">
-    Examples
+  <a class="nav-link nav-internal" href="../notebooks.html">
+    Notebooks
   </a>
 </li>
 
@@ -338,15 +338,13 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Causal Inference Intuition</a></li>
-
-
-<li class="toctree-l1"><a class="reference internal" href="causaldata.html">Working with CausalData</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Short answer</a></li>
-
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causaldata.html">CausalData at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CATE vs GATE</a></li>
 </ul>
 </div>
 </nav></div>
@@ -387,7 +385,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Short answer</li>
+    <li class="breadcrumb-item active" aria-current="page">CATE vs GATE</li>
   </ul>
 </nav>
 </div>
@@ -404,17 +402,14 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>Here’s your explanation rewritten cleanly in Markdown with proper LaTeX formatting:</p>
-<hr class="docutils" />
-<section id="short-answer">
-<h1>Short answer<a class="headerlink" href="#short-answer" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="cate-vs-gate">
+<h1>CATE vs GATE<a class="headerlink" href="#cate-vs-gate" title="Link to this heading">#</a></h1>
 <p><strong>GATE = Group Average Treatment Effect.</strong>
 It’s the <strong>average causal effect within a subgroup</strong> (defined by <em>pre-treatment</em> covariates).
 Yes—you can think of it as “ATE on a part of the data,” <strong>provided</strong> the group is defined by baseline variables and estimated correctly.</p>
 <hr class="docutils" />
-</section>
 <section id="what-it-is-formally">
-<h1>What it is (formally)<a class="headerlink" href="#what-it-is-formally" title="Link to this heading">#</a></h1>
+<h2>What it is (formally)<a class="headerlink" href="#what-it-is-formally" title="Link to this heading">#</a></h2>
 <ul>
 <li><p><strong>CATE:</strong></p>
 <div class="math notranslate nohighlight">
@@ -431,12 +426,12 @@ Yes—you can think of it as “ATE on a part of the data,” <strong>provided</
 </li>
 </ul>
 <p>If your groups <span class="math notranslate nohighlight">\(G(X)\)</span> partition the sample, the overall ATE is the <strong>prevalence-weighted average</strong> of the GATEs.</p>
-<hr class="docutils" />
 </section>
+<hr class="docutils" />
 <section id="how-people-estimate-it-two-common-ways">
-<h1>How people estimate it (two common ways)<a class="headerlink" href="#how-people-estimate-it-two-common-ways" title="Link to this heading">#</a></h1>
+<h2>How people estimate it (two common ways)<a class="headerlink" href="#how-people-estimate-it-two-common-ways" title="Link to this heading">#</a></h2>
 <section id="subgroup-ate-just-ate-on-a-subset">
-<h2>1. <strong>Subgroup ATE (“just ATE on a subset”)</strong><a class="headerlink" href="#subgroup-ate-just-ate-on-a-subset" title="Link to this heading">#</a></h2>
+<h3>1. <strong>Subgroup ATE (“just ATE on a subset”)</strong><a class="headerlink" href="#subgroup-ate-just-ate-on-a-subset" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Restrict to units with <span class="math notranslate nohighlight">\(G(X) = g\)</span> and estimate the ATE there.</p></li>
 <li><p><strong>In an RCT:</strong> difference in means within the group.</p></li>
@@ -444,7 +439,7 @@ Yes—you can think of it as “ATE on a part of the data,” <strong>provided</
 </ul>
 </section>
 <section id="plug-in-from-cates-causal-ml-route">
-<h2>2. <strong>Plug-in from CATEs (causal ML route)</strong><a class="headerlink" href="#plug-in-from-cates-causal-ml-route" title="Link to this heading">#</a></h2>
+<h3>2. <strong>Plug-in from CATEs (causal ML route)</strong><a class="headerlink" href="#plug-in-from-cates-causal-ml-route" title="Link to this heading">#</a></h3>
 <ul>
 <li><p>First estimate <span class="math notranslate nohighlight">\(\hat{\tau}(X)\)</span> with a method you like
 (e.g., causal forests, T-/X-/R-/DR-learners).</p></li>
@@ -456,11 +451,11 @@ Yes—you can think of it as “ATE on a part of the data,” <strong>provided</
 </li>
 <li><p>Use <strong>honesty</strong> or <strong>cross-fitting</strong> to avoid overfitting.</p></li>
 </ul>
+</section>
+</section>
 <hr class="docutils" />
-</section>
-</section>
 <section id="gotchas">
-<h1>Gotchas<a class="headerlink" href="#gotchas" title="Link to this heading">#</a></h1>
+<h2>Gotchas<a class="headerlink" href="#gotchas" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><strong>Groups must be pre-treatment.</strong>
 If you define groups by a post-treatment variable, it’s no longer a GATE problem
@@ -473,10 +468,10 @@ If you choose groups by looking at outcomes, correct for multiple testing or use
 For AIPW: use influence-function SEs.
 For plug-in CATE averages: use bootstrap or forest-provided variance (with honesty).</p></li>
 </ul>
-<hr class="docutils" />
 </section>
+<hr class="docutils" />
 <section id="intuition">
-<h1>Intuition<a class="headerlink" href="#intuition" title="Link to this heading">#</a></h1>
+<h2>Intuition<a class="headerlink" href="#intuition" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><strong>ATE:</strong> average effect for everyone.</p></li>
 <li><p><strong>CATE:</strong> how effect varies with <span class="math notranslate nohighlight">\(X\)</span>.</p></li>
@@ -486,6 +481,7 @@ For plug-in CATE averages: use bootstrap or forest-provided variance (with hones
 <p>If you tell me how you’re defining the groups (e.g., age bins, risk deciles, predicted uplift bands) and whether it’s an RCT or observational study, I can give you the <strong>exact estimator and SE formula</strong> you should use.</p>
 <hr class="docutils" />
 <p>Do you want me to rewrite the <strong>age 45–60 example</strong> in the same style so it matches this format? That would make the two explanations consistent.</p>
+</section>
 </section>
 
 
@@ -499,20 +495,20 @@ For plug-in CATE averages: use bootstrap or forest-provided variance (with hones
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causaldata.html"
+       href="refutation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Working with CausalData</p>
+        <p class="prev-next-title">Refutation and robustness</p>
       </div>
     </a>
     <a class="right-next"
-       href="../examples.html"
+       href="../notebooks.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title">Notebooks</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -534,17 +530,15 @@ For plug-in CATE averages: use bootstrap or forest-provided variance (with hones
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Short answer</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-is-formally">What it is (formally)</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subgroup-ate-just-ate-on-a-subset">1. <strong>Subgroup ATE (“just ATE on a subset”)</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plug-in-from-cates-causal-ml-route">2. <strong>Plug-in from CATEs (causal ML route)</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-it-is-formally">What it is (formally)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-people-estimate-it-two-common-ways">How people estimate it (two common ways)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subgroup-ate-just-ate-on-a-subset">1. <strong>Subgroup ATE (“just ATE on a subset”)</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plug-in-from-cates-causal-ml-route">2. <strong>Plug-in from CATEs (causal ML route)</strong></a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gotchas">Gotchas</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#intuition">Intuition</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gotchas">Gotchas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intuition">Intuition</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

@@ -10,21 +10,33 @@ import warnings
 
 class CausalData:
     """
-    A class that wraps a pandas DataFrame and stores metadata about columns
-    for causal inference. The DataFrame is truncated to only include columns
-    specified in treatment, confounders, and target.
+    Container for causal inference datasets.
+
+    Wraps a pandas DataFrame and stores the names of treatment, outcome, and optional confounder columns.
+    The stored DataFrame is restricted to only those columns.
 
     Parameters
     ----------
     df : pd.DataFrame
         The DataFrame containing the data. Cannot contain NaN values.
-        Only columns specified in target, treatment, and confounders will be stored.
+        Only columns specified in outcome, treatment, and confounders will be stored.
     treatment : str
         Column name representing the treatment variable.
     outcome : str
-        Column name representing the target/outcome variable.
+        Column name representing the outcome (target) variable.
     confounders : Union[str, List[str]], optional
         Column name(s) representing the confounders/covariates.
+
+    Attributes
+    ----------
+    df : pd.DataFrame
+        A copy of the original data restricted to [outcome, treatment] + confounders.
+    treatment : str
+        Name of the treatment column.
+    outcome : str
+        Name of the outcome (target) column.
+    confounders : list[str]
+        Names of the confounder columns (may be empty).
 
     Examples
     --------

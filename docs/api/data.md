@@ -13,14 +13,34 @@ This module includes functions for generating:
 ## API Reference
 
 ```{eval-rst}
-.. automodule:: causalkit.data.generators
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. currentmodule:: causalkit.data
+
+.. autosummary::
+   :toctree: generated
+   :caption: Public objects in causalkit.data
+   :recursive:
+   :nosignatures:
+
+   causaldata.CausalData
+   generators.generate_rct_data
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.data.causaldata
+.. currentmodule:: causalkit.data.causaldata
+
+CausalData
+----------
+
+.. autoclass:: CausalData
+   :members:
+   :inherited-members:
+   :show-inheritance:
+   :special-members: __init__
+   :exclude-members: __weakref__
+```
+
+```{eval-rst}
+.. automodule:: causalkit.data.generators
    :members:
    :undoc-members:
    :show-inheritance:

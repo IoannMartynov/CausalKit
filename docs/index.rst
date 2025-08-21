@@ -16,7 +16,7 @@ CausalKit simplifies the process of conducting causal inference studies by provi
 
 
    user-guide
-   examples
+   notebooks
    api
 
 Installation

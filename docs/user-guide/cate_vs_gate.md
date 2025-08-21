@@ -1,4 +1,4 @@
-## Cate vs Gate
+# CATE vs GATE
 
 **GATE = Group Average Treatment Effect.**
 It’s the **average causal effect within a subgroup** (defined by *pre-treatment* covariates).
