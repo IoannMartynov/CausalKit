@@ -63,7 +63,14 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 # Autodoc settings
-autosummary_generate = True
+# Do not auto-generate new autosummary stubs during CI to avoid import-time failures;
+# we keep pre-generated files under docs/api/generated committed.
+autosummary_generate = False
+# Mock optional heavy dependencies to allow docs build in minimal CI environments
+autodoc_mock_imports = [
+    'catboost',
+    'matplotlib',
+]
 # Move type hints into the description for clearer parameter sections
 autodoc_typehints = "description"
 autodoc_default_options = {
