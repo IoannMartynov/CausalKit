@@ -11,5 +11,4 @@ user-guide/causaldata
 user-guide/eda
 user-guide/inference
 user-guide/refutation
-user-guide/cate_vs_gate
 ```
