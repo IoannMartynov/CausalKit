@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.eda.eda.CausalEDA.confounders_roc_auc &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -45,12 +45,12 @@
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.data.generators.generate_rct_data';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc';</script>
     <link rel="icon" href="../../_static/logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Design Module" href="../design.html" />
-    <link rel="prev" title="causalkit.data.causaldata.CausalData" href="causalkit.data.causaldata.CausalData.html" />
+    <link rel="next" title="causalkit.eda.eda.CausalEDA.positivity_check" href="causalkit.eda.eda.CausalEDA.positivity_check.html" />
+    <link rel="prev" title="causalkit.eda.eda.CausalEDA.fit_propensity" href="causalkit.eda.eda.CausalEDA.fit_propensity.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -336,19 +336,19 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../data.html">Data Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.data.generators.generate_rct_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../eda.html">EDA Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../eda.html">EDA Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalEDA.html">causalkit.eda.CausalEDA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalDataLite.html">causalkit.eda.CausalDataLite</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.data_shape.html">causalkit.eda.eda.CausalEDA.data_shape</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_stats.html">causalkit.eda.eda.CausalEDA.outcome_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.fit_propensity.html">causalkit.eda.eda.CausalEDA.fit_propensity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_roc_auc.html">causalkit.eda.eda.CausalEDA.confounders_roc_auc</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.eda.eda.CausalEDA.confounders_roc_auc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.positivity_check.html">causalkit.eda.eda.CausalEDA.positivity_check</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.plot_ps_overlap.html">causalkit.eda.eda.CausalEDA.plot_ps_overlap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_means.html">causalkit.eda.eda.CausalEDA.confounders_means</a></li>
@@ -419,9 +419,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../data.html" class="nav-link">Data Module</a></li>
+    <li class="breadcrumb-item"><a href="../eda.html" class="nav-link">EDA Module</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">causalkit.da...</li>
+    <li class="breadcrumb-item active" aria-current="page">causalkit.ed...</li>
   </ul>
 </nav>
 </div>
@@ -438,48 +438,21 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="causalkit-data-generators-generate-rct-data">
-<h1>causalkit.data.generators.generate_rct_data<a class="headerlink" href="#causalkit-data-generators-generate-rct-data" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.data.generators.generate_rct_data">
-<span class="sig-prename descclassname"><span class="pre">causalkit.data.generators.</span></span><span class="sig-name descname"><span class="pre">generate_rct_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_users</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/generators.html#generate_rct_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.generators.generate_rct_data" title="Link to this definition">#</a></dt>
-<dd><p>Create synthetic RCT data using CausalDatasetGenerator as the core engine.</p>
-<ul class="simple">
-<li><p>Treatment is randomized to approximately match <cite>split</cite> (independent of covariates).</p></li>
-<li><p>Outcome distribution is controlled by <cite>target_type</cite> and <cite>target_params</cite>.</p></li>
-<li><p>Returns a legacy-compatible schema with ancillary covariates derived from the outcome
-(age, cnt_trans, platform_Android, platform_iOS, invited_friend), plus a UUID user_id.</p></li>
-</ul>
+  <section id="causalkit-eda-eda-causaleda-confounders-roc-auc">
+<h1>causalkit.eda.eda.CausalEDA.confounders_roc_auc<a class="headerlink" href="#causalkit-eda-eda-causaleda-confounders-roc-auc" title="Link to this heading">#</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.confounders_roc_auc">
+<span class="sig-prename descclassname"><span class="pre">CausalEDA.</span></span><span class="sig-name descname"><span class="pre">confounders_roc_auc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/eda/eda.html#CausalEDA.confounders_roc_auc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.confounders_roc_auc" title="Link to this definition">#</a></dt>
+<dd><p>Compute ROC AUC of treatment assignment vs. estimated propensity score.</p>
+<p>Interpretation: Higher AUC means treatment is more predictable from confounders,
+indicating stronger systematic differences between groups (potential
+confounding). Values near 0.5 suggest random-like assignment.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_users</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Total number of users in the dataset.</p></li>
-<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Proportion of users in the treatment group (e.g., 0.5 =&gt; 50/50).</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Seed for reproducibility.</p></li>
-<li><p><strong>target_type</strong> (<em>{&quot;binary&quot;</em><em>,</em><em>&quot;normal&quot;</em><em>,</em><em>&quot;nonnormal&quot;}</em>) – Outcome family. “nonnormal” is approximated via a Poisson mean process.</p></li>
-<li><p><strong>target_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>If None, defaults are used:</dt><dd><ul>
-<li><p>binary   : {“p”: {“A”: 0.10, “B”: 0.12}}</p></li>
-<li><p>normal   : {“mean”: {“A”: 0.00, “B”: 0.20}, “std”: 1.0}</p></li>
-<li><p>nonnormal: {“shape”: 2.0, “scale”: {“A”: 1.0, “B”: 1.1}}</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Columns: user_id, treatment, outcome, age, cnt_trans,</dt><dd><p>platform_Android, platform_iOS, invited_friend.</p>
-</dd>
-</dl>
-</p>
-</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>target_type</cite> is not one of {“binary”, “normal”, “nonnormal”}.</p>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ps</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -497,20 +470,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causalkit.data.causaldata.CausalData.html"
+       href="causalkit.eda.eda.CausalEDA.fit_propensity.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.data.causaldata.CausalData</p>
+        <p class="prev-next-title">causalkit.eda.eda.CausalEDA.fit_propensity</p>
       </div>
     </a>
     <a class="right-next"
-       href="../design.html"
+       href="causalkit.eda.eda.CausalEDA.positivity_check.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Design Module</p>
+        <p class="prev-next-title">causalkit.eda.eda.CausalEDA.positivity_check</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -532,7 +505,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.generators.generate_rct_data"><code class="docutils literal notranslate"><span class="pre">generate_rct_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.confounders_roc_auc"><code class="docutils literal notranslate"><span class="pre">CausalEDA.confounders_roc_auc()</span></code></a></li>
 </ul>
   </nav></div>
 

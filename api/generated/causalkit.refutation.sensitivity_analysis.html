@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.refutation.sensitivity_analysis &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -45,12 +45,12 @@
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.data.generators.generate_rct_data';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.refutation.sensitivity_analysis';</script>
     <link rel="icon" href="../../_static/logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Design Module" href="../design.html" />
-    <link rel="prev" title="causalkit.data.causaldata.CausalData" href="causalkit.data.causaldata.CausalData.html" />
+    <link rel="next" title="causalkit.refutation.get_sensitivity_summary" href="causalkit.refutation.get_sensitivity_summary.html" />
+    <link rel="prev" title="causalkit.refutation.refute_subset" href="causalkit.refutation.refute_subset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -336,9 +336,9 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../data.html">Data Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.data.generators.generate_rct_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
@@ -368,11 +368,11 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../refutation.html">Refutation Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_outcome.html">causalkit.refutation.refute_placebo_outcome</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_treatment.html">causalkit.refutation.refute_placebo_treatment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.refutation.sensitivity_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis_set.html">causalkit.refutation.sensitivity_analysis_set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
@@ -419,9 +419,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../data.html" class="nav-link">Data Module</a></li>
+    <li class="breadcrumb-item"><a href="../refutation.html" class="nav-link">Refutation Module</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">causalkit.da...</li>
+    <li class="breadcrumb-item active" aria-current="page">causalkit.re...</li>
   </ul>
 </nav>
 </div>
@@ -438,50 +438,57 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="causalkit-data-generators-generate-rct-data">
-<h1>causalkit.data.generators.generate_rct_data<a class="headerlink" href="#causalkit-data-generators-generate-rct-data" title="Link to this heading">#</a></h1>
+  <section id="causalkit-refutation-sensitivity-analysis">
+<h1>causalkit.refutation.sensitivity_analysis<a class="headerlink" href="#causalkit-refutation-sensitivity-analysis" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.data.generators.generate_rct_data">
-<span class="sig-prename descclassname"><span class="pre">causalkit.data.generators.</span></span><span class="sig-name descname"><span class="pre">generate_rct_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_users</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/generators.html#generate_rct_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.generators.generate_rct_data" title="Link to this definition">#</a></dt>
-<dd><p>Create synthetic RCT data using CausalDatasetGenerator as the core engine.</p>
-<ul class="simple">
-<li><p>Treatment is randomized to approximately match <cite>split</cite> (independent of covariates).</p></li>
-<li><p>Outcome distribution is controlled by <cite>target_type</cite> and <cite>target_params</cite>.</p></li>
-<li><p>Returns a legacy-compatible schema with ancillary covariates derived from the outcome
-(age, cnt_trans, platform_Android, platform_iOS, invited_friend), plus a UUID user_id.</p></li>
-</ul>
+<dt class="sig sig-object py" id="causalkit.refutation.sensitivity_analysis">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/sensitivity.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity_analysis" title="Link to this definition">#</a></dt>
+<dd><p>Perform sensitivity analysis on a causal effect estimate.</p>
+<p>This function takes a DoubleML effect estimation result and performs sensitivity
+analysis to assess robustness to unobserved confounding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_users</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Total number of users in the dataset.</p></li>
-<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Proportion of users in the treatment group (e.g., 0.5 =&gt; 50/50).</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Seed for reproducibility.</p></li>
-<li><p><strong>target_type</strong> (<em>{&quot;binary&quot;</em><em>,</em><em>&quot;normal&quot;</em><em>,</em><em>&quot;nonnormal&quot;}</em>) – Outcome family. “nonnormal” is approximated via a Poisson mean process.</p></li>
-<li><p><strong>target_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>If None, defaults are used:</dt><dd><ul>
-<li><p>binary   : {“p”: {“A”: 0.10, “B”: 0.12}}</p></li>
-<li><p>normal   : {“mean”: {“A”: 0.00, “B”: 0.20}, “std”: 1.0}</p></li>
-<li><p>nonnormal: {“shape”: 2.0, “scale”: {“A”: 1.0, “B”: 1.1}}</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results, must include:
+- ‘model’: A fitted DoubleML model object (e.g., DoubleMLIRM)
+- Other keys like ‘coefficient’, ‘std_error’, ‘p_value’, etc.</p></li>
+<li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the outcome equation (confounding strength)</p></li>
+<li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the treatment equation (confounding strength)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for the sensitivity analysis</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Columns: user_id, treatment, outcome, age, cnt_trans,</dt><dd><p>platform_Android, platform_iOS, invited_friend.</p>
-</dd>
-</dl>
-</p>
+<dd class="field-even"><p>A formatted sensitivity analysis summary report</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>target_type</cite> is not one of {“binary”, “normal”, “nonnormal”}.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the effect_estimation does not contain a ‘model’ key or if the model
+    does not support sensitivity analysis</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.13)"><strong>KeyError</strong></a> – If required keys are missing from the effect_estimation dictionary</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – If the model is not a DoubleML object that supports sensitivity analysis</p></li>
+</ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.sensitivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">sensitivity_analysis</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data and estimate effect</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ck</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">ck</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform sensitivity analysis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sensitivity_report</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -497,20 +504,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causalkit.data.causaldata.CausalData.html"
+       href="causalkit.refutation.refute_subset.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.data.causaldata.CausalData</p>
+        <p class="prev-next-title">causalkit.refutation.refute_subset</p>
       </div>
     </a>
     <a class="right-next"
-       href="../design.html"
+       href="causalkit.refutation.get_sensitivity_summary.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Design Module</p>
+        <p class="prev-next-title">causalkit.refutation.get_sensitivity_summary</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -532,7 +539,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.generators.generate_rct_data"><code class="docutils literal notranslate"><span class="pre">generate_rct_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.sensitivity_analysis"><code class="docutils literal notranslate"><span class="pre">sensitivity_analysis()</span></code></a></li>
 </ul>
   </nav></div>
 

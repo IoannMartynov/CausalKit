@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.inference.dml &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -45,12 +45,12 @@
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.data.generators.generate_rct_data';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.inference.dml';</script>
     <link rel="icon" href="../../_static/logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Design Module" href="../design.html" />
-    <link rel="prev" title="causalkit.data.causaldata.CausalData" href="causalkit.data.causaldata.CausalData.html" />
+    <link rel="next" title="causalkit.inference.causalforestdml" href="causalkit.inference.causalforestdml.html" />
+    <link rel="prev" title="causalkit.inference.bootstrap_diff_means" href="causalkit.inference.bootstrap_diff_means.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -336,9 +336,9 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../data.html">Data Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.data.generators.generate_rct_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
@@ -357,11 +357,11 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.treatment_features.html">causalkit.eda.eda.CausalEDA.treatment_features</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../inference.html">Inference Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../inference.html">Inference Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml.html">causalkit.inference.dml</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.inference.dml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
@@ -419,9 +419,9 @@ document.write(`
     <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
     
     
-    <li class="breadcrumb-item"><a href="../data.html" class="nav-link">Data Module</a></li>
+    <li class="breadcrumb-item"><a href="../inference.html" class="nav-link">Inference Module</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">causalkit.da...</li>
+    <li class="breadcrumb-item active" aria-current="page">causalkit.in...</li>
   </ul>
 </nav>
 </div>
@@ -438,50 +438,66 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="causalkit-data-generators-generate-rct-data">
-<h1>causalkit.data.generators.generate_rct_data<a class="headerlink" href="#causalkit-data-generators-generate-rct-data" title="Link to this heading">#</a></h1>
+  <section id="causalkit-inference-dml">
+<h1>causalkit.inference.dml<a class="headerlink" href="#causalkit-inference-dml" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.data.generators.generate_rct_data">
-<span class="sig-prename descclassname"><span class="pre">causalkit.data.generators.</span></span><span class="sig-name descname"><span class="pre">generate_rct_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_users</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/generators.html#generate_rct_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.generators.generate_rct_data" title="Link to this definition">#</a></dt>
-<dd><p>Create synthetic RCT data using CausalDatasetGenerator as the core engine.</p>
-<ul class="simple">
-<li><p>Treatment is randomized to approximately match <cite>split</cite> (independent of covariates).</p></li>
-<li><p>Outcome distribution is controlled by <cite>target_type</cite> and <cite>target_params</cite>.</p></li>
-<li><p>Returns a legacy-compatible schema with ancillary covariates derived from the outcome
-(age, cnt_trans, platform_Android, platform_iOS, invited_friend), plus a UUID user_id.</p></li>
-</ul>
+<dt class="sig sig-object py" id="causalkit.inference.dml">
+<span class="sig-prename descclassname"><span class="pre">causalkit.inference.</span></span><span class="sig-name descname"><span class="pre">dml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#causalkit.inference.dml" title="Link to this definition">#</a></dt>
+<dd><p>Estimate average treatment effects using DoubleML’s interactive regression model (IRM).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_users</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Total number of users in the dataset.</p></li>
-<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Proportion of users in the treatment group (e.g., 0.5 =&gt; 50/50).</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Seed for reproducibility.</p></li>
-<li><p><strong>target_type</strong> (<em>{&quot;binary&quot;</em><em>,</em><em>&quot;normal&quot;</em><em>,</em><em>&quot;nonnormal&quot;}</em>) – Outcome family. “nonnormal” is approximated via a Poisson mean process.</p></li>
-<li><p><strong>target_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>If None, defaults are used:</dt><dd><ul>
-<li><p>binary   : {“p”: {“A”: 0.10, “B”: 0.12}}</p></li>
-<li><p>normal   : {“mean”: {“A”: 0.00, “B”: 0.20}, “std”: 1.0}</p></li>
-<li><p>nonnormal: {“shape”: 2.0, “scale”: {“A”: 1.0, “B”: 1.1}}</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The causaldata object containing treatment, target, and confounders variables.</p></li>
+<li><p><strong>ml_g</strong> (<em>estimator</em><em>, </em><em>optional</em>) – A machine learner implementing <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict()</span></code> methods for the nuisance function g_0(D,X) = E[Y|X,D].
+If None, a CatBoostRegressor configured to use all CPU cores is used.</p></li>
+<li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – A machine learner implementing <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> methods for the nuisance function m_0(X) = E[D|X].
+If None, a CatBoostClassifier configured to use all CPU cores is used.</p></li>
+<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
+<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions for the sample splitting.</p></li>
+<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default &quot;ATE&quot;</em>) – A str (“ATE” or “ATTE”) specifying the score function.</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Columns: user_id, treatment, outcome, age, cnt_trans,</dt><dd><p>platform_Android, platform_iOS, invited_friend.</p>
-</dd>
-</dl>
-</p>
+<dd class="field-even"><p>A dictionary containing:
+- coefficient: The estimated average treatment effect
+- std_error: The standard error of the estimate
+- p_value: The p-value for the null hypothesis that the effect is zero
+- confidence_interval: Tuple of (lower, upper) bounds for the confidence interval
+- model: The fitted DoubleMLIRM object</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>target_type</cite> is not one of {“binary”, “normal”, “nonnormal”}.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the causaldata object doesn’t have treatment, target, and confounders variables defined,
+    or if the treatment variable is not binary.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create causaldata object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ck</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Estimate ATE using DoubleML</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">ck</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Standard Error: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;std_error&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Confidence Interval: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -497,20 +513,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="causalkit.data.causaldata.CausalData.html"
+       href="causalkit.inference.bootstrap_diff_means.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.data.causaldata.CausalData</p>
+        <p class="prev-next-title">causalkit.inference.bootstrap_diff_means</p>
       </div>
     </a>
     <a class="right-next"
-       href="../design.html"
+       href="causalkit.inference.causalforestdml.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Design Module</p>
+        <p class="prev-next-title">causalkit.inference.causalforestdml</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -532,7 +548,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.generators.generate_rct_data"><code class="docutils literal notranslate"><span class="pre">generate_rct_data()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.dml"><code class="docutils literal notranslate"><span class="pre">dml()</span></code></a></li>
 </ul>
   </nav></div>
 
