@@ -6,6 +6,7 @@ focus on interpretability: treatment predictability, overlap/positivity,
 covariate balance before/after weighting, and basic data health.
 
 What the main outputs mean
+
 - outcome_stats(): DataFrame with comprehensive statistics (count, mean, std, 
   percentiles, min/max) for outcome grouped by treatment.
 - fit_propensity(): Numpy array of cross-validated propensity scores P(T=1|X).
@@ -495,6 +496,7 @@ class CausalEDA:
     """Exploratory diagnostics for causal designs with binary treatment.
 
     The class exposes methods to:
+    
     - Summarize outcome by treatment and naive mean difference.
     - Estimate cross-validated propensity scores and assess treatment
       predictability (AUC) and positivity/overlap.
@@ -1019,7 +1021,7 @@ class CausalEDA:
             DataFrame with confounders as index and the following columns:
             - mean_t_0: mean value for control group (treatment=0)
             - mean_t_1: mean value for treated group (treatment=1)  
-            - abs_diff: absolute difference |mean_t_1 - mean_t_0|
+            - abs_diff: absolute difference abs(mean_t_1 - mean_t_0)
             - smd: standardized mean difference (Cohen's d)
             
         Notes

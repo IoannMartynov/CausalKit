@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>causalkit.eda.eda &#8212; CausalKit  documentation</title>
+    <title>causalkit.eda.eda &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../../_static/documentation_options.js?v=2caa9db7"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -386,6 +386,7 @@ document.write(`
 <span class="sd">covariate balance before/after weighting, and basic data health.</span>
 
 <span class="sd">What the main outputs mean</span>
+
 <span class="sd">- outcome_stats(): DataFrame with comprehensive statistics (count, mean, std, </span>
 <span class="sd">  percentiles, min/max) for outcome grouped by treatment.</span>
 <span class="sd">- fit_propensity(): Numpy array of cross-validated propensity scores P(T=1|X).</span>
@@ -827,7 +828,7 @@ document.write(`
 <span class="c1"># Optional lightweight dataclass for standalone usage, but CausalEDA also</span>
 <span class="c1"># supports the existing causalkit.data.CausalData which uses `confounders`.</span>
 <div class="viewcode-block" id="CausalDataLite">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalDataLite">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.CausalDataLite.html#causalkit.eda.eda.CausalDataLite">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CausalDataLite</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A minimal container for dataset roles used by CausalEDA.</span>
@@ -893,11 +894,12 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.eda.CausalEDA">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CausalEDA</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Exploratory diagnostics for causal designs with binary treatment.</span>
 
 <span class="sd">    The class exposes methods to:</span>
+<span class="sd">    </span>
 <span class="sd">    - Summarize outcome by treatment and naive mean difference.</span>
 <span class="sd">    - Estimate cross-validated propensity scores and assess treatment</span>
 <span class="sd">      predictability (AUC) and positivity/overlap.</span>
@@ -906,7 +908,7 @@ document.write(`
 <span class="sd">    - Inspect weight distributions and effective sample size (ESS).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="CausalEDA.__init__">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.__init__">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.eda.CausalEDA.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ps_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_splits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">):</span>
         <span class="n">roles</span> <span class="o">=</span> <span class="n">_extract_roles</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">CausalDataLite</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;treatment&quot;</span><span class="p">],</span> <span class="n">target</span><span class="o">=</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;outcome&quot;</span><span class="p">],</span> <span class="n">confounders</span><span class="o">=</span><span class="n">roles</span><span class="p">[</span><span class="s2">&quot;confounders&quot;</span><span class="p">])</span>
@@ -960,7 +962,7 @@ document.write(`
     <span class="c1"># ---------- basics ----------</span>
 
 <div class="viewcode-block" id="CausalEDA.data_shape">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.data_shape">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.data_shape.html#causalkit.eda.eda.CausalEDA.data_shape">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">data_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the shape information of the causal dataset.</span>
 
@@ -990,7 +992,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.outcome_stats">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.outcome_stats">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.outcome_stats.html#causalkit.eda.eda.CausalEDA.outcome_stats">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">outcome_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Comprehensive outcome statistics grouped by treatment.</span>
 
@@ -1064,7 +1066,7 @@ document.write(`
 
     <span class="c1"># ---------- propensity &amp; overlap ----------</span>
 <div class="viewcode-block" id="CausalEDA.fit_propensity">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.fit_propensity">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.html#causalkit.eda.eda.CausalEDA.fit_propensity">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit_propensity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PropensityModel&#39;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate cross-validated propensity scores P(T=1|X).</span>
 
@@ -1188,7 +1190,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.outcome_fit">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.outcome_fit">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.html#causalkit.eda.eda.CausalEDA.outcome_fit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">outcome_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outcome_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;OutcomeModel&#39;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit a regression model to predict outcome from confounders only.</span>
 
@@ -1360,7 +1362,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.confounders_roc_auc">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.confounders_roc_auc">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.html#causalkit.eda.eda.CausalEDA.confounders_roc_auc">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">confounders_roc_auc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute ROC AUC of treatment assignment vs. estimated propensity score.</span>
 
@@ -1379,7 +1381,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.positivity_check">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.positivity_check">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.positivity_check.html#causalkit.eda.eda.CausalEDA.positivity_check">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">positivity_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check overlap/positivity based on propensity score thresholds.</span>
 
@@ -1402,7 +1404,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.plot_ps_overlap">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.plot_ps_overlap">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.html#causalkit.eda.eda.CausalEDA.plot_ps_overlap">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_ps_overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot overlaid histograms of propensity scores for treated vs control.</span>
 
@@ -1428,7 +1430,7 @@ document.write(`
     <span class="c1"># ---------- balance ----------</span>
 
 <div class="viewcode-block" id="CausalEDA.confounders_means">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.confounders_means">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.confounders_means.html#causalkit.eda.eda.CausalEDA.confounders_means">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">confounders_means</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Comprehensive confounders balance assessment with means by treatment group.</span>
 
@@ -1448,7 +1450,7 @@ document.write(`
 <span class="sd">            DataFrame with confounders as index and the following columns:</span>
 <span class="sd">            - mean_t_0: mean value for control group (treatment=0)</span>
 <span class="sd">            - mean_t_1: mean value for treated group (treatment=1)  </span>
-<span class="sd">            - abs_diff: absolute difference |mean_t_1 - mean_t_0|</span>
+<span class="sd">            - abs_diff: absolute difference abs(mean_t_1 - mean_t_0)</span>
 <span class="sd">            - smd: standardized mean difference (Cohen&#39;s d)</span>
 <span class="sd">            </span>
 <span class="sd">        Notes</span>
@@ -1515,7 +1517,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.outcome_plots">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.outcome_plots">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.outcome_plots.html#causalkit.eda.eda.CausalEDA.outcome_plots">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">outcome_plots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">treatment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="n">target</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1614,7 +1616,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="CausalEDA.treatment_features">
-<a class="viewcode-back" href="../../../api/eda.html#causalkit.eda.eda.CausalEDA.treatment_features">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/causalkit.eda.eda.CausalEDA.treatment_features.html#causalkit.eda.eda.CausalEDA.treatment_features">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">treatment_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return SHAP values from the fitted propensity score model.</span>
 <span class="sd">        </span>
