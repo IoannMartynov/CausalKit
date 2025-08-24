@@ -9,13 +9,23 @@ import os
 import sys
 from datetime import datetime
 
-# Add the project root directory to the Python path
-sys.path.insert(0, os.path.abspath('..'))
+# Add the project root directory to the Python path (robust to CWD)
+_DOCS_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(_DOCS_DIR, '..')))
 
 # -- Project information -----------------------------------------------------
 project = 'CausalKit'
 copyright = f'{datetime.now().year}, CausalKit Team'
 author = 'Ioann Martynov'
+
+# Version information
+try:
+    import causalkit as _ck
+    release = str(getattr(_ck, "__version__", "0.0.0"))
+    version = release
+except Exception:
+    # Fallback to a placeholder version if import fails in docs env
+    release = version = "0.0.0"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -63,13 +73,15 @@ napoleon_type_aliases = None
 napoleon_attr_annotations = True
 
 # Autodoc settings
-# Do not auto-generate new autosummary stubs during CI to avoid import-time failures;
-# we keep pre-generated files under docs/api/generated committed.
-autosummary_generate = False
+# Allow autosummary to generate stubs for API pages that declare them.
+# With autodoc_mock_imports below, this should be safe in docs environments.
+autosummary_generate = True
 # Mock optional heavy dependencies to allow docs build in minimal CI environments
 autodoc_mock_imports = [
     'catboost',
     'matplotlib',
+    'econml',
+    'shap',
 ]
 # Move type hints into the description for clearer parameter sections
 autodoc_typehints = "description"

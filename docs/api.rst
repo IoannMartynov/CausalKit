@@ -8,7 +8,6 @@ This section provides detailed documentation for all modules and functions in Ca
 
    api/data
    api/design
-   api/analysis
    api/eda
    api/inference
    api/refutation

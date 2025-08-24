@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit  documentation</title>
+    <title>causalkit.data.generators.generate_rct_data &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/documentation_options.js?v=2caa9db7"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -342,9 +342,42 @@ document.write(`
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../eda.html">EDA Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../inference.html">Inference Module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../refutation.html">Refutation Module</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../eda.html">EDA Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalEDA.html">causalkit.eda.CausalEDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalDataLite.html">causalkit.eda.CausalDataLite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.data_shape.html">causalkit.eda.eda.CausalEDA.data_shape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_stats.html">causalkit.eda.eda.CausalEDA.outcome_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.fit_propensity.html">causalkit.eda.eda.CausalEDA.fit_propensity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_roc_auc.html">causalkit.eda.eda.CausalEDA.confounders_roc_auc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.positivity_check.html">causalkit.eda.eda.CausalEDA.positivity_check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.plot_ps_overlap.html">causalkit.eda.eda.CausalEDA.plot_ps_overlap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_means.html">causalkit.eda.eda.CausalEDA.confounders_means</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_fit.html">causalkit.eda.eda.CausalEDA.outcome_fit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_plots.html">causalkit.eda.eda.CausalEDA.outcome_plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.treatment_features.html">causalkit.eda.eda.CausalEDA.treatment_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../inference.html">Inference Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml.html">causalkit.inference.dml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_outcome.html">causalkit.refutation.refute_placebo_outcome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_treatment.html">causalkit.refutation.refute_placebo_treatment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis_set.html">causalkit.refutation.sensitivity_analysis_set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
