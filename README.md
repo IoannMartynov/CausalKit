@@ -16,11 +16,11 @@ import causalkit
 ## [DOCS](https://ioannmartynov.github.io/CausalKit/index.html)
 
 # Scenarios Covered
-| Is RCT        | Treatment | Outcome    | EDA | Estimands      | Refutation | Docs    |
-|---------------|-----------|------------|-----|----------------|------------|---------|
-| Observational | Binary    | Continuous | Yes | ATE            | Yes        | Example |
-| Observational | Binary    | Continuous |     | ATT            | Yes        | Example |
-| Observational | Binary    | Binary     |     | ATE            |            |         |
-| Observational | Binary    | Binary     |     | ATT            |            |         |
+| Is RCT        | Treatment | Outcome    | EDA | Estimands | Refutation | Docs    |
+|---------------|-----------|------------|-----|-----------|------------|---------|
+| Observational | Binary    | Continuous | Yes | ATE       | Yes        | Example |
+| Observational | Binary    | Continuous |     | ATT       | Yes        | Example |
+| Observational | Binary    | Binary     |     |           |            |         |
+| Observational | Binary    | Binary     |     |           |            |         |
 
 # Don't forget to press Star ⭐️
