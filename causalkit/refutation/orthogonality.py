@@ -32,13 +32,20 @@ def aipw_score_ate(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray,
 
 def aipw_score_att(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, g: np.ndarray, theta: float, p1: Optional[float] = None, eps: float = 0.01) -> np.ndarray:
     """
-    Efficient influence function (EIF) for ATT, normalized by p1 = P(D=1).
-    m1 enters via theta only; derivative wrt m1 is zero.
+    Efficient influence function (EIF) for ATT (a.k.a. ATTE) under IRM/AIPW.
+
+    ψ_ATT(W; θ, η) = [ D*(Y - m0(X) - θ)  -  (1-D)*{ g(X)/(1-g(X)) }*(Y - m0(X)) ] / E[D]
+
+    Notes:
+      - This matches DoubleML's `score='ATTE'` (weights ω=D/E[D], \bar{ω}=m(X)/E[D]).
+      - m1 enters only via θ; ∂ψ/∂m1 = 0.
     """
     g = np.clip(g, eps, 1 - eps)
     if p1 is None:
         p1 = float(np.mean(d))
-    return (d * (y - m0 - theta) + (1 - d) * (g / (1 - g)) * (y - m0)) / (p1 + 1e-12)
+    gamma = g / (1.0 - g)
+    num = d * (y - m0 - theta) - (1.0 - d) * gamma * (y - m0)
+    return num / (p1 + 1e-12)
 
 
 def extract_nuisances(dml_model, test_indices: Optional[np.ndarray] = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -102,38 +109,6 @@ def extract_nuisances(dml_model, test_indices: Optional[np.ndarray] = None) -> T
     return g, m0, m1
 
 
-def aipw_score(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, g: np.ndarray, theta_hat: float, eps: float = 0.01) -> np.ndarray:
-    """
-    Compute AIPW (Augmented Inverse Propensity Weighting) scores.
-    
-    The AIPW score is the efficient influence function (EIF) for the ATE:
-    ψ_i(θ,η) = [m1(X_i) - m0(X_i)] + D_i(Y_i - m1(X_i))/g(X_i) - (1-D_i)(Y_i - m0(X_i))/(1-g(X_i)) - θ
-    
-    Parameters
-    ----------
-    y : np.ndarray
-        Observed outcomes
-    d : np.ndarray  
-        Binary treatment indicator (0/1)
-    m0 : np.ndarray
-        Predicted outcomes under control E[Y|X,D=0]
-    m1 : np.ndarray
-        Predicted outcomes under treatment E[Y|X,D=1] 
-    g : np.ndarray
-        Propensity scores P(D=1|X)
-    theta_hat : float
-        Estimated treatment effect
-    eps : float, default 0.01
-        Clipping bound for propensity scores to avoid extreme weights
-        
-    Returns
-    -------
-    np.ndarray
-        AIPW scores for each observation
-    """
-    # Clip propensity scores to avoid division by zero and extreme weights
-    g_clipped = np.clip(g, eps, 1 - eps)
-    return (m1 - m0) + d * (y - m1) / g_clipped - (1 - d) * (y - m0) / (1 - g_clipped) - theta_hat
 
 
 def oos_moment_check_with_fold_nuisances(
@@ -437,7 +412,6 @@ def refute_irm_orthogonality(
     m1_trim = m1_outcomes[trim_mask]
     
     # === 1. OUT-OF-SAMPLE MOMENT CHECK ===
-    strict_applied = False
     kf = KFold(n_splits=n_folds_oos, shuffle=True, random_state=42)
     fold_thetas: List[float] = []
     fold_indices: List[np.ndarray] = []
@@ -457,21 +431,32 @@ def refute_irm_orthogonality(
         fold_thetas.append(float(fold_result['coefficient']))
         fold_indices.append(test_idx)
         
-        if strict_oos and not strict_applied:
-            # Strict mode not implemented fully; fall back to fast nuisances but mark flag
-            strict_applied = False
-        
         # Use full-model cross-fitted nuisances indexed by test fold (fast OOS)
         g_fold = g_propensity[test_idx]
         m0_fold = m0_outcomes[test_idx]
         m1_fold = m1_outcomes[test_idx]
         fold_nuisances.append((g_fold, m0_fold, m1_fold))
     
-    # Run out-of-sample moment check with fold-specific nuisances
+    # Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)
     oos_df, oos_tstat = oos_moment_check_with_fold_nuisances(
         fold_thetas, fold_indices, fold_nuisances, y, d, score_fn=score_fn
     )
     oos_pvalue = 2 * (1 - stats.norm.cdf(np.abs(oos_tstat)))
+
+    # Strict aggregation over all held-out psi
+    all_psi_list: List[np.ndarray] = []
+    for k, (idx, (g_fold, m0_fold, m1_fold)) in enumerate(zip(fold_indices, fold_nuisances)):
+        th = fold_thetas[k]
+        psi_k = score_fn(y[idx], d[idx], m0_fold, m1_fold, g_fold, th)
+        all_psi_list.append(psi_k)
+    all_psi = np.concatenate(all_psi_list) if len(all_psi_list) > 0 else np.array([0.0])
+    tstat_strict = float((np.sqrt(len(all_psi)) * all_psi.mean()) / (all_psi.std(ddof=1) + 1e-12))
+    pvalue_strict = float(2 * (1 - stats.norm.cdf(np.abs(tstat_strict))))
+
+    # Choose which t-stat to report as main
+    strict_applied = bool(strict_oos)
+    main_tstat = tstat_strict if strict_applied else oos_tstat
+    main_pvalue = pvalue_strict if strict_applied else oos_pvalue
     
     # === 2. ORTHOGONALITY DERIVATIVE TESTS ===
     # Create basis functions: constant + first few standardized confounders
@@ -496,28 +481,42 @@ def refute_irm_orthogonality(
         ortho_derivs_full = orthogonality_derivatives(X_basis, y, d, m0_outcomes, m1_outcomes, g_propensity, eps=clip_eps)
         X_basis_trim = X_basis[trim_mask]
         ortho_derivs_trim = orthogonality_derivatives(X_basis_trim, y_trim, d_trim, m0_trim, m1_trim, g_trim, eps=clip_eps)
-        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_m1']) > 2) | 
-                                                   (np.abs(ortho_derivs_full['t_m0']) > 2) | 
-                                                   (np.abs(ortho_derivs_full['t_g']) > 2)]
-        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_m1']) > 2) | 
-                                                   (np.abs(ortho_derivs_trim['t_m0']) > 2) | 
-                                                   (np.abs(ortho_derivs_trim['t_g']) > 2)]
-        derivs_interpretation = 'Large |t-stats| (>2) indicate calibration issues'
+        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_m1']) > 2) | (np.abs(ortho_derivs_full['t_m0']) > 2) | (np.abs(ortho_derivs_full['t_g']) > 2)]
+        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_m1']) > 2) | (np.abs(ortho_derivs_trim['t_m0']) > 2) | (np.abs(ortho_derivs_trim['t_g']) > 2)]
+        derivs_interpretation = 'Large |t| (>2) indicate calibration issues'
         derivs_full_ok = len(problematic_derivs_full) == 0
         derivs_trim_ok = len(problematic_derivs_trim) == 0
-    else:
-        # For ATT, derivative formulas differ; skip with a clear note
-        ortho_derivs_full = pd.DataFrame()
-        ortho_derivs_trim = pd.DataFrame()
-        problematic_derivs_full = pd.DataFrame()
-        problematic_derivs_trim = pd.DataFrame()
-        derivs_interpretation = 'ATT selected: derivative checks skipped (ATE formulas not applicable)'
-        derivs_full_ok = True
-        derivs_trim_ok = True
+    else:  # ATTE / ATT
+        p1_full = float(np.mean(d))
+        ortho_derivs_full = orthogonality_derivatives_att(X_basis, y, d, m0_outcomes, g_propensity, p1_full, eps=clip_eps)
+        X_basis_trim = X_basis[trim_mask]
+        p1_trim = float(np.mean(d_trim))
+        ortho_derivs_trim = orthogonality_derivatives_att(X_basis_trim, y_trim, d_trim, m0_trim, g_trim, p1_trim, eps=clip_eps)
+        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_m0']) > 2) | (np.abs(ortho_derivs_full['t_g']) > 2)]
+        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_m0']) > 2) | (np.abs(ortho_derivs_trim['t_g']) > 2)]
+        derivs_interpretation = 'ATT: check m0 & g only; large |t| (>2) => calibration issues'
+        derivs_full_ok = len(problematic_derivs_full) == 0
+        derivs_trim_ok = len(problematic_derivs_trim) == 0
     
     # === 3. INFLUENCE DIAGNOSTICS ===
     influence_full = influence_summary(y, d, m0_outcomes, m1_outcomes, g_propensity, theta_hat, target=target_u, clip_eps=clip_eps)
-    influence_trim = influence_summary(y_trim, d_trim, m0_trim, m1_trim, g_trim, theta_hat, target=target_u, clip_eps=clip_eps)
+
+    # Re-estimate theta on the trimmed sample for fair trimmed influence diagnostics
+    theta_hat_trim = theta_hat
+    try:
+        df_full_local = data.get_df()
+        data_trim_obj = CausalData(
+            df=df_full_local.loc[trim_mask].copy(),
+            treatment=data.treatment.name,
+            outcome=data.target.name,
+            confounders=list(data.confounders) if data.confounders else None
+        )
+        res_trim = inference_fn(data_trim_obj, **inference_kwargs)
+        theta_hat_trim = float(res_trim.get('coefficient', theta_hat))
+    except Exception:
+        pass
+
+    influence_trim = influence_summary(y_trim, d_trim, m0_trim, m1_trim, g_trim, theta_hat_trim, target=target_u, clip_eps=clip_eps)
     
     # === DIAGNOSTIC ASSESSMENT ===
     model_se = result.get('std_error')
@@ -527,7 +526,7 @@ def refute_irm_orthogonality(
         se_reasonable = False
     
     conditions = {
-        'oos_moment_ok': abs(oos_tstat) < 2.0,
+        'oos_moment_ok': abs(main_tstat) < 2.0,
         'derivs_full_ok': derivs_full_ok,
         'derivs_trim_ok': derivs_trim_ok,
         'se_reasonable': se_reasonable,
@@ -544,6 +543,20 @@ def refute_irm_orthogonality(
         overall_assessment = "WARNING: Several orthogonality violations"
     else:
         overall_assessment = "FAIL: Major orthogonality violations detected"
+
+    # ATT-specific overlap and trim-sensitivity
+    overlap_att = None
+    trim_curve_att = None
+    if target_u in ('ATTE', 'ATT'):
+        overlap_att = overlap_diagnostics_att(g_propensity, d, eps_list=[0.95, 0.97, 0.98, 0.99])
+        try:
+            trim_curve_att = trim_sensitivity_curve_att(
+                inference_fn, data, g_propensity, d,
+                thresholds=np.linspace(0.90, 0.995, 12),
+                **inference_kwargs
+            )
+        except Exception as _:
+            trim_curve_att = None
     
     return {
         'theta': float(theta_hat),
@@ -551,12 +564,18 @@ def refute_irm_orthogonality(
             'target': target_u,
             'clip_eps': clip_eps,
             'strict_oos_requested': bool(strict_oos),
-            'strict_oos_applied': bool(False)
+            'strict_oos_applied': bool(strict_applied),
+            **({'p1': float(np.mean(d)), 'p1_full': float(np.mean(d)), 'p1_trim': float(np.mean(d_trim))} if target_u in ('ATTE','ATT') else {})
         },
         'oos_moment_test': {
             'fold_results': oos_df,
-            'tstat': float(oos_tstat),
-            'pvalue': float(oos_pvalue),
+            'tstat': float(main_tstat),
+            'pvalue': float(main_pvalue),
+            'tstat_fold_agg': float(oos_tstat),
+            'pvalue_fold_agg': float(oos_pvalue),
+            'tstat_strict': float(tstat_strict),
+            'pvalue_strict': float(pvalue_strict),
+            'aggregation': 'strict' if strict_applied else 'fold',
             'interpretation': 'Should be ≈ 0 if moment condition holds'
         },
         'orthogonality_derivatives': {
@@ -571,6 +590,11 @@ def refute_irm_orthogonality(
             'trimmed_sample': influence_trim,
             'interpretation': 'Heavy tails or extreme kurtosis suggest instability'
         },
+        'overlap_diagnostics': overlap_att,
+        'robustness': {
+            'trim_curve': trim_curve_att,
+            'interpretation': 'ATT typically more sensitive to trimming near m→1 (controls).'
+        },
         'trimming_info': {
             'bounds': trim_propensity,
             'n_trimmed': int(n_trimmed),
@@ -579,3 +603,99 @@ def refute_irm_orthogonality(
         'diagnostic_conditions': conditions,
         'overall_assessment': overall_assessment
     }
+
+
+def orthogonality_derivatives_att(
+    X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
+    m0: np.ndarray, g: np.ndarray, p1: float, eps: float = 0.01
+) -> pd.DataFrame:
+    """
+    Gateaux derivatives of the ATT score wrt nuisances (m0, g). m1-derivative is 0.
+
+    For ψ_ATT = [ D*(Y - m0 - θ)  -  (1-D)*(g/(1-g))*(Y - m0) ] / p1:
+
+      ∂_{m0}[h] : (1/n) Σ h(X_i) * [ ((1-D_i)*g_i/(1-g_i) - D_i) / p1 ]
+      ∂_{g}[s]  : (1/n) Σ s(X_i) * [ -(1-D_i)*(Y_i - m0_i) / ( p1 * (1-g_i)^2 ) ]
+
+    Both have 0 expectation at the truth (Neyman orthogonality).
+    """
+    n, B = X_basis.shape
+    g = np.clip(g, eps, 1 - eps)
+    odds = g / (1.0 - g)
+
+    dm0_terms = X_basis * (((1.0 - d) * odds - d) / (p1 + 1e-12))[:, None]
+    dm0 = dm0_terms.mean(axis=0)
+    dm0_se = dm0_terms.std(axis=0, ddof=1) / np.sqrt(n)
+
+    dg_terms = - X_basis * (((1.0 - d) * (y - m0)) / ((p1 + 1e-12) * (1.0 - g)**2))[:, None]
+    dg = dg_terms.mean(axis=0)
+    dg_se = dg_terms.std(axis=0, ddof=1) / np.sqrt(n)
+
+    dm1 = np.zeros(B)
+    dm1_se = np.zeros(B)
+    t = lambda est, se: est / np.maximum(se, 1e-12)
+
+    return pd.DataFrame({
+        "basis": np.arange(B),
+        "d_m1": dm1, "se_m1": dm1_se, "t_m1": np.zeros(B),
+        "d_m0": dm0, "se_m0": dm0_se, "t_m0": t(dm0, dm0_se),
+        "d_g": dg,   "se_g": dg_se,   "t_g":  t(dg, dg_se),
+    })
+
+
+def overlap_diagnostics_att(
+    g: np.ndarray, d: np.ndarray, eps_list: List[float] = [0.95, 0.97, 0.98, 0.99]
+) -> pd.DataFrame:
+    """
+    Key overlap metrics for ATT: availability of suitable controls.
+    Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; among TREATED, fraction with m(X) ≤ 1 - threshold.
+    """
+    rows = []
+    g = np.asarray(g)
+    d_bool = np.asarray(d).astype(bool)
+    ctrl = ~d_bool
+    trt = d_bool
+    n_ctrl = int(ctrl.sum())
+    n_trt = int(trt.sum())
+    for thr in eps_list:
+        pct_ctrl = float(100.0 * ((g[ctrl] >= thr).mean() if n_ctrl else np.nan))
+        pct_trt = float(100.0 * ((g[trt] <= (1.0 - thr)).mean() if n_trt else np.nan))
+        rows.append({
+            "threshold": thr,
+            "pct_controls_with_g_ge_thr": pct_ctrl,
+            "pct_treated_with_g_le_1_minus_thr": pct_trt,
+        })
+    return pd.DataFrame(rows)
+
+
+def trim_sensitivity_curve_att(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    g: np.ndarray, d: np.ndarray,
+    thresholds: np.ndarray = np.linspace(0.90, 0.995, 12),
+    **inference_kwargs
+) -> pd.DataFrame:
+    """
+    Re-estimate θ while progressively trimming CONTROLS with large m(X).
+    """
+    df_full = data.get_df()
+    rows = []
+    for thr in thresholds:
+        controls = (np.asarray(d).astype(bool) == False)
+        high_p = (np.asarray(g) >= thr)
+        drop = controls & high_p
+        keep = ~drop
+        df_trim = df_full.loc[keep].copy()
+        data_trim = CausalData(
+            df=df_trim, treatment=data.treatment.name,
+            outcome=data.target.name, confounders=list(data.confounders) if data.confounders else None
+        )
+        res = inference_fn(data_trim, **inference_kwargs)
+        rows.append({
+            "trim_threshold": float(thr),
+            "n": int(keep.sum()),
+            "pct_dropped": float(100.0 * drop.mean()),
+            "theta": float(res["coefficient"]),
+            "se": float(res.get("std_error", np.nan))
+        })
+    return pd.DataFrame(rows)

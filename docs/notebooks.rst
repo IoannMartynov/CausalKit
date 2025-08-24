@@ -16,4 +16,5 @@ General Examples
 .. toctree::
    :maxdepth: 1
 
-   examples/basic_example
+   examples/dml_ate
+   examples/dml_att

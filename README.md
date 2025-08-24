@@ -19,5 +19,10 @@ import causalkit
 | Is RCT        | Treatment | Outcome    | EDA | Estimands      | Refutation | Docs    |
 |---------------|-----------|------------|-----|----------------|------------|---------|
 | Observational | Binary    | Continuous | Yes | ATE,ATT linear | Yes        | Example |
+| Observational | Binary    | Binary     |     | ATE,ATT linear |            |         |
+| Observational | Binary    | Continuous |     | ATE non-linear |            |         |
+| Observational | Binary    | Continuous |     | ATT non-linear |            |         |
+| Observational | Binary    | Binary     |     | ATE non-linear |            |         |
+| Observational | Binary    | Binary     |     | ATT non-linear |            |         |
 
 # Don't forget to press Star ⭐️
