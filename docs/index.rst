@@ -50,9 +50,16 @@ Scenarios Covered
      - Binary
      - Continuous
      - Yes
-     - ATE linear
+     - ATE
      - Yes
-     - Example, Synthetic tests
+     - Example
+   * - Observational
+     - Binary
+     - Continuous
+     - Yes
+     - ATT
+     - Yes
+     - Example
 
 Start using with :doc:`User Guide <user-guide>`
 ----------------------------------------------
