@@ -46,4 +46,6 @@ docs = [
 ]
 
 [tool.setuptools]
-packages = ["causalkit", "causalkit.data", "causalkit.design", "causalkit.inference"]
+
+[tool.setuptools.packages.find]
+include = ["causalkit", "causalkit.*"]
