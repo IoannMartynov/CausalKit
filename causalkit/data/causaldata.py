@@ -89,6 +89,19 @@ class CausalData:
         # Store only the relevant columns
         columns_to_keep = [self._target, self._treatment] + self._confounders
         self.df = df[columns_to_keep].copy()
+        
+        # Coerce boolean columns to integers to ensure stored df is fully numeric
+        for col in self.df.columns:
+            if pdtypes.is_bool_dtype(self.df[col]):
+                # Use int8 for compact 0/1 storage
+                self.df[col] = self.df[col].astype("int8")
+        
+        # Final safeguard: ensure all stored columns are numeric
+        for col in self.df.columns:
+            if not pdtypes.is_numeric_dtype(self.df[col]):
+                raise ValueError(
+                    f"All columns in stored DataFrame must be numeric; column '{col}' has dtype {self.df[col].dtype}."
+                )
 
     def _ensure_list(self, value: Union[str, List[str]]) -> List[str]:
         """
@@ -114,9 +127,9 @@ class CausalData:
         if self._target not in all_columns:
             raise ValueError(f"Column '{self._target}' specified as outcome does not exist in the DataFrame.")
 
-        # Check if outcome column contains only int or float values
-        if not pdtypes.is_numeric_dtype(df[self._target]):
-            raise ValueError(f"Column '{self._target}' specified as outcome must contain only int or float values.")
+        # Check if outcome column contains numeric or boolean values
+        if not (pdtypes.is_numeric_dtype(df[self._target]) or pdtypes.is_bool_dtype(df[self._target])):
+            raise ValueError(f"Column '{self._target}' specified as outcome must contain only int, float, or bool values.")
 
         # Check if outcome column is constant (zero variance or single value)
         if df[self._target].std() == 0 or pd.isna(df[self._target].std()):
@@ -126,10 +139,10 @@ class CausalData:
         if self._treatment not in all_columns:
             raise ValueError(f"Column '{self._treatment}' specified as treatment does not exist in the DataFrame.")
 
-        # Check if treatment column contains only int or float values
-        if not pdtypes.is_numeric_dtype(df[self._treatment]):
+        # Check if treatment column contains numeric or boolean values
+        if not (pdtypes.is_numeric_dtype(df[self._treatment]) or pdtypes.is_bool_dtype(df[self._treatment])):
             raise ValueError(
-                f"Column '{self._treatment}' specified as treatment must contain only int or float values.")
+                f"Column '{self._treatment}' specified as treatment must contain only int, float, or bool values.")
 
         # Check if treatment column is constant (zero variance or single value)
         if df[self._treatment].std() == 0 or pd.isna(df[self._treatment].std()):
@@ -140,9 +153,9 @@ class CausalData:
             if col not in all_columns:
                 raise ValueError(f"Column '{col}' specified as confounders does not exist in the DataFrame.")
 
-            # Check if column contains only int or float values
-            if not pdtypes.is_numeric_dtype(df[col]):
-                raise ValueError(f"Column '{col}' specified as confounders must contain only int or float values.")
+            # Check if confounder column contains numeric or boolean values
+            if not (pdtypes.is_numeric_dtype(df[col]) or pdtypes.is_bool_dtype(df[col])):
+                raise ValueError(f"Column '{col}' specified as confounders must contain only int, float, or bool values.")
 
             # Check if confounder column is constant (zero variance or single value)
             if df[col].std() == 0 or pd.isna(df[col].std()):
