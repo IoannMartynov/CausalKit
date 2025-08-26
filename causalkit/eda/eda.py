@@ -532,6 +532,8 @@ class CausalEDA:
         )
         
         self.ps_pipe = Pipeline([("prep", self.preproc), ("clf", self.ps_model)])
+        # Optional: clarify no native categorical indices are used post-OHE
+        self.cat_features = None
 
     # ---------- basics ----------
 
@@ -734,8 +736,7 @@ class CausalEDA:
             treatment_values=t,
             fitted_model=self._fitted_model,
             feature_names=self._feature_names,
-            X_for_shap=getattr(self, '_X_for_shap', None),
-            cat_features_for_shap=getattr(self, '_cat_features_for_shap', None)
+            X_for_shap=getattr(self, '_X_for_shap', None)
         )
 
     def outcome_fit(self, outcome_model: Optional[Any] = None) -> 'OutcomeModel':
@@ -868,8 +869,7 @@ class CausalEDA:
             actual_outcomes=y,
             fitted_model=self._outcome_fitted_model,
             feature_names=self._outcome_feature_names,
-            X_for_shap=getattr(self, '_outcome_X_for_shap', None),
-            cat_features_for_shap=getattr(self, '_outcome_cat_features_for_shap', None)
+            X_for_shap=getattr(self, '_outcome_X_for_shap', None)
         )
 
     def confounders_roc_auc(self, ps: Optional[np.ndarray] = None) -> float:
