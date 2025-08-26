@@ -467,7 +467,9 @@ def refute_irm_orthogonality(
     if n_basis_funcs is None:
         n_basis_funcs = len(data.confounders) + 1
     
-    X = data.get_df()[list(data.confounders)].values
+    # Ensure confounders are represented as a float ndarray to avoid object-dtype reductions
+    df_conf = data.get_df()[list(data.confounders)]
+    X = df_conf.to_numpy(dtype=float)
     n_covs = min(max(n_basis_funcs - 1, 0), X.shape[1])  # -1 for constant term
     
     if n_covs > 0:

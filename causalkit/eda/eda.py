@@ -130,8 +130,8 @@ class PropensityModel:
                 if self.X_for_shap is None:
                     raise RuntimeError("Preprocessed data for SHAP computation not available.")
                 
-                # Create Pool object for SHAP computation
-                shap_pool = Pool(data=self.X_for_shap, cat_features=self.cat_features_for_shap)
+                # Create Pool object for SHAP computation (numeric-only features after preprocessing)
+                shap_pool = Pool(data=self.X_for_shap)
                 
                 # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
                 # where the last column is the bias term
@@ -345,8 +345,8 @@ class OutcomeModel:
                 if self.X_for_shap is None:
                     raise RuntimeError("Preprocessed data for SHAP computation not available.")
                 
-                # Create Pool object for SHAP computation
-                shap_pool = Pool(data=self.X_for_shap, cat_features=self.cat_features_for_shap)
+                # Create Pool object for SHAP computation (numeric-only after preprocessing)
+                shap_pool = Pool(data=self.X_for_shap)
                 
                 # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
                 # where the last column is the bias term
@@ -515,41 +515,21 @@ class CausalEDA:
             verbose=False  # Suppress training output
         )
 
-        # Preprocessing for CatBoost - identify categorical features for native handling
+        # Preprocessing: always make features numeric via OneHotEncoder for categoricals
         X = self.d.df[self.d.confounders]
         num = X.select_dtypes(include=[np.number]).columns.tolist()
         cat = [c for c in X.columns if c not in num]
-        self.cat_features = [X.columns.get_loc(c) for c in cat] if cat else None
-        
-        # For CatBoost, we can use minimal preprocessing since it handles categoricals natively
-        if isinstance(self.ps_model, CatBoostClassifier):
-            # Only scale numeric features, keep categoricals as-is for CatBoost
-            if num:
-                num_transformer = Pipeline(steps=[
-                    ("scaler", StandardScaler(with_mean=True, with_std=True))
-                ])
-                self.preproc = ColumnTransformer(
-                    transformers=[
-                        ("num", num_transformer, num),
-                        ("cat", "passthrough", cat),
-                    ],
-                    remainder="drop",
-                )
-            else:
-                # All categorical, no preprocessing needed
-                self.preproc = "passthrough"
-        else:
-            # Fallback preprocessing for other models (like LogisticRegression)
-            num_transformer = Pipeline(steps=[
-                ("scaler", StandardScaler(with_mean=True, with_std=True))
-            ])
-            self.preproc = ColumnTransformer(
-                transformers=[
-                    ("num", num_transformer, num),
-                    ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat),
-                ],
-                remainder="drop",
-            )
+
+        num_transformer = Pipeline(steps=[
+            ("scaler", StandardScaler(with_mean=True, with_std=True))
+        ])
+        self.preproc = ColumnTransformer(
+            transformers=[
+                ("num", num_transformer, num),
+                ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat),
+            ],
+            remainder="drop",
+        )
         
         self.ps_pipe = Pipeline([("prep", self.preproc), ("clf", self.ps_model)])
 
@@ -702,15 +682,8 @@ class CausalEDA:
                             verbose=False
                         )
                         
-                        # Identify categorical features after preprocessing
-                        if self.cat_features is not None:
-                            # Map original categorical feature indices to preprocessed data
-                            num_features = X.select_dtypes(include=[np.number]).shape[1]
-                            cat_features_prep = list(range(num_features, X_train_prep.shape[1]))
-                        else:
-                            cat_features_prep = None
-                        
-                        model.fit(X_train_prep, t_train, cat_features=cat_features_prep)
+                        # All features are numeric after preprocessing; no cat_features needed
+                        model.fit(X_train_prep, t_train)
                         ps[test_idx] = model.predict_proba(X_test_prep)[:, 1]
         else:
             # Use standard sklearn pipeline for non-CatBoost models
@@ -737,24 +710,15 @@ class CausalEDA:
                 verbose=False
             )
             
-            # Identify categorical features after preprocessing
-            if self.cat_features is not None:
-                # Map original categorical feature indices to preprocessed data
-                num_features = X.select_dtypes(include=[np.number]).shape[1]
-                cat_features_prep = list(range(num_features, X_full_prep.shape[1]))
-            else:
-                cat_features_prep = None
-            
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
-                    final_model.fit(X_full_prep, t, cat_features=cat_features_prep)
+                    final_model.fit(X_full_prep, t)
             
             # Store the trained model and data needed for SHAP computation
             self._fitted_model = final_model
             self._feature_names = X.columns.tolist()
             self._X_for_shap = X_full_prep  # Store preprocessed data for SHAP
-            self._cat_features_for_shap = cat_features_prep  # Store categorical features info
         else:
             # For non-CatBoost models, fit the pipeline on full data
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
@@ -811,40 +775,21 @@ class CausalEDA:
                 verbose=False
             )
         
-        # Identify categorical features for native CatBoost handling
+        # Identify numeric and categorical features for preprocessing
         num_features = X.select_dtypes(include=[np.number]).columns.tolist()
         cat_features = [c for c in X.columns if c not in num_features]
-        cat_features_indices = [X.columns.get_loc(c) for c in cat_features] if cat_features else None
         
-        # Setup preprocessing similar to propensity model
-        if isinstance(outcome_model, CatBoostRegressor):
-            # Only scale numeric features, keep categoricals as-is for CatBoost
-            if num_features:
-                num_transformer = Pipeline(steps=[
-                    ("scaler", StandardScaler(with_mean=True, with_std=True))
-                ])
-                preproc = ColumnTransformer(
-                    transformers=[
-                        ("num", num_transformer, num_features),
-                        ("cat", "passthrough", cat_features),
-                    ],
-                    remainder="drop",
-                )
-            else:
-                # All categorical, no preprocessing needed
-                preproc = "passthrough"
-        else:
-            # Fallback preprocessing for other models
-            num_transformer = Pipeline(steps=[
-                ("scaler", StandardScaler(with_mean=True, with_std=True))
-            ])
-            preproc = ColumnTransformer(
-                transformers=[
-                    ("num", num_transformer, num_features),
-                    ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat_features),
-                ],
-                remainder="drop",
-            )
+        # Setup preprocessing: always OHE categoricals so model input is numeric
+        num_transformer = Pipeline(steps=[
+            ("scaler", StandardScaler(with_mean=True, with_std=True))
+        ])
+        preproc = ColumnTransformer(
+            transformers=[
+                ("num", num_transformer, num_features),
+                ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat_features),
+            ],
+            remainder="drop",
+        )
         
         # Special handling for CatBoost to properly pass categorical features
         if isinstance(outcome_model, CatBoostRegressor):
@@ -872,15 +817,8 @@ class CausalEDA:
                             verbose=False
                         )
                         
-                        # Identify categorical features after preprocessing
-                        if cat_features_indices is not None:
-                            # Map original categorical feature indices to preprocessed data
-                            num_features_count = len(num_features)
-                            cat_features_prep = list(range(num_features_count, X_train_prep.shape[1]))
-                        else:
-                            cat_features_prep = None
-                        
-                        model.fit(X_train_prep, y_train, cat_features=cat_features_prep)
+                        # All features are numeric after preprocessing; no cat_features needed
+                        model.fit(X_train_prep, y_train)
                         predictions[test_idx] = model.predict(X_test_prep)
         else:
             # Use standard sklearn pipeline for non-CatBoost models
@@ -905,24 +843,15 @@ class CausalEDA:
                 verbose=False
             )
             
-            # Identify categorical features after preprocessing
-            if cat_features_indices is not None:
-                # Map original categorical feature indices to preprocessed data
-                num_features_count = len(num_features)
-                cat_features_prep = list(range(num_features_count, X_full_prep.shape[1]))
-            else:
-                cat_features_prep = None
-            
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
-                    final_model.fit(X_full_prep, y, cat_features=cat_features_prep)
+                    final_model.fit(X_full_prep, y)
             
             # Store the trained model and data needed for SHAP computation
             self._outcome_fitted_model = final_model
             self._outcome_feature_names = X.columns.tolist()
             self._outcome_X_for_shap = X_full_prep  # Store preprocessed data for SHAP
-            self._outcome_cat_features_for_shap = cat_features_prep  # Store categorical features info
         else:
             # For non-CatBoost models, fit the pipeline on full data
             pipeline = Pipeline([("prep", preproc), ("reg", outcome_model)])
@@ -1236,8 +1165,8 @@ class CausalEDA:
                 if not hasattr(self, '_X_for_shap') or self._X_for_shap is None:
                     raise RuntimeError("Preprocessed data for SHAP computation not available. Please call fit_propensity() first.")
                 
-                # Create Pool object for SHAP computation
-                shap_pool = Pool(data=self._X_for_shap, cat_features=self._cat_features_for_shap)
+                # Create Pool object for SHAP computation (numeric-only after preprocessing)
+                shap_pool = Pool(data=self._X_for_shap)
                 
                 # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
                 # where the last column is the bias term
