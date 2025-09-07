@@ -31,12 +31,12 @@ def test_import_submodules():
 def test_import_specific_functions():
     """Test that specific functions from causalkit can be imported."""
     try:
-        from causalkit.data import generate_rct_data
+        from causalkit.data import generate_rct
         from causalkit.design import split_traffic
         from causalkit.inference import ttest
         
         # Check that the imported objects are callable
-        assert callable(generate_rct_data)
+        assert callable(generate_rct)
         assert callable(split_traffic)
         assert callable(ttest)
     except ImportError as e:
