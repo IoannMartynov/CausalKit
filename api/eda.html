@@ -338,7 +338,6 @@ document.write(`
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="design.html">Design Module</a></li>
@@ -532,6 +531,31 @@ interface for propensity score analysis.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.from_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.from_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.from_kfold" title="Link to this definition">#</a></dt>
+<dd><p>Estimate propensity scores via K-fold and return a PropensityModel.</p>
+<p>Produces out-of-fold propensity scores using StratifiedKFold. If no
+model is provided, a fast LogisticRegression is used. Categorical
+features are one-hot encoded and numeric features standardized by
+default using a ColumnTransformer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.PropensityModel" title="causalkit.eda.eda.PropensityModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropensityModel</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
+<li><p><strong>t</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>preprocessor</strong> (<em>ColumnTransformer</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.roc_auc">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roc_auc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.roc_auc" title="Link to this definition">#</a></dt>
@@ -639,6 +663,30 @@ interface for outcome model analysis.</p>
 <li><p><strong>feature_names</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – Names of features used in the model (confounders only)</p></li>
 <li><p><strong>X_for_shap</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>) – Preprocessed feature matrix for SHAP computation</p></li>
 <li><p><strong>cat_features_for_shap</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>]</em>) – Categorical feature indices for SHAP computation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.OutcomeModel.from_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#OutcomeModel.from_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.OutcomeModel.from_kfold" title="Link to this definition">#</a></dt>
+<dd><p>Estimate an outcome model via K-fold and return an OutcomeModel.</p>
+<p>Produces out-of-fold predictions using KFold. If no model is provided,
+a fast LinearRegression is used. Categorical features are one-hot
+encoded and numeric features standardized by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.OutcomeModel" title="causalkit.eda.eda.OutcomeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutcomeModel</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>preprocessor</strong> (<em>ColumnTransformer</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1209,6 +1257,7 @@ negative values indicate features that decrease treatment probability.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.eda.eda">CausalEDA</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel"><code class="docutils literal notranslate"><span class="pre">PropensityModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.__init__"><code class="docutils literal notranslate"><span class="pre">PropensityModel.__init__()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.from_kfold"><code class="docutils literal notranslate"><span class="pre">PropensityModel.from_kfold()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.roc_auc"><code class="docutils literal notranslate"><span class="pre">PropensityModel.roc_auc</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.shap"><code class="docutils literal notranslate"><span class="pre">PropensityModel.shap</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.ps_graph"><code class="docutils literal notranslate"><span class="pre">PropensityModel.ps_graph()</span></code></a></li>
@@ -1217,6 +1266,7 @@ negative values indicate features that decrease treatment probability.</p>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel"><code class="docutils literal notranslate"><span class="pre">OutcomeModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.__init__"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.__init__()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.from_kfold"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.from_kfold()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.scores"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.scores</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.shap"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.shap</span></code></a></li>
 </ul>
