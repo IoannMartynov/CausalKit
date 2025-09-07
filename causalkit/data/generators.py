@@ -42,153 +42,223 @@ def _sigmoid(z):
     return out
 
 
-def generate_rct_data(
-    n_users: int = 20_000,
+from typing import Optional, Dict, List, Any, Callable
+
+def _logit(p: float) -> float:
+    p = float(np.clip(p, 1e-12, 1 - 1e-12))
+    return float(np.log(p / (1 - p)))
+
+
+def _sample_confounders_like_class(
+    n: int,
+    rng: np.random.Generator,
+    *,
+    confounder_specs: Optional[List[Dict[str, Any]]],
+    k: int,
+    x_sampler: Optional[Callable[[int, int, int], np.ndarray]],
+    seed: Optional[int],
+) -> (np.ndarray, List[str]):
+    """Replicates CausalDatasetGenerator._sample_X behavior (names & one-hot)."""
+    # Custom sampler wins
+    if x_sampler is not None:
+        X = x_sampler(n, k, seed)
+        names = [f"x{i+1}" for i in range(k)]
+        return np.asarray(X, dtype=float), names
+
+    # Specs provided
+    if confounder_specs is not None:
+        cols, names = [], []
+        for spec in confounder_specs:
+            name = spec.get("name") or f"x{len(names)+1}"
+            dist = str(spec.get("dist", "normal")).lower()
+
+            if dist == "normal":
+                mu = float(spec.get("mu", 0.0)); sd = float(spec.get("sd", 1.0))
+                col = rng.normal(mu, sd, size=n)
+                cols.append(col.astype(float)); names.append(name)
+
+            elif dist == "uniform":
+                a = float(spec.get("a", 0.0)); b = float(spec.get("b", 1.0))
+                col = rng.uniform(a, b, size=n)
+                cols.append(col.astype(float)); names.append(name)
+
+            elif dist == "bernoulli":
+                p = float(spec.get("p", 0.5))
+                col = rng.binomial(1, p, size=n).astype(float)
+                cols.append(col); names.append(name)
+
+            elif dist == "categorical":
+                categories = list(spec.get("categories", [0, 1, 2]))
+                probs = spec.get("probs", None)
+                col = rng.choice(categories, p=probs, size=n)
+                # one-hot for all levels except the first
+                rest = categories[1:]
+                if len(rest) == 0:
+                    # Mirror class behavior: add a zero column if only one category provided
+                    cols.append(np.zeros(n, dtype=float))
+                    names.append(f"{name}_0")
+                else:
+                    for c in rest:
+                        oh = (col == c).astype(float)
+                        cols.append(oh)
+                        names.append(f"{name}_{c}")
+            else:
+                raise ValueError(f"Unknown dist: {dist}")
+
+        X = np.column_stack(cols) if cols else np.empty((n, 0))
+        return X, names
+
+    # Default: iid N(0,1) if k>0; else no X
+    if k > 0:
+        X = rng.normal(size=(n, k))
+        names = [f"x{i+1}" for i in range(k)]
+        return X, names
+    else:
+        return np.empty((n, 0)), []
+
+
+def generate_rct(
+    n: int = 20_000,
     split: float = 0.5,
     random_state: Optional[int] = 42,
-    target_type: str = "binary",                         # {"binary", "normal", "nonnormal"}
-    target_params: Optional[Dict] = None,                # distribution specifics (see docstring)
+    target_type: str = "binary",              # {"binary","normal","poisson"}; "nonnormal" -> "poisson"
+    target_params: Optional[Dict] = None,
+    confounder_specs: Optional[List[Dict[str, Any]]] = None,
+    k: int = 0,
+    x_sampler: Optional[Callable[[int, int, int], np.ndarray]] = None,
+    add_ancillary: bool = True,
 ) -> pd.DataFrame:
     """
-    Create synthetic RCT data using CausalDatasetGenerator as the core engine.
+    Generate an RCT dataset with treatment randomized independently of X.
 
-    - Treatment is randomized to approximately match `split` (independent of covariates).
-    - Outcome distribution is controlled by `target_type` and `target_params`.
-    - Returns a legacy-compatible schema with ancillary covariates derived from the outcome
-      (age, cnt_trans, platform_Android, platform_iOS, invited_friend), plus a UUID user_id.
-
-    Parameters
-    ----------
-    n_users : int
-        Total number of users in the dataset.
-    split : float
-        Proportion of users in the treatment group (e.g., 0.5 => 50/50).
-    random_state : int, optional
-        Seed for reproducibility.
-    target_type : {"binary","normal","nonnormal"}
-        Outcome family. "nonnormal" is approximated via a Poisson mean process.
-    target_params : dict, optional
-        If None, defaults are used:
-          - binary   : {"p": {"A": 0.10, "B": 0.12}}
-          - normal   : {"mean": {"A": 0.00, "B": 0.20}, "std": 1.0}
-          - nonnormal: {"shape": 2.0, "scale": {"A": 1.0, "B": 1.1}}
-
-    Returns
-    -------
-    pd.DataFrame
-        Columns: user_id, treatment, outcome, age, cnt_trans,
-                 platform_Android, platform_iOS, invited_friend.
-
-    Raises
-    ------
-    ValueError
-        If `target_type` is not one of {"binary", "normal", "nonnormal"}.
+    Returns columns:
+      - y, t, <confounder columns>, propensity, mu0, mu1, cate
+      - (optional) user_id, age, cnt_trans, platform_Android, platform_iOS, invited_friend
     """
+    # ---- RNG ----
     rng = np.random.default_rng(random_state)
 
-    # Defaults for target parameters
+    # ---- Validate split ----
+    if not (0.0 < float(split) < 1.0):
+        raise ValueError("split must be in (0,1).")
+
+    # ---- Normalize target_type & defaults ----
+    ttype = target_type.lower()
+    if ttype == "nonnormal":
+        ttype = "poisson"
+
+    if ttype not in {"binary", "normal", "poisson"}:
+        raise ValueError("target_type must be 'binary', 'normal', or 'poisson' (or alias 'nonnormal').")
+
     if target_params is None:
-        if target_type == "binary":
+        if ttype == "binary":
             target_params = {"p": {"A": 0.10, "B": 0.12}}
-        elif target_type == "normal":
+        elif ttype == "normal":
             target_params = {"mean": {"A": 0.00, "B": 0.20}, "std": 1.0}
-        elif target_type == "nonnormal":
+        else:  # poisson
             target_params = {"shape": 2.0, "scale": {"A": 1.0, "B": 1.1}}
-        else:
-            raise ValueError("target_type must be 'binary', 'normal', or 'nonnormal'.")
 
-    # Configure the generator based on requested target_type/params
-    outcome_type = None
-    alpha_y = 0.0
-    theta = 0.0
-    sigma_y = 1.0
+    # ---- Map params to natural-scale expectations for t=0/t=1 ----
+    if ttype == "binary":
+        pA = float(target_params["p"]["A"]); pB = float(target_params["p"]["B"])
+        if not (0.0 < pA < 1.0 and 0.0 < pB < 1.0):
+            raise ValueError("For binary outcomes, probabilities must be in (0,1).")
+        mu0_nat, mu1_nat = pA, pB
 
-    if target_type == "binary":
-        pA = float(target_params["p"]["A"])  # control prob
-        pB = float(target_params["p"]["B"])  # treatment prob
-        # Map to log-odds scale: logit(p) = log(p/(1-p))
-        def logit(p):
-            p = np.clip(p, 1e-6, 1-1e-6)
-            return float(np.log(p/(1-p)))
-        alpha_y = logit(pA)
-        theta = logit(pB) - logit(pA)
-        outcome_type = "binary"
-    elif target_type == "normal":
-        muA = float(target_params["mean"]["A"])  # control mean
-        muB = float(target_params["mean"]["B"])  # treatment mean
-        sigma_y = float(target_params.get("std", 1.0))
-        alpha_y = muA
-        theta = muB - muA
-        outcome_type = "continuous"
-    else:  # "nonnormal" -> approximate with Poisson mean process
+    elif ttype == "normal":
+        muA = float(target_params["mean"]["A"]); muB = float(target_params["mean"]["B"])
+        sd  = float(target_params.get("std", 1.0))
+        if not (sd > 0):
+            raise ValueError("For normal outcomes, std must be > 0.")
+        mu0_nat, mu1_nat = muA, muB
+
+    else:  # poisson
         shape = float(target_params.get("shape", 2.0))
-        scaleA = float(target_params["scale"]["A"])  # control scale
-        scaleB = float(target_params["scale"]["B"])  # treatment scale
-        lamA = shape * scaleA
-        lamB = shape * scaleB
-        alpha_y = float(np.log(max(lamA, 1e-6)))
-        theta = float(np.log(max(lamB, 1e-6)) - np.log(max(lamA, 1e-6)))
-        outcome_type = "poisson"
+        scaleA = float(target_params["scale"]["A"])
+        scaleB = float(target_params["scale"]["B"])
+        lamA = shape * scaleA; lamB = shape * scaleB
+        if not (lamA > 0 and lamB > 0):
+            raise ValueError("For Poisson outcomes, implied rates must be > 0.")
+        mu0_nat, mu1_nat = lamA, lamB
 
-    gen = CausalDatasetGenerator(
-        theta=theta,
-        alpha_y=alpha_y,
-        sigma_y=sigma_y,
-        outcome_type=outcome_type,
-        # RCT: treatment independent of X
-        beta_t=None,
-        g_t=None,
-        u_strength_t=0.0,
-        # outcome baseline independent of X
-        beta_y=None,
-        g_y=None,
-        u_strength_y=0.0,
-        target_t_rate=split,
+    # ---- Confounders (identical semantics to class) ----
+    X, xnames = _sample_confounders_like_class(
+        n, rng,
+        confounder_specs=confounder_specs,
+        k=int(k),
+        x_sampler=x_sampler,
         seed=random_state,
-        # No need to generate confounders for RCT construction
-        confounder_specs=[],
-        k=0,
     )
 
-    df_core = gen.generate(n_users)
-    # Extract core columns
-    y = df_core["y"].to_numpy()
-    t = df_core["t"].astype(int).to_numpy()
+    # ---- Treatment: pure randomization ----
+    t = rng.binomial(1, split, size=n).astype(float)
+    propensity = np.full(n, float(split), dtype=float)
 
-    # Build ancillary covariates based on outcome to preserve prior behavior
-    # Age
-    age = rng.normal(35 + 4 * y, 8, n_users).round().clip(18, 90).astype(int)
+    # ---- Outcome generation on natural scale ----
+    if ttype == "binary":
+        # Bernoulli with p depending only on T
+        p = np.where(t == 1.0, mu1_nat, mu0_nat)
+        y = rng.binomial(1, p, size=n).astype(float)
+        mu0 = np.full(n, mu0_nat, dtype=float)
+        mu1 = np.full(n, mu1_nat, dtype=float)
 
-    # Transactions count (ensure non-negative rate)
-    lam = np.maximum(1.5 + 2 * y, 1e-6)
-    cnt_trans = rng.poisson(lam, n_users).astype(int)
+    elif ttype == "normal":
+        mean = np.where(t == 1.0, mu1_nat, mu0_nat)
+        y = mean + rng.normal(0.0, sd, size=n)
+        mu0 = np.full(n, mu0_nat, dtype=float)
+        mu1 = np.full(n, mu1_nat, dtype=float)
 
-    # Platform
-    p_android = 1.0 / (1.0 + np.exp(-(-0.4 + 0.8 * y)))
-    platform_android = rng.binomial(1, np.clip(p_android, 0.0, 1.0), n_users).astype(int)
-    platform_ios = (1 - platform_android).astype(int)
+    else:  # poisson
+        lam = np.where(t == 1.0, mu1_nat, mu0_nat)
+        y = rng.poisson(lam).astype(float)
+        mu0 = np.full(n, mu0_nat, dtype=float)
+        mu1 = np.full(n, mu1_nat, dtype=float)
 
-    # Invited friend (normalize y to [0,1])
-    y_min, y_max = float(np.min(y)), float(np.max(y))
-    denom = (y_max - y_min) + 1e-8
-    y_norm = (y - y_min) / denom
-    invited_friend = rng.binomial(1, np.clip(0.05 + 0.25 * y_norm, 0.0, 1.0), n_users).astype(int)
+    cate = mu1 - mu0  # constant across units (ATE on natural scale)
 
-    # UUIDs
-    user_ids = [str(uuid.uuid4()) for _ in range(n_users)]
+    # ---- Assemble DataFrame ----
+    df = pd.DataFrame({"y": y, "t": t})
 
-    # Assemble legacy schema
-    df = pd.DataFrame({
-        "user_id": user_ids,
-        "treatment": t,
-        "outcome": y,
-        "age": age,
-        "cnt_trans": cnt_trans,
-        "platform_Android": platform_android,
-        "platform_iOS": platform_ios,
-        "invited_friend": invited_friend,
-    })
+    # Add confounder columns if any
+    for j, name in enumerate(xnames):
+        df[name] = X[:, j]
+    df["propensity"] = propensity
+    df["mu0"] = mu0
+    df["mu1"] = mu1
+    df["cate"] = cate
+
+    # ---- Optional ancillary (legacy-compat) ----
+    if add_ancillary:
+        # Age ~ N(35 + 4*y, 8), int clipped to [18,90]
+        age = rng.normal(35 + 4 * y, 8, n).round().clip(18, 90).astype(int)
+
+        # cnt_trans ~ Poisson(max(1.5 + 2*y, 1e-6))
+        lam_tx = np.maximum(1.5 + 2 * y, 1e-6)
+        cnt_trans = rng.poisson(lam_tx, n).astype(int)
+
+        # Platform: P(Android) = sigmoid(-0.4 + 0.8*y)
+        p_android = 1.0 / (1.0 + np.exp(-(-0.4 + 0.8 * y)))
+        platform_android = rng.binomial(1, np.clip(p_android, 0.0, 1.0), n).astype(int)
+        platform_ios = (1 - platform_android).astype(int)
+
+        # Invited friend: normalized y -> [0,1]
+        y_min, y_max = float(np.min(y)), float(np.max(y))
+        y_norm = (y - y_min) / ((y_max - y_min) + 1e-8)
+        invited_friend = rng.binomial(1, np.clip(0.05 + 0.25 * y_norm, 0.0, 1.0), n).astype(int)
+
+        # UUIDs (non-deterministic by design)
+        user_ids = [str(uuid.uuid4()) for _ in range(n)]
+
+        df.insert(0, "user_id", user_ids)
+        df["age"] = age
+        df["cnt_trans"] = cnt_trans
+        df["platform_Android"] = platform_android
+        df["platform_iOS"] = platform_ios
+        df["invited_friend"] = invited_friend
+
     return df
+
+
 
 
 

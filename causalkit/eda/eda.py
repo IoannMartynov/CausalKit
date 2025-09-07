@@ -34,6 +34,7 @@ from sklearn.metrics import roc_auc_score, mean_squared_error, mean_absolute_err
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression, LinearRegression
 from catboost import CatBoostClassifier, CatBoostRegressor
 import matplotlib.pyplot as plt
 
@@ -81,6 +82,93 @@ class PropensityModel:
         self.feature_names = feature_names
         self.X_for_shap = X_for_shap
         self.cat_features_for_shap = cat_features_for_shap
+
+    @classmethod
+    def from_kfold(
+        cls,
+        X: pd.DataFrame,
+        t: np.ndarray,
+        model: Optional[Any] = None,
+        n_splits: int = 5,
+        random_state: int = 42,
+        preprocessor: Optional[ColumnTransformer] = None,
+    ) -> "PropensityModel":
+        """Estimate propensity scores via K-fold and return a PropensityModel.
+
+        Produces out-of-fold propensity scores using StratifiedKFold. If no
+        model is provided, a fast LogisticRegression is used. Categorical
+        features are one-hot encoded and numeric features standardized by
+        default using a ColumnTransformer.
+        """
+        # Ensure inputs are aligned
+        if isinstance(X, pd.DataFrame):
+            feature_names = X.columns.tolist()
+        else:
+            raise ValueError("X must be a pandas DataFrame with named columns.")
+        t = np.asarray(t).astype(int)
+
+        # Preprocessor default
+        if preprocessor is None:
+            num = X.select_dtypes(include=[np.number]).columns.tolist()
+            cat = [c for c in X.columns if c not in num]
+            num_transformer = Pipeline(steps=[("scaler", StandardScaler(with_mean=True, with_std=True))])
+            preprocessor = ColumnTransformer(
+                transformers=[
+                    ("num", num_transformer, num),
+                    ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat),
+                ],
+                remainder="drop",
+            )
+
+        # Model default
+        if model is None:
+            model = LogisticRegression(max_iter=1000)
+
+        cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+
+        # Compute out-of-fold probabilities
+        if isinstance(model, CatBoostClassifier):
+            import warnings
+            ps = np.zeros(len(X))
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    for tr_idx, te_idx in cv.split(X, t):
+                        X_tr, X_te = X.iloc[tr_idx], X.iloc[te_idx]
+                        t_tr = t[tr_idx]
+                        X_tr_p = preprocessor.fit_transform(X_tr)
+                        X_te_p = preprocessor.transform(X_te)
+                        fold_model = CatBoostClassifier(thread_count=-1, random_seed=random_state, verbose=False)
+                        fold_model.fit(X_tr_p, t_tr)
+                        ps[te_idx] = fold_model.predict_proba(X_te_p)[:, 1]
+            # Fit final model for SHAP
+            X_full_p = preprocessor.fit_transform(X)
+            final_model = CatBoostClassifier(thread_count=-1, random_seed=random_state, verbose=False)
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                final_model.fit(X_full_p, t)
+            X_for_shap = X_full_p
+            fitted = final_model
+        else:
+            pipe = Pipeline([("prep", preprocessor), ("clf", model)])
+            import warnings
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    ps = cross_val_predict(pipe, X, t, cv=cv, method="predict_proba")[:, 1]
+                    pipe.fit(X, t)
+            fitted = pipe
+            X_for_shap = None
+
+        # clip for stability
+        ps = np.clip(ps, 1e-6, 1 - 1e-6)
+
+        return cls(
+            propensity_scores=ps,
+            treatment_values=t,
+            fitted_model=fitted,
+            feature_names=feature_names,
+            X_for_shap=X_for_shap,
+        )
     
     @property
     def roc_auc(self) -> float:
@@ -291,6 +379,86 @@ class OutcomeModel:
         self.feature_names = feature_names
         self.X_for_shap = X_for_shap
         self.cat_features_for_shap = cat_features_for_shap
+
+    @classmethod
+    def from_kfold(
+        cls,
+        X: pd.DataFrame,
+        y: np.ndarray,
+        model: Optional[Any] = None,
+        n_splits: int = 5,
+        random_state: int = 42,
+        preprocessor: Optional[ColumnTransformer] = None,
+    ) -> "OutcomeModel":
+        """Estimate an outcome model via K-fold and return an OutcomeModel.
+
+        Produces out-of-fold predictions using KFold. If no model is provided,
+        a fast LinearRegression is used. Categorical features are one-hot
+        encoded and numeric features standardized by default.
+        """
+        if not isinstance(X, pd.DataFrame):
+            raise ValueError("X must be a pandas DataFrame with named columns.")
+        feature_names = X.columns.tolist()
+        y = np.asarray(y)
+
+        # Preprocessor default
+        if preprocessor is None:
+            num = X.select_dtypes(include=[np.number]).columns.tolist()
+            cat = [c for c in X.columns if c not in num]
+            num_transformer = Pipeline(steps=[("scaler", StandardScaler(with_mean=True, with_std=True))])
+            preprocessor = ColumnTransformer(
+                transformers=[
+                    ("num", num_transformer, num),
+                    ("cat", OneHotEncoder(handle_unknown="ignore", drop=None, sparse_output=False), cat),
+                ],
+                remainder="drop",
+            )
+
+        # Model default
+        if model is None:
+            model = LinearRegression()
+
+        cv = KFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+
+        if isinstance(model, CatBoostRegressor):
+            import warnings
+            preds = np.zeros(len(X))
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    for tr_idx, te_idx in cv.split(X, y):
+                        X_tr, X_te = X.iloc[tr_idx], X.iloc[te_idx]
+                        y_tr = y[tr_idx]
+                        X_tr_p = preprocessor.fit_transform(X_tr)
+                        X_te_p = preprocessor.transform(X_te)
+                        fold_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False)
+                        fold_model.fit(X_tr_p, y_tr)
+                        preds[te_idx] = fold_model.predict(X_te_p)
+            # Fit final model for SHAP
+            X_full_p = preprocessor.fit_transform(X)
+            final_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False)
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                final_model.fit(X_full_p, y)
+            fitted = final_model
+            X_for_shap = X_full_p
+        else:
+            pipe = Pipeline([("prep", preprocessor), ("reg", model)])
+            import warnings
+            with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore", category=RuntimeWarning)
+                    preds = cross_val_predict(pipe, X, y, cv=cv)
+                    pipe.fit(X, y)
+            fitted = pipe
+            X_for_shap = None
+
+        return cls(
+            predicted_outcomes=preds,
+            actual_outcomes=y,
+            fitted_model=fitted,
+            feature_names=feature_names,
+            X_for_shap=X_for_shap,
+        )
     
     @property
     def scores(self) -> Dict[str, float]:
