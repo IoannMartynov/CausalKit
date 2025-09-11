@@ -73,7 +73,7 @@ def dml_ate(
     >>> df = generate_rct_data()
     >>> 
     >>> # Create causaldata object
-    >>> ck = CausalData(
+    >>> causal_data = CausalData(
     ...     df=df,
     ...     outcome='outcome',
     ...     treatment='treatment',
