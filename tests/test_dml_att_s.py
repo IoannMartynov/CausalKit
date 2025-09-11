@@ -1,0 +1,51 @@
+import numpy as np
+import pandas as pd
+import pytest
+
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+
+from causalkit.data.causaldata import CausalData
+from causalkit.data.generators import generate_rct
+from causalkit.inference.att import dml_att_s
+
+
+def make_causal_data(n=1000, target_type="normal", random_state=1):
+    df = generate_rct(n=n, split=0.5, random_state=random_state, target_type=target_type, k=3, add_ancillary=False)
+    y = "y"; t = "t"
+    xcols = [c for c in df.columns if c not in {y, t, "propensity", "mu0", "mu1", "cate"}]
+    return CausalData(df=df[[y, t] + xcols], treatment=t, outcome=y, confounders=xcols)
+
+
+def test_dml_att_s_runs_and_output_structure():
+    cd = make_causal_data(n=800, target_type="normal", random_state=42)
+    ml_g = RandomForestRegressor(n_estimators=50, random_state=42)
+    ml_m = RandomForestClassifier(n_estimators=50, random_state=42)
+
+    res = dml_att_s(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, confidence_level=0.95)
+
+    assert set(res.keys()) == {"coefficient", "std_error", "p_value", "confidence_interval", "model"}
+    assert np.isfinite(res["coefficient"]) and np.isfinite(res["std_error"]) and np.isfinite(res["p_value"])
+    ci = res["confidence_interval"]
+    assert isinstance(ci, tuple) and len(ci) == 2 and np.isfinite(ci[0]) and np.isfinite(ci[1])
+
+
+def test_dml_att_s_binary_outcome_with_classifier():
+    cd = make_causal_data(n=700, target_type="binary", random_state=21)
+    ml_g = RandomForestClassifier(n_estimators=60, random_state=21)
+    ml_m = RandomForestClassifier(n_estimators=60, random_state=21)
+
+    res = dml_att_s(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3)
+    assert np.isfinite(res["std_error"]) and np.isfinite(res["coefficient"]) 
+
+
+def test_dml_att_s_raises_on_non_binary_treatment():
+    cd = make_causal_data(n=300, target_type="normal", random_state=3)
+    df = cd.df.copy()
+    df[cd.treatment.name] = df[cd.treatment.name].replace({1: 2})
+    cd_bad = CausalData(df=df, treatment=cd.treatment.name, outcome=cd.target.name, confounders=cd.confounders)
+
+    ml_g = RandomForestRegressor(n_estimators=10, random_state=0)
+    ml_m = RandomForestClassifier(n_estimators=10, random_state=0)
+
+    with pytest.raises(ValueError):
+        dml_att_s(cd_bad, ml_g=ml_g, ml_m=ml_m, n_folds=2)
