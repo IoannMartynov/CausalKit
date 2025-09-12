@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data import CausalData
-from causalkit.inference.att import dml_att
+from causalkit.inference.att import dml_att_source
 
 
 def _make_synthetic(n=300, seed=123):
@@ -37,7 +37,7 @@ def test_dml_att_runs_with_confounders_and_sklearn_models():
     ml_g = RandomForestRegressor(n_estimators=50, max_depth=3, random_state=0)
     ml_m = RandomForestClassifier(n_estimators=50, max_depth=3, random_state=0)
 
-    res = dml_att(data, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1, confidence_level=0.9)
+    res = dml_att_source(data, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1, confidence_level=0.9)
 
     # Basic sanity checks
     assert isinstance(res, dict)

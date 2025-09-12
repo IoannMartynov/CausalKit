@@ -1,8 +1,17 @@
-"""
-Internal DoubleML-style IRM estimator consuming CausalData.
+r"""
+DML IRM estimator consuming CausalData.
 
 Implements cross-fitted nuisance estimation for g0, g1 and m, and supports ATE/ATTE scores.
 This is a lightweight clone of DoubleML's IRM tailored for CausalData input.
+
+software{DoubleML,
+  title = {{DoubleML} -- Double Machine Learning in Python},
+  author = {Bach, Philipp and Chernozhukov, Victor and Klaassen, Sven and Kurz, Malte S. and Spindler, Martin},
+  year = {2024},
+  version = {latest},
+  url = {https://github.com/DoubleML/doubleml-for-py},
+  note = {BSD-3-Clause License. Documentation: \url{https://docs.doubleml.org/stable/index.html}}
+}
 """
 from __future__ import annotations
 

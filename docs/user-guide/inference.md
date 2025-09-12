@@ -13,17 +13,17 @@ Under the hood, ATE/ATT routines rely on Double Machine Learning (DoubleML/IRM) 
 Below is the minimal flow using the DoubleML ATE estimator. It expects a `CausalData` object with one binary treatment, one outcome, and a list of confounders.
 
 ```python
-from causalkit.inference.ate import dml_ate
+from causalkit.inference.ate import dml_ate_source
 
 # Assume you already constructed a CausalData object: `causal_data`
 # (see the User Guide pages for data preparation and EDA)
 
-results = dml_ate(causal_data, n_folds=3, confidence_level=0.95)
+results = dml_ate_source(causal_data, n_folds=3, confidence_level=0.95)
 
-print("ATE (coefficient):", results["coefficient"])           # float
-print("Std. error:", results["std_error"])                    # float
-print("P-value:", results["p_value"])                         # float
-print("95% CI:", results["confidence_interval"])             # (lower, upper)
+print("ATE (coefficient):", results["coefficient"])  # float
+print("Std. error:", results["std_error"])  # float
+print("P-value:", results["p_value"])  # float
+print("95% CI:", results["confidence_interval"])  # (lower, upper)
 ```
 
 What it returns (structure):
