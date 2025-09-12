@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data import CausalData
-from causalkit.inference import dml_att
+from causalkit.inference import dml_att_source
 
 
 def test_dml_att():
@@ -57,7 +57,7 @@ def test_dml_att():
     ml_m = RandomForestClassifier(n_estimators=100, max_features=3, max_depth=5, min_samples_leaf=2, random_state=42)
     
     # Run DML for ATT estimation
-    results = dml_att(
+    results = dml_att_source(
         data=causal_data,
         ml_g=ml_g,
         ml_m=ml_m,

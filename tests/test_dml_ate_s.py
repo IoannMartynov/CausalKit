@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data.causaldata import CausalData
 from causalkit.data.generators import generate_rct
-from causalkit.inference.ate import dml_ate_s
+from causalkit.inference.ate import dml_ate
 
 
 def make_causal_data(n=1000, target_type="normal", random_state=1):
@@ -21,7 +21,7 @@ def test_dml_ate_s_ate_runs_and_output_structure():
     ml_g = RandomForestRegressor(n_estimators=50, random_state=42)
     ml_m = RandomForestClassifier(n_estimators=50, random_state=42)
 
-    res = dml_ate_s(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATE", confidence_level=0.95)
+    res = dml_ate(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATE", confidence_level=0.95)
 
     assert set(res.keys()) == {"coefficient", "std_error", "p_value", "confidence_interval", "model"}
     assert np.isfinite(res["coefficient"]) and np.isfinite(res["std_error"]) and np.isfinite(res["p_value"])
@@ -34,7 +34,7 @@ def test_dml_ate_s_atte_runs():
     ml_g = RandomForestRegressor(n_estimators=40, random_state=0)
     ml_m = RandomForestClassifier(n_estimators=40, random_state=0)
 
-    res = dml_ate_s(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATTE", confidence_level=0.9)
+    res = dml_ate(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATTE", confidence_level=0.9)
     assert np.isfinite(res["coefficient"]) and np.isfinite(res["std_error"]) and np.isfinite(res["p_value"])
 
 
@@ -45,7 +45,7 @@ def test_dml_ate_s_binary_outcome_with_classifier():
     ml_g = RandomForestClassifier(n_estimators=60, random_state=21)
     ml_m = RandomForestClassifier(n_estimators=60, random_state=21)
 
-    res = dml_ate_s(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATE")
+    res = dml_ate(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATE")
     assert np.isfinite(res["std_error"]) and np.isfinite(res["coefficient"]) 
 
 
@@ -59,4 +59,4 @@ def test_dml_ate_s_raises_on_non_binary_treatment():
     ml_m = RandomForestClassifier(n_estimators=10, random_state=0)
 
     with pytest.raises(ValueError):
-        dml_ate_s(cd_bad, ml_g=ml_g, ml_m=ml_m, n_folds=2)
+        dml_ate(cd_bad, ml_g=ml_g, ml_m=ml_m, n_folds=2)

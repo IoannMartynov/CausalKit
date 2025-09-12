@@ -1,5 +1,5 @@
 """
-AIPW orthogonality diagnostics for DoubleML estimators.
+AIPW orthogonality diagnostics for IRM-based estimators.
 
 This module implements comprehensive orthogonality diagnostics for AIPW/IRM-based
 estimators like dml_ate and dml_att to validate the key assumptions required 
@@ -20,93 +20,76 @@ from scipy import stats
 from sklearn.model_selection import KFold
 
 from causalkit.data.causaldata import CausalData
+import warnings
 
 
-def aipw_score_ate(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, g: np.ndarray, theta: float, eps: float = 0.01) -> np.ndarray:
+def aipw_score_ate(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray, m: np.ndarray, theta: float, trimming_threshold: float = 0.01) -> np.ndarray:
     """
     Efficient influence function (EIF) for ATE.
+    Uses IRM naming: g0,g1 are outcome regressions E[Y|X,D=0/1], m is propensity P(D=1|X).
     """
-    g = np.clip(g, eps, 1 - eps)
-    return (m1 - m0) + d * (y - m1) / g - (1 - d) * (y - m0) / (1 - g) - theta
+    m = np.clip(m, trimming_threshold, 1 - trimming_threshold)
+    return (g1 - g0) + d * (y - g1) / m - (1 - d) * (y - g0) / (1 - m) - theta
+
+
+def aipw_score_atte(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray, m: np.ndarray, theta: float, p_treated: Optional[float] = None, trimming_threshold: float = 0.01) -> np.ndarray:
+    """
+    Efficient influence function (EIF) for ATTE under IRM/AIPW.
+
+    ψ_ATTE(W; θ, η) = [ D*(Y - g0(X) - θ)  -  (1-D)*{ m(X)/(1-m(X)) }*(Y - g0(X)) ] / E[D]
+
+    Notes:
+      - Matches DoubleML's `score='ATTE'` (weights ω=D/E[D], \bar{ω}=m(X)/E[D]).
+      - g1 enters only via θ; ∂ψ/∂g1 = 0.
+    """
+    m = np.clip(m, trimming_threshold, 1 - trimming_threshold)
+    if p_treated is None:
+        p_treated = float(np.mean(d))
+    gamma = m / (1.0 - m)
+    num = d * (y - g0 - theta) - (1.0 - d) * gamma * (y - g0)
+    return num / (p_treated + 1e-12)
 
 
 def aipw_score_att(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, g: np.ndarray, theta: float, p1: Optional[float] = None, eps: float = 0.01) -> np.ndarray:
+    """Deprecated: use aipw_score_atte(y,d,g0,g1,m,theta,p_treated,trimming_threshold)."""
+    warnings.warn("aipw_score_att is deprecated; use aipw_score_atte with IRM naming.", DeprecationWarning, stacklevel=2)
+    return aipw_score_atte(y, d, g0=m0, g1=m1, m=g, theta=theta, p_treated=p1, trimming_threshold=eps)
+
+
+def extract_nuisances(model, test_indices: Optional[np.ndarray] = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Efficient influence function (EIF) for ATT (a.k.a. ATTE) under IRM/AIPW.
+    Extract cross-fitted nuisance predictions from internal IRM model.
 
-    ψ_ATT(W; θ, η) = [ D*(Y - m0(X) - θ)  -  (1-D)*{ g(X)/(1-g(X)) }*(Y - m0(X)) ] / E[D]
-
-    Notes:
-      - This matches DoubleML's `score='ATTE'` (weights ω=D/E[D], \bar{ω}=m(X)/E[D]).
-      - m1 enters only via θ; ∂ψ/∂m1 = 0.
-    """
-    g = np.clip(g, eps, 1 - eps)
-    if p1 is None:
-        p1 = float(np.mean(d))
-    gamma = g / (1.0 - g)
-    num = d * (y - m0 - theta) - (1.0 - d) * gamma * (y - m0)
-    return num / (p1 + 1e-12)
-
-
-def extract_nuisances(dml_model, test_indices: Optional[np.ndarray] = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Robustly extract nuisance function predictions from DoubleML model.
-    
-    Handles different DoubleML prediction key layouts and provides clear error messages.
-    
     Parameters
     ----------
-    dml_model : DoubleML model
-        Fitted DoubleML model with predictions
+    model : IRM
+        Fitted internal IRM estimator (causalkit.inference.estimators.IRM)
     test_indices : np.ndarray, optional
         If provided, extract predictions only for these indices
-        
+
     Returns
     -------
     Tuple[np.ndarray, np.ndarray, np.ndarray]
-        (g, m0, m1) where:
-        - g: propensity scores P(D=1|X) 
-        - m0: outcome predictions E[Y|X,D=0]
-        - m1: outcome predictions E[Y|X,D=1]
-        
-    Raises
-    ------
-    KeyError
-        If required prediction keys cannot be found
+        (m, g0, g1) where:
+        - m: propensity scores P(D=1|X)
+        - g0: outcome predictions E[Y|X,D=0]
+        - g1: outcome predictions E[Y|X,D=1]
     """
-    preds = dml_model.predictions
-    available_keys = list(preds.keys())
+    # Validate required attributes exist on IRM
+    for attr in ("m_hat_", "g0_hat_", "g1_hat_"):
+        if not hasattr(model, attr) or getattr(model, attr) is None:
+            raise AttributeError(f"IRM model is missing attribute '{attr}'. Ensure the model is fitted and comes from dml_ate/dml_att.")
 
-    def _reduce_to_1d(name: str) -> np.ndarray:
-        if name not in preds:
-            raise KeyError(f"Missing predictions['{name}']; available: {available_keys}")
-        arr = np.asarray(preds[name])
-        # Squeeze singleton dimensions first
-        arr = np.squeeze(arr)
-        if arr.ndim == 0:
-            raise ValueError(f"predictions['{name}'] is scalar; expected at least 1D, got shape {arr.shape}")
-        if arr.ndim == 1:
-            return arr
-        # Average across all non-first axes to aggregate repetitions/aux dims
-        axes = tuple(range(1, arr.ndim))
-        return arr.mean(axis=axes)
+    m = np.asarray(getattr(model, "m_hat_"), dtype=float).ravel()
+    g0 = np.asarray(getattr(model, "g0_hat_"), dtype=float).ravel()
+    g1 = np.asarray(getattr(model, "g1_hat_"), dtype=float).ravel()
 
-    # Strict: require proper keys
-    g = _reduce_to_1d('ml_m')  # P(D=1|X)
-    m0 = _reduce_to_1d('ml_g0')  # E[Y|X,D=0]
-    m1 = _reduce_to_1d('ml_g1')  # E[Y|X,D=1]
-
-    # Ensure arrays are 1D and extract test indices if specified
-    g = np.asarray(g).flatten()
-    m0 = np.asarray(m0).flatten()
-    m1 = np.asarray(m1).flatten()
-    
     if test_indices is not None:
-        g = g[test_indices]
-        m0 = m0[test_indices]  
-        m1 = m1[test_indices]
-    
-    return g, m0, m1
+        m = m[test_indices]
+        g0 = g0[test_indices]
+        g1 = g1[test_indices]
+
+    return m, g0, g1
 
 
 
@@ -133,7 +116,7 @@ def oos_moment_check_with_fold_nuisances(
     fold_indices : List[np.ndarray] 
         Indices for each fold
     fold_nuisances : List[Tuple[np.ndarray, np.ndarray, np.ndarray]]
-        Fold-specific nuisance predictions (g, m0, m1) for each fold
+        Fold-specific nuisance predictions (m, g0, g1) for each fold
     y, d : np.ndarray
         Observed outcomes and treatments
         
@@ -145,13 +128,13 @@ def oos_moment_check_with_fold_nuisances(
     rows = []
     for k, (idx, nuisances) in enumerate(zip(fold_indices, fold_nuisances)):
         th = fold_thetas[k]
-        g_fold, m0_fold, m1_fold = nuisances
+        m_fold, g0_fold, g1_fold = nuisances
         
         # Compute scores using fold-specific theta and nuisances
         if score_fn is None:
-            psi = aipw_score_ate(y[idx], d[idx], m0_fold, m1_fold, g_fold, th)
+            psi = aipw_score_ate(y[idx], d[idx], g0_fold, g1_fold, m_fold, th)
         else:
-            psi = score_fn(y[idx], d[idx], m0_fold, m1_fold, g_fold, th)
+            psi = score_fn(y[idx], d[idx], g0_fold, g1_fold, m_fold, th)
         rows.append({"fold": k, "n": len(idx), "psi_mean": psi.mean(), "psi_var": psi.var(ddof=1)})
     
     df = pd.DataFrame(rows)
@@ -166,13 +149,13 @@ def oos_moment_check(
     fold_indices: List[np.ndarray],
     y: np.ndarray,
     d: np.ndarray,
-    m0: np.ndarray,
-    m1: np.ndarray,
-    g: np.ndarray,
+    g0: np.ndarray,
+    g1: np.ndarray,
+    m: np.ndarray,
     score_fn: Optional[Callable[[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, float], np.ndarray]] = None,
 ) -> Tuple[pd.DataFrame, float]:
     """
-    Out-of-sample moment check to avoid tautological results (legacy version).
+    Out-of-sample moment check to avoid tautological results (legacy/simple version).
     
     For each fold k, evaluates the AIPW score using θ fitted on other folds,
     then tests if the combined moment condition holds.
@@ -183,7 +166,7 @@ def oos_moment_check(
         Treatment effects estimated excluding each fold
     fold_indices : List[np.ndarray] 
         Indices for each fold
-    y, d, m0, m1, g : np.ndarray
+    y, d, g0, g1, m : np.ndarray
         Data arrays (outcomes, treatment, predictions)
         
     Returns
@@ -195,9 +178,9 @@ def oos_moment_check(
     for k, idx in enumerate(fold_indices):
         th = fold_thetas[k]
         if score_fn is None:
-            psi = aipw_score_ate(y[idx], d[idx], m0[idx], m1[idx], g[idx], th)
+            psi = aipw_score_ate(y[idx], d[idx], g0[idx], g1[idx], m[idx], th)
         else:
-            psi = score_fn(y[idx], d[idx], m0[idx], m1[idx], g[idx], th)
+            psi = score_fn(y[idx], d[idx], g0[idx], g1[idx], m[idx], th)
         rows.append({"fold": k, "n": len(idx), "psi_mean": psi.mean(), "psi_var": psi.var(ddof=1)})
     
     df = pd.DataFrame(rows)
@@ -208,65 +191,49 @@ def oos_moment_check(
 
 
 def orthogonality_derivatives(X_basis: np.ndarray, y: np.ndarray, d: np.ndarray, 
-                            m0: np.ndarray, m1: np.ndarray, g: np.ndarray, eps: float = 0.01) -> pd.DataFrame:
+                            g0: np.ndarray, g1: np.ndarray, m: np.ndarray, trimming_threshold: float = 0.01) -> pd.DataFrame:
     """
-    Compute orthogonality (Gateaux derivative) tests for nuisance functions.
-    
-    Tests directional derivatives of the AIPW signal with respect to nuisances.
-    For true nuisances, these derivatives should be ≈ 0 for rich sets of directions.
-    
-    Parameters
-    ----------
-    X_basis : np.ndarray, shape (n, B)
-        Matrix of direction functions evaluated at X (include column of 1s for calibration)
-    y, d, m0, m1, g : np.ndarray
-        Data arrays
-    eps : float, default 0.01
-        Clipping bound for propensity scores to avoid extreme weights
-        
-    Returns
-    -------
-    pd.DataFrame
-        Derivative estimates, standard errors, and t-statistics for each basis function
+    Compute orthogonality (Gateaux derivative) tests for nuisance functions (ATE case).
+    Uses IRM naming: g0,g1 outcomes; m propensity.
     """
     n, B = X_basis.shape
     
     # Clip propensity scores to avoid division by zero and extreme weights
-    g_clipped = np.clip(g, eps, 1 - eps)
+    m_clipped = np.clip(m, trimming_threshold, 1 - trimming_threshold)
     
-    # m1 direction: ∂_{m1} φ̄[h1] = (1/n)∑ h1(Xi)(1 - Di/gi)
-    dm1_terms = X_basis * (1 - d / g_clipped)[:, None]
-    dm1 = dm1_terms.mean(axis=0)
-    dm1_se = dm1_terms.std(axis=0, ddof=1) / np.sqrt(n)
+    # g1 direction: ∂_{g1} φ̄[h1] = (1/n)∑ h1(Xi)(1 - Di/mi)
+    dg1_terms = X_basis * (1 - d / m_clipped)[:, None]
+    dg1 = dg1_terms.mean(axis=0)
+    dg1_se = dg1_terms.std(axis=0, ddof=1) / np.sqrt(n)
     
-    # m0 direction: ∂_{m0} φ̄[h0] = (1/n)∑ h0(Xi)((1-Di)/(1-gi) - 1)
-    dm0_terms = X_basis * ((1 - d) / (1 - g_clipped) - 1)[:, None]
-    dm0 = dm0_terms.mean(axis=0)  
-    dm0_se = dm0_terms.std(axis=0, ddof=1) / np.sqrt(n)
+    # g0 direction: ∂_{g0} φ̄[h0] = (1/n)∑ h0(Xi)((1-Di)/(1-mi) - 1)
+    dg0_terms = X_basis * ((1 - d) / (1 - m_clipped) - 1)[:, None]
+    dg0 = dg0_terms.mean(axis=0)  
+    dg0_se = dg0_terms.std(axis=0, ddof=1) / np.sqrt(n)
     
-    # g direction: ∂_g φ̄[s] = -(1/n)∑ s(Xi)[Di(Yi-m1i)/gi² + (1-Di)(Yi-m0i)/(1-gi)²]
-    g_summand = (d * (y - m1) / g_clipped**2 + (1 - d) * (y - m0) / (1 - g_clipped)**2)
-    dg_terms = -X_basis * g_summand[:, None]
-    dg = dg_terms.mean(axis=0)
-    dg_se = dg_terms.std(axis=0, ddof=1) / np.sqrt(n)
+    # m direction: ∂_m φ̄[s] = -(1/n)∑ s(Xi)[Di(Yi-g1i)/mi² + (1-Di)(Yi-g0i)/(1-mi)²]
+    m_summand = (d * (y - g1) / m_clipped**2 + (1 - d) * (y - g0) / (1 - m_clipped)**2)
+    dm_terms = -X_basis * m_summand[:, None]
+    dm = dm_terms.mean(axis=0)
+    dm_se = dm_terms.std(axis=0, ddof=1) / np.sqrt(n)
     
     out = pd.DataFrame({
         "basis": np.arange(B),
-        "d_m1": dm1, "se_m1": dm1_se, "t_m1": dm1 / np.maximum(dm1_se, 1e-12),
-        "d_m0": dm0, "se_m0": dm0_se, "t_m0": dm0 / np.maximum(dm0_se, 1e-12),
-        "d_g": dg, "se_g": dg_se, "t_g": dg / np.maximum(dg_se, 1e-12),
+        "d_g1": dg1, "se_g1": dg1_se, "t_g1": dg1 / np.maximum(dg1_se, 1e-12),
+        "d_g0": dg0, "se_g0": dg0_se, "t_g0": dg0 / np.maximum(dg0_se, 1e-12),
+        "d_m": dm,  "se_m": dm_se,  "t_m":  dm / np.maximum(dm_se, 1e-12),
     })
     return out
 
 
-def influence_summary(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, 
-                     g: np.ndarray, theta_hat: float, k: int = 10, target: str = "ATE", clip_eps: float = 0.01) -> Dict[str, Any]:
+def influence_summary(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray, 
+                     m: np.ndarray, theta_hat: float, k: int = 10, score: str = "ATE", trimming_threshold: float = 0.01, *, target: Optional[str] = None, clip_eps: Optional[float] = None) -> Dict[str, Any]:
     """
     Compute influence diagnostics showing where uncertainty comes from.
     
     Parameters
     ----------
-    y, d, m0, m1, g : np.ndarray
+    y, d, g0, g1, m : np.ndarray
         Data arrays
     theta_hat : float
         Estimated treatment effect
@@ -278,22 +245,28 @@ def influence_summary(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarr
     Dict[str, Any]
         Influence diagnostics including SE, heavy-tail metrics, and top-k cases
     """
-    target_u = str(target).upper()
-    if target_u == "ATE":
-        psi = aipw_score_ate(y, d, m0, m1, g, theta_hat, eps=clip_eps)
-    elif target_u == "ATTE" or target_u == "ATT":
-        psi = aipw_score_att(y, d, m0, m1, g, theta_hat, p1=float(np.mean(d)), eps=clip_eps)
+    if target is not None:
+        warnings.warn("'target' is deprecated; use 'score' ('ATE'|'ATTE').", DeprecationWarning, stacklevel=2)
+        score = target
+    if clip_eps is not None:
+        warnings.warn("'clip_eps' is deprecated; use 'trimming_threshold'.", DeprecationWarning, stacklevel=2)
+        trimming_threshold = clip_eps
+    score_u = str(score).upper()
+    if score_u == "ATE":
+        psi = aipw_score_ate(y, d, g0, g1, m, theta_hat, trimming_threshold=trimming_threshold)
+    elif score_u in ("ATTE", "ATT"):
+        psi = aipw_score_atte(y, d, g0, g1, m, theta_hat, p_treated=float(np.mean(d)), trimming_threshold=trimming_threshold)
     else:
-        raise ValueError("target must be 'ATE' or 'ATTE'")
+        raise ValueError("score must be 'ATE' or 'ATTE'")
     se = psi.std(ddof=1) / np.sqrt(len(psi))
     idx = np.argsort(-np.abs(psi))[:k]
     
     top = pd.DataFrame({
         "i": idx, 
         "psi": psi[idx], 
-        "g": g[idx],
-        "res_t": d[idx] * (y[idx] - m1[idx]),
-        "res_c": (1 - d[idx]) * (y[idx] - m0[idx])
+        "m": m[idx],
+        "res_t": d[idx] * (y[idx] - g1[idx]),
+        "res_c": (1 - d[idx]) * (y[idx] - g0[idx])
     })
     
     return {
@@ -309,14 +282,17 @@ def refute_irm_orthogonality(
     data: CausalData,
     trim_propensity: Tuple[float, float] = (0.02, 0.98),
     n_basis_funcs: Optional[int] = None,
-    n_folds_oos: int = 5,
-    target: str = "ATE",
+    n_folds_oos: int = 4,
+    score: Optional[str] = None,
+    trimming_threshold: float = 0.01,
+    *,
+    target: Optional[str] = None,
     clip_eps: float = 0.01,
     strict_oos: bool = False,
     **inference_kwargs,
 ) -> Dict[str, Any]:
     """
-    Comprehensive AIPW orthogonality diagnostics for DoubleML estimators.
+    Comprehensive AIPW orthogonality diagnostics for IRM estimators.
     
     Implements three key diagnostic approaches based on the efficient influence function (EIF):
     1. Out-of-sample moment check (non-tautological)
@@ -352,64 +328,75 @@ def refute_irm_orthogonality(
         
     Examples
     --------
-    >>> from causalkit.refutation import refute_irm_orthogonality
-    >>> from causalkit.inference.ate import dml_ate
+    >>> from causalkit.refutation.orthogonality import refute_irm_orthogonality
+    >>> from causalkit.inference.ate.dml_ate import dml_ate
     >>> 
     >>> # Comprehensive orthogonality check
     >>> ortho_results = refute_irm_orthogonality(dml_ate, causal_data)
     >>> 
     >>> # Check key diagnostics
     >>> print(f"OOS moment t-stat: {ortho_results['oos_moment_test']['tstat']:.3f}")
-    >>> print(f"Calibration issues: {len(ortho_results['orthogonality_derivatives'].query('abs(t_g) > 2'))}")
     >>> print(f"Assessment: {ortho_results['overall_assessment']}")
     """
-    # Run inference to get fitted DoubleML model
+    # Run inference to get fitted IRM model
     result = inference_fn(data, **inference_kwargs)
     
     if 'model' not in result:
         raise ValueError("Inference function must return a dictionary with 'model' key")
     
     dml_model = result['model']
-    theta_hat = float(result['coefficient'])
+    # Prefer wrapper-reported coefficient; fallback to IRM attributes if missing
+    if 'coefficient' in result:
+        theta_hat = float(result['coefficient'])
+    else:
+        theta_hat = float(getattr(dml_model, 'coef_', [np.nan])[0])
     
-    # Extract cross-fitted predictions from DoubleML model using robust function
-    g_propensity, m0_outcomes, m1_outcomes = extract_nuisances(dml_model)
+    # Extract cross-fitted predictions from IRM model using robust function
+    m_propensity, g0_outcomes, g1_outcomes = extract_nuisances(dml_model)
     
     # Get observed data
     y = data.target.values.astype(float)
     d = data.treatment.values.astype(float)
 
-    # Determine target automatically if requested
-    target_u = str(target).upper() if target is not None else "AUTO"
-    if target_u == "AUTO":
+    # Handle deprecations and determine score
+    if target is not None:
+        warnings.warn("'target' is deprecated; use 'score' ('ATE'|'ATTE').", DeprecationWarning, stacklevel=2)
+        if score is None:
+            score = target
+    if clip_eps is not None:
+        warnings.warn("'clip_eps' is deprecated; use 'trimming_threshold'.", DeprecationWarning, stacklevel=2)
+        trimming_threshold = clip_eps
+
+    score_u = str(score).upper() if score is not None else "AUTO"
+    if score_u == "AUTO":
         score_attr = getattr(dml_model, 'score', None)
         if score_attr is None:
             score_attr = getattr(dml_model, '_score', 'ATE')
         score_str = str(score_attr).upper()
-        target_u = 'ATTE' if 'ATT' in score_str else 'ATE'
+        score_u = 'ATTE' if 'ATT' in score_str else 'ATE'
     
     # Build score function
-    if target_u == 'ATE':
-        def score_fn(y_, d_, m0_, m1_, g_, th_):
-            return aipw_score_ate(y_, d_, m0_, m1_, g_, th_, eps=clip_eps)
-    elif target_u in ('ATTE', 'ATT'):
-        p1 = float(np.mean(d))
-        def score_fn(y_, d_, m0_, m1_, g_, th_):
-            return aipw_score_att(y_, d_, m0_, m1_, g_, th_, p1=p1, eps=clip_eps)
+    if score_u == 'ATE':
+        def score_fn(y_, d_, g0_, g1_, m_, th_):
+            return aipw_score_ate(y_, d_, g0_, g1_, m_, th_, trimming_threshold=trimming_threshold)
+    elif score_u in ('ATTE', 'ATT'):
+        p_treated = float(np.mean(d))
+        def score_fn(y_, d_, g0_, g1_, m_, th_):
+            return aipw_score_atte(y_, d_, g0_, g1_, m_, th_, p_treated=p_treated, trimming_threshold=trimming_threshold)
     else:
-        raise ValueError("target must be 'ATE' or 'ATTE'")
+        raise ValueError("score must be 'ATE' or 'ATTE'")
     
     # Apply propensity trimming
     trim_min, trim_max = trim_propensity
-    trim_mask = (g_propensity >= trim_min) & (g_propensity <= trim_max)
+    trim_mask = (m_propensity >= trim_min) & (m_propensity <= trim_max)
     n_trimmed = int(np.sum(~trim_mask))
     
     # Create trimmed arrays
     y_trim = y[trim_mask]
     d_trim = d[trim_mask]
-    g_trim = g_propensity[trim_mask]
-    m0_trim = m0_outcomes[trim_mask]
-    m1_trim = m1_outcomes[trim_mask]
+    m_trim = m_propensity[trim_mask]
+    g0_trim = g0_outcomes[trim_mask]
+    g1_trim = g1_outcomes[trim_mask]
     
     # === 1. OUT-OF-SAMPLE MOMENT CHECK ===
     kf = KFold(n_splits=n_folds_oos, shuffle=True, random_state=42)
@@ -432,10 +419,10 @@ def refute_irm_orthogonality(
         fold_indices.append(test_idx)
         
         # Use full-model cross-fitted nuisances indexed by test fold (fast OOS)
-        g_fold = g_propensity[test_idx]
-        m0_fold = m0_outcomes[test_idx]
-        m1_fold = m1_outcomes[test_idx]
-        fold_nuisances.append((g_fold, m0_fold, m1_fold))
+        m_fold = m_propensity[test_idx]
+        g0_fold = g0_outcomes[test_idx]
+        g1_fold = g1_outcomes[test_idx]
+        fold_nuisances.append((m_fold, g0_fold, g1_fold))
     
     # Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)
     oos_df, oos_tstat = oos_moment_check_with_fold_nuisances(
@@ -445,9 +432,9 @@ def refute_irm_orthogonality(
 
     # Strict aggregation over all held-out psi
     all_psi_list: List[np.ndarray] = []
-    for k, (idx, (g_fold, m0_fold, m1_fold)) in enumerate(zip(fold_indices, fold_nuisances)):
+    for k, (idx, (m_fold, g0_fold, g1_fold)) in enumerate(zip(fold_indices, fold_nuisances)):
         th = fold_thetas[k]
-        psi_k = score_fn(y[idx], d[idx], m0_fold, m1_fold, g_fold, th)
+        psi_k = score_fn(y[idx], d[idx], g0_fold, g1_fold, m_fold, th)
         all_psi_list.append(psi_k)
     all_psi = np.concatenate(all_psi_list) if len(all_psi_list) > 0 else np.array([0.0])
     tstat_strict = float((np.sqrt(len(all_psi)) * all_psi.mean()) / (all_psi.std(ddof=1) + 1e-12))
@@ -479,29 +466,29 @@ def refute_irm_orthogonality(
     else:
         X_basis = np.ones((len(X), 1))  # Only constant term
     
-    if target_u == 'ATE':
-        ortho_derivs_full = orthogonality_derivatives(X_basis, y, d, m0_outcomes, m1_outcomes, g_propensity, eps=clip_eps)
+    if score_u == 'ATE':
+        ortho_derivs_full = orthogonality_derivatives(X_basis, y, d, g0_outcomes, g1_outcomes, m_propensity, trimming_threshold=trimming_threshold)
         X_basis_trim = X_basis[trim_mask]
-        ortho_derivs_trim = orthogonality_derivatives(X_basis_trim, y_trim, d_trim, m0_trim, m1_trim, g_trim, eps=clip_eps)
-        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_m1']) > 2) | (np.abs(ortho_derivs_full['t_m0']) > 2) | (np.abs(ortho_derivs_full['t_g']) > 2)]
-        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_m1']) > 2) | (np.abs(ortho_derivs_trim['t_m0']) > 2) | (np.abs(ortho_derivs_trim['t_g']) > 2)]
+        ortho_derivs_trim = orthogonality_derivatives(X_basis_trim, y_trim, d_trim, g0_trim, g1_trim, m_trim, trimming_threshold=trimming_threshold)
+        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_g1']) > 2) | (np.abs(ortho_derivs_full['t_g0']) > 2) | (np.abs(ortho_derivs_full['t_m']) > 2)]
+        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_g1']) > 2) | (np.abs(ortho_derivs_trim['t_g0']) > 2) | (np.abs(ortho_derivs_trim['t_m']) > 2)]
         derivs_interpretation = 'Large |t| (>2) indicate calibration issues'
         derivs_full_ok = len(problematic_derivs_full) == 0
         derivs_trim_ok = len(problematic_derivs_trim) == 0
     else:  # ATTE / ATT
-        p1_full = float(np.mean(d))
-        ortho_derivs_full = orthogonality_derivatives_att(X_basis, y, d, m0_outcomes, g_propensity, p1_full, eps=clip_eps)
+        p_treated_full = float(np.mean(d))
+        ortho_derivs_full = orthogonality_derivatives_atte(X_basis, y, d, g0_outcomes, m_propensity, p_treated_full, trimming_threshold=trimming_threshold)
         X_basis_trim = X_basis[trim_mask]
-        p1_trim = float(np.mean(d_trim))
-        ortho_derivs_trim = orthogonality_derivatives_att(X_basis_trim, y_trim, d_trim, m0_trim, g_trim, p1_trim, eps=clip_eps)
-        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_m0']) > 2) | (np.abs(ortho_derivs_full['t_g']) > 2)]
-        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_m0']) > 2) | (np.abs(ortho_derivs_trim['t_g']) > 2)]
-        derivs_interpretation = 'ATT: check m0 & g only; large |t| (>2) => calibration issues'
+        p_treated_trim = float(np.mean(d_trim))
+        ortho_derivs_trim = orthogonality_derivatives_atte(X_basis_trim, y_trim, d_trim, g0_trim, m_trim, p_treated_trim, trimming_threshold=trimming_threshold)
+        problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_g0']) > 2) | (np.abs(ortho_derivs_full['t_m']) > 2)]
+        problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_g0']) > 2) | (np.abs(ortho_derivs_trim['t_m']) > 2)]
+        derivs_interpretation = 'ATTE: check g0 & m only; large |t| (>2) => calibration issues'
         derivs_full_ok = len(problematic_derivs_full) == 0
         derivs_trim_ok = len(problematic_derivs_trim) == 0
     
     # === 3. INFLUENCE DIAGNOSTICS ===
-    influence_full = influence_summary(y, d, m0_outcomes, m1_outcomes, g_propensity, theta_hat, target=target_u, clip_eps=clip_eps)
+    influence_full = influence_summary(y, d, g0_outcomes, g1_outcomes, m_propensity, theta_hat, score=score_u, trimming_threshold=trimming_threshold)
 
     # Re-estimate theta on the trimmed sample for fair trimmed influence diagnostics
     theta_hat_trim = theta_hat
@@ -518,7 +505,7 @@ def refute_irm_orthogonality(
     except Exception:
         pass
 
-    influence_trim = influence_summary(y_trim, d_trim, m0_trim, m1_trim, g_trim, theta_hat_trim, target=target_u, clip_eps=clip_eps)
+    influence_trim = influence_summary(y_trim, d_trim, g0_trim, g1_trim, m_trim, theta_hat_trim, score=score_u, trimming_threshold=trimming_threshold)
     
     # === DIAGNOSTIC ASSESSMENT ===
     model_se = result.get('std_error')
@@ -546,28 +533,31 @@ def refute_irm_orthogonality(
     else:
         overall_assessment = "FAIL: Major orthogonality violations detected"
 
-    # ATT-specific overlap and trim-sensitivity
-    overlap_att = None
-    trim_curve_att = None
-    if target_u in ('ATTE', 'ATT'):
-        overlap_att = overlap_diagnostics_att(g_propensity, d, eps_list=[0.95, 0.97, 0.98, 0.99])
+    # ATTE-specific overlap and trim-sensitivity
+    overlap_atte = None
+    trim_curve_atte = None
+    if score_u in ('ATTE', 'ATT'):
+        overlap_atte = overlap_diagnostics_atte(m_propensity, d, eps_list=[0.95, 0.97, 0.98, 0.99])
         try:
-            trim_curve_att = trim_sensitivity_curve_att(
-                inference_fn, data, g_propensity, d,
+            trim_curve_atte = trim_sensitivity_curve_atte(
+                inference_fn, data, m_propensity, d,
                 thresholds=np.linspace(0.90, 0.995, 12),
                 **inference_kwargs
             )
         except Exception as _:
-            trim_curve_att = None
+            trim_curve_atte = None
     
     return {
         'theta': float(theta_hat),
         'params': {
-            'target': target_u,
-            'clip_eps': clip_eps,
+            'score': score_u,
+            'trimming_threshold': trimming_threshold,
             'strict_oos_requested': bool(strict_oos),
             'strict_oos_applied': bool(strict_applied),
-            **({'p1': float(np.mean(d)), 'p1_full': float(np.mean(d)), 'p1_trim': float(np.mean(d_trim))} if target_u in ('ATTE','ATT') else {})
+            **({'p_treated': float(np.mean(d)), 'p_treated_full': float(np.mean(d)), 'p_treated_trim': float(np.mean(d_trim))} if score_u in ('ATTE','ATT') else {}),
+            # backward-compat aliases
+            'target': score_u,
+            'clip_eps': trimming_threshold,
         },
         'oos_moment_test': {
             'fold_results': oos_df,
@@ -592,10 +582,12 @@ def refute_irm_orthogonality(
             'trimmed_sample': influence_trim,
             'interpretation': 'Heavy tails or extreme kurtosis suggest instability'
         },
-        'overlap_diagnostics': overlap_att,
+        'overlap_diagnostics': overlap_atte,
+        'overlap_atte': overlap_atte,
         'robustness': {
-            'trim_curve': trim_curve_att,
-            'interpretation': 'ATT typically more sensitive to trimming near m→1 (controls).'
+            'trim_curve': trim_curve_atte,
+            'trim_curve_atte': trim_curve_atte,
+            'interpretation': 'ATTE typically more sensitive to trimming near m→1 (controls).'
         },
         'trimming_info': {
             'bounds': trim_propensity,
@@ -607,73 +599,90 @@ def refute_irm_orthogonality(
     }
 
 
-def orthogonality_derivatives_att(
+def orthogonality_derivatives_atte(
     X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
-    m0: np.ndarray, g: np.ndarray, p1: float, eps: float = 0.01
+    g0: np.ndarray, m: np.ndarray, p_treated: float, trimming_threshold: float = 0.01
 ) -> pd.DataFrame:
     """
-    Gateaux derivatives of the ATT score wrt nuisances (m0, g). m1-derivative is 0.
+    Gateaux derivatives of the ATTE score wrt nuisances (g0, m). g1-derivative is 0.
 
-    For ψ_ATT = [ D*(Y - m0 - θ)  -  (1-D)*(g/(1-g))*(Y - m0) ] / p1:
+    For ψ_ATTE = [ D*(Y - g0 - θ)  -  (1-D)*(m/(1-m))*(Y - g0) ] / p_treated:
 
-      ∂_{m0}[h] : (1/n) Σ h(X_i) * [ ((1-D_i)*g_i/(1-g_i) - D_i) / p1 ]
-      ∂_{g}[s]  : (1/n) Σ s(X_i) * [ -(1-D_i)*(Y_i - m0_i) / ( p1 * (1-g_i)^2 ) ]
+      ∂_{g0}[h] : (1/n) Σ h(X_i) * [ ((1-D_i)*m_i/(1-m_i) - D_i) / p_treated ]
+      ∂_{m}[s]  : (1/n) Σ s(X_i) * [ -(1-D_i)*(Y_i - g0_i) / ( p_treated * (1-m_i)^2 ) ]
 
     Both have 0 expectation at the truth (Neyman orthogonality).
     """
     n, B = X_basis.shape
-    g = np.clip(g, eps, 1 - eps)
-    odds = g / (1.0 - g)
+    m = np.clip(m, trimming_threshold, 1 - trimming_threshold)
+    odds = m / (1.0 - m)
 
-    dm0_terms = X_basis * (((1.0 - d) * odds - d) / (p1 + 1e-12))[:, None]
-    dm0 = dm0_terms.mean(axis=0)
-    dm0_se = dm0_terms.std(axis=0, ddof=1) / np.sqrt(n)
+    dg0_terms = X_basis * (((1.0 - d) * odds - d) / (p_treated + 1e-12))[:, None]
+    dg0 = dg0_terms.mean(axis=0)
+    dg0_se = dg0_terms.std(axis=0, ddof=1) / np.sqrt(n)
 
-    dg_terms = - X_basis * (((1.0 - d) * (y - m0)) / ((p1 + 1e-12) * (1.0 - g)**2))[:, None]
-    dg = dg_terms.mean(axis=0)
-    dg_se = dg_terms.std(axis=0, ddof=1) / np.sqrt(n)
+    dm_terms = - X_basis * (((1.0 - d) * (y - g0)) / ((p_treated + 1e-12) * (1.0 - m)**2))[:, None]
+    dm = dm_terms.mean(axis=0)
+    dm_se = dm_terms.std(axis=0, ddof=1) / np.sqrt(n)
 
-    dm1 = np.zeros(B)
-    dm1_se = np.zeros(B)
+    dg1 = np.zeros(B)
+    dg1_se = np.zeros(B)
     t = lambda est, se: est / np.maximum(se, 1e-12)
 
     return pd.DataFrame({
         "basis": np.arange(B),
-        "d_m1": dm1, "se_m1": dm1_se, "t_m1": np.zeros(B),
-        "d_m0": dm0, "se_m0": dm0_se, "t_m0": t(dm0, dm0_se),
-        "d_g": dg,   "se_g": dg_se,   "t_g":  t(dg, dg_se),
+        "d_g1": dg1, "se_g1": dg1_se, "t_g1": np.zeros(B),
+        "d_g0": dg0, "se_g0": dg0_se, "t_g0": t(dg0, dg0_se),
+        "d_m": dm,   "se_m": dm_se,   "t_m":  t(dm, dm_se),
     })
 
 
-def overlap_diagnostics_att(
-    g: np.ndarray, d: np.ndarray, eps_list: List[float] = [0.95, 0.97, 0.98, 0.99]
+def orthogonality_derivatives_att(
+    X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
+    m0: np.ndarray, g: np.ndarray, p1: float, eps: float = 0.01
+) -> pd.DataFrame:
+    """Deprecated: use orthogonality_derivatives_atte(X_basis,y,d,g0,m,p_treated,trimming_threshold)."""
+    warnings.warn("orthogonality_derivatives_att is deprecated; use orthogonality_derivatives_atte with IRM naming.", DeprecationWarning, stacklevel=2)
+    return orthogonality_derivatives_atte(X_basis, y, d, g0=m0, m=g, p_treated=p1, trimming_threshold=eps)
+
+
+def overlap_diagnostics_atte(
+    m: np.ndarray, d: np.ndarray, eps_list: List[float] = [0.95, 0.97, 0.98, 0.99]
 ) -> pd.DataFrame:
     """
-    Key overlap metrics for ATT: availability of suitable controls.
+    Key overlap metrics for ATTE: availability of suitable controls.
     Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; among TREATED, fraction with m(X) ≤ 1 - threshold.
     """
     rows = []
-    g = np.asarray(g)
+    m = np.asarray(m)
     d_bool = np.asarray(d).astype(bool)
     ctrl = ~d_bool
     trt = d_bool
     n_ctrl = int(ctrl.sum())
     n_trt = int(trt.sum())
     for thr in eps_list:
-        pct_ctrl = float(100.0 * ((g[ctrl] >= thr).mean() if n_ctrl else np.nan))
-        pct_trt = float(100.0 * ((g[trt] <= (1.0 - thr)).mean() if n_trt else np.nan))
+        pct_ctrl = float(100.0 * ((m[ctrl] >= thr).mean() if n_ctrl else np.nan))
+        pct_trt = float(100.0 * ((m[trt] <= (1.0 - thr)).mean() if n_trt else np.nan))
         rows.append({
             "threshold": thr,
-            "pct_controls_with_g_ge_thr": pct_ctrl,
-            "pct_treated_with_g_le_1_minus_thr": pct_trt,
+            "pct_controls_with_m_ge_thr": pct_ctrl,
+            "pct_treated_with_m_le_1_minus_thr": pct_trt,
         })
     return pd.DataFrame(rows)
 
 
-def trim_sensitivity_curve_att(
+def overlap_diagnostics_att(
+    g: np.ndarray, d: np.ndarray, eps_list: List[float] = [0.95, 0.97, 0.98, 0.99]
+) -> pd.DataFrame:
+    """Deprecated: use overlap_diagnostics_atte(m,d,eps_list)."""
+    warnings.warn("overlap_diagnostics_att is deprecated; use overlap_diagnostics_atte with IRM naming.", DeprecationWarning, stacklevel=2)
+    return overlap_diagnostics_atte(m=g, d=d, eps_list=eps_list)
+
+
+def trim_sensitivity_curve_atte(
     inference_fn: Callable[..., Dict[str, Any]],
     data: CausalData,
-    g: np.ndarray, d: np.ndarray,
+    m: np.ndarray, d: np.ndarray,
     thresholds: np.ndarray = np.linspace(0.90, 0.995, 12),
     **inference_kwargs
 ) -> pd.DataFrame:
@@ -684,7 +693,7 @@ def trim_sensitivity_curve_att(
     rows = []
     for thr in thresholds:
         controls = (np.asarray(d).astype(bool) == False)
-        high_p = (np.asarray(g) >= thr)
+        high_p = (np.asarray(m) >= thr)
         drop = controls & high_p
         keep = ~drop
         df_trim = df_full.loc[keep].copy()
@@ -701,3 +710,15 @@ def trim_sensitivity_curve_att(
             "se": float(res.get("std_error", np.nan))
         })
     return pd.DataFrame(rows)
+
+
+def trim_sensitivity_curve_att(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    g: np.ndarray, d: np.ndarray,
+    thresholds: np.ndarray = np.linspace(0.90, 0.995, 12),
+    **inference_kwargs
+) -> pd.DataFrame:
+    """Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds)."""
+    warnings.warn("trim_sensitivity_curve_att is deprecated; use trim_sensitivity_curve_atte with IRM naming.", DeprecationWarning, stacklevel=2)
+    return trim_sensitivity_curve_atte(inference_fn, data, m=g, d=d, thresholds=thresholds, **inference_kwargs)
