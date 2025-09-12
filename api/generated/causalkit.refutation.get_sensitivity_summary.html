@@ -442,16 +442,15 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.get_sensitivity_summary">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">get_sensitivity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/sensitivity.html#get_sensitivity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.get_sensitivity_summary" title="Link to this definition">#</a></dt>
-<dd><p>Get the sensitivity summary string from a sensitivity-analyzed model.</p>
+<dd><p>Get the sensitivity summary string if available.</p>
+<p>Checks for a top-level ‘sensitivity_summary’ (set by sensitivity_analysis)
+and falls back to model.sensitivity_summary if present.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – Effect estimation result containing a model that has been sensitivity-analyzed</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The sensitivity summary string if available, None otherwise</p>
-</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a> or None</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>effect_estimation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em>)</p>
 </dd>
 </dl>
 </dd></dl>

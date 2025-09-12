@@ -442,19 +442,18 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.sensitivity_analysis">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/sensitivity.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity_analysis" title="Link to this definition">#</a></dt>
-<dd><p>Perform sensitivity analysis on a causal effect estimate.</p>
-<p>This function takes a DoubleML effect estimation result and performs sensitivity
-analysis to assess robustness to unobserved confounding.</p>
+<dd><p>Create a sensitivity-style summary for an IRM-based effect estimate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results, must include:
-- ‘model’: A fitted DoubleML model object (e.g., DoubleMLIRM)
-- Other keys like ‘coefficient’, ‘std_error’, ‘p_value’, etc.</p></li>
+<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results from dml_ate or dml_att;
+must include:
+- ‘model’: A fitted IRM model object
+- ‘coefficient’, ‘std_error’, ‘confidence_interval’ are used if present</p></li>
 <li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the outcome equation (confounding strength)</p></li>
 <li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the treatment equation (confounding strength)</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for the sensitivity analysis</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders (for display only)</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI display</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -463,31 +462,11 @@ analysis to assess robustness to unobserved confounding.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the effect_estimation does not contain a ‘model’ key or if the model
-    does not support sensitivity analysis</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.13)"><strong>KeyError</strong></a> – If required keys are missing from the effect_estimation dictionary</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – If the model is not a DoubleML object that supports sensitivity analysis</p></li>
-</ul>
-</dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.sensitivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">sensitivity_analysis</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data and estimate effect</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ck</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">ck</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform sensitivity analysis</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sensitivity_report</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report</span><span class="p">)</span>
-</pre></div>
-</div>
+<p class="rubric">Notes</p>
+<p>This implementation prefers DoubleML-style model.sensitivity_analysis if available
+(for backward compatibility). Otherwise, it formats key statistics from the IRM
+model together with the provided sensitivity parameters for reporting.</p>
 </dd></dl>
 
 </section>
