@@ -769,11 +769,19 @@ Uses IRM naming: g0,g1 are outcome regressions E[Y|X,D=0/1], m is propensity P(D
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.orthogonality.extract_nuisances">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">extract_nuisances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#extract_nuisances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.extract_nuisances" title="Link to this definition">#</a></dt>
-<dd><p>Extract cross-fitted nuisance predictions from internal IRM model.</p>
+<dd><p>Extract cross-fitted nuisance predictions from an IRM-like model or a compatible dummy.</p>
+<dl class="simple">
+<dt>Tries several backends for robustness:</dt><dd><ol class="arabic simple">
+<li><p>IRM attributes: <a href="#id1"><span class="problematic" id="id2">m_hat_</span></a>, <a href="#id3"><span class="problematic" id="id4">g0_hat_</span></a>, <a href="#id5"><span class="problematic" id="id6">g1_hat_</span></a></p></li>
+<li><p>model.predictions dict with keys: ‘ml_m’,’ml_g0’,’ml_g1’</p></li>
+<li><p>Direct attributes: ml_m, ml_g0, ml_g1</p></li>
+</ol>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>IRM</em>) – Fitted internal IRM estimator (causalkit.inference.estimators.IRM)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><em>object</em></a>) – Fitted internal IRM estimator (causalkit.inference.estimators.IRM) or a compatible dummy model</p></li>
 <li><p><strong>test_indices</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – If provided, extract predictions only for these indices</p></li>
 </ul>
 </dd>
@@ -980,8 +988,7 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.orthogonality.orthogonality_derivatives_att">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">orthogonality_derivatives_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#orthogonality_derivatives_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.orthogonality_derivatives_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use orthogonality_derivatives_atte(X_basis,y,d,g0,m,p_treated,trimming_threshold).</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
 </dd>
@@ -997,6 +1004,15 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 </ul>
 </dd>
 </dl>
+<p>Deprecated ATT naming wrapper around orthogonality_derivatives_atte.
+Returns legacy column names for backward compatibility:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>m1 derivatives are identically zero: d_m1,se_m1,t_m1</p></li>
+<li><p>m0 maps to g0 in IRM naming</p></li>
+<li><p>g maps to m in IRM naming (propensity)</p></li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">

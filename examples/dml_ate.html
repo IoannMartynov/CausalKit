@@ -858,38 +858,56 @@ document.write(`
       <th>feature</th>
       <th>shap_mean</th>
       <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>num__premium_user</td>
-      <td>0.000052</td>
-      <td>0.302916</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>num__avg_sessions_week</td>
-      <td>0.000122</td>
-      <td>0.197933</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>num__tenure_months</td>
-      <td>0.000140</td>
-      <td>0.177237</td>
-    </tr>
-    <tr>
-      <th>3</th>
       <td>num__spend_last_month</td>
       <td>-0.000322</td>
       <td>0.164243</td>
+      <td>1.178501</td>
+      <td>0.038124</td>
+      <td>-0.000073</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>num__tenure_months</td>
+      <td>0.000140</td>
+      <td>0.177237</td>
+      <td>1.193914</td>
+      <td>0.041208</td>
+      <td>0.000032</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>num__avg_sessions_week</td>
+      <td>0.000122</td>
+      <td>0.197933</td>
+      <td>1.218881</td>
+      <td>0.046138</td>
+      <td>0.000028</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>num__premium_user</td>
+      <td>0.000052</td>
+      <td>0.302916</td>
+      <td>1.353801</td>
+      <td>0.071462</td>
+      <td>0.000012</td>
     </tr>
     <tr>
       <th>4</th>
       <td>num__urban_resident</td>
       <td>0.000008</td>
       <td>0.146948</td>
+      <td>1.158294</td>
+      <td>0.034033</td>
+      <td>0.000002</td>
     </tr>
   </tbody>
 </table>
@@ -927,36 +945,51 @@ document.write(`
       <th>feature</th>
       <th>shap_mean</th>
       <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
       <th>mean_abs_shap</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>3</th>
+      <th>0</th>
       <td>num__spend_last_month</td>
       <td>-0.000322</td>
       <td>0.164243</td>
+      <td>1.178501</td>
+      <td>0.038124</td>
+      <td>-0.000073</td>
       <td>0.000322</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>1</th>
       <td>num__tenure_months</td>
       <td>0.000140</td>
       <td>0.177237</td>
+      <td>1.193914</td>
+      <td>0.041208</td>
+      <td>0.000032</td>
       <td>0.000140</td>
     </tr>
     <tr>
-      <th>1</th>
+      <th>2</th>
       <td>num__avg_sessions_week</td>
       <td>0.000122</td>
       <td>0.197933</td>
+      <td>1.218881</td>
+      <td>0.046138</td>
+      <td>0.000028</td>
       <td>0.000122</td>
     </tr>
     <tr>
-      <th>0</th>
+      <th>3</th>
       <td>num__premium_user</td>
       <td>0.000052</td>
       <td>0.302916</td>
+      <td>1.353801</td>
+      <td>0.071462</td>
+      <td>0.000012</td>
       <td>0.000052</td>
     </tr>
     <tr>
@@ -964,6 +997,9 @@ document.write(`
       <td>num__urban_resident</td>
       <td>0.000008</td>
       <td>0.146948</td>
+      <td>1.158294</td>
+      <td>0.034033</td>
+      <td>0.000002</td>
       <td>0.000008</td>
     </tr>
   </tbody>
@@ -1089,7 +1125,7 @@ document.write(`
  &#39;std_error&#39;: 0.08816425428368271,
  &#39;p_value&#39;: 0.0,
  &#39;confidence_interval&#39;: (1.6391101652455118, 1.9847076914852104),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x1446fee40&gt;}
+ &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x176e6ee40&gt;}
 </pre></div>
 </div>
 </div>
@@ -1193,7 +1229,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_15824/1147422044.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_18837/1147422044.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
   ate_ortho_check = refute_irm_orthogonality(dml_ate, causal_data)
 </pre></div>
 </div>
