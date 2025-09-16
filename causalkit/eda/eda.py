@@ -106,6 +106,9 @@ class PropensityModel:
         else:
             raise ValueError("X must be a pandas DataFrame with named columns.")
         t = np.asarray(t).astype(int)
+        # validate binary treatment
+        if not np.isin(t, [0, 1]).all():
+            raise ValueError("Treatment must be binary {0,1}.")
 
         # Preprocessor default
         if preprocessor is None:
@@ -143,11 +146,16 @@ class PropensityModel:
                         ps[te_idx] = fold_model.predict_proba(X_te_p)[:, 1]
             # Fit final model for SHAP
             X_full_p = preprocessor.fit_transform(X)
-            final_model = CatBoostClassifier(thread_count=-1, random_seed=random_state, verbose=False)
+            final_model = CatBoostClassifier(thread_count=-1, random_state=random_state, verbose=False)
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 final_model.fit(X_full_p, t)
             X_for_shap = X_full_p
             fitted = final_model
+            # use transformed feature names for SHAP alignment
+            try:
+                feature_names = preprocessor.get_feature_names_out().tolist()
+            except Exception:
+                feature_names = [f"feature_{i}" for i in range(X_full_p.shape[1])]
         else:
             pipe = Pipeline([("prep", preprocessor), ("clf", model)])
             import warnings
@@ -187,115 +195,62 @@ class PropensityModel:
     
     @property
     def shap(self) -> pd.DataFrame:
-        """Return SHAP values from the fitted propensity score model.
+        """Return feature attribution from the fitted propensity model.
         
-        SHAP values show the directional contribution of each feature to 
-        treatment assignment prediction, where positive values increase 
-        treatment probability and negative values decrease it.
+        For CatBoost models: returns SHAP-based attributions with both signed mean (shap_mean)
+        and magnitude (shap_mean_abs), sorted by shap_mean_abs.
         
-        Returns
-        -------
-        pd.DataFrame
-            For CatBoost models: DataFrame with columns 'feature' and 'shap_mean',
-            where 'shap_mean' represents the mean SHAP value across all samples.
-            
-            For sklearn models: DataFrame with columns 'feature' and 'importance'
-            (absolute coefficient values, for backward compatibility).
-            
-        Raises
-        ------
-        RuntimeError
-            If the fitted model does not support SHAP values extraction.
+        For sklearn linear models (LogisticRegression): returns absolute coefficients under
+        column 'coef_abs' (not SHAP), sorted descending.
         """
         # Extract SHAP values or feature importance based on model type
         if isinstance(self.fitted_model, CatBoostClassifier):
-            # Use CatBoost's SHAP values for directional feature contributions
             try:
-                # Import Pool for SHAP computation
                 from catboost import Pool
-                
-                # Check if we have the required data for SHAP computation
                 if self.X_for_shap is None:
                     raise RuntimeError("Preprocessed data for SHAP computation not available.")
-                
-                # Create Pool object for SHAP computation (numeric-only features after preprocessing)
                 shap_pool = Pool(data=self.X_for_shap)
-                
-                # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
-                # where the last column is the bias term
                 shap_values = self.fitted_model.get_feature_importance(type='ShapValues', data=shap_pool)
-                
-                # Remove bias term (last column) and compute mean SHAP values across samples
-                # This gives us the average directional contribution of each feature
-                shap_values_no_bias = shap_values[:, :-1]  # Remove bias column
-                importance_values = np.mean(shap_values_no_bias, axis=0)  # Mean across samples
-                
-                feature_names = self.feature_names
-                column_name = 'shap_mean'  # Use different column name to indicate SHAP values
-                
+                shap_values_no_bias = shap_values[:, :-1]
+                shap_mean = np.mean(shap_values_no_bias, axis=0)
+                shap_mean_abs = np.mean(np.abs(shap_values_no_bias), axis=0)
+                feature_names = list(self.feature_names)
+                if len(feature_names) != shap_values_no_bias.shape[1]:
+                    raise RuntimeError("Feature names length does not match SHAP values. Ensure transformed names are used.")
+                result_df = pd.DataFrame({
+                    'feature': feature_names,
+                    'shap_mean': shap_mean,
+                    'shap_mean_abs': shap_mean_abs,
+                }).sort_values('shap_mean_abs', ascending=False).reset_index(drop=True)
+                # Augment with probability-scale metrics using baseline p0 = mean propensity score
+                p0 = float(np.mean(self.propensity_scores))
+                p0 = float(np.clip(p0, 1e-9, 1 - 1e-9))
+                logit_p0 = float(np.log(p0 / (1.0 - p0)))
+                result_df['odds_mult_abs'] = np.exp(result_df['shap_mean_abs'].values)
+                result_df['exact_pp_change_abs'] = 1.0 / (1.0 + np.exp(-(logit_p0 + result_df['shap_mean_abs'].values))) - p0
+                result_df['exact_pp_change_signed'] = 1.0 / (1.0 + np.exp(-(logit_p0 + result_df['shap_mean'].values))) - p0
+                return result_df
             except Exception as e:
                 raise RuntimeError(f"Failed to extract SHAP values from CatBoost model: {e}")
-        
         elif hasattr(self.fitted_model, 'named_steps') and hasattr(self.fitted_model.named_steps.get('clf'), 'coef_'):
-            # Handle sklearn pipeline with logistic regression
             try:
                 clf = self.fitted_model.named_steps['clf']
-                # For logistic regression, use absolute coefficients as importance
-                importance_values = np.abs(clf.coef_[0])
-                
-                # Need to map back to original feature names through preprocessing
-                # For simplicity, if we have preprocessed features, we'll use the original feature names
-                # and aggregate importance for one-hot encoded categorical features
+                coef_abs = np.abs(clf.coef_[0])
                 prep = self.fitted_model.named_steps.get('prep')
                 if hasattr(prep, 'get_feature_names_out'):
                     try:
-                        # Try to get feature names from preprocessor
-                        transformed_names = prep.get_feature_names_out()
-                        feature_names = [str(name) for name in transformed_names]
-                    except:
-                        # Fallback to original feature names if transformation fails
-                        feature_names = self.feature_names
-                        if len(importance_values) != len(feature_names):
-                            # If lengths don't match due to one-hot encoding, we can't map back easily
-                            # Just use indices as feature names
-                            feature_names = [f"feature_{i}" for i in range(len(importance_values))]
+                        feature_names = [str(n) for n in prep.get_feature_names_out()]
+                    except Exception:
+                        feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
                 else:
-                    feature_names = self.feature_names
-                
-                column_name = 'importance'  # Keep backward compatibility for sklearn models
-                    
+                    feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
+                if len(coef_abs) != len(feature_names):
+                    raise RuntimeError("Feature names length does not match coefficients.")
+                return pd.DataFrame({'feature': feature_names, 'coef_abs': coef_abs}).sort_values('coef_abs', ascending=False).reset_index(drop=True)
             except Exception as e:
                 raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
-        
         else:
             raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self.fitted_model)}")
-        
-        # Ensure we have matching lengths
-        if len(importance_values) != len(feature_names):
-            # This can happen with preprocessing transformations
-            # Create generic feature names if needed
-            if len(importance_values) > len(feature_names):
-                feature_names = feature_names + [f"transformed_feature_{i}" for i in range(len(feature_names), len(importance_values))]
-            else:
-                feature_names = feature_names[:len(importance_values)]
-        
-        # Create DataFrame with appropriate column name
-        result_df = pd.DataFrame({
-            'feature': feature_names,
-            column_name: importance_values
-        })
-        
-        # Sort appropriately: by absolute value for SHAP values (to show most impactful features),
-        # by value for regular importance (higher is better)
-        if column_name == 'shap_mean':
-            # For SHAP values, sort by absolute value to show most impactful features first
-            result_df = result_df.reindex(result_df[column_name].abs().sort_values(ascending=False).index)
-        else:
-            # For regular importance, sort by value (descending)
-            result_df = result_df.sort_values(column_name, ascending=False)
-        
-        result_df = result_df.reset_index(drop=True)
-        return result_df
     
     def ps_graph(self):
         """Plot overlaid histograms of propensity scores for treated vs control.
@@ -806,10 +761,10 @@ class CausalEDA:
     def fit_propensity(self) -> 'PropensityModel':
         """Estimate cross-validated propensity scores P(T=1|X).
 
-        Uses a preprocessing+CatBoost classifier pipeline with stratified K-fold
-        cross_val_predict to generate out-of-fold probabilities. CatBoost uses
-        all available threads and handles categorical features natively. Returns a
-        PropensityModel instance containing propensity scores and diagnostic methods.
+        Uses a preprocessing + classifier setup with stratified K-fold to generate
+        out-of-fold probabilities. For CatBoost, data are one-hot encoded via the
+        configured ColumnTransformer before fitting (no native categorical passing).
+        Returns a PropensityModel instance containing propensity scores and diagnostics.
         
         Returns
         -------
@@ -823,6 +778,9 @@ class CausalEDA:
         df = self.d.df
         X = df[self.d.confounders]
         t = df[self.d.treatment].astype(int).values
+        # validate binary treatment
+        if not np.isin(t, [0, 1]).all():
+            raise ValueError("Treatment must be binary {0,1}.")
         cv = StratifiedKFold(n_splits=self.n_splits, shuffle=True, random_state=self.random_state)
         
         # Special handling for CatBoost to properly pass categorical features
@@ -887,7 +845,11 @@ class CausalEDA:
             
             # Store the trained model and data needed for SHAP computation
             self._fitted_model = final_model
-            self._feature_names = X.columns.tolist()
+            # use transformed feature names to align with SHAP space
+            try:
+                self._feature_names = self.preproc.get_feature_names_out().tolist()
+            except Exception:
+                self._feature_names = [f"feature_{i}" for i in range(X_full_prep.shape[1])]
             self._X_for_shap = X_full_prep  # Store preprocessed data for SHAP
         else:
             # For non-CatBoost models, fit the pipeline on full data
@@ -1280,135 +1242,65 @@ class CausalEDA:
         return fig1, fig2
 
     def treatment_features(self) -> pd.DataFrame:
-        """Return SHAP values from the fitted propensity score model.
+        """Return feature attribution from the fitted propensity score model.
         
-        This method extracts SHAP values from the propensity score model
-        that was trained during fit_propensity(). SHAP values show the directional
-        contribution of each feature to treatment assignment prediction, where
-        positive values increase treatment probability and negative values decrease it.
-        
-        Returns
-        -------
-        pd.DataFrame
-            For CatBoost models: DataFrame with columns 'feature' and 'shap_mean', 
-            where 'shap_mean' represents the mean SHAP value across all samples.
-            Positive values indicate features that increase treatment probability,
-            negative values indicate features that decrease treatment probability.
-            
-            For sklearn models: DataFrame with columns 'feature' and 'importance'
-            (absolute coefficient values, for backward compatibility).
-            
-        Raises
-        ------
-        RuntimeError
-            If fit_propensity() has not been called yet, or if the fitted
-            model does not support SHAP values extraction.
-            
-        Examples
-        --------
-        >>> eda = CausalEDA(data)
-        >>> ps = eda.fit_propensity()  # Must be called first
-        >>> shap_df = eda.treatment_features()
-        >>> print(shap_df.head())
-           feature  shap_mean
-        0  age         0.45  # Positive: increases treatment prob
-        1  income     -0.32  # Negative: decreases treatment prob
-        2  education   0.12  # Positive: increases treatment prob
+        - CatBoost path: SHAP attributions with columns 'shap_mean' and 'shap_mean_abs',
+          sorted by 'shap_mean_abs'. Uses transformed feature names from the preprocessor.
+        - Sklearn path (LogisticRegression): absolute coefficients reported as 'coef_abs'.
         """
         # Check if model has been fitted
         if not hasattr(self, '_fitted_model') or self._fitted_model is None:
             raise RuntimeError("No fitted propensity model found. Please call fit_propensity() first.")
-        
         if not hasattr(self, '_feature_names') or self._feature_names is None:
             raise RuntimeError("Feature names not available. Please call fit_propensity() first.")
         
-        # Extract SHAP values or feature importance based on model type
         if isinstance(self._fitted_model, CatBoostClassifier):
-            # Use CatBoost's SHAP values for directional feature contributions
             try:
-                # Import Pool for SHAP computation
                 from catboost import Pool
-                
-                # Check if we have the required data for SHAP computation
                 if not hasattr(self, '_X_for_shap') or self._X_for_shap is None:
                     raise RuntimeError("Preprocessed data for SHAP computation not available. Please call fit_propensity() first.")
-                
-                # Create Pool object for SHAP computation (numeric-only after preprocessing)
                 shap_pool = Pool(data=self._X_for_shap)
-                
-                # Get SHAP values - returns array of shape (n_samples, n_features + 1) 
-                # where the last column is the bias term
                 shap_values = self._fitted_model.get_feature_importance(type='ShapValues', data=shap_pool)
-                
-                # Remove bias term (last column) and compute mean SHAP values across samples
-                # This gives us the average directional contribution of each feature
-                shap_values_no_bias = shap_values[:, :-1]  # Remove bias column
-                importance_values = np.mean(shap_values_no_bias, axis=0)  # Mean across samples
-                
-                feature_names = self._feature_names
-                column_name = 'shap_mean'  # Use different column name to indicate SHAP values
-                
+                shap_values_no_bias = shap_values[:, :-1]
+                shap_mean = np.mean(shap_values_no_bias, axis=0)
+                shap_mean_abs = np.mean(np.abs(shap_values_no_bias), axis=0)
+                feature_names = list(self._feature_names)
+                if len(feature_names) != shap_values_no_bias.shape[1]:
+                    raise RuntimeError("Feature names length does not match SHAP values. Ensure transformed names are used.")
+                result_df = pd.DataFrame({
+                    'feature': feature_names,
+                    'shap_mean': shap_mean,
+                    'shap_mean_abs': shap_mean_abs,
+                }).sort_values('shap_mean_abs', ascending=False).reset_index(drop=True)
+                # Augment with probability-scale metrics using baseline p0 = mean propensity score
+                p0 = float(np.mean(getattr(self, '_ps', None))) if hasattr(self, '_ps') else np.nan
+                if not np.isfinite(p0):
+                    raise RuntimeError("Baseline propensity scores not available to compute probability-based columns. Fit propensity first.")
+                p0 = float(np.clip(p0, 1e-9, 1 - 1e-9))
+                logit_p0 = float(np.log(p0 / (1.0 - p0)))
+                result_df['odds_mult_abs'] = np.exp(result_df['shap_mean_abs'].values)
+                result_df['exact_pp_change_abs'] = 1.0 / (1.0 + np.exp(-(logit_p0 + result_df['shap_mean_abs'].values))) - p0
+                result_df['exact_pp_change_signed'] = 1.0 / (1.0 + np.exp(-(logit_p0 + result_df['shap_mean'].values))) - p0
+                return result_df
             except Exception as e:
                 raise RuntimeError(f"Failed to extract SHAP values from CatBoost model: {e}")
-        
         elif hasattr(self._fitted_model, 'named_steps') and hasattr(self._fitted_model.named_steps.get('clf'), 'coef_'):
-            # Handle sklearn pipeline with logistic regression
             try:
                 clf = self._fitted_model.named_steps['clf']
-                # For logistic regression, use absolute coefficients as importance
-                importance_values = np.abs(clf.coef_[0])
-                
-                # Need to map back to original feature names through preprocessing
-                # For simplicity, if we have preprocessed features, we'll use the original feature names
-                # and aggregate importance for one-hot encoded categorical features
+                coef_abs = np.abs(clf.coef_[0])
                 prep = self._fitted_model.named_steps.get('prep')
                 if hasattr(prep, 'get_feature_names_out'):
                     try:
-                        # Try to get feature names from preprocessor
-                        transformed_names = prep.get_feature_names_out()
-                        feature_names = [str(name) for name in transformed_names]
-                    except:
-                        # Fallback to original feature names if transformation fails
-                        feature_names = self._feature_names
-                        if len(importance_values) != len(feature_names):
-                            # If lengths don't match due to one-hot encoding, we can't map back easily
-                            # Just use indices as feature names
-                            feature_names = [f"feature_{i}" for i in range(len(importance_values))]
+                        feature_names = [str(n) for n in prep.get_feature_names_out()]
+                    except Exception:
+                        feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
                 else:
-                    feature_names = self._feature_names
-                
-                column_name = 'importance'  # Keep backward compatibility for sklearn models
-                    
+                    feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
+                if len(coef_abs) != len(feature_names):
+                    raise RuntimeError("Feature names length does not match coefficients.")
+                return pd.DataFrame({'feature': feature_names, 'coef_abs': coef_abs}).sort_values('coef_abs', ascending=False).reset_index(drop=True)
             except Exception as e:
                 raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
-        
         else:
             raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self._fitted_model)}")
-        
-        # Ensure we have matching lengths
-        if len(importance_values) != len(feature_names):
-            # This can happen with preprocessing transformations
-            # Create generic feature names if needed
-            if len(importance_values) > len(feature_names):
-                feature_names = feature_names + [f"transformed_feature_{i}" for i in range(len(feature_names), len(importance_values))]
-            else:
-                feature_names = feature_names[:len(importance_values)]
-        
-        # Create DataFrame with appropriate column name
-        result_df = pd.DataFrame({
-            'feature': feature_names,
-            column_name: importance_values
-        })
-        
-        # Sort appropriately: by absolute value for SHAP values (to show most impactful features),
-        # by value for regular importance (higher is better)
-        if column_name == 'shap_mean':
-            # For SHAP values, sort by absolute value to show most impactful features first
-            result_df = result_df.reindex(result_df[column_name].abs().sort_values(ascending=False).index)
-        else:
-            # For regular importance, sort by value (descending)
-            result_df = result_df.sort_values(column_name, ascending=False)
-        
-        result_df = result_df.reset_index(drop=True)
-        return result_df
 
