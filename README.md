@@ -21,10 +21,10 @@ import causalkit
 
 
 # Scenarios Covered
-| Is RCT        | Treatment | Outcome    | EDA | Estimands | Refutation | Docs    |
-|---------------|-----------|------------|-----|-----------|------------|---------|
-| Observational | Binary    | Continuous | Yes | ATE       | Yes        | Example |
-| Observational | Binary    | Continuous | Yes | ATT       | Yes        | Example |
+| Is RCT        | Treatment | Outcome    | EDA | Estimands | Refutation | Docs                                                                       |
+|---------------|-----------|------------|-----|-----------|------------|----------------------------------------------------------------------------|
+| Observational | Binary    | Continuous | Yes | ATE       | Yes        | [Example](https://ioannmartynov.github.io/CausalKit/examples/dml_ate.html) |
+| Observational | Binary    | Continuous | Yes | ATT       | Yes        | [Example](https://ioannmartynov.github.io/CausalKit/examples/dml_att.html) |
 
 # Don't forget to press Star ⭐️⭐️⭐️⭐️⭐️
 
