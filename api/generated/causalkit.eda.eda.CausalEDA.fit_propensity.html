@@ -443,10 +443,10 @@ document.write(`
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.fit_propensity">
 <span class="sig-prename descclassname"><span class="pre">CausalEDA.</span></span><span class="sig-name descname"><span class="pre">fit_propensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/eda/eda.html#CausalEDA.fit_propensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.fit_propensity" title="Link to this definition">#</a></dt>
 <dd><p>Estimate cross-validated propensity scores P(T=1|X).</p>
-<p>Uses a preprocessing+CatBoost classifier pipeline with stratified K-fold
-cross_val_predict to generate out-of-fold probabilities. CatBoost uses
-all available threads and handles categorical features natively. Returns a
-PropensityModel instance containing propensity scores and diagnostic methods.</p>
+<p>Uses a preprocessing + classifier setup with stratified K-fold to generate
+out-of-fold probabilities. For CatBoost, data are one-hot encoded via the
+configured ColumnTransformer before fitting (no native categorical passing).
+Returns a PropensityModel instance containing propensity scores and diagnostics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A PropensityModel instance with methods for:

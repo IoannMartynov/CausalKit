@@ -24,6 +24,9 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 ------------------
 from causalkit.eda import CausalEDA
 eda = CausalEDA(causal_data)
+
+# shape of data
+eda.data_shape()
 ------------------
 
 
@@ -32,6 +35,7 @@ eda = CausalEDA(causal_data)
 Cell [0;32mIn[2], line 1[0m
 [0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01meda[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalEDA
 [1;32m      2[0m eda [38;5;241m=[39m CausalEDA(causal_data)
+[1;32m      4[0m [38;5;66;03m# shape of data[39;00m
 
 File [0;32m~/work/CausalKit/CausalKit/causalkit/eda/__init__.py:1[0m
 [0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01m.[39;00m[38;5;21;01meda[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalEDA, CausalDataLite
