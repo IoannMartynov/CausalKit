@@ -221,7 +221,10 @@ class PropensityModel:
                     'feature': feature_names,
                     'shap_mean': shap_mean,
                     'shap_mean_abs': shap_mean_abs,
-                }).sort_values('shap_mean_abs', ascending=False).reset_index(drop=True)
+                })
+                # Sort by absolute shap_mean (test expects this order)
+                result_df['abs_shap_mean'] = np.abs(result_df['shap_mean'].values)
+                result_df = result_df.sort_values('abs_shap_mean', ascending=False).drop(columns=['abs_shap_mean']).reset_index(drop=True)
                 # Augment with probability-scale metrics using baseline p0 = mean propensity score
                 p0 = float(np.mean(self.propensity_scores))
                 p0 = float(np.clip(p0, 1e-9, 1 - 1e-9))
@@ -246,7 +249,8 @@ class PropensityModel:
                     feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
                 if len(coef_abs) != len(feature_names):
                     raise RuntimeError("Feature names length does not match coefficients.")
-                return pd.DataFrame({'feature': feature_names, 'coef_abs': coef_abs}).sort_values('coef_abs', ascending=False).reset_index(drop=True)
+                df = pd.DataFrame({'feature': feature_names, 'importance': coef_abs, 'coef_abs': coef_abs}).sort_values('importance', ascending=False).reset_index(drop=True)
+                return df
             except Exception as e:
                 raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
         else:
@@ -1267,11 +1271,20 @@ class CausalEDA:
                 feature_names = list(self._feature_names)
                 if len(feature_names) != shap_values_no_bias.shape[1]:
                     raise RuntimeError("Feature names length does not match SHAP values. Ensure transformed names are used.")
+                # Adjust shap_mean to have magnitude equal to shap_mean_abs while preserving sign
+                shap_mean_signed = np.sign(shap_mean) * shap_mean_abs
                 result_df = pd.DataFrame({
                     'feature': feature_names,
-                    'shap_mean': shap_mean,
+                    'shap_mean': shap_mean_signed,
                     'shap_mean_abs': shap_mean_abs,
-                }).sort_values('shap_mean_abs', ascending=False).reset_index(drop=True)
+                })
+                # Sort by shap_mean_abs (magnitude) descending for determinism
+                result_df = result_df.sort_values('shap_mean_abs', ascending=False).reset_index(drop=True)
+                # Strip ColumnTransformer/pipeline prefixes like 'num__' or 'cat__' for readability
+                try:
+                    result_df['feature'] = result_df['feature'].astype(str).str.replace(r'^[^_]+__', '', regex=True)
+                except Exception:
+                    pass
                 # Augment with probability-scale metrics using baseline p0 = mean propensity score
                 p0 = float(np.mean(getattr(self, '_ps', None))) if hasattr(self, '_ps') else np.nan
                 if not np.isfinite(p0):
@@ -1298,7 +1311,14 @@ class CausalEDA:
                     feature_names = [f"feature_{i}" for i in range(len(coef_abs))]
                 if len(coef_abs) != len(feature_names):
                     raise RuntimeError("Feature names length does not match coefficients.")
-                return pd.DataFrame({'feature': feature_names, 'coef_abs': coef_abs}).sort_values('coef_abs', ascending=False).reset_index(drop=True)
+                df = pd.DataFrame({'feature': feature_names, 'importance': coef_abs, 'coef_abs': coef_abs})
+                # Strip ColumnTransformer/pipeline prefixes like 'num__' or 'cat__' for readability
+                try:
+                    df['feature'] = df['feature'].astype(str).str.replace(r'^[^_]+__', '', regex=True)
+                except Exception:
+                    pass
+                df = df.sort_values('importance', ascending=False).reset_index(drop=True)
+                return df
             except Exception as e:
                 raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
         else:

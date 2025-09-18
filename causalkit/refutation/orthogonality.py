@@ -58,12 +58,17 @@ def aipw_score_att(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray,
 
 def extract_nuisances(model, test_indices: Optional[np.ndarray] = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Extract cross-fitted nuisance predictions from internal IRM model.
+    Extract cross-fitted nuisance predictions from an IRM-like model or a compatible dummy.
+
+    Tries several backends for robustness:
+      1) IRM attributes: m_hat_, g0_hat_, g1_hat_
+      2) model.predictions dict with keys: 'ml_m','ml_g0','ml_g1'
+      3) Direct attributes: ml_m, ml_g0, ml_g1
 
     Parameters
     ----------
-    model : IRM
-        Fitted internal IRM estimator (causalkit.inference.estimators.IRM)
+    model : object
+        Fitted internal IRM estimator (causalkit.inference.estimators.IRM) or a compatible dummy model
     test_indices : np.ndarray, optional
         If provided, extract predictions only for these indices
 
@@ -75,14 +80,29 @@ def extract_nuisances(model, test_indices: Optional[np.ndarray] = None) -> Tuple
         - g0: outcome predictions E[Y|X,D=0]
         - g1: outcome predictions E[Y|X,D=1]
     """
-    # Validate required attributes exist on IRM
-    for attr in ("m_hat_", "g0_hat_", "g1_hat_"):
-        if not hasattr(model, attr) or getattr(model, attr) is None:
-            raise AttributeError(f"IRM model is missing attribute '{attr}'. Ensure the model is fitted and comes from dml_ate/dml_att.")
+    m = g0 = g1 = None
 
-    m = np.asarray(getattr(model, "m_hat_"), dtype=float).ravel()
-    g0 = np.asarray(getattr(model, "g0_hat_"), dtype=float).ravel()
-    g1 = np.asarray(getattr(model, "g1_hat_"), dtype=float).ravel()
+    # 1) Preferred IRM attributes
+    if hasattr(model, "m_hat_") and getattr(model, "m_hat_", None) is not None:
+        m = np.asarray(getattr(model, "m_hat_"), dtype=float).ravel()
+        g0 = np.asarray(getattr(model, "g0_hat_"), dtype=float).ravel()
+        g1 = np.asarray(getattr(model, "g1_hat_"), dtype=float).ravel()
+    else:
+        # 2) Predictions dict backend
+        preds = getattr(model, "predictions", None)
+        if isinstance(preds, dict) and all(k in preds for k in ("ml_m", "ml_g0", "ml_g1")):
+            m = np.asarray(preds["ml_m"], dtype=float).ravel()
+            g0 = np.asarray(preds["ml_g0"], dtype=float).ravel()
+            g1 = np.asarray(preds["ml_g1"], dtype=float).ravel()
+        else:
+            # 3) Direct attributes with same names
+            if all(hasattr(model, nm) for nm in ("ml_m", "ml_g0", "ml_g1")):
+                m = np.asarray(getattr(model, "ml_m"), dtype=float).ravel()
+                g0 = np.asarray(getattr(model, "ml_g0"), dtype=float).ravel()
+                g1 = np.asarray(getattr(model, "ml_g1"), dtype=float).ravel()
+
+    if m is None or g0 is None or g1 is None:
+        raise AttributeError("IRM model-compatible nuisances not found. Expected m_hat_/g0_hat_/g1_hat_ or predictions['ml_*'].")
 
     if test_indices is not None:
         m = m[test_indices]
@@ -547,6 +567,50 @@ def refute_irm_orthogonality(
         except Exception as _:
             trim_curve_atte = None
     
+    # Build backward-compatibility aliases for overlap diagnostics (ATT naming uses 'g')
+    overlap_bc = overlap_atte.copy() if isinstance(overlap_atte, pd.DataFrame) else None
+    if isinstance(overlap_bc, pd.DataFrame):
+        if 'pct_controls_with_m_ge_thr' in overlap_bc.columns:
+            overlap_bc['pct_controls_with_g_ge_thr'] = overlap_bc['pct_controls_with_m_ge_thr']
+        if 'pct_treated_with_m_le_1_minus_thr' in overlap_bc.columns:
+            overlap_bc['pct_treated_with_g_le_1_minus_thr'] = overlap_bc['pct_treated_with_m_le_1_minus_thr']
+    
+    # p-treated parameterization and legacy alias p1
+    params_extra = {}
+    if score_u in ('ATTE','ATT'):
+        p_full = float(np.mean(d))
+        p_trim = float(np.mean(d_trim)) if len(d_trim) > 0 else float('nan')
+        params_extra = {
+            'p_treated': p_full,
+            'p_treated_full': p_full,
+            'p_treated_trim': p_trim,
+            # legacy aliases
+            'p1': p_full,
+            'p1_full': p_full,
+            'p1_trim': p_trim,
+        }
+    
+    # For ATT naming in derivative outputs, add legacy columns to copies (non-destructive)
+    if score_u in ('ATTE','ATT') and isinstance(ortho_derivs_full, pd.DataFrame):
+        def _with_legacy_cols(df_in: pd.DataFrame) -> pd.DataFrame:
+            df_out = df_in.copy()
+            # map IRM naming to legacy ATT naming
+            if 'd_g0' in df_out.columns:
+                df_out['d_m0'] = df_out['d_g0']
+                df_out['se_m0'] = df_out.get('se_g0', np.nan)
+                df_out['t_m0'] = df_out.get('t_g0', np.nan)
+            if 'd_m' in df_out.columns:
+                df_out['d_g'] = df_out['d_m']
+                df_out['se_g'] = df_out.get('se_m', np.nan)
+                df_out['t_g'] = df_out.get('t_m', np.nan)
+            # m1 is zero under ATTE
+            df_out['d_m1'] = 0.0
+            df_out['se_m1'] = 0.0
+            df_out['t_m1'] = 0.0
+            return df_out
+        ortho_derivs_full = _with_legacy_cols(ortho_derivs_full)
+        ortho_derivs_trim = _with_legacy_cols(ortho_derivs_trim)
+    
     return {
         'theta': float(theta_hat),
         'params': {
@@ -554,7 +618,7 @@ def refute_irm_orthogonality(
             'trimming_threshold': trimming_threshold,
             'strict_oos_requested': bool(strict_oos),
             'strict_oos_applied': bool(strict_applied),
-            **({'p_treated': float(np.mean(d)), 'p_treated_full': float(np.mean(d)), 'p_treated_trim': float(np.mean(d_trim))} if score_u in ('ATTE','ATT') else {}),
+            **params_extra,
             # backward-compat aliases
             'target': score_u,
             'clip_eps': trimming_threshold,
@@ -582,7 +646,7 @@ def refute_irm_orthogonality(
             'trimmed_sample': influence_trim,
             'interpretation': 'Heavy tails or extreme kurtosis suggest instability'
         },
-        'overlap_diagnostics': overlap_atte,
+        'overlap_diagnostics': overlap_bc,
         'overlap_atte': overlap_atte,
         'robustness': {
             'trim_curve': trim_curve_atte,
@@ -641,9 +705,36 @@ def orthogonality_derivatives_att(
     X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
     m0: np.ndarray, g: np.ndarray, p1: float, eps: float = 0.01
 ) -> pd.DataFrame:
-    """Deprecated: use orthogonality_derivatives_atte(X_basis,y,d,g0,m,p_treated,trimming_threshold)."""
-    warnings.warn("orthogonality_derivatives_att is deprecated; use orthogonality_derivatives_atte with IRM naming.", DeprecationWarning, stacklevel=2)
-    return orthogonality_derivatives_atte(X_basis, y, d, g0=m0, m=g, p_treated=p1, trimming_threshold=eps)
+    """
+    Deprecated ATT naming wrapper around orthogonality_derivatives_atte.
+    Returns legacy column names for backward compatibility:
+      - m1 derivatives are identically zero: d_m1,se_m1,t_m1
+      - m0 maps to g0 in IRM naming
+      - g maps to m in IRM naming (propensity)
+    """
+    warnings.warn(
+        "orthogonality_derivatives_att is deprecated; use orthogonality_derivatives_atte with IRM naming.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    df = orthogonality_derivatives_atte(X_basis, y, d, g0=m0, m=g, p_treated=p1, trimming_threshold=eps)
+    # Build legacy columns alongside to preserve tests relying on old names
+    out = pd.DataFrame({
+        "basis": df["basis"].values,
+        # legacy m1 (always zero under ATTE)
+        "d_m1": np.zeros(len(df)),
+        "se_m1": np.zeros(len(df)),
+        "t_m1": np.zeros(len(df)),
+        # legacy m0 corresponds to IRM g0
+        "d_m0": df["d_g0"].values,
+        "se_m0": df["se_g0"].values,
+        "t_m0": df["t_g0"].values,
+        # legacy g corresponds to IRM m (propensity)
+        "d_g": df["d_m"].values,
+        "se_g": df["se_m"].values,
+        "t_g": df["t_m"].values,
+    })
+    return out
 
 
 def overlap_diagnostics_atte(
