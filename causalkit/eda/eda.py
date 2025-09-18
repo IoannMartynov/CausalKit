@@ -39,45 +39,69 @@ from catboost import CatBoostClassifier, CatBoostRegressor
 import matplotlib.pyplot as plt
 
 
+import warnings
+_CK_EDA_WARN_ONCE = set()
+
+def _warn_once(name: str, to: str):
+    key = (name, to)
+    if key not in _CK_EDA_WARN_ONCE:
+        warnings.warn(
+            f"`{name}` is deprecated; use `{to}` instead. "
+            "This alias will be removed in a future release.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        _CK_EDA_WARN_ONCE.add(key)
+
+
 class PropensityModel:
-    """A model for propensity scores and related diagnostics.
+    """A model for m(x) = P(D=1|X) and related diagnostics.
     
-    This class encapsulates propensity scores and provides methods for:
-    - Computing ROC AUC
+    This class encapsulates propensity m and provides methods for:
+    - Computing ROC AUC (AUC of D vs m)
     - Extracting SHAP values
-    - Plotting propensity score overlap
+    - Plotting m overlap
     - Checking positivity/overlap
     
-    The class is returned by CausalEDA.fit_propensity() and provides a cleaner
-    interface for propensity score analysis.
+    The class is returned by CausalEDA.fit_m() and provides a cleaner
+    interface for propensity analysis.
     """
     
     def __init__(self, 
-                 propensity_scores: np.ndarray,
-                 treatment_values: np.ndarray,
-                 fitted_model: Any,
-                 feature_names: List[str],
+                 m: Optional[np.ndarray] = None,
+                 d: Optional[np.ndarray] = None,
+                 fitted_model: Any = None,
+                 feature_names: List[str] = None,
                  X_for_shap: Optional[np.ndarray] = None,
-                 cat_features_for_shap: Optional[List[int]] = None):
+                 cat_features_for_shap: Optional[List[int]] = None,
+                 propensity_scores: Optional[np.ndarray] = None,
+                 treatment_values: Optional[np.ndarray] = None):
         """Initialize PropensityModel with fitted model artifacts.
         
         Parameters
         ----------
-        propensity_scores : np.ndarray
-            Array of propensity scores P(T=1|X)
-        treatment_values : np.ndarray
+        m : np.ndarray
+            Array of m(x) = P(D=1|X)
+        d : np.ndarray
             Array of actual treatment assignments (0/1)
         fitted_model : Any
-            The fitted propensity score model
+            The fitted propensity model
         feature_names : List[str]
             Names of features used in the model
         X_for_shap : Optional[np.ndarray]
             Preprocessed feature matrix for SHAP computation
         cat_features_for_shap : Optional[List[int]]
             Categorical feature indices for SHAP computation
+        propensity_scores, treatment_values : Optional legacy aliases accepted for back-compat
         """
-        self.propensity_scores = propensity_scores
-        self.treatment_values = treatment_values
+        # Back-compat arg names
+        if m is None and propensity_scores is not None:
+            _warn_once("propensity_scores (init)", "m")
+            m = propensity_scores
+        if d is None and treatment_values is not None:
+            d = treatment_values
+        self.m = np.asarray(m) if m is not None else None
+        self.d = np.asarray(d) if d is not None else None
         self.fitted_model = fitted_model
         self.feature_names = feature_names
         self.X_for_shap = X_for_shap
@@ -93,9 +117,9 @@ class PropensityModel:
         random_state: int = 42,
         preprocessor: Optional[ColumnTransformer] = None,
     ) -> "PropensityModel":
-        """Estimate propensity scores via K-fold and return a PropensityModel.
+        """Estimate m(x) via K-fold and return a PropensityModel.
 
-        Produces out-of-fold propensity scores using StratifiedKFold. If no
+        Produces out-of-fold m estimates using StratifiedKFold. If no
         model is provided, a fast LogisticRegression is used. Categorical
         features are one-hot encoded and numeric features standardized by
         default using a ColumnTransformer.
@@ -141,12 +165,12 @@ class PropensityModel:
                         t_tr = t[tr_idx]
                         X_tr_p = preprocessor.fit_transform(X_tr)
                         X_te_p = preprocessor.transform(X_te)
-                        fold_model = CatBoostClassifier(thread_count=-1, random_seed=random_state, verbose=False)
+                        fold_model = CatBoostClassifier(thread_count=-1, random_seed=random_state, verbose=False, allow_writing_files=False)
                         fold_model.fit(X_tr_p, t_tr)
                         ps[te_idx] = fold_model.predict_proba(X_te_p)[:, 1]
             # Fit final model for SHAP
             X_full_p = preprocessor.fit_transform(X)
-            final_model = CatBoostClassifier(thread_count=-1, random_state=random_state, verbose=False)
+            final_model = CatBoostClassifier(thread_count=-1, random_state=random_state, verbose=False, allow_writing_files=False)
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 final_model.fit(X_full_p, t)
             X_for_shap = X_full_p
@@ -180,7 +204,7 @@ class PropensityModel:
     
     @property
     def roc_auc(self) -> float:
-        """Compute ROC AUC of treatment assignment vs. propensity scores.
+        """Compute ROC AUC of treatment assignment vs. m(x).
         
         Higher AUC means treatment is more predictable from confounders,
         indicating stronger systematic differences between groups (potential
@@ -191,7 +215,7 @@ class PropensityModel:
         float
             ROC AUC score between 0 and 1
         """
-        return float(roc_auc_score(self.treatment_values, self.propensity_scores))
+        return float(roc_auc_score(self.d, self.m))
     
     @property
     def shap(self) -> pd.DataFrame:
@@ -256,45 +280,42 @@ class PropensityModel:
         else:
             raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self.fitted_model)}")
     
-    def ps_graph(self):
-        """Plot overlaid histograms of propensity scores for treated vs control.
-        
-        Useful to visually assess group overlap. Does not return data; it draws
-        on the current matplotlib figure.
-        """
+    @property
+    def propensity_scores(self):
+        _warn_once("propensity_scores", "m")
+        return self.m
+
+    def plot_m_overlap(self):
+        """Plot overlaid histograms of m(x) for treated vs control."""
         plt.figure()
-        t = self.treatment_values
-        ps = self.propensity_scores
-        plt.hist(ps[t == 1], bins=30, alpha=0.5, density=True, label="treated")
-        plt.hist(ps[t == 0], bins=30, alpha=0.5, density=True, label="control")
-        plt.xlabel("Propensity score")
+        t = self.d
+        m = self.m
+        plt.hist(m[t == 1], bins=30, alpha=0.5, density=True, label="treated")
+        plt.hist(m[t == 0], bins=30, alpha=0.5, density=True, label="control")
+        plt.xlabel("m(x) = P(D=1|X)")
         plt.ylabel("Density")
         plt.legend()
-        plt.title("PS overlap")
-    
-    def positivity_check(self, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
-        """Check overlap/positivity based on propensity score thresholds.
-        
-        Parameters
-        ----------
-        bounds : Tuple[float, float], default (0.05, 0.95)
-            Lower and upper thresholds for positivity check
-        
-        Returns
-        -------
-        Dict[str, Any]
-            Dictionary with:
-            - bounds: (low, high) thresholds used
-            - share_below: fraction with PS < low
-            - share_above: fraction with PS > high
-            - flag: heuristic boolean True if the tails collectively exceed ~2%
-        """
+        plt.title("Overlap of m(x) by treatment group")
+
+    def positivity_check_m(self, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
+        """Check overlap/positivity for m(x) based on thresholds."""
         low, high = bounds
-        ps = self.propensity_scores
-        share_low = float((ps < low).mean())
-        share_high = float((ps > high).mean())
-        flag = (share_low + share_high) > 0.02  # heuristic
-        return {"bounds": bounds, "share_below": share_low, "share_above": share_high, "flag": bool(flag)}
+        m = self.m
+        return {
+            "bounds": bounds,
+            "share_below": float((m < low).mean()),
+            "share_above": float((m > high).mean()),
+            "flag": bool(((m < low).mean() + (m > high).mean()) > 0.02),
+        }
+
+    # Back-compat shims
+    def ps_graph(self, *args, **kwargs):
+        _warn_once("ps_graph()", "plot_m_overlap()")
+        return self.plot_m_overlap(*args, **kwargs)
+
+    def positivity_check(self, *args, **kwargs):
+        _warn_once("positivity_check()", "positivity_check_m()")
+        return self.positivity_check_m(*args, **kwargs)
 
 
 class OutcomeModel:
@@ -390,12 +411,12 @@ class OutcomeModel:
                         y_tr = y[tr_idx]
                         X_tr_p = preprocessor.fit_transform(X_tr)
                         X_te_p = preprocessor.transform(X_te)
-                        fold_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False)
+                        fold_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False, allow_writing_files=False)
                         fold_model.fit(X_tr_p, y_tr)
                         preds[te_idx] = fold_model.predict(X_te_p)
             # Fit final model for SHAP
             X_full_p = preprocessor.fit_transform(X)
-            final_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False)
+            final_model = CatBoostRegressor(thread_count=-1, random_seed=random_state, verbose=False, allow_writing_files=False)
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 final_model.fit(X_full_p, y)
             fitted = final_model
@@ -639,7 +660,8 @@ class CausalEDA:
         self.ps_model = ps_model or CatBoostClassifier(
             thread_count=-1,  # Use all available threads
             random_seed=random_state,
-            verbose=False  # Suppress training output
+            verbose=False,  # Suppress training output
+            allow_writing_files=False
         )
 
         # Preprocessing: always make features numeric via OneHotEncoder for categoricals
@@ -762,116 +784,77 @@ class CausalEDA:
         return stats_df
 
     # ---------- propensity & overlap ----------
-    def fit_propensity(self) -> 'PropensityModel':
-        """Estimate cross-validated propensity scores P(T=1|X).
+    def fit_m(self) -> 'PropensityModel':
+        """Estimate cross-validated m(x) = P(D=1|X).
 
         Uses a preprocessing + classifier setup with stratified K-fold to generate
         out-of-fold probabilities. For CatBoost, data are one-hot encoded via the
-        configured ColumnTransformer before fitting (no native categorical passing).
-        Returns a PropensityModel instance containing propensity scores and diagnostics.
-        
-        Returns
-        -------
-        PropensityModel
-            A PropensityModel instance with methods for:
-            - roc_auc: ROC AUC score property
-            - shap: SHAP values DataFrame property  
-            - ps_graph(): method to plot propensity score overlap
-            - positivity_check(): method to check positivity/overlap
+        configured ColumnTransformer before fitting. Returns a PropensityModel.
         """
         df = self.d.df
         X = df[self.d.confounders]
         t = df[self.d.treatment].astype(int).values
-        # validate binary treatment
         if not np.isin(t, [0, 1]).all():
             raise ValueError("Treatment must be binary {0,1}.")
         cv = StratifiedKFold(n_splits=self.n_splits, shuffle=True, random_state=self.random_state)
-        
-        # Special handling for CatBoost to properly pass categorical features
+
         if isinstance(self.ps_model, CatBoostClassifier):
-            # For CatBoost, we need custom cross-validation to pass cat_features properly
             import warnings
-            
             ps = np.zeros(len(X))
-            
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
-                    
                     for train_idx, test_idx in cv.split(X, t):
-                        # Prepare data for this fold
                         X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
                         t_train = t[train_idx]
-                        
-                        # Apply preprocessing
                         X_train_prep = self.preproc.fit_transform(X_train)
                         X_test_prep = self.preproc.transform(X_test)
-                        
-                        # Create and train CatBoost model for this fold
-                        model = CatBoostClassifier(
-                            thread_count=-1,
-                            random_seed=self.random_state,
-                            verbose=False
-                        )
-                        
-                        # All features are numeric after preprocessing; no cat_features needed
+                        model = CatBoostClassifier(thread_count=-1, random_seed=self.random_state, verbose=False, allow_writing_files=False)
                         model.fit(X_train_prep, t_train)
                         ps[test_idx] = model.predict_proba(X_test_prep)[:, 1]
         else:
-            # Use standard sklearn pipeline for non-CatBoost models
             import warnings
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
                     ps = cross_val_predict(self.ps_pipe, X, t, cv=cv, method="predict_proba")[:, 1]
-        
-        # clip away from 0/1 for stability
-        ps = np.clip(ps, 1e-6, 1 - 1e-6)
-        self._ps = ps
-        
-        # Train a final model on the full dataset for feature importance
-        # This provides consistent feature importance across the entire dataset
+
+        m = np.clip(ps, 1e-6, 1 - 1e-6)
+        self._m = m
+
         if isinstance(self.ps_model, CatBoostClassifier):
-            # Apply preprocessing to full dataset
             X_full_prep = self.preproc.fit_transform(X)
-            
-            # Create and train final model
-            final_model = CatBoostClassifier(
-                thread_count=-1,
-                random_seed=self.random_state,
-                verbose=False
-            )
-            
+            final_model = CatBoostClassifier(thread_count=-1, random_seed=self.random_state, verbose=False)
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
                     final_model.fit(X_full_prep, t)
-            
-            # Store the trained model and data needed for SHAP computation
             self._fitted_model = final_model
-            # use transformed feature names to align with SHAP space
             try:
                 self._feature_names = self.preproc.get_feature_names_out().tolist()
             except Exception:
                 self._feature_names = [f"feature_{i}" for i in range(X_full_prep.shape[1])]
-            self._X_for_shap = X_full_prep  # Store preprocessed data for SHAP
+            self._X_for_shap = X_full_prep
         else:
-            # For non-CatBoost models, fit the pipeline on full data
             with np.errstate(divide='ignore', invalid='ignore', over='ignore'):
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", category=RuntimeWarning)
                     self.ps_pipe.fit(X, t)
             self._fitted_model = self.ps_pipe
             self._feature_names = X.columns.tolist()
-        
-        # Create and return PropensityModel instance
+
         return PropensityModel(
-            propensity_scores=ps,
-            treatment_values=t,
+            m=m,
+            d=t,
             fitted_model=self._fitted_model,
             feature_names=self._feature_names,
             X_for_shap=getattr(self, '_X_for_shap', None)
         )
+
+    # Back-compat shim
+    def fit_propensity(self) -> 'PropensityModel':
+        _warn_once("fit_propensity()", "fit_m()")
+        return self.fit_m()
 
     def outcome_fit(self, outcome_model: Optional[Any] = None) -> 'OutcomeModel':
         """Fit a regression model to predict outcome from confounders only.
@@ -907,7 +890,8 @@ class CausalEDA:
             outcome_model = CatBoostRegressor(
                 thread_count=-1,
                 random_seed=self.random_state,
-                verbose=False
+                verbose=False,
+                allow_writing_files=False
             )
         
         # Identify numeric and categorical features for preprocessing
@@ -949,7 +933,8 @@ class CausalEDA:
                         model = CatBoostRegressor(
                             thread_count=-1,
                             random_seed=self.random_state,
-                            verbose=False
+                            verbose=False,
+                            allow_writing_files=False
                         )
                         
                         # All features are numeric after preprocessing; no cat_features needed
@@ -1006,62 +991,60 @@ class CausalEDA:
             X_for_shap=getattr(self, '_outcome_X_for_shap', None)
         )
 
-    def confounders_roc_auc(self, ps: Optional[np.ndarray] = None) -> float:
-        """Compute ROC AUC of treatment assignment vs. estimated propensity score.
-
-        Interpretation: Higher AUC means treatment is more predictable from confounders,
-        indicating stronger systematic differences between groups (potential
-        confounding). Values near 0.5 suggest random-like assignment.
-        """
-        if ps is None:
-            ps = getattr(self, "_ps", None)
-            if ps is None:
-                ps_model = self.fit_propensity()
-                ps = ps_model.propensity_scores
-        # AUC against actual treatment
+    def auc_m(self, m: Optional[np.ndarray] = None) -> float:
+        """Compute ROC AUC of treatment assignment vs. m(x)."""
+        if m is None:
+            m = getattr(self, "_m", None)
+            if m is None:
+                pm = self.fit_m()
+                m = pm.m
         t = self.d.df[self.d.treatment].astype(int).values
-        return float(roc_auc_score(t, ps))
+        return float(roc_auc_score(t, m))
 
-    def positivity_check(self, ps: Optional[np.ndarray] = None, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
-        """Check overlap/positivity based on propensity score thresholds.
-
-        Returns a dict with:
-        - bounds: (low, high) thresholds used
-        - share_below: fraction with PS < low
-        - share_above: fraction with PS > high
-        - flag: heuristic boolean True if the tails collectively exceed ~2%
-        """
-        if ps is None:
-            ps = getattr(self, "_ps", None)
-            if ps is None:
-                ps_model = self.fit_propensity()
-                ps = ps_model.propensity_scores
+    def positivity_check_m(self, m: Optional[np.ndarray] = None, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
+        """Check overlap/positivity for m(x) based on thresholds."""
+        if m is None:
+            m = getattr(self, "_m", None)
+            if m is None:
+                pm = self.fit_m()
+                m = pm.m
         low, high = bounds
-        share_low = float((ps < low).mean())
-        share_high = float((ps > high).mean())
-        flag = (share_low + share_high) > 0.02  # heuristic
-        return {"bounds": bounds, "share_below": share_low, "share_above": share_high, "flag": bool(flag)}
+        return {
+            "bounds": bounds,
+            "share_below": float((m < low).mean()),
+            "share_above": float((m > high).mean()),
+            "flag": bool(((m < low).mean() + (m > high).mean()) > 0.02),
+        }
 
-    def plot_ps_overlap(self, ps: Optional[np.ndarray] = None):
-        """Plot overlaid histograms of propensity scores for treated vs control.
-
-        Useful to visually assess group overlap. Does not return data; it draws
-        on the current matplotlib figure.
-        """
-        if ps is None:
-            ps = getattr(self, "_ps", None)
-            if ps is None:
-                ps_model = self.fit_propensity()
-                ps = ps_model.propensity_scores
+    def plot_m_overlap(self, m: Optional[np.ndarray] = None):
+        """Plot overlaid histograms of m(x) for treated vs control."""
+        if m is None:
+            m = getattr(self, "_m", None)
+            if m is None:
+                pm = self.fit_m()
+                m = pm.m
         df = self.d.df
         t = df[self.d.treatment].astype(int).values
         plt.figure()
-        plt.hist(ps[t == 1], bins=30, alpha=0.5, density=True, label="treated")
-        plt.hist(ps[t == 0], bins=30, alpha=0.5, density=True, label="control")
-        plt.xlabel("Propensity score")
+        plt.hist(m[t == 1], bins=30, alpha=0.5, density=True, label="treated")
+        plt.hist(m[t == 0], bins=30, alpha=0.5, density=True, label="control")
+        plt.xlabel("m(x) = P(D=1|X)")
         plt.ylabel("Density")
         plt.legend()
-        plt.title("PS overlap")
+        plt.title("Overlap of m(x)")
+
+    # Back-compat shims for public API
+    def confounders_roc_auc(self, ps: Optional[np.ndarray] = None) -> float:
+        _warn_once("confounders_roc_auc()", "auc_m()")
+        return self.auc_m(m=ps)
+
+    def positivity_check(self, ps: Optional[np.ndarray] = None, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
+        _warn_once("positivity_check()", "positivity_check_m()")
+        return self.positivity_check_m(m=ps, bounds=bounds)
+
+    def plot_ps_overlap(self, ps: Optional[np.ndarray] = None):
+        _warn_once("plot_ps_overlap()", "plot_m_overlap()")
+        return self.plot_m_overlap(m=ps)
 
     # ---------- balance ----------
 
@@ -1245,8 +1228,8 @@ class CausalEDA:
 
         return fig1, fig2
 
-    def treatment_features(self) -> pd.DataFrame:
-        """Return feature attribution from the fitted propensity score model.
+    def m_features(self) -> pd.DataFrame:
+        """Return feature attribution from the fitted m(x) model.
         
         - CatBoost path: SHAP attributions with columns 'shap_mean' and 'shap_mean_abs',
           sorted by 'shap_mean_abs'. Uses transformed feature names from the preprocessor.
@@ -1254,15 +1237,15 @@ class CausalEDA:
         """
         # Check if model has been fitted
         if not hasattr(self, '_fitted_model') or self._fitted_model is None:
-            raise RuntimeError("No fitted propensity model found. Please call fit_propensity() first.")
+            raise RuntimeError("No fitted propensity model found. Please call fit_m() first.")
         if not hasattr(self, '_feature_names') or self._feature_names is None:
-            raise RuntimeError("Feature names not available. Please call fit_propensity() first.")
+            raise RuntimeError("Feature names not available. Please call fit_m() first.")
         
         if isinstance(self._fitted_model, CatBoostClassifier):
             try:
                 from catboost import Pool
                 if not hasattr(self, '_X_for_shap') or self._X_for_shap is None:
-                    raise RuntimeError("Preprocessed data for SHAP computation not available. Please call fit_propensity() first.")
+                    raise RuntimeError("Preprocessed data for SHAP computation not available. Please call fit_m() first.")
                 shap_pool = Pool(data=self._X_for_shap)
                 shap_values = self._fitted_model.get_feature_importance(type='ShapValues', data=shap_pool)
                 shap_values_no_bias = shap_values[:, :-1]
@@ -1285,10 +1268,10 @@ class CausalEDA:
                     result_df['feature'] = result_df['feature'].astype(str).str.replace(r'^[^_]+__', '', regex=True)
                 except Exception:
                     pass
-                # Augment with probability-scale metrics using baseline p0 = mean propensity score
-                p0 = float(np.mean(getattr(self, '_ps', None))) if hasattr(self, '_ps') else np.nan
+                # Augment with probability-scale metrics using baseline p0 = mean m
+                p0 = float(np.mean(getattr(self, '_m', None))) if hasattr(self, '_m') else np.nan
                 if not np.isfinite(p0):
-                    raise RuntimeError("Baseline propensity scores not available to compute probability-based columns. Fit propensity first.")
+                    raise RuntimeError("Baseline m estimates not available to compute probability-based columns. Fit m first.")
                 p0 = float(np.clip(p0, 1e-9, 1 - 1e-9))
                 logit_p0 = float(np.log(p0 / (1.0 - p0)))
                 result_df['odds_mult_abs'] = np.exp(result_df['shap_mean_abs'].values)
@@ -1323,4 +1306,9 @@ class CausalEDA:
                 raise RuntimeError(f"Failed to extract feature importance from sklearn model: {e}")
         else:
             raise RuntimeError(f"Feature importance extraction not supported for model type: {type(self._fitted_model)}")
+
+    # Back-compat shim
+    def treatment_features(self) -> pd.DataFrame:
+        _warn_once("treatment_features()", "m_features()")
+        return self.m_features()
 

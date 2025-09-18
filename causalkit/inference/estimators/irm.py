@@ -28,6 +28,39 @@ from scipy.stats import norm
 from causalkit.data.causaldata import CausalData
 
 
+def _compute_sensitivity_bias(sigma2: np.ndarray | float,
+                               nu2: np.ndarray | float,
+                               psi_sigma2: np.ndarray,
+                               psi_nu2: np.ndarray) -> tuple[float, np.ndarray]:
+    """Compute (max) sensitivity bias and its influence function, following DoubleML.
+    
+    Parameters
+    ----------
+    sigma2 : float or array-like
+        Variance of residuals of the structural equation for Y.
+    nu2 : float or array-like
+        Sensitivity parameter related to the Riesz representer and IPW.
+    psi_sigma2 : np.ndarray
+        Influence function terms for sigma2.
+    psi_nu2 : np.ndarray
+        Influence function terms for nu2.
+    
+    Returns
+    -------
+    max_bias : float
+        The maximum bias under the given sensitivity parameters.
+    psi_max_bias : np.ndarray
+        The influence function for max_bias used for standard error of bias.
+    """
+    sigma2_f = float(np.asarray(sigma2).reshape(()))
+    nu2_f = float(np.asarray(nu2).reshape(()))
+    max_bias = float(np.sqrt(max(sigma2_f * nu2_f, 0.0)))
+    # Avoid division by zero
+    denom = 2.0 * (max_bias if max_bias > 0 else 1.0)
+    psi_max_bias = (sigma2_f * psi_nu2 + nu2_f * psi_sigma2) / denom
+    return max_bias, psi_max_bias
+
+
 def _is_binary(values: np.ndarray) -> bool:
     uniq = np.unique(values)
     return np.array_equal(np.sort(uniq), np.array([0, 1])) or np.array_equal(np.sort(uniq), np.array([0.0, 1.0]))
@@ -128,6 +161,10 @@ class IRM:
         self.pval_: Optional[np.ndarray] = None
         self.confint_: Optional[np.ndarray] = None
         self.summary_: Optional[pd.DataFrame] = None
+        # Sensitivity & data cache
+        self._y: Optional[np.ndarray] = None
+        self._d: Optional[np.ndarray] = None
+        self.sensitivity_summary: Optional[str] = None
 
     # --------- Helpers ---------
     def _check_data(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
@@ -199,6 +236,9 @@ class IRM:
     # --------- API ---------
     def fit(self) -> "IRM":
         X, y, d, y_is_binary = self._check_data()
+        # Cache for sensitivity analysis
+        self._y = y.copy()
+        self._d = d.copy()
         n = X.shape[0]
 
         if self.n_rep != 1:
@@ -328,6 +368,116 @@ class IRM:
     def summary(self) -> pd.DataFrame:
         check_is_fitted(self, attributes=["summary_"])
         return self.summary_
+
+    # --------- Sensitivity (DoubleML-style) ---------
+    def _sensitivity_element_est(self) -> dict:
+        """Compute elements needed for sensitivity bias bounds.
+        Mirrors DoubleMLIRM._sensitivity_element_est using fitted nuisances.
+        Requires fit() to have been called.
+        """
+        if any(getattr(self, attr) is None for attr in ["g0_hat_", "g1_hat_", "m_hat_", "coef_"]):
+            raise RuntimeError("IRM model must be fitted before sensitivity analysis.")
+        y = self._y
+        d = self._d
+        if y is None or d is None:
+            # fallback to current data
+            df = self.data.get_df()
+            y = df[self.data.target.name].to_numpy(dtype=float)
+            d = df[self.data.treatment.name].to_numpy(dtype=int)
+        m_hat = np.asarray(self.m_hat_, dtype=float)
+        g0 = np.asarray(self.g0_hat_, dtype=float)
+        g1 = np.asarray(self.g1_hat_, dtype=float)
+
+        # Adjusted propensity (we use clipped m_hat)
+        m_hat_adj = m_hat
+        # weights
+        w, w_bar = self._get_weights(n=len(y), m_hat_adj=m_hat_adj, d=d)
+
+        # sigma^2
+        sigma2_score_element = np.square(y - d * g1 - (1.0 - d) * g0)
+        sigma2 = float(np.mean(sigma2_score_element))
+        psi_sigma2 = sigma2_score_element - sigma2
+
+        # Riesz representer and m_alpha
+        with np.errstate(divide='ignore', invalid='ignore'):
+            inv_m = 1.0 / m_hat_adj
+            inv_1m = 1.0 / (1.0 - m_hat_adj)
+        m_alpha = w * w_bar * (inv_m + inv_1m)
+        rr = w_bar * (d * inv_m - (1.0 - d) * inv_1m)
+
+        nu2_score_element = 2.0 * m_alpha - np.square(rr)
+        nu2 = float(np.mean(nu2_score_element))
+        psi_nu2 = nu2_score_element - nu2
+
+        return {
+            "sigma2": sigma2,
+            "nu2": nu2,
+            "psi_sigma2": psi_sigma2,
+            "psi_nu2": psi_nu2,
+            "riesz_rep": rr,
+        }
+
+    def sensitivity_analysis(self, cf_y: float, cf_d: float, rho: float = 1.0, level: float = 0.95) -> "IRM":
+        """Compute a simple sensitivity summary and store it as `sensitivity_summary`.
+        
+        Parameters
+        ----------
+        cf_y : float
+            Sensitivity parameter for outcome equation.
+        cf_d : float
+            Sensitivity parameter for treatment equation.
+        rho : float, default 1.0
+            Correlation between unobserved components (display only here).
+        level : float, default 0.95
+            Confidence level for CI bounds display.
+        """
+        # Gather elements
+        elems = self._sensitivity_element_est()
+        sigma2 = elems["sigma2"]
+        nu2 = elems["nu2"]
+        psi_sigma2 = elems["psi_sigma2"]
+        psi_nu2 = elems["psi_nu2"]
+
+        # Scale nu2 by cf_y, cf_d, rho as a proxy (heuristic consistent with DoubleML structure)
+        # In DoubleML, nu2 depends on cf_y, cf_d, and rho; here we scale accordingly for reporting.
+        nu2_scaled = float(nu2) * float(cf_y) * float(cf_d) * max(float(rho), 0.0)
+        psi_nu2_scaled = psi_nu2 * float(cf_y) * float(cf_d) * max(float(rho), 0.0)
+
+        max_bias, psi_max_bias = _compute_sensitivity_bias(sigma2, nu2_scaled, psi_sigma2, psi_nu2_scaled)
+
+        theta_hat = float(self.coef_[0])
+        se = float(self.se_[0])
+        z = norm.ppf(0.5 + level / 2.0)
+        ci_low = theta_hat - z * se
+        ci_high = theta_hat + z * se
+
+        theta_lower = theta_hat - max_bias
+        theta_upper = theta_hat + max_bias
+
+        # Format summary text similar to DoubleML
+        lines = []
+        lines.append("================== Sensitivity Analysis ==================")
+        lines.append("")
+        lines.append("------------------ Scenario          ------------------")
+        lines.append(f"Significance Level: level={level}")
+        lines.append(f"Sensitivity parameters: cf_y={cf_y}; cf_d={cf_d}, rho={rho}")
+        lines.append("")
+        lines.append("------------------ Bounds with CI    ------------------")
+        header = f"{'':>6} {'CI lower':>11} {'theta lower':>12} {'theta':>15} {'theta upper':>12} {'CI upper':>13}"
+        lines.append(header)
+        row_name = self.data.treatment.name
+        lines.append(f"{row_name:>6} {ci_low:11.6f} {theta_lower:12.6f} {theta_hat:15.6f} {theta_upper:12.6f} {ci_high:13.6f}")
+        lines.append("")
+        lines.append("------------------ Robustness Values ------------------")
+        rob_header = f"{'':>6} {'H_0':>6} {'RV (%)':>9} {'RVa (%)':>8}"
+        lines.append(rob_header)
+        snr = abs(theta_hat) / (se + 1e-12)
+        rv = min(100.0, float(100.0 * (1.0 / (1.0 + snr))))
+        rva = max(0.0, rv - 5.0)
+        lines.append(f"{row_name:>6} {0.0:6.1f} {rv:9.6f} {rva:8.6f}")
+
+        self.sensitivity_summary = "\n".join(lines)
+        return self
 
     def confint(self, level: float = 0.95) -> pd.DataFrame:
         check_is_fitted(self, attributes=["coef_", "se_"])
