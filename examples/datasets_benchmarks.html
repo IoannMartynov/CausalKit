@@ -599,15 +599,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 3.9104555564866956,
- &#39;std_error&#39;: 0.23592251483262563,
- &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (3.4480559242726327, 4.3728551887007585),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x10769b250&gt;}
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -690,88 +681,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>y</th>
-      <th>t</th>
-      <th>tenure_months</th>
-      <th>sessions_per_week</th>
-      <th>spend_last_30d</th>
-      <th>premium_user</th>
-      <th>urban_resident</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>12.406833</td>
-      <td>1.0</td>
-      <td>21.656605</td>
-      <td>6.528831</td>
-      <td>108.828852</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>24.729293</td>
-      <td>1.0</td>
-      <td>5.520191</td>
-      <td>8.697370</td>
-      <td>282.721931</td>
-      <td>1.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>21.206321</td>
-      <td>1.0</td>
-      <td>27.005414</td>
-      <td>1.583188</td>
-      <td>76.560660</td>
-      <td>0.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>12.788396</td>
-      <td>1.0</td>
-      <td>29.286777</td>
-      <td>5.144106</td>
-      <td>250.488359</td>
-      <td>0.0</td>
-      <td>1.0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>29.289485</td>
-      <td>1.0</td>
-      <td>-5.412422</td>
-      <td>8.487460</td>
-      <td>269.056688</td>
-      <td>0.0</td>
-      <td>1.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -780,15 +689,6 @@ document.write(`
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 <span class="n">ate_result</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 6.691277054034963,
- &#39;std_error&#39;: 0.2811688205220031,
- &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (6.14019629223623, 7.242357815833695),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x153545f90&gt;}
 </pre></div>
 </div>
 </div>
@@ -803,15 +703,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 5.557809684780822,
- &#39;std_error&#39;: 0.16240854670087557,
- &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (5.239494782465615, 5.8761245870960295),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x153362c40&gt;}
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -820,11 +711,6 @@ document.write(`
 
 <span class="c1"># shape of data</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 10000, &#39;n_columns&#39;: 7}
 </pre></div>
 </div>
 </div>
@@ -837,77 +723,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>mean_t_0</th>
-      <th>mean_t_1</th>
-      <th>abs_diff</th>
-      <th>smd</th>
-    </tr>
-    <tr>
-      <th>confounders</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>spend_last_30d</th>
-      <td>26.819530</td>
-      <td>177.132999</td>
-      <td>150.313468</td>
-      <td>2.927622</td>
-    </tr>
-    <tr>
-      <th>urban_resident</th>
-      <td>0.662323</td>
-      <td>0.647359</td>
-      <td>0.014964</td>
-      <td>-0.031474</td>
-    </tr>
-    <tr>
-      <th>premium_user</th>
-      <td>0.193768</td>
-      <td>0.198907</td>
-      <td>0.005139</td>
-      <td>0.012936</td>
-    </tr>
-    <tr>
-      <th>sessions_per_week</th>
-      <td>6.052819</td>
-      <td>6.062821</td>
-      <td>0.010002</td>
-      <td>0.003322</td>
-    </tr>
-    <tr>
-      <th>tenure_months</th>
-      <td>17.883618</td>
-      <td>17.875583</td>
-      <td>0.008035</td>
-      <td>-0.000670</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -920,22 +735,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.9998
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
 <span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.1701, &#39;share_above&#39;: 0.8183, &#39;flag&#39;: True}
 </pre></div>
 </div>
 </div>
@@ -948,82 +753,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>feature</th>
-      <th>shap_mean</th>
-      <th>shap_mean_abs</th>
-      <th>odds_mult_abs</th>
-      <th>exact_pp_change_abs</th>
-      <th>exact_pp_change_signed</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>num__spend_last_30d</td>
-      <td>-0.000424</td>
-      <td>5.302985</td>
-      <td>200.935675</td>
-      <td>0.175716</td>
-      <td>-0.000062</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>num__tenure_months</td>
-      <td>-0.000442</td>
-      <td>0.254931</td>
-      <td>1.290372</td>
-      <td>0.034106</td>
-      <td>-0.000064</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>num__urban_resident</td>
-      <td>0.000445</td>
-      <td>0.178274</td>
-      <td>1.195153</td>
-      <td>0.024470</td>
-      <td>0.000065</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>num__sessions_per_week</td>
-      <td>0.000340</td>
-      <td>0.177695</td>
-      <td>1.194461</td>
-      <td>0.024395</td>
-      <td>0.000050</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>num__premium_user</td>
-      <td>0.000081</td>
-      <td>0.094717</td>
-      <td>1.099348</td>
-      <td>0.013365</td>
-      <td>0.000012</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 </section>
 
