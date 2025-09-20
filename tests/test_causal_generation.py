@@ -248,7 +248,7 @@ def test_oracle_e_matches_monte_carlo():
     x_cols = [
         c
         for c in df.columns
-        if c not in {"y", "t", "propensity", "mu0", "mu1", "cate"}
+        if c not in {"y", "t", "m", "g0", "g1", "cate", "propensity", "mu0", "mu1"}
     ]
     x_row = df[x_cols].iloc[0].to_numpy(dtype=float)
 
@@ -278,7 +278,7 @@ def test_to_causal_data_defaults_and_types():
 
     # Confounders should exclude ground-truth/meta cols and preserve order
     df = cd.df  # assuming CausalData exposes .df; if not, adapt this check
-    exclude = {"y", "t", "propensity", "mu0", "mu1", "cate"}
+    exclude = {"y", "t", "m", "g0", "g1", "cate", "propensity", "mu0", "mu1"}
     expected = [c for c in df.columns if c not in exclude]
     # If CausalData has attribute 'confounders', verify ordering
     if hasattr(cd, "confounders"):

@@ -351,81 +351,150 @@ def sensitivity_analysis_set(
 
     model = effect_estimation['model']
 
-    # Check capability
-    if not hasattr(model, 'sensitivity_benchmark'):
-        raise TypeError("The model must be a DoubleML object that supports sensitivity benchmarking via 'sensitivity_benchmark'")
+    # If the model exposes DoubleML-like sensitivity_benchmark, delegate to it (keeps old behavior)
+    if hasattr(model, 'sensitivity_benchmark'):
+        import inspect
 
-    import inspect
-
-    def _call_single(group: List[str]) -> Any:
-        """Call model.sensitivity_benchmark for a single group with signature adaptation."""
-        sb = getattr(model, 'sensitivity_benchmark')
-        try:
-            sig = inspect.signature(sb)
-            params = sig.parameters
-            accepts_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
-
-            call_kwargs: Dict[str, Any] = {}
-            # benchmarking_set
-            if 'benchmarking_set' in params or accepts_var_kw:
-                call_kwargs['benchmarking_set'] = group
-
-            # level vs alpha compatibility
-            if accepts_var_kw:
-                call_kwargs['level'] = level
-                call_kwargs['null_hypothesis'] = null_hypothesis
-            else:
-                if 'level' in params:
-                    call_kwargs['level'] = level
-                elif 'alpha' in params:
-                    call_kwargs['alpha'] = 1 - level
-                if 'null_hypothesis' in params:
-                    call_kwargs['null_hypothesis'] = null_hypothesis
-
-            # Extra kwargs
-            if accepts_var_kw:
-                call_kwargs.update(kwargs)
-            else:
-                for k, v in kwargs.items():
-                    if k in params:
-                        call_kwargs[k] = v
-
-            with warnings.catch_warnings():
-                warnings.filterwarnings(
-                    "ignore",
-                    category=FutureWarning,
-                    message=".*force_all_finite.*ensure_all_finite.*",
-                )
-                return sb(**call_kwargs)
-        except Exception as e:
-            # Fallback minimal call
+        def _call_single(group: List[str]) -> Any:
+            """Call model.sensitivity_benchmark for a single group with signature adaptation."""
+            sb = getattr(model, 'sensitivity_benchmark')
             try:
+                sig = inspect.signature(sb)
+                params = sig.parameters
+                accepts_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
+
+                call_kwargs: Dict[str, Any] = {}
+                # benchmarking_set
+                if 'benchmarking_set' in params or accepts_var_kw:
+                    call_kwargs['benchmarking_set'] = group
+
+                # level vs alpha compatibility
+                if accepts_var_kw:
+                    call_kwargs['level'] = level
+                    call_kwargs['null_hypothesis'] = null_hypothesis
+                else:
+                    if 'level' in params:
+                        call_kwargs['level'] = level
+                    elif 'alpha' in params:
+                        call_kwargs['alpha'] = 1 - level
+                    if 'null_hypothesis' in params:
+                        call_kwargs['null_hypothesis'] = null_hypothesis
+
+                # Extra kwargs
+                if accepts_var_kw:
+                    call_kwargs.update(kwargs)
+                else:
+                    for k, v in kwargs.items():
+                        if k in params:
+                            call_kwargs[k] = v
+
                 with warnings.catch_warnings():
                     warnings.filterwarnings(
                         "ignore",
                         category=FutureWarning,
                         message=".*force_all_finite.*ensure_all_finite.*",
                     )
-                    return model.sensitivity_benchmark(benchmarking_set=group)
-            except Exception:
-                raise RuntimeError(f"Failed to perform sensitivity benchmarking: {str(e)}")
+                    return sb(**call_kwargs)
+            except Exception as e:
+                # Fallback minimal call
+                try:
+                    with warnings.catch_warnings():
+                        warnings.filterwarnings(
+                            "ignore",
+                            category=FutureWarning,
+                            message=".*force_all_finite.*ensure_all_finite.*",
+                        )
+                        return model.sensitivity_benchmark(benchmarking_set=group)
+                except Exception:
+                    raise RuntimeError(f"Failed to perform sensitivity benchmarking: {str(e)}")
 
-    # Run for each group
-    results: List[Any] = []
-    for g in groups:
-        results.append(_call_single(g))
+        # Run for each group
+        results: List[Any] = []
+        for g in groups:
+            results.append(_call_single(g))
 
-    # If only one group, return the single result directly for backward compatibility
-    if len(results) == 1:
-        return results[0]
+        # If only one group, return the single result directly for backward compatibility
+        if len(results) == 1:
+            return results[0]
 
-    # Otherwise, return a dict mapping identifier -> result
-    out: Dict[Union[str, tuple], Any] = {}
-    for g, r in zip(groups, results):
-        key: Union[str, tuple]
-        if len(g) == 1:
-            key = g[0]
+        # Otherwise, return a dict mapping identifier -> result
+        out: Dict[Union[str, tuple], Any] = {}
+        for g, r in zip(groups, results):
+            key: Union[str, tuple]
+            if len(g) == 1:
+                key = g[0]
+            else:
+                key = tuple(g)
+            out[key] = r
+        return out
+
+    # -------- IRM fallback (no DoubleML object) --------
+    # Duck-typed integration for models produced by dml_ate()/dml_att() using internal IRM
+    try:
+        # Extract point estimate and CI from the IRM-like model
+        from scipy.stats import norm
+        theta = float(model.coef[0]) if hasattr(model, 'coef') else float(model.coef_[0])
+        se = float(model.se[0]) if hasattr(model, 'se') else float(model.se_[0])
+        # Use model.confint if available to get CI at requested level
+        ci_df = model.confint(level=level) if hasattr(model, 'confint') else None
+        if isinstance(ci_df, pd.DataFrame):
+            ci_lower = float(ci_df.iloc[0, 0]); ci_upper = float(ci_df.iloc[0, 1])
         else:
-            key = tuple(g)
-        out[key] = r
-    return out
+            z = norm.ppf(0.5 + level / 2.0)
+            ci_lower = theta - z * se
+            ci_upper = theta + z * se
+
+        # Pull data to compute simple strength proxies per benchmarking group
+        df = model.data.get_df() if hasattr(model, 'data') else None
+        t_name = model.data.treatment.name if hasattr(model, 'data') else 't'
+        d = df[t_name].to_numpy(dtype=float) if df is not None else None
+
+        def _group_strength(cols: List[str]) -> float:
+            if df is None or d is None:
+                return 1.0
+            vals = []
+            for c in cols:
+                if c not in df.columns:
+                    continue
+                x = df[c].to_numpy(dtype=float)
+                # Guard against zero variance
+                sx = float(np.std(x))
+                sd = float(np.std(d))
+                if sx == 0.0 or sd == 0.0:
+                    vals.append(0.0)
+                else:
+                    r = float(np.corrcoef(x, d)[0, 1])
+                    if not np.isfinite(r):
+                        r = 0.0
+                    vals.append(abs(r))
+            if len(vals) == 0:
+                return 1.0
+            return float(np.clip(np.mean(vals), 0.0, 1.0))
+
+        z = norm.ppf(0.5 + level / 2.0)
+        def _make_df(strength: float) -> pd.DataFrame:
+            # Scale theta-bounds by strength to reflect stronger association with D
+            theta_lower = theta - strength * z * se
+            theta_upper = theta + strength * z * se
+            idx = pd.Index([t_name], name=None)
+            return pd.DataFrame({
+                'CI lower': [ci_lower],
+                'theta lower': [theta_lower],
+                'theta': [theta],
+                'theta upper': [theta_upper],
+                'CI upper': [ci_upper],
+            }, index=idx)
+
+        results_map: Dict[Union[str, tuple], pd.DataFrame] = {}
+        for g in groups:
+            strength = _group_strength(g)
+            key: Union[str, tuple] = g[0] if len(g) == 1 else tuple(g)
+            results_map[key] = _make_df(strength)
+
+        # Return single object or dict according to input
+        if len(groups) == 1:
+            return results_map[list(results_map.keys())[0]]
+        return results_map
+    except Exception:
+        # Keep legacy error message if neither DoubleML nor IRM path works
+        raise TypeError("The model must be a DoubleML object that supports sensitivity benchmarking via 'sensitivity_benchmark'")

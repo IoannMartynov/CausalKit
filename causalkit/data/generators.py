@@ -9,8 +9,23 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Union, List, Tuple, Callable, Any
 from scipy.special import erfinv, erf
+import warnings
 
 from causalkit.data.causaldata import CausalData
+
+# Legacy naming deprecation warnings (warn once per process)
+_CK_NAMING_WARN_ONCE = {"propensity": False, "mu0": False, "mu1": False}
+
+def _warn_legacy(col: str) -> None:
+    if not _CK_NAMING_WARN_ONCE.get(col, False):
+        warnings.warn(
+            f"`{col}` is deprecated; use "
+            + {"propensity": "`m`", "mu0": "`g0`", "mu1": "`g1`"}[col]
+            + " instead. Will be removed in a future release.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        _CK_NAMING_WARN_ONCE[col] = True
 
 
 def _sigmoid(z):
@@ -410,10 +425,11 @@ class CausalDatasetGenerator:
       - y: outcome
       - t: binary treatment (0/1)
       - x1..xk (or user-provided names)
-      - propensity: P(T=1 | X) used to draw T (ground truth)
-      - mu0: E[Y | T=0, X] on the natural outcome scale
-      - mu1: E[Y | T=1, X] on the natural outcome scale
-      - cate: mu1 - mu0 (conditional average treatment effect on the natural outcome scale)
+      - m   : true propensity P(T=1 | X)
+      - g0  : E[Y | X, T=0] on the natural outcome scale
+      - g1  : E[Y | X, T=1] on the natural outcome scale
+      - cate: g1 - g0 (conditional average treatment effect on the natural outcome scale)
+      (Deprecated aliases kept for one release: propensity, mu0, mu1)
 
     Notes on effect scale:
       - For "continuous", `theta` (or tau(X)) is an additive mean difference.
@@ -681,10 +697,11 @@ class CausalDatasetGenerator:
               - y : float
               - t : {0.0, 1.0}
               - <confounder columns> : floats (and one-hot columns for categorical)
-              - propensity : float in (0,1), true P(T=1 | X)
-              - mu0 : expected outcome under control on the natural scale
-              - mu1 : expected outcome under treatment on the natural scale
-              - cate : mu1 - mu0 (conditional treatment effect on the natural scale)
+              - m   : float in (0,1), true P(T=1 | X)
+              - g0  : expected outcome under control on the natural scale
+              - g1  : expected outcome under treatment on the natural scale
+              - cate: g1 - g0 (conditional treatment effect on the natural scale)
+              (Deprecated aliases also emitted for one release: propensity, mu0, mu1)
 
         Notes
         -----
@@ -734,11 +751,15 @@ class CausalDatasetGenerator:
         df = pd.DataFrame({"y": Y, "t": T})
         for j, name in enumerate(names):
             df[name] = X[:, j]
-        # Useful ground-truth columns for evaluation
-        df["propensity"] = propensity
-        df["mu0"] = mu0
-        df["mu1"] = mu1
-        df["cate"] = mu1 - mu0
+        # Useful ground-truth columns for evaluation (IRM naming)
+        df["m"] = propensity
+        df["g0"] = mu0
+        df["g1"] = mu1
+        df["cate"] = df["g1"] - df["g0"]
+        # Legacy aliases with deprecation warnings (to be removed in a future release)
+        df["propensity"] = df["m"]; _warn_legacy("propensity")
+        df["mu0"] = df["g0"]; _warn_legacy("mu0")
+        df["mu1"] = df["g1"]; _warn_legacy("mu1")
         return df
     
     def to_causal_data(self, n: int, confounders: Optional[Union[str, List[str]]] = None) -> CausalData:
@@ -762,7 +783,7 @@ class CausalDatasetGenerator:
         # Determine confounders to use
         if confounders is None:
             # Keep original column order; exclude outcome/treatment/ground-truth columns
-            exclude = {'y', 't', 'propensity', 'mu0', 'mu1', 'cate'}
+            exclude = {'y', 't', 'm', 'g0', 'g1', 'cate', 'propensity', 'mu0', 'mu1'}
             confounder_cols = [c for c in df.columns if c not in exclude]
         elif isinstance(confounders, str):
             confounder_cols = [confounders]
@@ -774,19 +795,22 @@ class CausalDatasetGenerator:
 
     def oracle_nuisance(self, num_quad: int = 21):
         """
-        Return nuisance functions (e(x), m0(x), m1(x)).
+        Return nuisance functions (m(x), g0(x), g1(x)) compatible with IRM.
+
+        NOTE: Previously documented as (e, m0, m1). The semantics are unchanged;
+        only naming now matches IRM conventions.
 
         Behavior:
         - If both u_strength_t != 0 and u_strength_y != 0, DML is not identified; raise ValueError.
-        - e(x): If u_strength_t == 0, closed form sigmoid(alpha_t + s * f_t(x)).
+        - m(x): If u_strength_t == 0, closed form sigmoid(alpha_t + s * f_t(x)).
                  If u_strength_t != 0, approximate E_U[sigmoid(alpha_t + s * f_t(x) + u_strength_t * U)]
                  using Gauss–Hermite quadrature with `num_quad` nodes, where U ~ N(0,1).
-        - m0/m1(x): closed-form mappings on the natural outcome scale evaluated with U omitted.
+        - g0/g1(x): closed-form mappings on the natural outcome scale evaluated with U omitted.
 
         Parameters
         ----------
         num_quad : int, default=21
-            Number of Gauss–Hermite nodes for marginalizing over U in e(x) when u_strength_t != 0.
+            Number of Gauss–Hermite nodes for marginalizing over U in m(x) when u_strength_t != 0.
         """
         # Disallow unobserved confounding for DML when U affects both T and Y
         if (getattr(self, "u_strength_t", 0.0) != 0) and (getattr(self, "u_strength_y", 0.0) != 0):
@@ -799,7 +823,7 @@ class CausalDatasetGenerator:
         gh_x, gh_w = np.polynomial.hermite.hermgauss(int(num_quad))
         gh_w = gh_w / np.sqrt(np.pi)
 
-        def e_of_x(x_row: np.ndarray) -> float:
+        def m_of_x(x_row: np.ndarray) -> float:
             x = np.asarray(x_row, dtype=float).reshape(1, -1)
             # Base score without U contribution, matching _treatment_score(X, U=0)
             base = float(self.alpha_t)
@@ -811,7 +835,7 @@ class CausalDatasetGenerator:
             z = base + ut * np.sqrt(2.0) * gh_x
             return float(np.sum(_sigmoid(z) * gh_w))
 
-        def m_of_x_t(x_row: np.ndarray, t: int) -> float:
+        def g_of_x_t(x_row: np.ndarray, t: int) -> float:
             x = np.asarray(x_row, dtype=float).reshape(1, -1)
             if self.tau is None:
                 tau_val = float(self.theta)
@@ -832,6 +856,6 @@ class CausalDatasetGenerator:
                 return float(np.exp(np.clip(loc, -20.0, 20.0)))
             raise ValueError("outcome_type must be 'continuous','binary','poisson'.")
 
-        return (lambda x: e_of_x(x),
-                lambda x: m_of_x_t(x, 0),
-                lambda x: m_of_x_t(x, 1))
+        return (lambda x: m_of_x(x),
+                lambda x: g_of_x_t(x, 0),
+                lambda x: g_of_x_t(x, 1))
