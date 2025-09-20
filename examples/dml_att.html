@@ -680,7 +680,7 @@ document.write(`
 <span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">LinearRegression</span>
 <span class="ne">---&gt; </span><span class="mi">38</span> <span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostClassifier</span><span class="p">,</span> <span class="n">CatBoostRegressor</span>
 <span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span> <span class="k">class</span><span class="w"> </span><span class="nc">PropensityModel</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span> <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="ne">ModuleNotFoundError</span>: No module named &#39;catboost&#39;
 </pre></div>
@@ -757,28 +757,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>6526</td>
-      <td>3.189869</td>
-      <td>3.755023</td>
+      <td>6529</td>
+      <td>3.187405</td>
+      <td>3.755011</td>
       <td>-12.770866</td>
-      <td>-1.572612</td>
-      <td>0.699795</td>
-      <td>3.149570</td>
-      <td>5.723303</td>
-      <td>7.935340</td>
+      <td>-1.579354</td>
+      <td>0.699513</td>
+      <td>3.149450</td>
+      <td>5.720525</td>
+      <td>7.932562</td>
       <td>17.323664</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>3474</td>
-      <td>5.216191</td>
-      <td>3.987103</td>
+      <td>3471</td>
+      <td>5.221957</td>
+      <td>3.986130</td>
       <td>-7.310514</td>
-      <td>0.147968</td>
-      <td>2.504771</td>
-      <td>5.199664</td>
-      <td>7.959577</td>
-      <td>10.348905</td>
+      <td>0.152369</td>
+      <td>2.511003</td>
+      <td>5.205133</td>
+      <td>7.972448</td>
+      <td>10.350862</td>
       <td>18.147842</td>
     </tr>
   </tbody>
@@ -794,8 +794,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0b92a3ea95c420294257a09f5fb34077cf1563d3dbe7b825d67bd26e29bf5db6.png" src="../_images/0b92a3ea95c420294257a09f5fb34077cf1563d3dbe7b825d67bd26e29bf5db6.png" />
-<img alt="../_images/6a6faa193a8cab32bd02ddf8536c8fd9b15ac8345f46583d7a28bac258ee14f4.png" src="../_images/6a6faa193a8cab32bd02ddf8536c8fd9b15ac8345f46583d7a28bac258ee14f4.png" />
+<img alt="../_images/6df624ffacf19362eeecb34fffb99e58406d2997675ca652b701fa5831d66f03.png" src="../_images/6df624ffacf19362eeecb34fffb99e58406d2997675ca652b701fa5831d66f03.png" />
+<img alt="../_images/9bfe2bcbf2c62a2f972a32b3084488c3ae6a31ac7870f1b03e3c7727b767f79f.png" src="../_images/9bfe2bcbf2c62a2f972a32b3084488c3ae6a31ac7870f1b03e3c7727b767f79f.png" />
 </div>
 </div>
 </section>
@@ -845,38 +845,38 @@ document.write(`
   <tbody>
     <tr>
       <th>spend_last_month</th>
-      <td>90.313423</td>
-      <td>119.353025</td>
-      <td>29.039602</td>
-      <td>0.523162</td>
+      <td>90.246033</td>
+      <td>119.504887</td>
+      <td>29.258855</td>
+      <td>0.527431</td>
     </tr>
     <tr>
       <th>premium_user</th>
-      <td>0.195066</td>
-      <td>0.354347</td>
-      <td>0.159281</td>
-      <td>0.362615</td>
+      <td>0.194823</td>
+      <td>0.354941</td>
+      <td>0.160118</td>
+      <td>0.364510</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>4.902830</td>
-      <td>5.299702</td>
-      <td>0.396872</td>
-      <td>0.198761</td>
+      <td>4.903527</td>
+      <td>5.298734</td>
+      <td>0.395206</td>
+      <td>0.197970</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.576463</td>
-      <td>0.646805</td>
-      <td>0.070341</td>
-      <td>0.144688</td>
+      <td>0.576811</td>
+      <td>0.646211</td>
+      <td>0.069400</td>
+      <td>0.142734</td>
     </tr>
     <tr>
       <th>tenure_months</th>
-      <td>23.329078</td>
-      <td>24.906290</td>
-      <td>1.577212</td>
-      <td>0.130648</td>
+      <td>23.337260</td>
+      <td>24.892263</td>
+      <td>1.555004</td>
+      <td>0.128836</td>
     </tr>
   </tbody>
 </table>
@@ -894,7 +894,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6937
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6924
 </pre></div>
 </div>
 </div>
@@ -908,7 +908,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0132, &#39;share_above&#39;: 0.0004, &#39;flag&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0123, &#39;share_above&#39;: 0.0003, &#39;flag&#39;: False}
 </pre></div>
 </div>
 </div>
@@ -942,33 +942,57 @@ document.write(`
       <th></th>
       <th>feature</th>
       <th>shap_mean</th>
+      <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>spend_last_month</td>
-      <td>-0.000735</td>
+      <td>num__avg_sessions_week</td>
+      <td>-0.000709</td>
+      <td>0.231318</td>
+      <td>1.260259</td>
+      <td>0.053972</td>
+      <td>-0.000160</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>tenure_months</td>
-      <td>0.000451</td>
+      <td>num__tenure_months</td>
+      <td>0.000493</td>
+      <td>0.176727</td>
+      <td>1.193305</td>
+      <td>0.040955</td>
+      <td>0.000111</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>urban_resident</td>
-      <td>0.000190</td>
+      <td>num__premium_user</td>
+      <td>0.000182</td>
+      <td>0.350892</td>
+      <td>1.420334</td>
+      <td>0.082963</td>
+      <td>0.000041</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>premium_user</td>
-      <td>0.000124</td>
+      <td>num__urban_resident</td>
+      <td>0.000045</td>
+      <td>0.169130</td>
+      <td>1.184274</td>
+      <td>0.039157</td>
+      <td>0.000010</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>avg_sessions_week</td>
-      <td>-0.000029</td>
+      <td>num__spend_last_month</td>
+      <td>-0.000011</td>
+      <td>0.571914</td>
+      <td>1.771655</td>
+      <td>0.137722</td>
+      <td>-0.000002</td>
     </tr>
   </tbody>
 </table>
@@ -983,7 +1007,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f59534eb67281f5bdf385881e1b78278e380cbfbd8cca958f6e9b4ea33c8e037.png" src="../_images/f59534eb67281f5bdf385881e1b78278e380cbfbd8cca958f6e9b4ea33c8e037.png" />
+<img alt="../_images/858d349d907017e563b51b13fe35faa7ac28d238cbc0ea3afb75f67a05442a52.png" src="../_images/858d349d907017e563b51b13fe35faa7ac28d238cbc0ea3afb75f67a05442a52.png" />
 </div>
 </div>
 </section>
@@ -1001,7 +1025,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.6452253851701975, &#39;mae&#39;: 2.905800097741897}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.644001419637874, &#39;mae&#39;: 2.9062081925949586}
 </pre></div>
 </div>
 </div>
@@ -1041,27 +1065,27 @@ document.write(`
     <tr>
       <th>0</th>
       <td>premium_user</td>
-      <td>0.001378</td>
+      <td>0.001251</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>avg_sessions_week</td>
-      <td>-0.001012</td>
+      <td>spend_last_month</td>
+      <td>-0.001191</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>spend_last_month</td>
-      <td>-0.000987</td>
+      <td>avg_sessions_week</td>
+      <td>-0.001137</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>urban_resident</td>
-      <td>0.000543</td>
+      <td>tenure_months</td>
+      <td>0.000659</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>tenure_months</td>
-      <td>0.000078</td>
+      <td>urban_resident</td>
+      <td>0.000418</td>
     </tr>
   </tbody>
 </table>
@@ -1090,11 +1114,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.3526087292914886,
- &#39;std_error&#39;: 0.12236935395875607,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.2811744560034295,
+ &#39;std_error&#39;: 0.11952472711806723,
  &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (1.1127692027208929, 1.5924482558620843),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x30bf034d0&gt;}
+ &#39;confidence_interval&#39;: (1.0469102955900398, 1.5154386164168192),
+ &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x15e557770&gt;}
 </pre></div>
 </div>
 </div>
@@ -1111,11 +1135,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.3289856721337017,
- &#39;std_error&#39;: 0.09562652739143553,
- &#39;p_value&#39;: 6.543944256710985e-44,
- &#39;confidence_interval&#39;: (1.1415611224798552, 1.5164102217875481),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x30bf03a10&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.3388422571411907,
+ &#39;std_error&#39;: 0.09290445060655343,
+ &#39;p_value&#39;: 4.415346870522402e-47,
+ &#39;confidence_interval&#39;: (1.1567528799488656, 1.5209316343335157),
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x15e557cb0&gt;}
 </pre></div>
 </div>
 </div>
@@ -1154,7 +1178,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.0005303676259224534, &#39;p_value&#39;: 0.8796279247422861}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.0012806280371837212, &#39;p_value&#39;: 0.7044798699944812}
 </pre></div>
 </div>
 </div>
@@ -1174,7 +1198,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.05021781986561498, &#39;p_value&#39;: 0.5215538145260595}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.029196210635696572, &#39;p_value&#39;: 0.7102486963099138}
 </pre></div>
 </div>
 </div>
@@ -1200,8 +1224,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.1134, p_value = 0.0000
- With 50% subset: theta = 1.4014, p_value = 0.0000
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.1100, p_value = 0.0000
+ With 50% subset: theta = 1.4470, p_value = 0.0000
 </pre></div>
 </div>
 </div>
@@ -1224,10 +1248,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_90226/3497871755.py:1: DeprecationWarning: &#39;target&#39; is deprecated; use &#39;score&#39; (&#39;ATE&#39;|&#39;ATTE&#39;).
-  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATT&#39;)
-/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_90226/3497871755.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
-  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATT&#39;)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_28896/3020675057.py:1: DeprecationWarning: &#39;target&#39; is deprecated; use &#39;score&#39; (&#39;ATE&#39;|&#39;ATTE&#39;).
+  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATTE&#39;)
+/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_28896/3020675057.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
+  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATTE&#39;)
 </pre></div>
 </div>
 </div>
@@ -1249,8 +1273,8 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: 0.6481
-P-value: 0.5169
+T-statistic: -0.3333
+P-value: 0.7389
 Interpretation: Should be ≈ 0 if moment condition holds
 
 Fold-wise results:
@@ -1285,29 +1309,29 @@ Fold-wise results:
       <th>0</th>
       <td>0</td>
       <td>2500</td>
-      <td>0.372164</td>
-      <td>98.625282</td>
+      <td>0.161032</td>
+      <td>90.556348</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>2500</td>
-      <td>-0.482262</td>
-      <td>410.059345</td>
+      <td>-0.497376</td>
+      <td>393.743965</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>2500</td>
-      <td>0.348117</td>
-      <td>89.346389</td>
+      <td>0.230331</td>
+      <td>89.496856</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>2500</td>
-      <td>0.103786</td>
-      <td>97.426532</td>
+      <td>-0.065950</td>
+      <td>91.623263</td>
     </tr>
   </tbody>
 </table>
@@ -1378,6 +1402,15 @@ Full sample derivatives:
       <th>d_m</th>
       <th>se_m</th>
       <th>t_m</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
     </tr>
   </thead>
   <tbody>
@@ -1387,12 +1420,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.079327</td>
-      <td>0.028627</td>
-      <td>2.771027</td>
-      <td>-3.685035</td>
-      <td>3.618563</td>
-      <td>-1.018370</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1400,12 +1442,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.017497</td>
-      <td>0.037685</td>
-      <td>0.464296</td>
-      <td>-7.787187</td>
-      <td>8.011251</td>
-      <td>-0.972031</td>
+      <td>0.038682</td>
+      <td>0.038963</td>
+      <td>0.992797</td>
+      <td>-7.964437</td>
+      <td>8.432958</td>
+      <td>-0.944442</td>
+      <td>0.038682</td>
+      <td>0.038963</td>
+      <td>0.992797</td>
+      <td>-7.964437</td>
+      <td>8.432958</td>
+      <td>-0.944442</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1413,12 +1464,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.035066</td>
-      <td>0.036903</td>
-      <td>0.950216</td>
-      <td>-7.601570</td>
-      <td>7.047204</td>
-      <td>-1.078665</td>
+      <td>0.042164</td>
+      <td>0.038231</td>
+      <td>1.102877</td>
+      <td>-6.935440</td>
+      <td>7.420589</td>
+      <td>-0.934621</td>
+      <td>0.042164</td>
+      <td>0.038231</td>
+      <td>1.102877</td>
+      <td>-6.935440</td>
+      <td>7.420589</td>
+      <td>-0.934621</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>3</th>
@@ -1426,12 +1486,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.062146</td>
-      <td>0.029407</td>
-      <td>2.113294</td>
-      <td>-3.765735</td>
-      <td>3.486169</td>
-      <td>-1.080193</td>
+      <td>0.052754</td>
+      <td>0.029836</td>
+      <td>1.768112</td>
+      <td>-3.198707</td>
+      <td>3.665548</td>
+      <td>-0.872641</td>
+      <td>0.052754</td>
+      <td>0.029836</td>
+      <td>1.768112</td>
+      <td>-3.198707</td>
+      <td>3.665548</td>
+      <td>-0.872641</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>4</th>
@@ -1439,12 +1508,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.052454</td>
-      <td>0.038796</td>
-      <td>1.352062</td>
-      <td>-6.737390</td>
-      <td>6.248224</td>
-      <td>-1.078289</td>
+      <td>0.025439</td>
+      <td>0.038231</td>
+      <td>0.665406</td>
+      <td>-6.487625</td>
+      <td>6.551067</td>
+      <td>-0.990316</td>
+      <td>0.025439</td>
+      <td>0.038231</td>
+      <td>0.665406</td>
+      <td>-6.487625</td>
+      <td>6.551067</td>
+      <td>-0.990316</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>5</th>
@@ -1452,12 +1530,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.015356</td>
-      <td>0.027040</td>
-      <td>0.567912</td>
-      <td>-2.783046</td>
-      <td>2.959678</td>
-      <td>-0.940321</td>
+      <td>0.006936</td>
+      <td>0.026899</td>
+      <td>0.257848</td>
+      <td>-2.740073</td>
+      <td>3.102471</td>
+      <td>-0.883191</td>
+      <td>0.006936</td>
+      <td>0.026899</td>
+      <td>0.257848</td>
+      <td>-2.740073</td>
+      <td>3.102471</td>
+      <td>-0.883191</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1492,6 +1579,15 @@ Full sample derivatives:
       <th>d_m</th>
       <th>se_m</th>
       <th>t_m</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
     </tr>
   </thead>
   <tbody>
@@ -1501,12 +1597,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.079568</td>
-      <td>0.028634</td>
-      <td>2.778809</td>
-      <td>-3.686931</td>
-      <td>3.619601</td>
-      <td>-1.018601</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1514,12 +1619,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.016833</td>
-      <td>0.037691</td>
-      <td>0.446613</td>
-      <td>-7.793494</td>
-      <td>8.013555</td>
-      <td>-0.972539</td>
+      <td>0.038132</td>
+      <td>0.038969</td>
+      <td>0.978517</td>
+      <td>-7.966467</td>
+      <td>8.435382</td>
+      <td>-0.944411</td>
+      <td>0.038132</td>
+      <td>0.038969</td>
+      <td>0.978517</td>
+      <td>-7.966467</td>
+      <td>8.435382</td>
+      <td>-0.944411</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1527,12 +1641,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.035792</td>
-      <td>0.036909</td>
-      <td>0.969741</td>
-      <td>-7.608670</td>
-      <td>7.049227</td>
-      <td>-1.079362</td>
+      <td>0.042828</td>
+      <td>0.038237</td>
+      <td>1.120084</td>
+      <td>-6.949009</td>
+      <td>7.422719</td>
+      <td>-0.936181</td>
+      <td>0.042828</td>
+      <td>0.038237</td>
+      <td>1.120084</td>
+      <td>-6.949009</td>
+      <td>7.422719</td>
+      <td>-0.936181</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>3</th>
@@ -1540,12 +1663,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.061928</td>
-      <td>0.029414</td>
-      <td>2.105437</td>
-      <td>-3.765013</td>
-      <td>3.487166</td>
-      <td>-1.079677</td>
+      <td>0.052521</td>
+      <td>0.029843</td>
+      <td>1.759913</td>
+      <td>-3.207026</td>
+      <td>3.666596</td>
+      <td>-0.874660</td>
+      <td>0.052521</td>
+      <td>0.029843</td>
+      <td>1.759913</td>
+      <td>-3.207026</td>
+      <td>3.666596</td>
+      <td>-0.874660</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>4</th>
@@ -1553,12 +1685,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.053008</td>
-      <td>0.038804</td>
-      <td>1.366048</td>
-      <td>-6.738847</td>
-      <td>6.250022</td>
-      <td>-1.078212</td>
+      <td>0.025984</td>
+      <td>0.038239</td>
+      <td>0.679505</td>
+      <td>-6.492960</td>
+      <td>6.552954</td>
+      <td>-0.990845</td>
+      <td>0.025984</td>
+      <td>0.038239</td>
+      <td>0.679505</td>
+      <td>-6.492960</td>
+      <td>6.552954</td>
+      <td>-0.990845</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>5</th>
@@ -1566,12 +1707,21 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.015625</td>
-      <td>0.027046</td>
-      <td>0.577707</td>
-      <td>-2.785636</td>
-      <td>2.960525</td>
-      <td>-0.940926</td>
+      <td>0.007209</td>
+      <td>0.026906</td>
+      <td>0.267918</td>
+      <td>-2.748894</td>
+      <td>3.103358</td>
+      <td>-0.885780</td>
+      <td>0.007209</td>
+      <td>0.026906</td>
+      <td>0.267918</td>
+      <td>-2.748894</td>
+      <td>3.103358</td>
+      <td>-0.885780</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1615,25 +1765,12 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.079327</td>
-      <td>0.028627</td>
-      <td>2.771027</td>
-      <td>-3.685035</td>
-      <td>3.618563</td>
-      <td>-1.018370</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.062146</td>
-      <td>0.029407</td>
-      <td>2.113294</td>
-      <td>-3.765735</td>
-      <td>3.486169</td>
-      <td>-1.080193</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
     </tr>
   </tbody>
 </table>
@@ -1677,25 +1814,12 @@ Full sample derivatives:
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
-      <td>0.079568</td>
-      <td>0.028634</td>
-      <td>2.778809</td>
-      <td>-3.686931</td>
-      <td>3.619601</td>
-      <td>-1.018601</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.061928</td>
-      <td>0.029414</td>
-      <td>2.105437</td>
-      <td>-3.765013</td>
-      <td>3.487166</td>
-      <td>-1.079677</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
     </tr>
   </tbody>
 </table>
@@ -1731,14 +1855,14 @@ Full sample derivatives:
 Interpretation: Heavy tails or extreme kurtosis suggest instability
 
 Full sample influence metrics:
-  Plugin SE: 0.1319
-  Kurtosis: 2007.60
-  P99/Median ratio: 9.35
+  Plugin SE: 0.1290
+  Kurtosis: 2102.94
+  P99/Median ratio: 8.99
 
 Trimmed sample influence metrics:
-  Plugin SE: 0.1319
-  Kurtosis: 2003.49
-  P99/Median ratio: 9.27
+  Plugin SE: 0.1290
+  Kurtosis: 2099.23
+  P99/Median ratio: 8.95
 
 Top influential observations (full sample):
 </pre></div>
@@ -1772,82 +1896,82 @@ Top influential observations (full sample):
     <tr>
       <th>0</th>
       <td>5169</td>
-      <td>-881.551829</td>
-      <td>0.974798</td>
+      <td>-872.753752</td>
+      <td>0.976292</td>
       <td>0.0</td>
-      <td>7.917808</td>
+      <td>7.356217</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>313</td>
-      <td>-169.085514</td>
-      <td>0.896874</td>
-      <td>0.0</td>
-      <td>6.754195</td>
+      <td>8900</td>
+      <td>145.827351</td>
+      <td>0.934003</td>
+      <td>-0.0</td>
+      <td>-3.576620</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>4002</td>
-      <td>-161.212529</td>
-      <td>0.858016</td>
+      <td>9615</td>
+      <td>-141.800862</td>
+      <td>0.863140</td>
       <td>0.0</td>
-      <td>9.267735</td>
+      <td>7.804205</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>8342</td>
-      <td>-130.545360</td>
-      <td>0.876630</td>
-      <td>0.0</td>
-      <td>6.382383</td>
+      <td>3112</td>
+      <td>113.911280</td>
+      <td>0.901686</td>
+      <td>-0.0</td>
+      <td>-4.311016</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>9615</td>
-      <td>-95.934272</td>
-      <td>0.799091</td>
-      <td>0.0</td>
-      <td>8.379285</td>
+      <td>4330</td>
+      <td>104.788962</td>
+      <td>0.875907</td>
+      <td>-0.0</td>
+      <td>-5.153000</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>5613</td>
-      <td>93.290016</td>
-      <td>0.877228</td>
-      <td>-0.0</td>
-      <td>-4.535791</td>
+      <td>9369</td>
+      <td>-98.128647</td>
+      <td>0.733857</td>
+      <td>0.0</td>
+      <td>12.352487</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>5990</td>
-      <td>92.002628</td>
-      <td>0.815225</td>
+      <td>6849</td>
+      <td>90.866796</td>
+      <td>0.827884</td>
       <td>-0.0</td>
-      <td>-7.244289</td>
+      <td>-6.557095</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>6849</td>
-      <td>85.820270</td>
-      <td>0.794533</td>
+      <td>323</td>
+      <td>87.549304</td>
+      <td>0.926911</td>
       <td>-0.0</td>
-      <td>-7.709903</td>
+      <td>-2.396184</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>1135</td>
-      <td>81.390341</td>
-      <td>0.724792</td>
-      <td>-0.0</td>
-      <td>-10.736199</td>
+      <td>3694</td>
+      <td>-87.406904</td>
+      <td>0.819597</td>
+      <td>0.0</td>
+      <td>6.677937</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>6144</td>
-      <td>-78.351906</td>
-      <td>0.931320</td>
+      <td>5325</td>
+      <td>-80.857573</td>
+      <td>0.729825</td>
       <td>0.0</td>
-      <td>2.007282</td>
+      <td>10.389672</td>
     </tr>
   </tbody>
 </table>
@@ -1900,30 +2024,40 @@ Top influential observations (full sample):
       <th>threshold</th>
       <th>pct_controls_with_m_ge_thr</th>
       <th>pct_treated_with_m_le_1_minus_thr</th>
+      <th>pct_controls_with_g_ge_thr</th>
+      <th>pct_treated_with_g_le_1_minus_thr</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>0.95</td>
-      <td>0.015323</td>
-      <td>0.172712</td>
+      <td>0.015316</td>
+      <td>0.230481</td>
+      <td>0.015316</td>
+      <td>0.230481</td>
     </tr>
     <tr>
       <th>1</th>
       <td>0.97</td>
-      <td>0.015323</td>
-      <td>0.086356</td>
+      <td>0.015316</td>
+      <td>0.028810</td>
+      <td>0.015316</td>
+      <td>0.028810</td>
     </tr>
     <tr>
       <th>2</th>
       <td>0.98</td>
       <td>0.000000</td>
-      <td>0.028785</td>
+      <td>0.028810</td>
+      <td>0.000000</td>
+      <td>0.028810</td>
     </tr>
     <tr>
       <th>3</th>
       <td>0.99</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
@@ -1961,98 +2095,98 @@ Top influential observations (full sample):
     <tr>
       <th>0</th>
       <td>0.900000</td>
-      <td>9998</td>
-      <td>0.02</td>
-      <td>1.370059</td>
-      <td>0.094382</td>
+      <td>9996</td>
+      <td>0.04</td>
+      <td>1.406195</td>
+      <td>0.103095</td>
     </tr>
     <tr>
       <th>1</th>
       <td>0.908636</td>
-      <td>9998</td>
-      <td>0.02</td>
-      <td>1.371410</td>
-      <td>0.099910</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.351316</td>
+      <td>0.096496</td>
     </tr>
     <tr>
       <th>2</th>
       <td>0.917273</td>
-      <td>9998</td>
-      <td>0.02</td>
-      <td>1.336071</td>
-      <td>0.103635</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.400847</td>
+      <td>0.098057</td>
     </tr>
     <tr>
       <th>3</th>
       <td>0.925909</td>
-      <td>9998</td>
-      <td>0.02</td>
-      <td>1.340468</td>
-      <td>0.098261</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.301191</td>
+      <td>0.097339</td>
     </tr>
     <tr>
       <th>4</th>
       <td>0.934545</td>
       <td>9999</td>
       <td>0.01</td>
-      <td>1.423050</td>
-      <td>0.102279</td>
+      <td>1.275482</td>
+      <td>0.106366</td>
     </tr>
     <tr>
       <th>5</th>
       <td>0.943182</td>
       <td>9999</td>
       <td>0.01</td>
-      <td>1.444556</td>
-      <td>0.100216</td>
+      <td>1.361187</td>
+      <td>0.094541</td>
     </tr>
     <tr>
       <th>6</th>
       <td>0.951818</td>
       <td>9999</td>
       <td>0.01</td>
-      <td>1.337149</td>
-      <td>0.097223</td>
+      <td>1.311377</td>
+      <td>0.110577</td>
     </tr>
     <tr>
       <th>7</th>
       <td>0.960455</td>
       <td>9999</td>
       <td>0.01</td>
-      <td>1.332516</td>
-      <td>0.103177</td>
+      <td>1.363900</td>
+      <td>0.102087</td>
     </tr>
     <tr>
       <th>8</th>
       <td>0.969091</td>
       <td>9999</td>
       <td>0.01</td>
-      <td>1.385052</td>
-      <td>0.099993</td>
+      <td>1.364416</td>
+      <td>0.102742</td>
     </tr>
     <tr>
       <th>9</th>
       <td>0.977727</td>
       <td>10000</td>
       <td>0.00</td>
-      <td>1.237599</td>
-      <td>0.162667</td>
+      <td>1.253225</td>
+      <td>0.125716</td>
     </tr>
     <tr>
       <th>10</th>
       <td>0.986364</td>
       <td>10000</td>
       <td>0.00</td>
-      <td>1.376841</td>
-      <td>0.119269</td>
+      <td>1.344956</td>
+      <td>0.128773</td>
     </tr>
     <tr>
       <th>11</th>
       <td>0.995000</td>
       <td>10000</td>
       <td>0.00</td>
-      <td>1.383855</td>
-      <td>0.124867</td>
+      <td>1.269253</td>
+      <td>0.128606</td>
     </tr>
   </tbody>
 </table>
@@ -2073,7 +2207,7 @@ Top influential observations (full sample):
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Propensity Score Trimming ---
 Trimming bounds: (0.02, 0.98)
-Observations trimmed: 18 (0.2%)
+Observations trimmed: 17 (0.2%)
 </pre></div>
 </div>
 </div>
@@ -2171,38 +2305,38 @@ Overall: CAUTION: Most conditions satisfied
   <tbody>
     <tr>
       <th>tenure_months</th>
-      <td>0.062157</td>
-      <td>0.018854</td>
-      <td>0.145552</td>
-      <td>0.040776</td>
+      <td>0.053576</td>
+      <td>0.025750</td>
+      <td>0.264154</td>
+      <td>0.081161</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>0.046324</td>
-      <td>0.027139</td>
-      <td>0.636976</td>
-      <td>0.184079</td>
+      <td>0.035180</td>
+      <td>0.059335</td>
+      <td>0.505135</td>
+      <td>0.187856</td>
     </tr>
     <tr>
       <th>spend_last_month</th>
-      <td>0.029671</td>
-      <td>0.085699</td>
-      <td>0.884782</td>
-      <td>0.353696</td>
+      <td>0.028300</td>
+      <td>0.100006</td>
+      <td>0.803100</td>
+      <td>0.341281</td>
     </tr>
     <tr>
       <th>premium_user</th>
-      <td>0.052777</td>
-      <td>0.062092</td>
-      <td>0.545694</td>
-      <td>0.250380</td>
+      <td>0.042281</td>
+      <td>0.081704</td>
+      <td>0.524485</td>
+      <td>0.248317</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.013517</td>
-      <td>0.000000</td>
-      <td>1.000000</td>
-      <td>0.045627</td>
+      <td>0.003823</td>
+      <td>0.015243</td>
+      <td>0.158730</td>
+      <td>0.010075</td>
     </tr>
   </tbody>
 </table>
@@ -2232,11 +2366,11 @@ Sensitivity parameters: cf_y=0.02; cf_d=0.08, rho=1.0
 
 ------------------ Bounds with CI    ------------------
    CI lower  theta lower     theta  theta upper  CI upper
-t  0.823516     0.984511  1.328986      1.67346  1.828416
+t  0.834104      0.98946  1.338842     1.688225  1.839559
 
 ------------------ Robustness Values ------------------
    H_0     RV (%)    RVa (%)
-t  0.0  14.846743  13.033511
+t  0.0  14.754729  13.061519
 </pre></div>
 </div>
 </div>

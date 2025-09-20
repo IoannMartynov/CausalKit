@@ -717,16 +717,17 @@ treatment prevalence, noise, and (optionally) heterogeneous treatment effects.</
 <p>where f_y(X) = X &#64; beta_y + g_y(X), and tau(X) is either constant <cite>theta</cite> or a user function.</p>
 </li>
 </ul>
-<dl class="simple">
+<dl>
 <dt><strong>Returned columns</strong></dt><dd><ul class="simple">
 <li><p>y: outcome</p></li>
 <li><p>t: binary treatment (0/1)</p></li>
 <li><p>x1..xk (or user-provided names)</p></li>
-<li><p>propensity: P(T=1 | X) used to draw T (ground truth)</p></li>
-<li><p>mu0: E[Y | T=0, X] on the natural outcome scale</p></li>
-<li><p>mu1: E[Y | T=1, X] on the natural outcome scale</p></li>
-<li><p>cate: mu1 - mu0 (conditional average treatment effect on the natural outcome scale)</p></li>
+<li><p>m   : true propensity P(T=1 | X)</p></li>
+<li><p>g0  : E[Y | X, T=0] on the natural outcome scale</p></li>
+<li><p>g1  : E[Y | X, T=1] on the natural outcome scale</p></li>
+<li><p>cate: g1 - g0 (conditional average treatment effect on the natural outcome scale)</p></li>
 </ul>
+<p>(Deprecated aliases kept for one release: propensity, mu0, mu1)</p>
 </dd>
 <dt>Notes on effect scale:</dt><dd><ul class="simple">
 <li><p>For “continuous”, <cite>theta</cite> (or tau(X)) is an additive mean difference.</p></li>
@@ -915,16 +916,17 @@ treatment prevalence, noise, and (optionally) heterogeneous treatment effects.</
 <dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of observations to simulate.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
+<dd class="field-even"><p><dl>
 <dt>Columns:</dt><dd><ul class="simple">
 <li><p>y : float</p></li>
 <li><p>t : {0.0, 1.0}</p></li>
 <li><p>&lt;confounder columns&gt; : floats (and one-hot columns for categorical)</p></li>
-<li><p>propensity : float in (0,1), true P(T=1 | X)</p></li>
-<li><p>mu0 : expected outcome under control on the natural scale</p></li>
-<li><p>mu1 : expected outcome under treatment on the natural scale</p></li>
-<li><p>cate : mu1 - mu0 (conditional treatment effect on the natural scale)</p></li>
+<li><p>m   : float in (0,1), true P(T=1 | X)</p></li>
+<li><p>g0  : expected outcome under control on the natural scale</p></li>
+<li><p>g1  : expected outcome under treatment on the natural scale</p></li>
+<li><p>cate: g1 - g0 (conditional treatment effect on the natural scale)</p></li>
 </ul>
+<p>(Deprecated aliases also emitted for one release: propensity, mu0, mu1)</p>
 </dd>
 </dl>
 </p>
@@ -967,20 +969,22 @@ the log-odds / log-mean scale.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.data.generators.CausalDatasetGenerator.oracle_nuisance">
 <span class="sig-name descname"><span class="pre">oracle_nuisance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_quad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">21</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/data/generators.html#CausalDatasetGenerator.oracle_nuisance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.generators.CausalDatasetGenerator.oracle_nuisance" title="Link to this definition">#</a></dt>
-<dd><p>Return nuisance functions (e(x), m0(x), m1(x)).</p>
+<dd><p>Return nuisance functions (m(x), g0(x), g1(x)) compatible with IRM.</p>
+<p>NOTE: Previously documented as (e, m0, m1). The semantics are unchanged;
+only naming now matches IRM conventions.</p>
 <p>Behavior:
 - If both u_strength_t != 0 and u_strength_y != 0, DML is not identified; raise ValueError.
-- e(x): If u_strength_t == 0, closed form sigmoid(alpha_t + s * f_t(x)).</p>
+- m(x): If u_strength_t == 0, closed form sigmoid(alpha_t + s * f_t(x)).</p>
 <blockquote>
 <div><p>If u_strength_t != 0, approximate E_U[sigmoid(alpha_t + s * f_t(x) + u_strength_t * U)]
 using Gauss–Hermite quadrature with <cite>num_quad</cite> nodes, where U ~ N(0,1).</p>
 </div></blockquote>
 <ul class="simple">
-<li><p>m0/m1(x): closed-form mappings on the natural outcome scale evaluated with U omitted.</p></li>
+<li><p>g0/g1(x): closed-form mappings on the natural outcome scale evaluated with U omitted.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>num_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=21</em>) – Number of Gauss–Hermite nodes for marginalizing over U in e(x) when u_strength_t != 0.</p>
+<dd class="field-odd"><p><strong>num_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default=21</em>) – Number of Gauss–Hermite nodes for marginalizing over U in m(x) when u_strength_t != 0.</p>
 </dd>
 </dl>
 </dd></dl>

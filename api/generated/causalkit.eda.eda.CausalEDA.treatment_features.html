@@ -442,16 +442,9 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.treatment_features">
 <span class="sig-prename descclassname"><span class="pre">CausalEDA.</span></span><span class="sig-name descname"><span class="pre">treatment_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/eda/eda.html#CausalEDA.treatment_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.treatment_features" title="Link to this definition">#</a></dt>
-<dd><p>Return feature attribution from the fitted propensity score model.
-:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-<ul class="simple">
-<li><p>CatBoost path: SHAP attributions with columns ‘shap_mean’ and ‘shap_mean_abs’,
-sorted by ‘shap_mean_abs’. Uses transformed feature names from the preprocessor.</p></li>
-<li><p>Sklearn path (LogisticRegression): absolute coefficients reported as ‘coef_abs’.</p></li>
-</ul>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>

@@ -442,13 +442,7 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.positivity_check">
 <span class="sig-prename descclassname"><span class="pre">CausalEDA.</span></span><span class="sig-name descname"><span class="pre">positivity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.05,</span> <span class="pre">0.95)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/eda/eda.html#CausalEDA.positivity_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.positivity_check" title="Link to this definition">#</a></dt>
-<dd><p>Check overlap/positivity based on propensity score thresholds.</p>
-<p>Returns a dict with:
-- bounds: (low, high) thresholds used
-- share_below: fraction with PS &lt; low
-- share_above: fraction with PS &gt; high
-- flag: heuristic boolean True if the tails collectively exceed ~2%</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
 </dd>
