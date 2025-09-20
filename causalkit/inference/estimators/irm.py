@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import warnings
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
 
@@ -241,6 +242,13 @@ class IRM:
         self._d = d.copy()
         n = X.shape[0]
 
+        # Enforce valid propensity model: must expose predict_proba when classifier
+        if is_classifier(self.ml_m) and not hasattr(self.ml_m, "predict_proba"):
+            raise ValueError("ml_m must support predict_proba() to produce valid propensity probabilities.")
+        # For binary outcomes, require probabilistic outcome models when using classifiers
+        if y_is_binary and is_classifier(self.ml_g) and not hasattr(self.ml_g, "predict_proba"):
+            raise ValueError("Binary outcome: ml_g is a classifier but does not expose predict_proba(). Use a probabilistic classifier or calibrate it.")
+
         if self.n_rep != 1:
             raise NotImplementedError("IRM currently supports n_rep=1 only.")
         if self.n_folds < 2:
@@ -263,6 +271,7 @@ class IRM:
             mask0 = (d_tr == 0)
             if not np.any(mask0):
                 # Fallback: if no control in train, fit on all train
+                warnings.warn("IRM: A CV fold had no controls in the training split; fitting g0 on all train data for this fold.", RuntimeWarning, stacklevel=2)
                 X_g0, y_g0 = X_tr, y_tr
             else:
                 X_g0, y_g0 = X_tr[mask0], y_tr[mask0]
@@ -272,12 +281,16 @@ class IRM:
                 pred_g0 = pred_g0[:, 1] if pred_g0.ndim == 2 else pred_g0.ravel()
             else:
                 pred_g0 = model_g0.predict(X_te)
-            g0_hat[test_idx] = np.asarray(pred_g0, dtype=float).ravel()
+            pred_g0 = np.asarray(pred_g0, dtype=float).ravel()
+            if y_is_binary:
+                pred_g0 = np.clip(pred_g0, 1e-12, 1 - 1e-12)
+            g0_hat[test_idx] = pred_g0
 
             # g1
             model_g1 = clone(self.ml_g)
             mask1 = (d_tr == 1)
             if not np.any(mask1):
+                warnings.warn("IRM: A CV fold had no treated units in the training split; fitting g1 on all train data for this fold.", RuntimeWarning, stacklevel=2)
                 X_g1, y_g1 = X_tr, y_tr
             else:
                 X_g1, y_g1 = X_tr[mask1], y_tr[mask1]
@@ -287,7 +300,10 @@ class IRM:
                 pred_g1 = pred_g1[:, 1] if pred_g1.ndim == 2 else pred_g1.ravel()
             else:
                 pred_g1 = model_g1.predict(X_te)
-            g1_hat[test_idx] = np.asarray(pred_g1, dtype=float).ravel()
+            pred_g1 = np.asarray(pred_g1, dtype=float).ravel()
+            if y_is_binary:
+                pred_g1 = np.clip(pred_g1, 1e-12, 1 - 1e-12)
+            g1_hat[test_idx] = pred_g1
 
             # m
             model_m = clone(self.ml_m)
@@ -310,7 +326,7 @@ class IRM:
 
         # psi elements
         psi_b = w * (g1_hat - g0_hat) + w_bar * (u1 * h1 - u0 * h0)
-        psi_a = -w / np.mean(w)  # ensures E[psi_a] ≈ -1
+        psi_a = -w / np.mean(w)  # ensures E[psi_a] = -1 exactly
 
         theta_hat = float(np.mean(psi_b))  # since E[psi_a] = -1
         psi = psi_b + psi_a * theta_hat
