@@ -325,7 +325,16 @@ class IRM:
         w, w_bar = self._get_weights(n, m_hat, d)
 
         # psi elements
-        psi_b = w * (g1_hat - g0_hat) + w_bar * (u1 * h1 - u0 * h0)
+        if self.score == "ATTE" and self.normalize_ipw:
+            # Rescale w_bar per leg to preserve ATT score identities under IPW normalization
+            s1 = float(np.mean(d / m_hat))
+            s0 = float(np.mean((1 - d) / (1 - m_hat)))
+            s1 = s1 if s1 != 0 else 1.0
+            s0 = s0 if s0 != 0 else 1.0
+            # Note: h1, h0 may already be normalized to mean 1; scaling w_bar per leg preserves products
+            psi_b = w * (g1_hat - g0_hat) + (u1 * h1) * (w_bar * s1) - (u0 * h0) * (w_bar * s0)
+        else:
+            psi_b = w * (g1_hat - g0_hat) + w_bar * (u1 * h1 - u0 * h0)
         psi_a = -w / np.mean(w)  # ensures E[psi_a] = -1 exactly
 
         theta_hat = float(np.mean(psi_b))  # since E[psi_a] = -1
