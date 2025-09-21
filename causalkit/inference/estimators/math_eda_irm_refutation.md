@@ -105,10 +105,20 @@ $$
 **Weight-sum identity (diagnostic).**
 
 $$
-\mathbb E\!\left[\frac{1-D}{p_1}\frac{m}{1-m}\right]=p_1.
+\mathbb{E}\!\left[\frac{1-D}{p_1}\frac{m}{1-m}\right]=\frac{1}{p_1}\,\mathbb{E}\!\left[(1-D)\frac{m}{1-m}\right]=\frac{1}{p_1}\,\mathbb{E}[m]=\frac{p_1}{p_1}=1.
 $$
 
-In-sample, the total control weight should match the number of treated (within sampling noise).
+Equivalently, **without** the $1/p_1$ factor:
+
+$$
+\mathbb{E}\!\left[(1-D)\frac{m}{1-m}\right]=\mathbb{E}[D]=p_1.
+$$
+
+So in-sample diagnostics can be phrased as either:
+
+* $\sum_{i}(1-d_i)\tfrac{\hat m_i}{1-\hat m_i}\approx \sum_i d_i$ (raw factors), **or**
+* $\sum_{i}(1-d_i)\tfrac{\hat m_i}{(1-\hat m_i)p_1}\approx n$ (ATT weights match treated weights $\sum_i d_i/p_1 = n$).
+
 
 ### 3.3 Orthogonality (Neyman)
 
@@ -227,3 +237,4 @@ APIs: `IRM.sensitivity_analysis`, `refutation/sensitivity.py`. Bounds remain **h
 * Enforce small clipping on $\hat m$ and (for classifiers) on $\hat g_d$ to prevent exploding residual-weight products.
 * Stratify folds by $D$ when cross-fitting.
 * If using fold-specific denominators (e.g., $\hat p_{1,k}$), ensure fold-wise centering of $\hat\psi$ or re-express with global $\hat p_1$.
+
