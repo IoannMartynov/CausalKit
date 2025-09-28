@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>causalkit.refutation.score.orthogonality &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.refutation.score.score_validation &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/refutation/score/orthogonality';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/refutation/score/score_validation';</script>
     <link rel="icon" href="../../../../_static/logo.svg"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -377,7 +377,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for causalkit.refutation.score.orthogonality</h1><div class="highlight"><pre>
+  <h1>Source code for causalkit.refutation.score.score_validation</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">AIPW orthogonality diagnostics for IRM-based estimators.</span>
 
@@ -801,51 +801,83 @@ document.write(`
     <span class="n">g1_trim</span> <span class="o">=</span> <span class="n">g1_outcomes</span><span class="p">[</span><span class="n">trim_mask</span><span class="p">]</span>
     
     <span class="c1"># === 1. OUT-OF-SAMPLE MOMENT CHECK ===</span>
-    <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_folds_oos</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-    <span class="n">fold_thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">fold_nuisances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    
-    <span class="n">df_full</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df_full</span><span class="p">):</span>
-        <span class="c1"># Create fold-specific data using public APIs</span>
-        <span class="n">train_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-            <span class="n">df</span><span class="o">=</span><span class="n">df_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-            <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">confounders</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="c1"># Prefer fast path using cached ψ_a, ψ_b and training folds from the fitted IRM model</span>
+    <span class="n">use_fast</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="s2">&quot;psi_a_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="s2">&quot;psi_b_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dml_model</span><span class="p">,</span> <span class="s2">&quot;folds_&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">use_fast</span><span class="p">:</span>
+        <span class="n">folds_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dml_model</span><span class="o">.</span><span class="n">folds_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">folds_arr</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">folds_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">fold_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">folds_arr</span> <span class="o">==</span> <span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">)]</span>
+        <span class="c1"># Compute both fold-aggregated and strict t-stats using only ψ components</span>
+        <span class="n">oos_df</span><span class="p">,</span> <span class="n">oos_tstat</span><span class="p">,</span> <span class="n">tstat_strict</span> <span class="o">=</span> <span class="n">oos_moment_check_from_psi</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dml_model</span><span class="o">.</span><span class="n">psi_a_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dml_model</span><span class="o">.</span><span class="n">psi_b_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">fold_indices</span><span class="p">,</span>
+            <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="c1"># Fit model on training fold to get theta</span>
-        <span class="n">fold_result</span> <span class="o">=</span> <span class="n">inference_fn</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span>
-        <span class="n">fold_thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fold_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]))</span>
-        <span class="n">fold_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span>
-        
-        <span class="c1"># Use full-model cross-fitted nuisances indexed by test fold (fast OOS)</span>
-        <span class="n">m_fold</span> <span class="o">=</span> <span class="n">m_propensity</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
-        <span class="n">g0_fold</span> <span class="o">=</span> <span class="n">g0_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
-        <span class="n">g1_fold</span> <span class="o">=</span> <span class="n">g1_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
-        <span class="n">fold_nuisances</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m_fold</span><span class="p">,</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">))</span>
-    
-    <span class="c1"># Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)</span>
-    <span class="n">oos_df</span><span class="p">,</span> <span class="n">oos_tstat</span> <span class="o">=</span> <span class="n">oos_moment_check_with_fold_nuisances</span><span class="p">(</span>
-        <span class="n">fold_thetas</span><span class="p">,</span> <span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">score_fn</span><span class="o">=</span><span class="n">score_fn</span>
-    <span class="p">)</span>
-    <span class="n">oos_pvalue</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">)))</span>
+        <span class="n">oos_pvalue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">))))</span>
+        <span class="n">pvalue_strict</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">tstat_strict</span><span class="p">))))</span> <span class="k">if</span> <span class="n">tstat_strict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+        <span class="n">strict_applied</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strict_oos</span><span class="p">)</span>
+        <span class="n">main_tstat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tstat_strict</span> <span class="k">if</span> <span class="n">strict_applied</span> <span class="k">else</span> <span class="n">oos_tstat</span><span class="p">)</span>
+        <span class="n">main_pvalue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">main_tstat</span><span class="p">))))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Fallback: legacy slow path with K refits and score recomputations</span>
+        <span class="n">kf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_folds_oos</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+        <span class="n">fold_thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fold_nuisances</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># Strict aggregation over all held-out psi</span>
-    <span class="n">all_psi_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">m_fold</span><span class="p">,</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">)):</span>
-        <span class="n">th</span> <span class="o">=</span> <span class="n">fold_thetas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">psi_k</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">,</span> <span class="n">m_fold</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
-        <span class="n">all_psi_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">psi_k</span><span class="p">)</span>
-    <span class="n">all_psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">all_psi_list</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_psi_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
-    <span class="n">tstat_strict</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_psi</span><span class="p">))</span> <span class="o">*</span> <span class="n">all_psi</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">all_psi</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">))</span>
-    <span class="n">pvalue_strict</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tstat_strict</span><span class="p">))))</span>
+        <span class="n">df_full</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">test_idx</span> <span class="ow">in</span> <span class="n">kf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">df_full</span><span class="p">):</span>
+            <span class="c1"># Create fold-specific data using public APIs</span>
+            <span class="n">train_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">=</span><span class="n">df_full</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+                <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">confounders</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="c1"># Fit model on training fold to get theta</span>
+            <span class="n">fold_result</span> <span class="o">=</span> <span class="n">inference_fn</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span>
+            <span class="n">fold_thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fold_result</span><span class="p">[</span><span class="s1">&#39;coefficient&#39;</span><span class="p">]))</span>
+            <span class="n">fold_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_idx</span><span class="p">)</span>
 
-    <span class="c1"># Choose which t-stat to report as main</span>
-    <span class="n">strict_applied</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strict_oos</span><span class="p">)</span>
-    <span class="n">main_tstat</span> <span class="o">=</span> <span class="n">tstat_strict</span> <span class="k">if</span> <span class="n">strict_applied</span> <span class="k">else</span> <span class="n">oos_tstat</span>
-    <span class="n">main_pvalue</span> <span class="o">=</span> <span class="n">pvalue_strict</span> <span class="k">if</span> <span class="n">strict_applied</span> <span class="k">else</span> <span class="n">oos_pvalue</span>
+            <span class="c1"># Use full-model cross-fitted nuisances indexed by test fold (fast OOS)</span>
+            <span class="n">m_fold</span> <span class="o">=</span> <span class="n">m_propensity</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+            <span class="n">g0_fold</span> <span class="o">=</span> <span class="n">g0_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+            <span class="n">g1_fold</span> <span class="o">=</span> <span class="n">g1_outcomes</span><span class="p">[</span><span class="n">test_idx</span><span class="p">]</span>
+            <span class="n">fold_nuisances</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m_fold</span><span class="p">,</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">))</span>
+
+        <span class="c1"># Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)</span>
+        <span class="n">oos_df</span><span class="p">,</span> <span class="n">oos_tstat</span> <span class="o">=</span> <span class="n">oos_moment_check_with_fold_nuisances</span><span class="p">(</span>
+            <span class="n">fold_thetas</span><span class="p">,</span> <span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">score_fn</span><span class="o">=</span><span class="n">score_fn</span>
+        <span class="p">)</span>
+        <span class="n">oos_pvalue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">oos_tstat</span><span class="p">))))</span>
+
+        <span class="c1"># Strict aggregation over all held-out psi without creating a giant array</span>
+        <span class="n">total_n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">total_sumsq</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">m_fold</span><span class="p">,</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fold_indices</span><span class="p">,</span> <span class="n">fold_nuisances</span><span class="p">)):</span>
+            <span class="n">th</span> <span class="o">=</span> <span class="n">fold_thetas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">psi_k</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">g0_fold</span><span class="p">,</span> <span class="n">g1_fold</span><span class="p">,</span> <span class="n">m_fold</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+            <span class="n">n_k</span> <span class="o">=</span> <span class="n">psi_k</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">s_k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_k</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">ss_k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="n">psi_k</span> <span class="o">*</span> <span class="n">psi_k</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">total_n</span> <span class="o">+=</span> <span class="n">n_k</span>
+            <span class="n">total_sum</span> <span class="o">+=</span> <span class="n">s_k</span>
+            <span class="n">total_sumsq</span> <span class="o">+=</span> <span class="n">ss_k</span>
+        <span class="k">if</span> <span class="n">total_n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">mean_all</span> <span class="o">=</span> <span class="n">total_sum</span> <span class="o">/</span> <span class="n">total_n</span>
+            <span class="n">var_all</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_sumsq</span> <span class="o">-</span> <span class="n">total_n</span> <span class="o">*</span> <span class="p">(</span><span class="n">mean_all</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">total_n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">se_all</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">var_all</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_n</span><span class="p">))</span>
+            <span class="n">tstat_strict</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mean_all</span> <span class="o">/</span> <span class="n">se_all</span><span class="p">)</span> <span class="k">if</span> <span class="n">se_all</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tstat_strict</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">pvalue_strict</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">tstat_strict</span><span class="p">))))</span>
+
+        <span class="c1"># Choose which t-stat to report as main</span>
+        <span class="n">strict_applied</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strict_oos</span><span class="p">)</span>
+        <span class="n">main_tstat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tstat_strict</span> <span class="k">if</span> <span class="n">strict_applied</span> <span class="k">else</span> <span class="n">oos_tstat</span><span class="p">)</span>
+        <span class="n">main_pvalue</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pvalue_strict</span> <span class="k">if</span> <span class="n">strict_applied</span> <span class="k">else</span> <span class="n">oos_pvalue</span><span class="p">)</span>
     
     <span class="c1"># === 2. ORTHOGONALITY DERIVATIVE TESTS ===</span>
     <span class="c1"># Create basis functions: constant + first few standardized confounders</span>
@@ -1196,6 +1228,351 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds).&quot;&quot;&quot;</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;trim_sensitivity_curve_att is deprecated; use trim_sensitivity_curve_atte with IRM naming.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">trim_sensitivity_curve_atte</span><span class="p">(</span><span class="n">inference_fn</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="n">thresholds</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">trim_sensitivity_curve_ate</span><span class="p">(</span>
+    <span class="n">m_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">D</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">Y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">g0_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">g1_hat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">eps_grid</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sensitivity of ATE estimate to propensity clipping epsilon (no re-fit).</span>
+
+<span class="sd">    For each epsilon in eps_grid, compute the AIPW/IRM ATE estimate using</span>
+<span class="sd">    m_clipped = clip(m_hat, eps, 1-eps) over the full sample and report</span>
+<span class="sd">    the plug-in standard error from the EIF.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    m_hat, D, Y, g0_hat, g1_hat : np.ndarray</span>
+<span class="sd">        Cross-fitted nuisances and observed arrays.</span>
+<span class="sd">    eps_grid : tuple[float, ...]</span>
+<span class="sd">        Sequence of clipping thresholds ε to evaluate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Columns: [&#39;trim_eps&#39;,&#39;n&#39;,&#39;pct_clipped&#39;,&#39;theta&#39;,&#39;se&#39;].</span>
+<span class="sd">        pct_clipped is the percent of observations with m outside [ε,1-ε].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m_hat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">g0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">g0_hat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">g1_hat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">eps</span> <span class="ow">in</span> <span class="n">eps_grid</span><span class="p">:</span>
+        <span class="n">eps_f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span>
+        <span class="n">m_clip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">eps_f</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">eps_f</span><span class="p">)</span>
+        <span class="c1"># share clipped (either side)</span>
+        <span class="n">pct_clipped</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">m</span> <span class="o">&lt;=</span> <span class="n">eps_f</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">eps_f</span><span class="p">)))</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+        <span class="c1"># AIPW ATE with clipped propensity</span>
+        <span class="n">theta_terms</span> <span class="o">=</span> <span class="p">(</span><span class="n">g1</span> <span class="o">-</span> <span class="n">g0</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">g1</span><span class="p">)</span> <span class="o">/</span> <span class="n">m_clip</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">g0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">m_clip</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">theta_terms</span><span class="p">))</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">theta_terms</span> <span class="o">-</span> <span class="n">theta</span>
+        <span class="n">se</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;trim_eps&quot;</span><span class="p">:</span> <span class="n">eps_f</span><span class="p">,</span>
+            <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="s2">&quot;pct_clipped&quot;</span><span class="p">:</span> <span class="n">pct_clipped</span><span class="p">,</span>
+            <span class="s2">&quot;theta&quot;</span><span class="p">:</span> <span class="n">theta</span><span class="p">,</span>
+            <span class="s2">&quot;se&quot;</span><span class="p">:</span> <span class="n">se</span><span class="p">,</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="c1"># Placebo / robustness checks (moved from placebo.py)</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_binary</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine if a pandas Series contains binary data (0/1 or True/False).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    series : pd.Series</span>
+<span class="sd">        The series to check</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the series appears to be binary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unique_vals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    
+    <span class="c1"># Check for 0/1 binary</span>
+    <span class="k">if</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span> <span class="ow">or</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="mi">0</span><span class="p">}</span> <span class="ow">or</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    
+    <span class="c1"># Check for True/False binary</span>
+    <span class="k">if</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">}</span> <span class="ow">or</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="kc">True</span><span class="p">}</span> <span class="ow">or</span> <span class="n">unique_vals</span> <span class="o">==</span> <span class="p">{</span><span class="kc">False</span><span class="p">}:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="c1"># Check for numeric that could be treated as binary (only two distinct values)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">unique_vals</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_random_outcome</span><span class="p">(</span><span class="n">original_outcome</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate random outcome variables matching the distribution of the original outcome.</span>
+<span class="sd">    </span>
+<span class="sd">    For binary outcomes: generates random binary variables with same proportion as original</span>
+<span class="sd">    For continuous outcomes: generates random continuous variables from normal distribution</span>
+<span class="sd">    fitted to the original data</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    original_outcome : pd.Series</span>
+<span class="sd">        The original outcome variable</span>
+<span class="sd">    rng : np.random.Generator</span>
+<span class="sd">        Random number generator</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Generated random outcome variables</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_outcome</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">_is_binary</span><span class="p">(</span><span class="n">original_outcome</span><span class="p">):</span>
+        <span class="c1"># For binary outcome, generate random binary with same proportion</span>
+        <span class="n">original_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">original_rate</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># For continuous outcome, generate from normal distribution fitted to original data</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">std</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If no variance, generate constant values equal to the mean</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">original_outcome</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_random_treatment</span><span class="p">(</span><span class="n">original_treatment</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate random binary treatment variables with same proportion as original.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    original_treatment : pd.Series</span>
+<span class="sd">        The original treatment variable</span>
+<span class="sd">    rng : np.random.Generator</span>
+<span class="sd">        Random number generator</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Generated random binary treatment variables</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original_treatment</span><span class="p">)</span>
+    <span class="n">treatment_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">original_treatment</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">rng</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">treatment_rate</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">original_treatment</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_inference</span><span class="p">(</span>
+    <span class="n">inference_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">CausalData</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper that executes `inference_fn` and extracts the two items of interest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">inference_fn</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;theta&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;coefficient&quot;</span><span class="p">]),</span> <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;p_value&quot;</span><span class="p">])}</span>
+
+
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="c1"># 1. Placebo ‑- generate random outcome</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="refute_placebo_outcome">
+<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.refute_placebo_outcome.html#causalkit.refutation.refute_placebo_outcome">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">refute_placebo_outcome</span><span class="p">(</span>
+    <span class="n">inference_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">CausalData</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate random outcome (target) variables while keeping treatment</span>
+<span class="sd">    and covariates intact. For binary outcomes, generates random binary</span>
+<span class="sd">    variables with the same proportion. For continuous outcomes, generates</span>
+<span class="sd">    random variables from a normal distribution fitted to the original data.</span>
+<span class="sd">    A valid causal rct_design should now yield θ ≈ 0 and a large p-value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">df_mod</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">original_outcome</span> <span class="o">=</span> <span class="n">df_mod</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span>
+    <span class="n">df_mod</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span> <span class="o">=</span> <span class="n">_generate_random_outcome</span><span class="p">(</span><span class="n">original_outcome</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+    <span class="n">ck_mod</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">df_mod</span><span class="p">,</span>
+        <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_treatment</span><span class="p">,</span>
+        <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span>
+        <span class="n">confounders</span><span class="o">=</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_run_inference</span><span class="p">(</span><span class="n">inference_fn</span><span class="p">,</span> <span class="n">ck_mod</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="c1"># 2. Placebo ‑- generate random treatment</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="refute_placebo_treatment">
+<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.refute_placebo_treatment.html#causalkit.refutation.refute_placebo_treatment">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">refute_placebo_treatment</span><span class="p">(</span>
+    <span class="n">inference_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">CausalData</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate random binary treatment variables while keeping outcome and</span>
+<span class="sd">    covariates intact. Generates random binary treatment with the same</span>
+<span class="sd">    proportion as the original treatment. Breaks the treatment–outcome link.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">df_mod</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">original_treatment</span> <span class="o">=</span> <span class="n">df_mod</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span>
+    <span class="n">df_mod</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span> <span class="o">=</span> <span class="n">_generate_random_treatment</span><span class="p">(</span><span class="n">original_treatment</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+
+    <span class="n">ck_mod</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">df_mod</span><span class="p">,</span>
+        <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_treatment</span><span class="p">,</span>
+        <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span>
+        <span class="n">confounders</span><span class="o">=</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_run_inference</span><span class="p">(</span><span class="n">inference_fn</span><span class="p">,</span> <span class="n">ck_mod</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ------------------------------------------------------------------</span>
+<span class="c1"># 3. Subset robustness check</span>
+<span class="c1"># ------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="refute_subset">
+<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.refute_subset.html#causalkit.refutation.refute_subset">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">refute_subset</span><span class="p">(</span>
+    <span class="n">inference_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">CausalData</span><span class="p">,</span>
+    <span class="n">fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Re-estimate the effect on a random subset (default 80 %)</span>
+<span class="sd">    to check sample-stability of the estimate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">fraction</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`fraction` must lie in (0, 1].&quot;</span><span class="p">)</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">fraction</span> <span class="o">*</span> <span class="n">n</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">df_mod</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">ck_mod</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">=</span><span class="n">df_mod</span><span class="p">,</span>
+        <span class="n">treatment</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_treatment</span><span class="p">,</span>
+        <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span>
+        <span class="n">confounders</span><span class="o">=</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_run_inference</span><span class="p">(</span><span class="n">inference_fn</span><span class="p">,</span> <span class="n">ck_mod</span><span class="p">,</span> <span class="o">**</span><span class="n">inference_kwargs</span><span class="p">)</span></div>
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fast_fold_thetas_from_psi</span><span class="p">(</span><span class="n">psi_a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">psi_b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute leave-fold-out θ_{-k} using cached ψ_a, ψ_b.</span>
+<span class="sd">    θ_{-k} = - mean_R(ψ_b) / mean_R(ψ_a), where R is the complement of fold k.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">psi_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_a</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">psi_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_b</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">psi_a</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">sum_a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_a</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">sum_b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_b</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">thetas</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">fold_indices</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">n_r</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">idx</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="n">n_r</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">sum_a</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_a</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+        <span class="n">sb</span> <span class="o">=</span> <span class="n">sum_b</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+        <span class="n">mean_a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">/</span> <span class="n">n_r</span>
+        <span class="n">mean_b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">/</span> <span class="n">n_r</span>
+        <span class="n">denom</span> <span class="o">=</span> <span class="n">mean_a</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mean_a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-12</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span>  <span class="c1"># robust guard against div-by-zero</span>
+        <span class="n">thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">mean_b</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">thetas</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">oos_moment_check_from_psi</span><span class="p">(</span>
+    <span class="n">psi_a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">psi_b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">fold_indices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OOS moment check using cached ψ_a, ψ_b only.</span>
+<span class="sd">    Returns (fold-wise DF, t_fold_agg, t_strict if requested).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">psi_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_a</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">psi_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_b</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">fold_thetas</span> <span class="o">=</span> <span class="n">_fast_fold_thetas_from_psi</span><span class="p">(</span><span class="n">psi_a</span><span class="p">,</span> <span class="n">psi_b</span><span class="p">,</span> <span class="n">fold_indices</span><span class="p">)</span>
+
+    <span class="n">rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">total_sumsq</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fold_indices</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">fold_thetas</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="c1"># ψ_k = ψ_b[idx] + ψ_a[idx]*θ_{-k}</span>
+        <span class="n">psi_k</span> <span class="o">=</span> <span class="n">psi_b</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">psi_a</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">th</span>
+        <span class="n">n_k</span> <span class="o">=</span> <span class="n">psi_k</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">m_k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_k</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="k">if</span> <span class="n">n_k</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">v_k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_k</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">n_k</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;fold&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">n_k</span><span class="p">,</span> <span class="s2">&quot;psi_mean&quot;</span><span class="p">:</span> <span class="n">m_k</span><span class="p">,</span> <span class="s2">&quot;psi_var&quot;</span><span class="p">:</span> <span class="n">v_k</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">n_k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">total_n</span> <span class="o">+=</span> <span class="n">n_k</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">psi_k</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">total_sum</span> <span class="o">+=</span> <span class="n">s</span>
+            <span class="n">total_sumsq</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">((</span><span class="n">psi_k</span> <span class="o">*</span> <span class="n">psi_k</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+    <span class="c1"># Fold-aggregated t-stat</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_mean&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;psi_var&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
+    <span class="n">t_fold</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span> <span class="k">if</span> <span class="n">den</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="n">t_strict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">total_n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">mean_all</span> <span class="o">=</span> <span class="n">total_sum</span> <span class="o">/</span> <span class="n">total_n</span>
+        <span class="n">var_all</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_sumsq</span> <span class="o">-</span> <span class="n">total_n</span> <span class="o">*</span> <span class="p">(</span><span class="n">mean_all</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">total_n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">se_all</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">var_all</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_n</span><span class="p">))</span>
+        <span class="n">t_strict</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean_all</span> <span class="o">/</span> <span class="n">se_all</span><span class="p">)</span> <span class="k">if</span> <span class="n">se_all</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">t_fold</span><span class="p">),</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">t_strict</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">t_strict</span><span class="p">))</span>
 </pre></div>
 
                 </article>
