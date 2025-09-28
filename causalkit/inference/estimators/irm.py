@@ -62,6 +62,32 @@ def _compute_sensitivity_bias(sigma2: np.ndarray | float,
     return max_bias, psi_max_bias
 
 
+def _combine_nu2(m_alpha: np.ndarray, rr: np.ndarray, cf_y: float, cf_d: float, rho: float) -> tuple[float, np.ndarray]:
+    """Combine sensitivity levers into nu2 via per-unit quadratic form.
+
+    nu2_i = (sqrt(2*m_alpha_i))^2 * cf_y + (|rr_i|)^2 * cf_d + 2*rho*sqrt(cf_y*cf_d)*|rr_i|*sqrt(2*m_alpha_i)
+
+    Returns
+    -------
+    nu2 : float
+        Mean of per-unit nu2_i.
+    psi_nu2 : np.ndarray
+        Influence-function-style centered terms: nu2_i - nu2.
+    """
+    cf_y = float(cf_y)
+    cf_d = float(cf_d)
+    # clip rho to [-1,1]
+    rho = float(np.clip(rho, -1.0, 1.0))
+    if cf_y < 0 or cf_d < 0:
+        raise ValueError("cf_y and cf_d must be >= 0.")
+    a = np.sqrt(2.0 * np.maximum(np.asarray(m_alpha, dtype=float), 0.0))
+    b = np.abs(np.asarray(rr, dtype=float))
+    base = (a * a) * cf_y + (b * b) * cf_d + 2.0 * rho * np.sqrt(cf_y * cf_d) * a * b
+    nu2 = float(np.mean(base))
+    psi_nu2 = base - nu2
+    return nu2, psi_nu2
+
+
 def _is_binary(values: np.ndarray) -> bool:
     uniq = np.unique(values)
     return np.array_equal(np.sort(uniq), np.array([0, 1])) or np.array_equal(np.sort(uniq), np.array([0.0, 1.0]))
@@ -128,7 +154,7 @@ class IRM:
         ml_g: Any,
         ml_m: Any,
         *,
-        n_folds: int = 4,
+        n_folds: int = 5,
         n_rep: int = 1,
         score: str = "ATE",
         normalize_ipw: bool = False,
@@ -339,7 +365,8 @@ class IRM:
             psi_b = w * (g1_hat - g0_hat) + (u1 * h1) * (w_bar * s1) - (u0 * h0) * (w_bar * s0)
         else:
             psi_b = w * (g1_hat - g0_hat) + w_bar * (u1 * h1 - u0 * h0)
-        psi_a = -w / np.mean(w)  # ensures E[psi_a] = -1 exactly
+        w_mean = float(np.mean(w))
+        psi_a = -w / (w_mean if w_mean != 0.0 else 1.0)  # ensures E[psi_a] = -1 with zero-guard
 
         theta_hat = float(np.mean(psi_b))  # since E[psi_a] = -1
         psi = psi_b + psi_a * theta_hat
@@ -444,6 +471,7 @@ class IRM:
             "psi_sigma2": psi_sigma2,
             "psi_nu2": psi_nu2,
             "riesz_rep": rr,
+            "m_alpha": m_alpha,
         }
 
     def sensitivity_analysis(self, cf_y: float, cf_d: float, rho: float = 1.0, level: float = 0.95) -> "IRM":
@@ -460,19 +488,24 @@ class IRM:
         level : float, default 0.95
             Confidence level for CI bounds display.
         """
+        # Validate inputs
+        if not (0.0 < float(level) < 1.0):
+            raise ValueError("level must be in (0,1).")
+        if cf_y < 0 or cf_d < 0:
+            raise ValueError("cf_y and cf_d must be >= 0.")
+        rho = float(np.clip(rho, -1.0, 1.0))
+
         # Gather elements
         elems = self._sensitivity_element_est()
         sigma2 = elems["sigma2"]
-        nu2 = elems["nu2"]
         psi_sigma2 = elems["psi_sigma2"]
-        psi_nu2 = elems["psi_nu2"]
+        m_alpha = elems.get("m_alpha")
+        rr = elems.get("riesz_rep")
 
-        # Scale nu2 by cf_y, cf_d, rho as a proxy (heuristic consistent with DoubleML structure)
-        # In DoubleML, nu2 depends on cf_y, cf_d, and rho; here we scale accordingly for reporting.
-        nu2_scaled = float(nu2) * float(cf_y) * float(cf_d) * max(float(rho), 0.0)
-        psi_nu2_scaled = psi_nu2 * float(cf_y) * float(cf_d) * max(float(rho), 0.0)
+        # Build nu2 from components and sensitivity levers
+        nu2, psi_nu2 = _combine_nu2(m_alpha, rr, cf_y, cf_d, rho)
 
-        max_bias, psi_max_bias = _compute_sensitivity_bias(sigma2, nu2_scaled, psi_sigma2, psi_nu2_scaled)
+        max_bias, psi_max_bias = _compute_sensitivity_bias(sigma2, nu2, psi_sigma2, psi_nu2)
 
         theta_hat = float(self.coef_[0])
         se = float(self.se_[0])
@@ -497,13 +530,13 @@ class IRM:
         row_name = self.data.treatment.name
         lines.append(f"{row_name:>6} {ci_low:11.6f} {theta_lower:12.6f} {theta_hat:15.6f} {theta_upper:12.6f} {ci_high:13.6f}")
         lines.append("")
-        lines.append("------------------ Robustness Values ------------------")
-        rob_header = f"{'':>6} {'H_0':>6} {'RV (%)':>9} {'RVa (%)':>8}"
+        lines.append("------------------ Robustness (SNR proxy) -------------")
+        rob_header = f"{'':>6} {'H_0':>6} {'SNR proxy (%)':>15} {'adj (%)':>8}"
         lines.append(rob_header)
         snr = abs(theta_hat) / (se + 1e-12)
         rv = min(100.0, float(100.0 * (1.0 / (1.0 + snr))))
         rva = max(0.0, rv - 5.0)
-        lines.append(f"{row_name:>6} {0.0:6.1f} {rv:9.6f} {rva:8.6f}")
+        lines.append(f"{row_name:>6} {0.0:6.1f} {rv:15.6f} {rva:8.6f}")
 
         self.sensitivity_summary = "\n".join(lines)
         return self
