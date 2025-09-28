@@ -43,7 +43,7 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.refutation.get_sensitivity_summary';</script>
     <link rel="icon" href="../../_static/logo.svg"/>
@@ -361,7 +361,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
@@ -441,7 +440,7 @@ document.write(`
 <h1>causalkit.refutation.get_sensitivity_summary<a class="headerlink" href="#causalkit-refutation-get-sensitivity-summary" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.get_sensitivity_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">get_sensitivity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/sensitivity.html#get_sensitivity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.get_sensitivity_summary" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">get_sensitivity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#get_sensitivity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.get_sensitivity_summary" title="Link to this definition">#</a></dt>
 <dd><p>Get the sensitivity summary string if available.</p>
 <p>Checks for a top-level ‘sensitivity_summary’ (set by sensitivity_analysis)
 and falls back to model.sensitivity_summary if present.</p>

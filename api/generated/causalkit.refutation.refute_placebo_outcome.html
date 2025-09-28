@@ -43,7 +43,7 @@
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.refutation.refute_placebo_outcome';</script>
     <link rel="icon" href="../../_static/logo.svg"/>
@@ -361,7 +361,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
@@ -441,12 +440,12 @@ document.write(`
 <h1>causalkit.refutation.refute_placebo_outcome<a class="headerlink" href="#causalkit-refutation-refute-placebo-outcome" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.refute_placebo_outcome">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">refute_placebo_outcome</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/placebo.html#refute_placebo_outcome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.refute_placebo_outcome" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">refute_placebo_outcome</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/score/placebo.html#refute_placebo_outcome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.refute_placebo_outcome" title="Link to this definition">#</a></dt>
 <dd><p>Generate random outcome (target) variables while keeping treatment
 and covariates intact. For binary outcomes, generates random binary
 variables with the same proportion. For continuous outcomes, generates
 random variables from a normal distribution fitted to the original data.
-A valid causal design should now yield θ ≈ 0 and a large p-value.</p>
+A valid causal rct_design should now yield θ ≈ 0 and a large p-value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>

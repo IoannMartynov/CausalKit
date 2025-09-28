@@ -43,7 +43,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/design';</script>
     <link rel="icon" href="../_static/logo.svg"/>
@@ -361,7 +361,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
@@ -445,102 +444,8 @@ document.write(`
 <li><p>Supporting stratified splitting to maintain distribution of key variables</p></li>
 </ul>
 </section>
-<section id="module-causalkit.design.traffic_splitter">
-<span id="api-reference"></span><h2>API Reference<a class="headerlink" href="#module-causalkit.design.traffic_splitter" title="Link to this heading">#</a></h2>
-<p>Utility functions for splitting traffic data from DataFrames.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.design.traffic_splitter.split_traffic">
-<span class="sig-prename descclassname"><span class="pre">causalkit.design.traffic_splitter.</span></span><span class="sig-name descname"><span class="pre">split_traffic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/design/traffic_splitter.html#split_traffic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.design.traffic_splitter.split_traffic" title="Link to this definition">#</a></dt>
-<dd><p>Split a DataFrame into multiple parts based on the specified ratio.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The input DataFrame containing traffic data.</p></li>
-<li><p><strong>split_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><em>floats</em><em>, </em><em>default 0.5</em>) – If float, represents the proportion of the DataFrame to include in the first split.
-If list, each value represents the proportion for each split. The values should sum to 1.</p></li>
-<li><p><strong>stratify_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>optional</em>) – Column name to use for stratified splitting. If provided, the splits will have
-the same proportion of values in this column.</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for reproducibility.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple containing the split DataFrames. If split_ratio is a float, returns a tuple of two DataFrames.
-If split_ratio is a list, returns a tuple with length equal to len(split_ratio) + 1.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a> of pd.DataFrame</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="s1">&#39;group&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">50</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">split_traffic</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">split_ratio</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">train_df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
-<span class="go">(80, 20)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_df</span><span class="p">,</span> <span class="n">val_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">split_traffic</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">split_ratio</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">train_df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_df</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
-<span class="go">(70, 20, 10)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<p id="module-causalkit.design.mde">Utility functions for calculating Minimum Detectable Effect (MDE) for experimental design.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.design.mde.calculate_mde">
-<span class="sig-prename descclassname"><span class="pre">causalkit.design.mde.</span></span><span class="sig-name descname"><span class="pre">calculate_mde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'conversion'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/design/mde.html#calculate_mde"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.design.mde.calculate_mde" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the Minimum Detectable Effect (MDE) for conversion or continuous data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sample_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Total sample size or a tuple of (control_size, treatment_size).
-If a single integer is provided, the sample will be split according to the ratio parameter.</p></li>
-<li><p><strong>baseline_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Baseline conversion rate (for conversion data) or baseline mean (for continuous data).
-Required for conversion data.</p></li>
-<li><p><strong>variance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – Variance of the data. For conversion data, this is calculated from the baseline rate if not provided.
-For continuous data, this parameter is required.
-Can be a single float (assumed same for both groups) or a tuple of (control_variance, treatment_variance).</p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.05</em>) – Significance level (Type I error rate).</p></li>
-<li><p><strong>power</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.8</em>) – Statistical power (1 - Type II error rate).</p></li>
-<li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default 'conversion'</em>) – Type of data. Either ‘conversion’ for binary/conversion data or ‘continuous’ for continuous data.</p></li>
-<li><p><strong>ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.5</em>) – Ratio of the sample allocated to the control group if sample_size is a single integer.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing:
-- ‘mde’: The minimum detectable effect (absolute)
-- ‘mde_relative’: The minimum detectable effect as a percentage of the baseline (relative)
-- ‘parameters’: The parameters used for the calculation</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate MDE for conversion data with 1000 total sample size and 10% baseline conversion rate</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calculate_mde</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">baseline_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s1">&#39;conversion&#39;</span><span class="p">)</span>
-<span class="go">{&#39;mde&#39;: 0.0527..., &#39;mde_relative&#39;: 0.5272..., &#39;parameters&#39;: {...}}</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate MDE for continuous data with 500 samples in each group and variance of 4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calculate_mde</span><span class="p">((</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">variance</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s1">&#39;continuous&#39;</span><span class="p">)</span>
-<span class="go">{&#39;mde&#39;: 0.3482..., &#39;mde_relative&#39;: None, &#39;parameters&#39;: {...}}</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>For conversion data, the MDE is calculated using the formula:
-MDE = (z_α/2 + z_β) * sqrt((p1*(1-p1)/n1) + (p2*(1-p2)/n2))</p>
-<p>For continuous data, the MDE is calculated using the formula:
-MDE = (z_α/2 + z_β) * sqrt((σ1²/n1) + (σ2²/n2))</p>
-<p>where:
-- z_α/2 is the critical value for significance level α
-- z_β is the critical value for power
-- p1 and p2 are the conversion rates in the control and treatment groups
-- σ1² and σ2² are the variances in the control and treatment groups
-- n1 and n2 are the sample sizes in the control and treatment groups</p>
-</dd></dl>
-
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -591,11 +496,7 @@ MDE = (z_α/2 + z_β) * sqrt((σ1²/n1) + (σ2²/n2))</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.design.traffic_splitter">API Reference</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.design.traffic_splitter.split_traffic"><code class="docutils literal notranslate"><span class="pre">split_traffic()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.design.mde.calculate_mde"><code class="docutils literal notranslate"><span class="pre">calculate_mde()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
 </ul>
   </nav></div>
 
