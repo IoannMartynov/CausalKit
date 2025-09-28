@@ -9,17 +9,17 @@ The helpers modify the data (shuffle, subsample, …), re-run the
 inference, and return only the new point estimate (theta) and p-value.
 """
 
-from .placebo import (
+from causalkit.refutation.score.placebo import (
     refute_placebo_outcome,
     refute_placebo_treatment,
     refute_subset,
 )
-from .sensitivity import (
+from causalkit.refutation.unconfoundedness.uncofoundedness_validation import (
     sensitivity_analysis,
     get_sensitivity_summary,
     sensitivity_analysis_set,
 )
-from .orthogonality import (
+from causalkit.refutation.score.orthogonality import (
     refute_irm_orthogonality,
 )
 

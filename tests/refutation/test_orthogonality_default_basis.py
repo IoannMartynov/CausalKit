@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from causalkit.data.causaldata import CausalData
-from causalkit.refutation.orthogonality import refute_irm_orthogonality
+from causalkit.refutation.score.orthogonality import refute_irm_orthogonality
 
 
 def _dummy_inference(data: CausalData, **kwargs):

@@ -1,7 +1,6 @@
 import warnings
-import pytest
 
-from causalkit.refutation.sensitivity import sensitivity_analysis_set, sensitivity_analysis
+from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis_set, sensitivity_analysis
 
 
 class FakeModelWarnSB:

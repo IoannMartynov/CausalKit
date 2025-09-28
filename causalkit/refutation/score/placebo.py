@@ -157,7 +157,7 @@ def refute_placebo_outcome(
     and covariates intact. For binary outcomes, generates random binary
     variables with the same proportion. For continuous outcomes, generates
     random variables from a normal distribution fitted to the original data.
-    A valid causal design should now yield θ ≈ 0 and a large p-value.
+    A valid causal rct_design should now yield θ ≈ 0 and a large p-value.
     """
     rng = np.random.default_rng(random_state)
 

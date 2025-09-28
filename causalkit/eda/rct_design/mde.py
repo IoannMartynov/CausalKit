@@ -1,5 +1,5 @@
 """
-Utility functions for calculating Minimum Detectable Effect (MDE) for experimental design.
+Utility functions for calculating Minimum Detectable Effect (MDE) for experimental rct_design.
 """
 
 import numpy as np

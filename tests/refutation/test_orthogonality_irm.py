@@ -1,8 +1,5 @@
-import numpy as np
-import pandas as pd
-
 from causalkit.data.generators import CausalDatasetGenerator
-from causalkit.refutation.orthogonality import refute_irm_orthogonality
+from causalkit.refutation.score.orthogonality import refute_irm_orthogonality
 from causalkit.inference.att.dml_att import dml_att
 
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier

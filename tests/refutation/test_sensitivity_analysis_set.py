@@ -1,6 +1,6 @@
 import pytest
 
-from causalkit.refutation.sensitivity import sensitivity_analysis_set
+from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis_set
 
 
 class FakeModelSimple:

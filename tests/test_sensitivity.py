@@ -3,11 +3,9 @@ Tests for the sensitivity analysis utilities.
 """
 
 import pytest
-import pandas as pd
-import numpy as np
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 
-from causalkit.refutation.sensitivity import sensitivity_analysis, get_sensitivity_summary
+from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis, get_sensitivity_summary
 
 
 @pytest.fixture

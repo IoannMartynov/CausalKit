@@ -13,7 +13,7 @@ from causalkit.refutation import (
     refute_placebo_treatment,
     refute_subset,
 )
-from causalkit.refutation.placebo import _is_binary, _generate_random_outcome, _generate_random_treatment
+from causalkit.refutation.score.placebo import _is_binary, _generate_random_outcome, _generate_random_treatment
 
 
 @pytest.fixture

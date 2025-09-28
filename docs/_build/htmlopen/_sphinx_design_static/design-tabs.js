@@ -7,7 +7,7 @@
  * @type {Record<string, HTMLElement[]>}
  */
 let sd_id_to_elements = {};
-const storageKeyPrefix = "sphinx-design-tab-id-";
+const storageKeyPrefix = "sphinx-rct_design-tab-id-";
 
 /**
  * Create a key for a tab element.
@@ -56,7 +56,7 @@ function ready() {
           );
           if (tabParam) {
             console.log(
-              "sphinx-design: Selecting tab id for group '" +
+              "sphinx-rct_design: Selecting tab id for group '" +
                 group +
                 "' from URL parameter: " +
                 tabParam
@@ -71,7 +71,7 @@ function ready() {
         );
         if (previousId === id) {
           // console.log(
-          //   "sphinx-design: Selecting tab from session storage: " + id
+          //   "sphinx-rct_design: Selecting tab from session storage: " + id
           // );
           // @ts-ignore
           label.previousElementSibling.checked = true;
