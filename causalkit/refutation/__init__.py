@@ -17,7 +17,8 @@ from causalkit.refutation.score.placebo import (
 from causalkit.refutation.unconfoundedness.uncofoundedness_validation import (
     sensitivity_analysis,
     get_sensitivity_summary,
-    sensitivity_analysis_set,
+    validate_unconfoundedness_balance,
+    sensitivity_benchmark,
 )
 from causalkit.refutation.score.orthogonality import (
     refute_irm_orthogonality,
@@ -29,6 +30,5 @@ __all__ = [
     "refute_subset",
     "sensitivity_analysis",
     "get_sensitivity_summary",
-    "sensitivity_analysis_set",
     "refute_irm_orthogonality",
 ]
