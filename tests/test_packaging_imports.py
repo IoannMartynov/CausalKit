@@ -8,7 +8,7 @@ def test_import_additional_subpackages():
     try:
         # Top-level subpackages that were previously missing in the package list
         import causalkit.eda.eda as eda_module
-        import causalkit.refutation.orthogonality as ref_module
+        import causalkit.refutation.score.orthogonality as ref_module
 
         # Nested subpackage inside inference should also be present
         import causalkit.inference.att as att_module

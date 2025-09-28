@@ -128,7 +128,7 @@ class IRM:
         ml_g: Any,
         ml_m: Any,
         *,
-        n_folds: int = 5,
+        n_folds: int = 4,
         n_rep: int = 1,
         score: str = "ATE",
         normalize_ipw: bool = False,
@@ -162,6 +162,7 @@ class IRM:
         self.pval_: Optional[np.ndarray] = None
         self.confint_: Optional[np.ndarray] = None
         self.summary_: Optional[pd.DataFrame] = None
+        self.folds_: Optional[np.ndarray] = None
         # Sensitivity & data cache
         self._y: Optional[np.ndarray] = None
         self._d: Optional[np.ndarray] = None
@@ -259,9 +260,11 @@ class IRM:
         g0_hat = np.full(n, np.nan, dtype=float)
         g1_hat = np.full(n, np.nan, dtype=float)
         m_hat = np.full(n, np.nan, dtype=float)
+        folds = np.full(n, -1, dtype=int)
 
         skf = StratifiedKFold(n_splits=self.n_folds, shuffle=True, random_state=self.random_state)
-        for train_idx, test_idx in skf.split(X, d):
+        for i, (train_idx, test_idx) in enumerate(skf.split(X, d)):
+            folds[test_idx] = i
             # Outcome models trained on respective treatment groups in the train fold
             X_tr, y_tr, d_tr = X[train_idx], y[train_idx], d[train_idx]
             X_te = X[test_idx]
@@ -315,6 +318,7 @@ class IRM:
         if np.any(np.isnan(m_hat)) or np.any(np.isnan(g0_hat)) or np.any(np.isnan(g1_hat)):
             raise RuntimeError("Cross-fitted predictions contain NaN values.")
         m_hat = _clip_propensity(m_hat, self.trimming_threshold)
+        self.folds_ = folds
 
         # Score elements
         u0 = y - g0_hat

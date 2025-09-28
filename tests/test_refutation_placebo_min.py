@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from causalkit.data import CausalData
-from causalkit.refutation.placebo import (
+from causalkit.refutation.score.placebo import (
     refute_placebo_outcome,
     refute_placebo_treatment,
     refute_subset,

@@ -24,10 +24,14 @@ except Exception:
     pass
 
 from causalkit import data
-from causalkit import design
+# 'design' is optional; keep import non-fatal if missing in editable installs
+try:
+    from causalkit import design  # type: ignore
+except Exception:
+    design = None  # type: ignore
 
 __version__ = "0.1.0"
-__all__ = ["data", "design", "inference"]
+__all__ = ["data", "inference"]
 
 # Lazily import heavy optional subpackages (e.g., inference depends on optional ML libs like catboost)
 from typing import TYPE_CHECKING

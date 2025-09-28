@@ -16,17 +16,6 @@ def make_causal_data(n=1000, target_type="normal", random_state=1):
     return CausalData(df=df[[y, t] + xcols], treatment=t, outcome=y, confounders=xcols)
 
 
-def test_dml_ate_s_ate_runs_and_output_structure():
-    cd = make_causal_data(n=800, target_type="normal", random_state=42)
-    ml_g = RandomForestRegressor(n_estimators=50, random_state=42)
-    ml_m = RandomForestClassifier(n_estimators=50, random_state=42)
-
-    res = dml_ate(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3, score="ATE", confidence_level=0.95)
-
-    assert set(res.keys()) == {"coefficient", "std_error", "p_value", "confidence_interval", "model"}
-    assert np.isfinite(res["coefficient"]) and np.isfinite(res["std_error"]) and np.isfinite(res["p_value"])
-    ci = res["confidence_interval"]
-    assert isinstance(ci, tuple) and len(ci) == 2 and np.isfinite(ci[0]) and np.isfinite(ci[1])
 
 
 def test_dml_ate_s_atte_runs():

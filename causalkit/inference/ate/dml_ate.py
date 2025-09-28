@@ -29,6 +29,7 @@ def dml_ate(
     trimming_rule: str = "truncate",
     trimming_threshold: float = 1e-2,
     random_state: Optional[int] = None,
+    store_diagnostic_data: bool = True,
 ) -> Dict[str, Any]:
     """
     Estimate average treatment effects using the internal IRM estimator.
@@ -63,6 +64,11 @@ def dml_ate(
     -------
     Dict[str, Any]
         Keys: coefficient, std_error, p_value, confidence_interval, model
+    
+    Notes
+    -----
+    By default, this function stores a comprehensive 'diagnostic_data' dictionary in the result.
+    You can disable this by setting store_diagnostic_data=False.
     """
     # Basic validations mirroring dml_ate
     if data.treatment is None:
@@ -104,18 +110,8 @@ def dml_ate(
             raise ValueError(f"Treatment must be binary 0/1 or boolean; found {uniq}.")
 
     # Fit IRM
-    irm = IRM(
-        data,
-        ml_g=ml_g,
-        ml_m=ml_m,
-        n_folds=n_folds,
-        n_rep=n_rep,
-        score=score,
-        normalize_ipw=normalize_ipw,
-        trimming_rule=trimming_rule,
-        trimming_threshold=trimming_threshold,
-        random_state=random_state,
-    )
+    irm = IRM(data, ml_g=ml_g, ml_m=ml_m, n_folds=n_folds, n_rep=n_rep, score=score, normalize_ipw=normalize_ipw,
+              trimming_rule=trimming_rule, trimming_threshold=trimming_threshold, random_state=random_state)
 
     # Suppress any benign warnings during fit similar to dml_ate
     with warnings.catch_warnings():
@@ -135,10 +131,37 @@ def dml_ate(
         ci_lower = float(arr[0, 0])
         ci_upper = float(arr[0, 1])
 
+    # Collect diagnostic data for overlap/weight and score checks (optional)
+    diagnostic_data = None
+    if store_diagnostic_data:
+        df_diag = data.get_df()
+        y_diag = df_diag[data.target.name].to_numpy(dtype=float)
+        d_diag = df_diag[data.treatment.name].to_numpy().astype(int)
+        x_diag = df_diag[data.confounders].to_numpy(dtype=float)
+        p1_diag = float(np.mean(d_diag))
+
+        diagnostic_data = {
+            "m_hat": np.asarray(irm.m_hat_, dtype=float),
+            "g0_hat": np.asarray(irm.g0_hat_, dtype=float),
+            "g1_hat": np.asarray(irm.g1_hat_, dtype=float),
+            "y": y_diag,
+            "d": d_diag,
+            "x": x_diag,
+            "psi": np.asarray(irm.psi_, dtype=float),
+            "psi_a": np.asarray(irm.psi_a_, dtype=float),
+            "psi_b": np.asarray(irm.psi_b_, dtype=float),
+            "folds": np.asarray(getattr(irm, "folds_", None), dtype=int) if getattr(irm, "folds_", None) is not None else None,
+            "score": str(score).upper(),
+            "normalize_ipw": bool(normalize_ipw),
+            "trimming_threshold": float(trimming_threshold),
+            "p1": p1_diag,
+        }
+
     return {
         "coefficient": float(irm.coef[0]),
         "std_error": float(irm.se[0]),
         "p_value": float(irm.pvalues[0]),
         "confidence_interval": (ci_lower, ci_upper),
         "model": irm,
+        "diagnostic_data": diagnostic_data,
     }

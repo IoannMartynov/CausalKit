@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-import pytest
 
-from causalkit.refutation.orthogonality import (
+from causalkit.refutation.score.orthogonality import (
     aipw_score_att,
     orthogonality_derivatives_att,
     refute_irm_orthogonality,

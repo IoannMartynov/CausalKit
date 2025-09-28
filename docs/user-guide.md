@@ -11,4 +11,5 @@ user-guide/causaldata
 user-guide/eda
 user-guide/inference
 user-guide/refutation
+user-guide/math_eda_irm_refutation
 ```

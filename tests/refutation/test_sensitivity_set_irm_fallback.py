@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from causalkit.data.causaldata import CausalData
 from causalkit.data.generators import generate_rct
 from causalkit.inference.ate import dml_ate
-from causalkit.refutation.sensitivity import sensitivity_analysis_set
+from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis_set
 
 
 def _make_cd(n=800, seed=123):
