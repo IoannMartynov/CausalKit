@@ -12,6 +12,10 @@ from .overlap_validation import (
     ess_per_group,
     att_weight_sum_identity,
 )
+from .propensity_calibration import (
+    calibration_report_m,
+    ece_binary,
+)
 
 __all__ = [
     "DEFAULT_THRESHOLDS",
@@ -23,4 +27,6 @@ __all__ = [
     "auc_for_m",
     "ess_per_group",
     "att_weight_sum_identity",
+    "calibration_report_m",
+    "ece_binary",
 ]

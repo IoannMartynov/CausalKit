@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 
 from causalkit.data.causaldata import CausalData
 from causalkit.inference.estimators.irm import IRM
-from causalkit.refutation.score.orthogonality import (
+from causalkit.refutation.score.score_validation import (
     extract_nuisances,
     aipw_score_atte,
     aipw_score_att,
