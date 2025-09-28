@@ -394,6 +394,40 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_sensitivity_bias</span><span class="p">(</span><span class="n">sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+                               <span class="n">nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+                               <span class="n">psi_sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                               <span class="n">psi_nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute (max) sensitivity bias and its IF, following DoubleML.</span>
+<span class="sd">    max_bias = sqrt(max(sigma2 * nu2, 0)).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sigma2_f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sigma2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(()))</span>
+    <span class="n">nu2_f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nu2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(()))</span>
+    <span class="n">max_bias</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sigma2_f</span> <span class="o">*</span> <span class="n">nu2_f</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_bias</span> <span class="k">if</span> <span class="n">max_bias</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">psi_max_bias</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma2_f</span> <span class="o">*</span> <span class="n">psi_nu2</span> <span class="o">+</span> <span class="n">nu2_f</span> <span class="o">*</span> <span class="n">psi_sigma2</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="k">return</span> <span class="n">max_bias</span><span class="p">,</span> <span class="n">psi_max_bias</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_combine_nu2</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine sensitivity levers into nu2 via per-unit quadratic form.</span>
+
+<span class="sd">    nu2_i = (sqrt(2*m_alpha_i))^2 * cf_y + (|rr_i|)^2 * cf_d + 2*rho*sqrt(cf_y*cf_d)*|rr_i|*sqrt(2*m_alpha_i)</span>
+<span class="sd">    Returns (nu2, psi_nu2) with psi_nu2 centered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cf_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_y</span><span class="p">)</span>
+    <span class="n">cf_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_d</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">cf_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cf_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cf_y and cf_d must be &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_d</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cf_y</span> <span class="o">*</span> <span class="n">cf_d</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="n">nu2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">base</span><span class="p">))</span>
+    <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">base</span> <span class="o">-</span> <span class="n">nu2</span>
+    <span class="k">return</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_nu2</span>
+
+
 <div class="viewcode-block" id="sensitivity_analysis">
 <a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sensitivity_analysis</span><span class="p">(</span>
@@ -440,6 +474,13 @@ document.write(`
     <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must contain a &#39;model&#39; key with a fitted IRM object&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Validate sensitivity inputs</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;level must be in (0,1).&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cf_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cf_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cf_y and cf_d must be &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
     <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
 
     <span class="c1"># Backward-compatibility: if model provides a sensitivity_analysis producing</span>
@@ -483,7 +524,7 @@ document.write(`
         <span class="c1"># Preserve legacy behavior expected by some tests: when no DoubleML</span>
         <span class="c1"># sensitivity is available and not enough IRM stats are provided,</span>
         <span class="c1"># raise a TypeError similar to the previous implementation.</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The model must be a DoubleML object that supports sensitivity analysis&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Insufficient stats for IRM fallback and no DoubleML support; provide coefficient, std_error, and confidence_interval or fit with IRM.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Build a simple sensitivity-like summary table</span>
     <span class="n">ci_lower</span><span class="p">,</span> <span class="n">ci_upper</span> <span class="o">=</span> <span class="n">ci</span>
@@ -499,11 +540,33 @@ document.write(`
     <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;CI lower&#39;</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta lower&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta upper&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;CI upper&#39;</span><span class="si">:</span><span class="s2">&gt;13</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
-    <span class="c1"># For a simple display, use theta +/- z*se as theta bounds at the same level</span>
+    <span class="c1"># For a sensitivity-aware display, compute bias-based theta bounds using principled combination</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-    <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
-    <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+    <span class="n">theta_hat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_sensitivity_element_est&quot;</span><span class="p">):</span>
+            <span class="n">elems</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_sensitivity_element_est</span><span class="p">()</span>
+            <span class="n">m_alpha</span> <span class="o">=</span> <span class="n">elems</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;m_alpha&quot;</span><span class="p">)</span>
+            <span class="n">rr</span> <span class="o">=</span> <span class="n">elems</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;riesz_rep&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m_alpha</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">rr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Model lacks m_alpha/riesz_rep; falling back to sampling CI for bounds.&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+                <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+                <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Use local helpers to avoid fragile imports</span>
+                <span class="n">nu2_c</span><span class="p">,</span> <span class="n">psi_nu2_c</span> <span class="o">=</span> <span class="n">_combine_nu2</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">cf_y</span><span class="p">,</span> <span class="n">cf_d</span><span class="p">,</span> <span class="n">rho</span><span class="p">)</span>
+                <span class="n">max_bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_compute_sensitivity_bias</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;sigma2&quot;</span><span class="p">],</span> <span class="n">nu2_c</span><span class="p">,</span> <span class="n">elems</span><span class="p">[</span><span class="s2">&quot;psi_sigma2&quot;</span><span class="p">],</span> <span class="n">psi_nu2_c</span><span class="p">)</span>
+                <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">-</span> <span class="n">max_bias</span>
+                <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">+</span> <span class="n">max_bias</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Fallback: use sampling bound (does not reflect confounding)</span>
+            <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+            <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+        <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta_hat</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+
     <span class="n">row_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">row_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">row_name</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
         <span class="n">row_name</span> <span class="o">=</span> <span class="n">row_name</span><span class="o">.</span><span class="n">name</span>
@@ -511,25 +574,187 @@ document.write(`
         <span class="n">row_name</span> <span class="o">=</span> <span class="s1">&#39;theta&#39;</span>
 
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_lower</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_lower</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_upper</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_upper</span><span class="si">:</span><span class="s2">13.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_lower</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_lower</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_hat</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_upper</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_upper</span><span class="si">:</span><span class="s2">13.6f</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Robustness Values ------------------&quot;</span><span class="p">)</span>
-    <span class="n">rob_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;H_0&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RV (%)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RVa (%)&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Robustness (SNR proxy) -------------&quot;</span><span class="p">)</span>
+    <span class="n">rob_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;H_0&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;SNR proxy (%)&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;adj (%)&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_header</span><span class="p">)</span>
 
     <span class="c1"># Provide simple signal-to-noise proxy as a placeholder robustness value</span>
     <span class="n">snr</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">se</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span>
     <span class="n">rv</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="mf">100.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">snr</span><span class="p">))))</span>
     <span class="n">rva</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rv</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span>
-    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rv</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rva</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rv</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rva</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">summary</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_lines</span><span class="p">)</span>
 
     <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;sensitivity_summary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span>
     <span class="k">return</span> <span class="n">summary</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_unconfoundedness_balance</span><span class="p">(</span>
+    <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">normalize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assess covariate balance under the unconfoundedness assumption by computing</span>
+<span class="sd">    standardized mean differences (SMD) both before weighting (raw groups) and</span>
+<span class="sd">    after weighting using the IPW / ATT weights implied by the DML/IRM estimation.</span>
+
+<span class="sd">    This function expects the result dictionary returned by dml_ate() or dml_att(),</span>
+<span class="sd">    which includes a fitted IRM model and a &#39;diagnostic_data&#39; entry with the</span>
+<span class="sd">    necessary arrays.</span>
+
+<span class="sd">    We compute, for each confounder X_j:</span>
+<span class="sd">      - For ATE (weighted): w1 = D/m_hat, w0 = (1-D)/(1-m_hat).</span>
+<span class="sd">      - For ATTE (weighted): Treated weight = 1 for D=1; Control weight w0 = m_hat/(1-m_hat) for D=0.</span>
+<span class="sd">      - If estimation used normalized IPW (normalize_ipw=True), we scale the corresponding</span>
+<span class="sd">        weights by their sample mean (as done in IRM) before computing balance.</span>
+
+<span class="sd">    The SMD is defined as |mu1 - mu0| / s_pooled, where mu_g are (weighted) means in the</span>
+<span class="sd">    (pseudo-)populations and s_pooled is the square root of the average of the (weighted)</span>
+<span class="sd">    variances in the two groups.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    effect_estimation : Dict[str, Any]</span>
+<span class="sd">        Output dict from dml_ate() or dml_att(). Must contain &#39;model&#39; and &#39;diagnostic_data&#39;.</span>
+<span class="sd">    threshold : float, default 0.1</span>
+<span class="sd">        Threshold for SMD; values below indicate acceptable balance for most use cases.</span>
+<span class="sd">    normalize : Optional[bool]</span>
+<span class="sd">        Whether to use normalized weights. If None, inferred from effect_estimation[&#39;diagnostic_data&#39;][&#39;normalize_ipw&#39;].</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Dict[str, Any]</span>
+<span class="sd">        A dictionary with keys:</span>
+<span class="sd">        - &#39;smd&#39;: pd.Series of weighted SMD values indexed by confounder names</span>
+<span class="sd">        - &#39;smd_unweighted&#39;: pd.Series of SMD values computed before weighting (raw groups)</span>
+<span class="sd">        - &#39;score&#39;: &#39;ATE&#39; or &#39;ATTE&#39;</span>
+<span class="sd">        - &#39;normalized&#39;: bool used for weighting</span>
+<span class="sd">        - &#39;threshold&#39;: float</span>
+<span class="sd">        - &#39;pass&#39;: bool indicating whether all weighted SMDs are below threshold</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must be a dictionary produced by dml_ate() or dml_att()&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span> <span class="ow">or</span> <span class="s1">&#39;diagnostic_data&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must contain &#39;model&#39; and &#39;diagnostic_data&#39; (from dml_ate/dml_att)&quot;</span><span class="p">)</span>
+
+    <span class="n">diag</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;diagnostic_data&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diag</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;diagnostic_data&#39; must be a dict&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Required arrays</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">m_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="s1">&#39;m_hat&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">diag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">used_norm</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">diag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;normalize_ipw&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span> <span class="k">if</span> <span class="n">normalize</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="n">normalize</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;diagnostic_data missing required fields: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">score</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;ATE&quot;</span><span class="p">,</span> <span class="s2">&quot;ATTE&quot;</span><span class="p">}:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;diagnostic_data[&#39;score&#39;] must be &#39;ATE&#39; or &#39;ATTE&#39;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;diagnostic_data[&#39;x&#39;] must be a 2D array of shape (n, p)&quot;</span><span class="p">)</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="n">m_hat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span> <span class="ow">or</span> <span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of m_hat and d must match number of rows in x&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Obtain confounder names if available</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;confounders&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">names</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x</span><span class="si">{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x</span><span class="si">{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+
+    <span class="c1"># Build weights per group according to estimand</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-12</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">m_hat</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">score</span> <span class="o">==</span> <span class="s2">&quot;ATE&quot;</span><span class="p">:</span>
+        <span class="n">w1</span> <span class="o">=</span> <span class="n">d</span> <span class="o">/</span> <span class="n">m</span>
+        <span class="n">w0</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">used_norm</span><span class="p">:</span>
+            <span class="n">w1_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">w1</span><span class="p">))</span>
+            <span class="n">w0_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">w0</span><span class="p">))</span>
+            <span class="n">w1</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">/</span> <span class="p">(</span><span class="n">w1_mean</span> <span class="k">if</span> <span class="n">w1_mean</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">w0</span> <span class="o">=</span> <span class="n">w0</span> <span class="o">/</span> <span class="p">(</span><span class="n">w0_mean</span> <span class="k">if</span> <span class="n">w0_mean</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># ATTE</span>
+        <span class="n">w1</span> <span class="o">=</span> <span class="n">d</span>  <span class="c1"># treated weight = 1 for treated, 0 otherwise</span>
+        <span class="n">w0</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">m</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">used_norm</span><span class="p">:</span>
+            <span class="n">w1_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">w1</span><span class="p">))</span>
+            <span class="n">w0_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">w0</span><span class="p">))</span>
+            <span class="n">w1</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">/</span> <span class="p">(</span><span class="n">w1_mean</span> <span class="k">if</span> <span class="n">w1_mean</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">w0</span> <span class="o">=</span> <span class="n">w0</span> <span class="o">/</span> <span class="p">(</span><span class="n">w0_mean</span> <span class="k">if</span> <span class="n">w0_mean</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="c1"># Guard against no-mass groups</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w1</span><span class="p">))</span>
+    <span class="n">s0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">s1</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">s0</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Degenerate weights: zero total mass in a pseudo-population&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Weighted means and variances (population-style)</span>
+    <span class="n">WX1</span> <span class="o">=</span> <span class="p">(</span><span class="n">w1</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">WX0</span> <span class="o">=</span> <span class="p">(</span><span class="n">w0</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">mu1</span> <span class="o">=</span> <span class="n">WX1</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">s1</span>
+    <span class="n">mu0</span> <span class="o">=</span> <span class="n">WX0</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">s0</span>
+
+    <span class="c1"># Weighted variance: E[(X-mu)^2] under weight distribution</span>
+    <span class="n">var1</span> <span class="o">=</span> <span class="p">(</span><span class="n">w1</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">mu1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">s1</span>
+    <span class="n">var0</span> <span class="o">=</span> <span class="p">(</span><span class="n">w0</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">mu0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">s0</span>
+    <span class="n">sd1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">sd0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">var0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">s_pooled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd0</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># SMD with zero-guard (weighted)</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s_pooled</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_pooled</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">smd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mu1</span> <span class="o">-</span> <span class="n">mu0</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="n">smd_s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">smd</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># --- Unweighted (pre-weighting) SMD using raw treated/control groups ---</span>
+    <span class="n">mask1</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">mask0</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask1</span>
+    <span class="c1"># If any group is empty (shouldn&#39;t be in typical settings), guard with nan SMDs</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask1</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask0</span><span class="p">):</span>
+        <span class="n">smd_unw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">X1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">mask1</span><span class="p">]</span>
+        <span class="n">X0</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">mask0</span><span class="p">]</span>
+        <span class="n">mu1_u</span> <span class="o">=</span> <span class="n">X1</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">mu0_u</span> <span class="o">=</span> <span class="n">X0</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># population-style std to mirror weighted computation</span>
+        <span class="n">sd1_u</span> <span class="o">=</span> <span class="n">X1</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">sd0_u</span> <span class="o">=</span> <span class="n">X0</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">s_pool_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">sd1_u</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sd0_u</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">denom_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">s_pool_u</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s_pool_u</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">smd_unw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mu1_u</span> <span class="o">-</span> <span class="n">mu0_u</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom_u</span>
+    <span class="n">smd_unweighted_s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">smd_unw</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">names</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1"># Extra quick‑report fields</span>
+    <span class="n">smd_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">smd</span><span class="p">))</span> <span class="k">if</span> <span class="n">smd</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span>
+    <span class="n">worst_features</span> <span class="o">=</span> <span class="n">smd_s</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;smd&#39;</span><span class="p">:</span> <span class="n">smd_s</span><span class="p">,</span>
+        <span class="s1">&#39;smd_unweighted&#39;</span><span class="p">:</span> <span class="n">smd_unweighted_s</span><span class="p">,</span>
+        <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">score</span><span class="p">,</span>
+        <span class="s1">&#39;normalized&#39;</span><span class="p">:</span> <span class="n">used_norm</span><span class="p">,</span>
+        <span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">threshold</span><span class="p">),</span>
+        <span class="s1">&#39;pass&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">smd</span><span class="p">))</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">smd</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">threshold</span><span class="p">)),</span>
+        <span class="s1">&#39;smd_max&#39;</span><span class="p">:</span> <span class="n">smd_max</span><span class="p">,</span>
+        <span class="s1">&#39;worst_features&#39;</span><span class="p">:</span> <span class="n">worst_features</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">out</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_sensitivity_summary</span><span class="p">(</span>
@@ -578,54 +803,48 @@ document.write(`
     
     <span class="c1"># Extract values from summary DataFrame</span>
     <span class="c1"># The summary should contain bounds and confidence intervals</span>
+    <span class="n">lower_lbl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
+    <span class="n">upper_lbl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mf">0.5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="c1"># Format the row data - adjust column names based on actual DoubleML output</span>
         <span class="n">row_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">idx</span>
-        
-        <span class="c1"># Try to extract the relevant columns from the summary</span>
-        <span class="c1"># DoubleML sensitivity summary typically contains these columns</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">ci_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;2.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower_bound&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;estimate&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper_bound&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            <span class="n">ci_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;97.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            
-            <span class="c1"># Format the row</span>
+            <span class="n">ci_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lower_lbl</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;2.5 %&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;2.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower_bound&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;estimate&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coef&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))</span>
+            <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper_bound&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">ci_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">upper_lbl</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;97.5 %&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;97.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
             <span class="n">row_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_lower</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_lower</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_upper</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_upper</span><span class="si">:</span><span class="s2">13.6f</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_str</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
             <span class="c1"># Fallback formatting if exact column names differ</span>
-            <span class="n">row_values</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2">&quot;</span> 
-                         <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">values</span><span class="p">[:</span><span class="mi">5</span><span class="p">]]</span>
+            <span class="n">row_values</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2">&quot;</span>
+                          <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">values</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]]</span>
             <span class="n">row_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row_values</span><span class="p">)</span>
             <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_str</span><span class="p">)</span>
-    
+
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-    
-    <span class="c1"># Robustness Values section</span>
-    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Robustness Values ------------------&quot;</span><span class="p">)</span>
-    
+
+    <span class="c1"># Robustness SNR proxy section</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Robustness (SNR proxy) -------------&quot;</span><span class="p">)</span>
+
     <span class="c1"># Create header for robustness values</span>
-    <span class="n">rob_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;H_0&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RV (%)&#39;</span><span class="si">:</span><span class="s2">&gt;9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;RVa (%)&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">rob_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;H_0&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;SNR proxy (%)&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;adj (%)&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_header</span><span class="p">)</span>
-    
-    <span class="c1"># Add robustness values - these might be in a different part of the summary</span>
+
+    <span class="c1"># Add robustness values if present, else placeholders</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="n">row_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">idx</span>
-        
         <span class="k">try</span><span class="p">:</span>
             <span class="n">h_0</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;H_0&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;null_hypothesis&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
             <span class="n">rv</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RV&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;robustness_value&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
             <span class="n">rva</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RVa&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;robustness_value_adjusted&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-            
-            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">h_0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rv</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rva</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">h_0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rv</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rva</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_row</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-            <span class="c1"># Fallback - use some default values if specific columns don&#39;t exist</span>
-            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2">   0.0  6.240295  4.339269&quot;</span>
+            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_row</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_lines</span><span class="p">)</span>
 
 
@@ -653,240 +872,181 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="sensitivity_analysis_set">
-<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.sensitivity_analysis_set.html#causalkit.refutation.sensitivity_analysis_set">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">sensitivity_analysis_set</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sensitivity_benchmark</span><span class="p">(</span>
     <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">benchmarking_set</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
-    <span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
-    <span class="n">null_hypothesis</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="n">benchmarking_set</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">fit_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Benchmark a set of observed confounders to assess robustness, mirroring</span>
-<span class="sd">    DoubleML&#39;s `sensitivity_benchmark` for DoubleMLIRM.</span>
+<span class="sd">    Computes a benchmark for a given set of features by refitting a short IRM model</span>
+<span class="sd">    (excluding the provided features) and contrasting it with the original (long) model.</span>
+<span class="sd">    Returns a DataFrame containing cf_y, cf_d, rho and the change in estimates.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    effect_estimation : Dict[str, Any]</span>
-<span class="sd">        A dictionary containing the effect estimation results with a fitted DoubleML model under the &#39;model&#39; key.</span>
-<span class="sd">    benchmarking_set : Union[str, List[str], List[List[str]]]</span>
-<span class="sd">        One or multiple names of observed confounders to benchmark (e.g., [&quot;inc&quot;], [&quot;pira&quot;], [&quot;twoearn&quot;]).</span>
-<span class="sd">        Accepts:</span>
-<span class="sd">        - a single string (benchmarks that single confounder),</span>
-<span class="sd">        - a list of strings (interpreted as multiple single-variable benchmarks, each run separately), or</span>
-<span class="sd">        - a list of lists/tuples of strings to specify explicit benchmarking groups (each inner list is run once together).</span>
-<span class="sd">    level : float, default 0.95</span>
-<span class="sd">        Confidence level used by the benchmarking procedure.</span>
-<span class="sd">    null_hypothesis : float, default 0.0</span>
-<span class="sd">        The null hypothesis value for the target parameter.</span>
-<span class="sd">    **kwargs : Any</span>
-<span class="sd">        Additional keyword arguments passed through to the underlying DoubleML `sensitivity_benchmark` method.</span>
+<span class="sd">    effect_estimation : dict</span>
+<span class="sd">        A dictionary containing the fitted IRM model under the key &#39;model&#39;.</span>
+<span class="sd">    benchmarking_set : list[str]</span>
+<span class="sd">        List of confounder names to be used for benchmarking (to be removed in the short model).</span>
+<span class="sd">    fit_args : dict, optional</span>
+<span class="sd">        Additional keyword arguments for the IRM.fit() method of the short model.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Any</span>
-<span class="sd">        - If a single confounder/group is provided, returns the object from a single call to</span>
-<span class="sd">          `model.sensitivity_benchmark(benchmarking_set=[...])`.</span>
-<span class="sd">        - If multiple confounders/groups are provided, returns a dict mapping each confounder (str)</span>
-<span class="sd">          or group (tuple[str, ...]) to its corresponding result object.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        If inputs have invalid types or if the model does not support sensitivity benchmarking.</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If required inputs are missing or invalid (e.g., empty benchmarking_set, invalid level).</span>
-<span class="sd">    RuntimeError</span>
-<span class="sd">        If the underlying `sensitivity_benchmark` call fails.</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        A one-row DataFrame indexed by the treatment name with columns:</span>
+<span class="sd">        - cf_y, cf_d, rho: residual-based benchmarking strengths</span>
+<span class="sd">        - theta_long, theta_short, delta: effect estimates and their change (long - short)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Validate inputs</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must be a dictionary&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must contain a &#39;model&#39; key with a fitted DoubleML object&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;level must be between 0 and 1 (exclusive)&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Normalize/validate benchmarking_set into a list of groups (each group is a list[str])</span>
-    <span class="n">groups</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">groups</span> <span class="o">=</span> <span class="p">[[</span><span class="n">benchmarking_set</span><span class="p">]]</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;benchmarking_set must not be empty&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">):</span>
-            <span class="c1"># Interpret list[str] as multiple single-variable benchmarks</span>
-            <span class="n">groups</span> <span class="o">=</span> <span class="p">[[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">]</span>  <span class="c1"># one call per confounder</span>
-        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">):</span>
-            <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">:</span>
-                <span class="n">subset_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Each benchmarking subset must not be empty&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">subset_list</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Each benchmarking subset must contain only strings&quot;</span><span class="p">)</span>
-                <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_list</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;benchmarking_set must be a string, a list of strings, or a list of lists of strings&quot;</span>
-            <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;benchmarking_set must be a string, a list of strings, or a list of lists of strings&quot;</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must be a dict containing a fitted IRM under key &#39;model&#39;.&quot;</span><span class="p">)</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
 
-    <span class="c1"># If the model exposes DoubleML-like sensitivity_benchmark, delegate to it (keeps old behavior)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;sensitivity_benchmark&#39;</span><span class="p">):</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+    <span class="c1"># Validate model type by attribute presence (duck-typing IRM)</span>
+    <span class="n">required_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;coef_&#39;</span><span class="p">,</span> <span class="s1">&#39;se_&#39;</span><span class="p">,</span> <span class="s1">&#39;_sensitivity_element_est&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">required_attrs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Sensitivity benchmarking requires a fitted IRM model with sensitivity elements.&quot;</span><span class="p">)</span>
 
-        <span class="k">def</span><span class="w"> </span><span class="nf">_call_single</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Call model.sensitivity_benchmark for a single group with signature adaptation.&quot;&quot;&quot;</span>
-            <span class="n">sb</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;sensitivity_benchmark&#39;</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">sb</span><span class="p">)</span>
-                <span class="n">params</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span>
-                <span class="n">accepts_var_kw</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-                <span class="n">call_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="c1"># benchmarking_set</span>
-                <span class="k">if</span> <span class="s1">&#39;benchmarking_set&#39;</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">or</span> <span class="n">accepts_var_kw</span><span class="p">:</span>
-                    <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;benchmarking_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span>
-
-                <span class="c1"># level vs alpha compatibility</span>
-                <span class="k">if</span> <span class="n">accepts_var_kw</span><span class="p">:</span>
-                    <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span>
-                    <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;null_hypothesis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">null_hypothesis</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s1">&#39;level&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                        <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span>
-                    <span class="k">elif</span> <span class="s1">&#39;alpha&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                        <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span>
-                    <span class="k">if</span> <span class="s1">&#39;null_hypothesis&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                        <span class="n">call_kwargs</span><span class="p">[</span><span class="s1">&#39;null_hypothesis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">null_hypothesis</span>
-
-                <span class="c1"># Extra kwargs</span>
-                <span class="k">if</span> <span class="n">accepts_var_kw</span><span class="p">:</span>
-                    <span class="n">call_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-                            <span class="n">call_kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-
-                <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
-                        <span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
-                        <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
-                        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*force_all_finite.*ensure_all_finite.*&quot;</span><span class="p">,</span>
-                    <span class="p">)</span>
-                    <span class="k">return</span> <span class="n">sb</span><span class="p">(</span><span class="o">**</span><span class="n">call_kwargs</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="c1"># Fallback minimal call</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
-                            <span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
-                            <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
-                            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*force_all_finite.*ensure_all_finite.*&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
-                        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">sensitivity_benchmark</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="o">=</span><span class="n">group</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to perform sensitivity benchmarking: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Run for each group</span>
-        <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_call_single</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
-
-        <span class="c1"># If only one group, return the single result directly for backward compatibility</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="c1"># Otherwise, return a dict mapping identifier -&gt; result</span>
-        <span class="n">out</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">groups</span><span class="p">,</span> <span class="n">results</span><span class="p">):</span>
-            <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-            <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
-        <span class="k">return</span> <span class="n">out</span>
-
-    <span class="c1"># -------- IRM fallback (no DoubleML object) --------</span>
-    <span class="c1"># Duck-typed integration for models produced by dml_ate()/dml_att() using internal IRM</span>
+    <span class="c1"># Extract current confounders</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Extract point estimate and CI from the IRM-like model</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;coef&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">se</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">se</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;se&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">se_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="c1"># Use model.confint if available to get CI at requested level</span>
-        <span class="n">ci_df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">confint</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;confint&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-            <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]);</span> <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-            <span class="n">ci_lower</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
-            <span class="n">ci_upper</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
+        <span class="n">x_list_long</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;confounders&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to access model data confounders: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Pull data to compute simple strength proxies per benchmarking group</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="n">t_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;t&#39;</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">t_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="c1"># input checks</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;benchmarking_set must be a list. </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;benchmarking_set must not be empty.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">x_list_long</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;benchmarking_set must be a subset of features </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">x_list_long</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">fit_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fit_args</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fit_args must be a dict. </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fit_args</span><span class="p">)</span><span class="si">}</span><span class="s2"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">fit_args</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span><span class="p">)</span>
 
-        <span class="k">def</span><span class="w"> </span><span class="nf">_group_strength</span><span class="p">(</span><span class="n">cols</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="mf">1.0</span>
-            <span class="n">vals</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="c1"># Guard against zero variance</span>
-                <span class="n">sx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-                <span class="n">sd</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">sx</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">sd</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
-                    <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">r</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-                        <span class="n">r</span> <span class="o">=</span> <span class="mf">0.0</span>
-                    <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="mf">1.0</span>
-            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vals</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="c1"># Build short data excluding benchmarking features</span>
+    <span class="n">x_list_short</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_list_long</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_list_short</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;After removing benchmarking_set there are no confounders left to fit the short model.&quot;</span><span class="p">)</span>
 
-        <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">_make_df</span><span class="p">(</span><span class="n">strength</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-            <span class="c1"># Scale theta-bounds by strength to reflect stronger association with D</span>
-            <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">strength</span> <span class="o">*</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
-            <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">strength</span> <span class="o">*</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="n">t_name</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-                <span class="s1">&#39;CI lower&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ci_lower</span><span class="p">],</span>
-                <span class="s1">&#39;theta lower&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_lower</span><span class="p">],</span>
-                <span class="s1">&#39;theta&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta</span><span class="p">],</span>
-                <span class="s1">&#39;theta upper&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_upper</span><span class="p">],</span>
-                <span class="s1">&#39;CI upper&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ci_upper</span><span class="p">],</span>
-            <span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+    <span class="c1"># Create a shallow copy of the underlying DataFrame and build a new CausalData</span>
+    <span class="n">df_long</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="n">treatment_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">target_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span>
 
-        <span class="n">results_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-            <span class="n">strength</span> <span class="o">=</span> <span class="n">_group_strength</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-            <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-            <span class="n">results_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_make_df</span><span class="p">(</span><span class="n">strength</span><span class="p">)</span>
+    <span class="c1"># Prefer in-scope names; fallback to import to avoid fragile self-import patterns</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">CausalData</span>  <span class="c1"># type: ignore[name-defined]</span>
+        <span class="n">IRM</span>  <span class="c1"># type: ignore[name-defined]</span>
+    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.estimators.irm</span><span class="w"> </span><span class="kn">import</span> <span class="n">IRM</span>
 
-        <span class="c1"># Return single object or dict according to input</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">results_map</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">results_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="k">return</span> <span class="n">results_map</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="c1"># Keep legacy error message if neither DoubleML nor IRM path works</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The model must be a DoubleML object that supports sensitivity benchmarking via &#39;sensitivity_benchmark&#39;&quot;</span><span class="p">)</span></div>
+    <span class="n">data_short</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_long</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="n">treatment_name</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">target_name</span><span class="p">,</span> <span class="n">confounders</span><span class="o">=</span><span class="n">x_list_short</span><span class="p">)</span>
 
+    <span class="c1"># Clone/construct a short IRM with same hyperparameters/learners</span>
+    <span class="n">irm_short</span> <span class="o">=</span> <span class="n">IRM</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">data_short</span><span class="p">,</span>
+        <span class="n">ml_g</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">ml_g</span><span class="p">,</span>
+        <span class="n">ml_m</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">ml_m</span><span class="p">,</span>
+        <span class="n">n_folds</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;n_folds&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="n">n_rep</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;n_rep&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">score</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;ATE&#39;</span><span class="p">),</span>
+        <span class="n">normalize_ipw</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;normalize_ipw&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="n">trimming_rule</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;trimming_rule&#39;</span><span class="p">,</span> <span class="s1">&#39;truncate&#39;</span><span class="p">),</span>
+        <span class="n">trimming_threshold</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;trimming_threshold&#39;</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">),</span>
+        <span class="n">weights</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Fit short model</span>
+    <span class="k">if</span> <span class="n">fit_args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">irm_short</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">irm_short</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+
+    <span class="c1"># Long model stats</span>
+    <span class="n">theta_long</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Short model stats</span>
+    <span class="n">theta_short</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">irm_short</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Compute residual-based strengths on the long model</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">treatment_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">m_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">m_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">g0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g0_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g1_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">r_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">g1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">g0</span><span class="p">)</span>
+    <span class="n">r_d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">-</span> <span class="n">m_hat</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_center</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ols_r2_and_fit</span><span class="p">(</span><span class="n">yv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stable OLS on centered &amp; standardized vars for R^2 and fitted component.&quot;&quot;&quot;</span>
+        <span class="c1"># Center the response</span>
+        <span class="n">yv_c</span> <span class="o">=</span> <span class="n">_center</span><span class="p">(</span><span class="n">yv</span><span class="p">)</span>
+        <span class="c1"># Ensure 2D float array</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Z</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Center columns</span>
+        <span class="n">Zc</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Standardize columns and drop near-constant / non-finite ones</span>
+        <span class="n">col_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">Zc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">col_std</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">col_std</span> <span class="o">&gt;</span> <span class="mf">1e-12</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid</span><span class="p">):</span>
+            <span class="c1"># Nothing useful to project on</span>
+            <span class="n">yhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">yhat</span>
+        <span class="n">Zcs</span> <span class="o">=</span> <span class="n">Zc</span><span class="p">[:,</span> <span class="n">valid</span><span class="p">]</span> <span class="o">/</span> <span class="n">col_std</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+        <span class="c1"># Replace any non-finite values to avoid numerical issues</span>
+        <span class="n">Zcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Zcs</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">yv_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">yv_c</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="c1"># Solve least squares with small rcond for stability</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">lstsq</span>
+        <span class="n">beta</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">Zcs</span><span class="p">,</span> <span class="n">yv_c</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+        <span class="n">yhat</span> <span class="o">=</span> <span class="n">Zcs</span> <span class="o">@</span> <span class="n">beta</span>
+        <span class="c1"># Guard R^2 computation</span>
+        <span class="n">denom</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yv_c</span><span class="p">,</span> <span class="n">yv_c</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">denom</span><span class="p">)</span> <span class="ow">or</span> <span class="n">denom</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yhat</span><span class="p">,</span> <span class="n">yhat</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="ow">or</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">denom</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">r2</span><span class="p">,</span> <span class="n">yhat</span>
+
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">benchmarking_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">R2y</span><span class="p">,</span> <span class="n">yhat_u</span> <span class="o">=</span> <span class="n">_ols_r2_and_fit</span><span class="p">(</span><span class="n">r_y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+    <span class="n">R2d</span><span class="p">,</span> <span class="n">dhat_u</span> <span class="o">=</span> <span class="n">_ols_r2_and_fit</span><span class="p">(</span><span class="n">r_d</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+    <span class="n">cf_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">R2y</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-12</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">R2y</span><span class="p">))</span>
+    <span class="n">cf_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">R2d</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-12</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">R2d</span><span class="p">))</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">_center</span><span class="p">(</span><span class="n">yhat_u</span><span class="p">),</span> <span class="n">_center</span><span class="p">(</span><span class="n">dhat_u</span><span class="p">))[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">yhat_u</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dhat_u</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">theta_long</span> <span class="o">-</span> <span class="n">theta_short</span>
+
+    <span class="n">df_benchmark</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;cf_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cf_y</span><span class="p">],</span>
+            <span class="s2">&quot;cf_d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cf_d</span><span class="p">],</span>
+            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">rho</span><span class="p">],</span>
+            <span class="s2">&quot;theta_long&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_long</span><span class="p">],</span>
+            <span class="s2">&quot;theta_short&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_short</span><span class="p">],</span>
+            <span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">delta</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">treatment_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_benchmark</span>
 </pre></div>
 
                 </article>
