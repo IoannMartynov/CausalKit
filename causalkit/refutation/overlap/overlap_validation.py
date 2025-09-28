@@ -305,6 +305,8 @@ def _clipping_audit(m_hat: np.ndarray, m_clipped_from: Optional[Tuple[float, flo
 
 # ---------- main entry ----------
 
+from .propensity_calibration import calibration_report_m as _calibration_report_m
+
 def positivity_overlap_checks(
     m_hat: np.ndarray,
     D: np.ndarray,
@@ -470,6 +472,17 @@ def positivity_overlap_checks(
     else:
         flags["clip_m"] = "GREEN"
 
+    # --- Propensity calibration (merged) ---
+    try:
+        cal_report = _calibration_report_m(m_hat, D.astype(int))
+        # Merge calibration flags with clear prefixes to avoid collisions
+        cal_flags = cal_report.get("flags", {})
+        flags["calibration_ece"] = cal_flags.get("ece", "NA")
+        flags["calibration_slope"] = cal_flags.get("slope", "NA")
+        flags["calibration_intercept"] = cal_flags.get("intercept", "NA")
+    except Exception:
+        cal_report = None
+
     return dict(
         n=int(n),
         n_treated=int(n1),
@@ -485,6 +498,7 @@ def positivity_overlap_checks(
         att_weights=att_weights,
         att_ess=att_ess,
         clipping=clipping,
+        calibration=cal_report,
         flags=flags,
     )
 

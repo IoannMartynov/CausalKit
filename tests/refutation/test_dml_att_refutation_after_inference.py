@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data import CausalData
 from causalkit.inference.att import dml_att_source
-from causalkit.refutation.score.placebo import (
+from causalkit.refutation.score.score_validation import (
     refute_placebo_outcome,
     refute_placebo_treatment,
     refute_subset,

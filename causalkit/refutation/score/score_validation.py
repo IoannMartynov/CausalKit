@@ -419,51 +419,83 @@ def refute_irm_orthogonality(
     g1_trim = g1_outcomes[trim_mask]
     
     # === 1. OUT-OF-SAMPLE MOMENT CHECK ===
-    kf = KFold(n_splits=n_folds_oos, shuffle=True, random_state=42)
-    fold_thetas: List[float] = []
-    fold_indices: List[np.ndarray] = []
-    fold_nuisances: List[Tuple[np.ndarray, np.ndarray, np.ndarray]] = []
-    
-    df_full = data.get_df()
-    for train_idx, test_idx in kf.split(df_full):
-        # Create fold-specific data using public APIs
-        train_data = CausalData(
-            df=df_full.iloc[train_idx].copy(),
-            treatment=data.treatment.name,
-            outcome=data.target.name,
-            confounders=list(data.confounders) if data.confounders else None
+    # Prefer fast path using cached ψ_a, ψ_b and training folds from the fitted IRM model
+    use_fast = hasattr(dml_model, "psi_a_") and hasattr(dml_model, "psi_b_") and getattr(dml_model, "folds_", None) is not None
+    if use_fast:
+        folds_arr = np.asarray(dml_model.folds_, dtype=int)
+        K = int(folds_arr.max() + 1) if folds_arr.size > 0 else 0
+        fold_indices = [np.where(folds_arr == k)[0] for k in range(K)]
+        # Compute both fold-aggregated and strict t-stats using only ψ components
+        oos_df, oos_tstat, tstat_strict = oos_moment_check_from_psi(
+            np.asarray(dml_model.psi_a_, dtype=float),
+            np.asarray(dml_model.psi_b_, dtype=float),
+            fold_indices,
+            strict=True,
         )
-        # Fit model on training fold to get theta
-        fold_result = inference_fn(train_data, **inference_kwargs)
-        fold_thetas.append(float(fold_result['coefficient']))
-        fold_indices.append(test_idx)
-        
-        # Use full-model cross-fitted nuisances indexed by test fold (fast OOS)
-        m_fold = m_propensity[test_idx]
-        g0_fold = g0_outcomes[test_idx]
-        g1_fold = g1_outcomes[test_idx]
-        fold_nuisances.append((m_fold, g0_fold, g1_fold))
-    
-    # Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)
-    oos_df, oos_tstat = oos_moment_check_with_fold_nuisances(
-        fold_thetas, fold_indices, fold_nuisances, y, d, score_fn=score_fn
-    )
-    oos_pvalue = 2 * (1 - stats.norm.cdf(np.abs(oos_tstat)))
+        oos_pvalue = float(2 * (1 - stats.norm.cdf(abs(oos_tstat))))
+        pvalue_strict = float(2 * (1 - stats.norm.cdf(abs(tstat_strict)))) if tstat_strict is not None else float("nan")
+        strict_applied = bool(strict_oos)
+        main_tstat = float(tstat_strict if strict_applied else oos_tstat)
+        main_pvalue = float(2 * (1 - stats.norm.cdf(abs(main_tstat))))
+    else:
+        # Fallback: legacy slow path with K refits and score recomputations
+        kf = KFold(n_splits=n_folds_oos, shuffle=True, random_state=42)
+        fold_thetas: List[float] = []
+        fold_indices: List[np.ndarray] = []
+        fold_nuisances: List[Tuple[np.ndarray, np.ndarray, np.ndarray]] = []
 
-    # Strict aggregation over all held-out psi
-    all_psi_list: List[np.ndarray] = []
-    for k, (idx, (m_fold, g0_fold, g1_fold)) in enumerate(zip(fold_indices, fold_nuisances)):
-        th = fold_thetas[k]
-        psi_k = score_fn(y[idx], d[idx], g0_fold, g1_fold, m_fold, th)
-        all_psi_list.append(psi_k)
-    all_psi = np.concatenate(all_psi_list) if len(all_psi_list) > 0 else np.array([0.0])
-    tstat_strict = float((np.sqrt(len(all_psi)) * all_psi.mean()) / (all_psi.std(ddof=1) + 1e-12))
-    pvalue_strict = float(2 * (1 - stats.norm.cdf(np.abs(tstat_strict))))
+        df_full = data.get_df()
+        for train_idx, test_idx in kf.split(df_full):
+            # Create fold-specific data using public APIs
+            train_data = CausalData(
+                df=df_full.iloc[train_idx].copy(),
+                treatment=data.treatment.name,
+                outcome=data.target.name,
+                confounders=list(data.confounders) if data.confounders else None
+            )
+            # Fit model on training fold to get theta
+            fold_result = inference_fn(train_data, **inference_kwargs)
+            fold_thetas.append(float(fold_result['coefficient']))
+            fold_indices.append(test_idx)
 
-    # Choose which t-stat to report as main
-    strict_applied = bool(strict_oos)
-    main_tstat = tstat_strict if strict_applied else oos_tstat
-    main_pvalue = pvalue_strict if strict_applied else oos_pvalue
+            # Use full-model cross-fitted nuisances indexed by test fold (fast OOS)
+            m_fold = m_propensity[test_idx]
+            g0_fold = g0_outcomes[test_idx]
+            g1_fold = g1_outcomes[test_idx]
+            fold_nuisances.append((m_fold, g0_fold, g1_fold))
+
+        # Run out-of-sample moment check with fold-specific nuisances (fold-aggregated)
+        oos_df, oos_tstat = oos_moment_check_with_fold_nuisances(
+            fold_thetas, fold_indices, fold_nuisances, y, d, score_fn=score_fn
+        )
+        oos_pvalue = float(2 * (1 - stats.norm.cdf(abs(oos_tstat))))
+
+        # Strict aggregation over all held-out psi without creating a giant array
+        total_n = 0
+        total_sum = 0.0
+        total_sumsq = 0.0
+        for k, (idx, (m_fold, g0_fold, g1_fold)) in enumerate(zip(fold_indices, fold_nuisances)):
+            th = fold_thetas[k]
+            psi_k = score_fn(y[idx], d[idx], g0_fold, g1_fold, m_fold, th)
+            n_k = psi_k.size
+            s_k = float(psi_k.sum())
+            ss_k = float((psi_k * psi_k).sum())
+            total_n += n_k
+            total_sum += s_k
+            total_sumsq += ss_k
+        if total_n > 1:
+            mean_all = total_sum / total_n
+            var_all = (total_sumsq - total_n * (mean_all ** 2)) / (total_n - 1)
+            se_all = float(np.sqrt(max(var_all, 0.0) / total_n))
+            tstat_strict = float(mean_all / se_all) if se_all > 0 else 0.0
+        else:
+            tstat_strict = 0.0
+        pvalue_strict = float(2 * (1 - stats.norm.cdf(abs(tstat_strict))))
+
+        # Choose which t-stat to report as main
+        strict_applied = bool(strict_oos)
+        main_tstat = float(tstat_strict if strict_applied else oos_tstat)
+        main_pvalue = float(pvalue_strict if strict_applied else oos_pvalue)
     
     # === 2. ORTHOGONALITY DERIVATIVE TESTS ===
     # Create basis functions: constant + first few standardized confounders
@@ -813,3 +845,339 @@ def trim_sensitivity_curve_att(
     """Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds)."""
     warnings.warn("trim_sensitivity_curve_att is deprecated; use trim_sensitivity_curve_atte with IRM naming.", DeprecationWarning, stacklevel=2)
     return trim_sensitivity_curve_atte(inference_fn, data, m=g, d=d, thresholds=thresholds, **inference_kwargs)
+
+
+def trim_sensitivity_curve_ate(
+    m_hat: np.ndarray,
+    D: np.ndarray,
+    Y: np.ndarray,
+    g0_hat: np.ndarray,
+    g1_hat: np.ndarray,
+    eps_grid: tuple[float, ...] = (0.0, 0.005, 0.01, 0.02, 0.05),
+) -> pd.DataFrame:
+    """
+    Sensitivity of ATE estimate to propensity clipping epsilon (no re-fit).
+
+    For each epsilon in eps_grid, compute the AIPW/IRM ATE estimate using
+    m_clipped = clip(m_hat, eps, 1-eps) over the full sample and report
+    the plug-in standard error from the EIF.
+
+    Parameters
+    ----------
+    m_hat, D, Y, g0_hat, g1_hat : np.ndarray
+        Cross-fitted nuisances and observed arrays.
+    eps_grid : tuple[float, ...]
+        Sequence of clipping thresholds ε to evaluate.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns: ['trim_eps','n','pct_clipped','theta','se'].
+        pct_clipped is the percent of observations with m outside [ε,1-ε].
+    """
+    m = np.asarray(m_hat, dtype=float).ravel()
+    d = np.asarray(D, dtype=float).ravel()
+    y = np.asarray(Y, dtype=float).ravel()
+    g0 = np.asarray(g0_hat, dtype=float).ravel()
+    g1 = np.asarray(g1_hat, dtype=float).ravel()
+    n = y.size
+    rows: list[dict[str, float]] = []
+
+    for eps in eps_grid:
+        eps_f = float(eps)
+        m_clip = np.clip(m, eps_f, 1.0 - eps_f)
+        # share clipped (either side)
+        pct_clipped = float(100.0 * np.mean((m <= eps_f) | (m >= 1.0 - eps_f))) if n > 0 else float("nan")
+        # AIPW ATE with clipped propensity
+        theta_terms = (g1 - g0) + d * (y - g1) / m_clip - (1.0 - d) * (y - g0) / (1.0 - m_clip)
+        theta = float(np.mean(theta_terms)) if n > 0 else float("nan")
+        psi = theta_terms - theta
+        se = float(np.std(psi, ddof=1) / np.sqrt(n)) if n > 1 else 0.0
+        rows.append({
+            "trim_eps": eps_f,
+            "n": int(n),
+            "pct_clipped": pct_clipped,
+            "theta": theta,
+            "se": se,
+        })
+
+    return pd.DataFrame(rows)
+
+
+# ------------------------------------------------------------------
+# Placebo / robustness checks (moved from placebo.py)
+# ------------------------------------------------------------------
+
+def _is_binary(series: pd.Series) -> bool:
+    """
+    Determine if a pandas Series contains binary data (0/1 or True/False).
+    
+    Parameters
+    ----------
+    series : pd.Series
+        The series to check
+        
+    Returns
+    -------
+    bool
+        True if the series appears to be binary
+    """
+    unique_vals = set(series.dropna().unique())
+    
+    # Check for 0/1 binary
+    if unique_vals == {0, 1} or unique_vals == {0} or unique_vals == {1}:
+        return True
+    
+    # Check for True/False binary
+    if unique_vals == {True, False} or unique_vals == {True} or unique_vals == {False}:
+        return True
+        
+    # Check for numeric that could be treated as binary (only two distinct values)
+    if len(unique_vals) == 2 and all(isinstance(x, (int, float, bool, np.integer, np.floating)) for x in unique_vals):
+        return True
+        
+    return False
+
+
+def _generate_random_outcome(original_outcome: pd.Series, rng: np.random.Generator) -> np.ndarray:
+    """
+    Generate random outcome variables matching the distribution of the original outcome.
+    
+    For binary outcomes: generates random binary variables with same proportion as original
+    For continuous outcomes: generates random continuous variables from normal distribution
+    fitted to the original data
+    
+    Parameters
+    ----------
+    original_outcome : pd.Series
+        The original outcome variable
+    rng : np.random.Generator
+        Random number generator
+        
+    Returns
+    -------
+    np.ndarray
+        Generated random outcome variables
+    """
+    n = len(original_outcome)
+    
+    if _is_binary(original_outcome):
+        # For binary outcome, generate random binary with same proportion
+        original_rate = float(original_outcome.mean())
+        return rng.binomial(1, original_rate, size=n).astype(original_outcome.dtype)
+    else:
+        # For continuous outcome, generate from normal distribution fitted to original data
+        mean = float(original_outcome.mean())
+        std = float(original_outcome.std())
+        if std == 0:
+            # If no variance, generate constant values equal to the mean
+            return np.full(n, mean, dtype=original_outcome.dtype)
+        return rng.normal(mean, std, size=n).astype(original_outcome.dtype)
+
+
+def _generate_random_treatment(original_treatment: pd.Series, rng: np.random.Generator) -> np.ndarray:
+    """
+    Generate random binary treatment variables with same proportion as original.
+    
+    Parameters
+    ----------
+    original_treatment : pd.Series
+        The original treatment variable
+    rng : np.random.Generator
+        Random number generator
+        
+    Returns
+    -------
+    np.ndarray
+        Generated random binary treatment variables
+    """
+    n = len(original_treatment)
+    treatment_rate = float(original_treatment.mean())
+    return rng.binomial(1, treatment_rate, size=n).astype(original_treatment.dtype)
+
+
+def _run_inference(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    **kwargs,
+) -> Dict[str, float]:
+    """
+    Helper that executes `inference_fn` and extracts the two items of interest.
+    """
+    res = inference_fn(data, **kwargs)
+    return {"theta": float(res["coefficient"]), "p_value": float(res["p_value"])}
+
+
+# ------------------------------------------------------------------
+# 1. Placebo ‑- generate random outcome
+# ------------------------------------------------------------------
+
+def refute_placebo_outcome(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    random_state: int | None = None,
+    **inference_kwargs,
+) -> Dict[str, float]:
+    """
+    Generate random outcome (target) variables while keeping treatment
+    and covariates intact. For binary outcomes, generates random binary
+    variables with the same proportion. For continuous outcomes, generates
+    random variables from a normal distribution fitted to the original data.
+    A valid causal rct_design should now yield θ ≈ 0 and a large p-value.
+    """
+    rng = np.random.default_rng(random_state)
+
+    df_mod = data.get_df().copy()
+    original_outcome = df_mod[data._target]
+    df_mod[data._target] = _generate_random_outcome(original_outcome, rng)
+
+    ck_mod = CausalData(
+        df=df_mod,
+        treatment=data._treatment,
+        outcome=data._target,
+        confounders=(list(data.confounders) if data.confounders else None),
+    )
+    return _run_inference(inference_fn, ck_mod, **inference_kwargs)
+
+
+# ------------------------------------------------------------------
+# 2. Placebo ‑- generate random treatment
+# ------------------------------------------------------------------
+
+def refute_placebo_treatment(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    random_state: int | None = None,
+    **inference_kwargs,
+) -> Dict[str, float]:
+    """
+    Generate random binary treatment variables while keeping outcome and
+    covariates intact. Generates random binary treatment with the same
+    proportion as the original treatment. Breaks the treatment–outcome link.
+    """
+    rng = np.random.default_rng(random_state)
+
+    df_mod = data.get_df().copy()
+    original_treatment = df_mod[data._treatment]
+    df_mod[data._treatment] = _generate_random_treatment(original_treatment, rng)
+
+    ck_mod = CausalData(
+        df=df_mod,
+        treatment=data._treatment,
+        outcome=data._target,
+        confounders=(list(data.confounders) if data.confounders else None),
+    )
+    return _run_inference(inference_fn, ck_mod, **inference_kwargs)
+
+
+# ------------------------------------------------------------------
+# 3. Subset robustness check
+# ------------------------------------------------------------------
+
+def refute_subset(
+    inference_fn: Callable[..., Dict[str, Any]],
+    data: CausalData,
+    fraction: float = 0.8,
+    random_state: int | None = None,
+    **inference_kwargs,
+) -> Dict[str, float]:
+    """
+    Re-estimate the effect on a random subset (default 80 %)
+    to check sample-stability of the estimate.
+    """
+    if not 0.0 < fraction <= 1.0:
+        raise ValueError("`fraction` must lie in (0, 1].")
+
+    rng = np.random.default_rng(random_state)
+    df = data.get_df()
+    n = len(df)
+    idx = rng.choice(n, size=int(np.floor(fraction * n)), replace=False)
+
+    df_mod = df.iloc[idx].copy()
+    ck_mod = CausalData(
+        df=df_mod,
+        treatment=data._treatment,
+        outcome=data._target,
+        confounders=(list(data.confounders) if data.confounders else None),
+    )
+    return _run_inference(inference_fn, ck_mod, **inference_kwargs)
+
+
+
+def _fast_fold_thetas_from_psi(psi_a: np.ndarray, psi_b: np.ndarray, fold_indices: List[np.ndarray]) -> List[float]:
+    """
+    Compute leave-fold-out θ_{-k} using cached ψ_a, ψ_b.
+    θ_{-k} = - mean_R(ψ_b) / mean_R(ψ_a), where R is the complement of fold k.
+    """
+    psi_a = np.asarray(psi_a, dtype=float).ravel()
+    psi_b = np.asarray(psi_b, dtype=float).ravel()
+    n = psi_a.size
+    sum_a = float(psi_a.sum())
+    sum_b = float(psi_b.sum())
+    thetas: List[float] = []
+    for idx in fold_indices:
+        idx = np.asarray(idx, dtype=int)
+        n_r = n - idx.size
+        if n_r <= 0:
+            thetas.append(0.0)
+            continue
+        sa = sum_a - float(psi_a[idx].sum())
+        sb = sum_b - float(psi_b[idx].sum())
+        mean_a = sa / n_r
+        mean_b = sb / n_r
+        denom = mean_a if abs(mean_a) > 1e-12 else -1.0  # robust guard against div-by-zero
+        thetas.append(-mean_b / denom)
+    return thetas
+
+
+def oos_moment_check_from_psi(
+    psi_a: np.ndarray,
+    psi_b: np.ndarray,
+    fold_indices: List[np.ndarray],
+    *,
+    strict: bool = False,
+) -> Tuple[pd.DataFrame, float, Optional[float]]:
+    """
+    OOS moment check using cached ψ_a, ψ_b only.
+    Returns (fold-wise DF, t_fold_agg, t_strict if requested).
+    """
+    psi_a = np.asarray(psi_a, dtype=float).ravel()
+    psi_b = np.asarray(psi_b, dtype=float).ravel()
+    fold_thetas = _fast_fold_thetas_from_psi(psi_a, psi_b, fold_indices)
+
+    rows: List[Dict[str, Any]] = []
+    total_n = 0
+    total_sum = 0.0
+    total_sumsq = 0.0
+
+    for k, idx in enumerate(fold_indices):
+        idx = np.asarray(idx, dtype=int)
+        th = fold_thetas[k]
+        # ψ_k = ψ_b[idx] + ψ_a[idx]*θ_{-k}
+        psi_k = psi_b[idx] + psi_a[idx] * th
+        n_k = psi_k.size
+        m_k = float(psi_k.mean()) if n_k > 0 else 0.0
+        v_k = float(psi_k.var(ddof=1)) if n_k > 1 else 0.0
+        rows.append({"fold": k, "n": n_k, "psi_mean": m_k, "psi_var": v_k})
+
+        if strict and n_k > 0:
+            total_n += n_k
+            s = float(psi_k.sum())
+            total_sum += s
+            total_sumsq += float((psi_k * psi_k).sum())
+
+    df = pd.DataFrame(rows)
+
+    # Fold-aggregated t-stat
+    num = float((df["n"] * df["psi_mean"]).sum())
+    den = float(np.sqrt((df["n"] * df["psi_var"]).sum()))
+    t_fold = (num / den) if den > 0 else 0.0
+
+    t_strict: Optional[float] = None
+    if strict and total_n > 1:
+        mean_all = total_sum / total_n
+        var_all = (total_sumsq - total_n * (mean_all ** 2)) / (total_n - 1)
+        se_all = float(np.sqrt(max(var_all, 0.0) / total_n))
+        t_strict = (mean_all / se_all) if se_all > 0 else 0.0
+
+    return df, float(t_fold), (None if t_strict is None else float(t_strict))
