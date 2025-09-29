@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Examples &#8212; CausalKit  documentation</title>
+    <title>Real World Examples &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -32,25 +32,26 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=7f41d439"></script>
+    <script src="_static/documentation_options.js?v=2caa9db7"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples';</script>
     <link rel="icon" href="_static/logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Basic example of CausalKit workflow" href="examples/basic_example.html" />
-    <link rel="prev" title="Short answer" href="user-guide/cate_vs_gate.html" />
+    <link rel="next" title="DML ATT Example" href="examples/dml_att.html" />
+    <link rel="prev" title="Math notation for EDA, IRM, and refutation diagnostics (CausalKit)" href="user-guide/math_eda_irm_refutation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,7 +158,14 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Examples
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -277,7 +285,14 @@ document.write(`
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Examples
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -336,7 +351,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="examples/basic_example.html">Basic example of CausalKit workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/dml_att.html">DML ATT Example</a></li>
+
 </ul>
 </div>
 </nav></div>
@@ -374,7 +390,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Examples</li>
+    <li class="breadcrumb-item active" aria-current="page">Real World Examples</li>
   </ul>
 </nav>
 </div>
@@ -391,8 +407,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
+  <section id="real-world-examples">
+<h1>Real World Examples<a class="headerlink" href="#real-world-examples" title="Link to this heading">#</a></h1>
 <p>This section contains examples of how to use CausalKit for various causal inference tasks.</p>
 <style>
   /* Hide Previous/Next navigation on the Examples page only */
@@ -401,7 +417,8 @@ document.write(`
 <h2>General Examples<a class="headerlink" href="#general-examples" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/basic_example.html">Basic example of CausalKit workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/dml_att.html">DML ATT Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/dml_att.html#inference">Inference</a></li>
 </ul>
 </div>
 </section>
@@ -418,20 +435,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="user-guide/cate_vs_gate.html"
+       href="user-guide/math_eda_irm_refutation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Short answer</p>
+        <p class="prev-next-title">Math notation for EDA, IRM, and refutation diagnostics (CausalKit)</p>
       </div>
     </a>
     <a class="right-next"
-       href="examples/basic_example.html"
+       href="examples/dml_att.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Basic example of CausalKit workflow</p>
+        <p class="prev-next-title">DML ATT Example</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,0 +1,136 @@
+Traceback (most recent call last):
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_core/utils/__init__.py", line 154, in wrapped
+    asyncio.get_running_loop()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+    ~~~~~~~~~^
+        nb,
+        ^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_core/utils/__init__.py", line 158, in wrapped
+    return loop.run_until_complete(inner)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+        cell, index, execution_count=self.code_cells_executed + 1
+    )
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from causalkit.data import CausalDatasetGenerator, CausalData
+
+# Reproducibility
+np.random.seed(42)
+
+confounder_specs = [
+    {"name": "tenure_months", "dist": "normal", "mu": 24, "sd": 12},
+    {"name": "avg_sessions_week", "dist": "normal", "mu": 5, "sd": 2},
+    {"name": "spend_last_month", "dist": "uniform", "a": 0, "b": 200},
+    {"name": "premium_user", "dist": "bernoulli", "p": 0.25},
+    {"name": "urban_resident", "dist": "bernoulli", "p": 0.60},
+]
+
+# Causal effect and noise
+theta = 1.8  # ATE: +1.8 ARPU units if new_feature = 1
+sigma_y = 3.5  # ARPU noise std
+target_t_rate = 0.35  # ~35% treated
+
+# Effects of confounders on ARPU (baseline, additive)
+# Order: tenure_months, avg_sessions_week, spend_last_month, premium_user, urban_resident
+beta_y = np.array([
+    0.05,  # tenure_months: small positive effect
+    0.40,  # avg_sessions_week: strong positive effect
+    0.02,  # spend_last_month: recent spend correlates with ARPU
+    2.00,  # premium_user: premium users have higher ARPU
+    1.00,  # urban_resident: urban users slightly higher ARPU
+], dtype=float)
+
+# Effects of confounders on treatment assignment (log-odds scale)
+beta_t = np.array([
+    0.015,  # tenure_months
+    0.10,  # avg_sessions_week
+    0.002,  # spend_last_month
+    0.75,  # premium_user
+    0.30,  # urban_resident: more likely to get the feature
+], dtype=float)
+
+gen = CausalDatasetGenerator(
+    theta=theta,
+    outcome_type="continuous",
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=42,
+    confounder_specs=confounder_specs,
+    beta_y=beta_y,
+    beta_t=beta_t,
+)
+
+
+# Create dataset
+causal_data = gen.to_causal_data(
+    n=10000,
+    confounders = [
+    "tenure_months",
+    "avg_sessions_week",
+    "spend_last_month",
+    "premium_user",
+    "urban_resident",
+]
+)
+
+# Show first few rows
+causal_data.df.head()
+
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mTypeError[39m                                 Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[1][39m[32m, line 41[39m
+[32m     32[39m [38;5;66;03m# Effects of confounders on treatment assignment (log-odds scale)[39;00m
+[32m     33[39m beta_t = np.array([
+[32m     34[39m     [32m0.015[39m,  [38;5;66;03m# tenure_months[39;00m
+[32m     35[39m     [32m0.10[39m,  [38;5;66;03m# avg_sessions_week[39;00m
+[32m   (...)[39m[32m     38[39m     [32m0.30[39m,  [38;5;66;03m# urban_resident: more likely to get the feature[39;00m
+[32m     39[39m ], dtype=[38;5;28mfloat[39m)
+[32m---> [39m[32m41[39m gen = CausalDatasetGenerator(
+[32m     42[39m     theta=theta,
+[32m     43[39m     outcome_type=[33m"[39m[33mcontinuous[39m[33m"[39m,
+[32m     44[39m     sigma_y=sigma_y,
+[32m     45[39m     target_t_rate=target_t_rate,
+[32m     46[39m     seed=[32m42[39m,
+[32m     47[39m     confounder_specs=confounder_specs,
+[32m     48[39m     beta_y=beta_y,
+[32m     49[39m     beta_t=beta_t,
+[32m     50[39m )
+[32m     53[39m [38;5;66;03m# Create dataset[39;00m
+[32m     54[39m causal_data = gen.to_causal_data(
+[32m     55[39m     n=[32m10000[39m,
+[32m     56[39m     confounders = [
+[32m   (...)[39m[32m     62[39m ]
+[32m     63[39m )
+
+[31mTypeError[39m: CausalDatasetGenerator.__init__() got an unexpected keyword argument 'target_t_rate'. Did you mean 'target_d_rate'?
+

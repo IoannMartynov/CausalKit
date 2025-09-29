@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -43,14 +44,14 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
     <link rel="icon" href="_static/logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Module" href="api/data.html" />
-    <link rel="prev" title="DML ATT Example" href="examples/dml_att.html" />
+    <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -156,8 +157,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -272,8 +280,15 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -357,11 +372,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -370,7 +380,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.refutation.sensitivity_analysis_set.html">causalkit.refutation.sensitivity_analysis_set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/generated/causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
 </ul>
 </details></li>
@@ -440,7 +449,7 @@ document.write(`
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/design.html">Design Module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/design.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/design.html#module-causalkit.design.traffic_splitter">API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/design.html#api-reference">API Reference</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/eda.html">EDA Module</a><ul>
@@ -451,7 +460,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="api/inference.html">Inference Module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/inference.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/inference.html#api-reference-package">API Reference (Package)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.att.ttest">ATT Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/inference.html#att-utilities">ATT Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.ate.dml_ate">ATE Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.cate.cate_esimand">CATE Utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/inference.html#module-causalkit.inference.gate.gate_esimand">GATE Utilities</a></li>
@@ -460,9 +469,9 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="api/refutation.html">Refutation Module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/refutation.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/refutation.html#api-reference-package">API Reference (Package)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.placebo">Placebo and Subset Refutation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.sensitivity">Sensitivity Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#module-causalkit.refutation.orthogonality">Orthogonality Checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#placebo-and-subset-refutation">Placebo and Subset Refutation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#sensitivity-analysis">Sensitivity Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/refutation.html#orthogonality-checks">Orthogonality Checks</a></li>
 </ul>
 </li>
 </ul>
@@ -480,12 +489,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="examples/dml_att.html"
+       href="research.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">DML ATT Example</p>
+        <p class="prev-next-title">Research</p>
       </div>
     </a>
     <a class="right-next"

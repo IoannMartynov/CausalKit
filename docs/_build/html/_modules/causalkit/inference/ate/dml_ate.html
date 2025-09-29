@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>causalkit.inference.ate.dml_ate &#8212; CausalKit  documentation</title>
+    <title>causalkit.inference.ate.dml_ate &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -37,12 +37,12 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../../../_static/documentation_options.js?v=2caa9db7"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/inference/ate/dml_ate';</script>
     <link rel="icon" href="../../../../_static/logo.svg"/>
@@ -379,21 +379,22 @@ document.write(`
                   
   <h1>Source code for causalkit.inference.ate.dml_ate</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">DoubleML implementation for estimating average treatment effects.</span>
+<span class="sd">IRM implementation for estimating average treatment effects.</span>
 
-<span class="sd">This module provides a function to estimate average treatment effects using DoubleML.</span>
+<span class="sd">This module provides a function dml_ate to estimate average treatment effects using</span>
+<span class="sd">our internal DoubleML-style IRM estimator that consumes CausalData directly.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">doubleml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">doubleml</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">CatBoostClassifier</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostClassifier</span><span class="p">,</span> <span class="n">CatBoostRegressor</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.estimators</span><span class="w"> </span><span class="kn">import</span> <span class="n">IRM</span>
 
 
 <div class="viewcode-block" id="dml_ate">
@@ -406,153 +407,145 @@ document.write(`
     <span class="n">n_rep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">score</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ATE&quot;</span><span class="p">,</span>
     <span class="n">confidence_level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+    <span class="n">normalize_ipw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">trimming_rule</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;truncate&quot;</span><span class="p">,</span>
+    <span class="n">trimming_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">store_diagnostic_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Estimate average treatment effects using DoubleML&#39;s interactive regression model (IRM).</span>
-<span class="sd">    </span>
+<span class="sd">    Estimate average treatment effects using the internal IRM estimator.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : CausalData</span>
-<span class="sd">        The causaldata object containing treatment, target, and confounders variables.</span>
+<span class="sd">        The causaldata object containing treatment, outcome, and confounders.</span>
 <span class="sd">    ml_g : estimator, optional</span>
-<span class="sd">        A machine learner implementing ``fit()`` and ``predict()`` methods for the nuisance function g_0(D,X) = E[Y|X,D].</span>
-<span class="sd">        If None, a CatBoostRegressor configured to use all CPU cores is used.</span>
+<span class="sd">        Learner for g(D,X)=E[Y|X,D]. If outcome is binary and learner is classifier,</span>
+<span class="sd">        predict_proba will be used; otherwise predict().</span>
 <span class="sd">    ml_m : classifier, optional</span>
-<span class="sd">        A machine learner implementing ``fit()`` and ``predict_proba()`` methods for the nuisance function m_0(X) = E[D|X].</span>
-<span class="sd">        If None, a CatBoostClassifier configured to use all CPU cores is used.</span>
+<span class="sd">        Learner for m(X)=E[D|X] (propensity). If None, a CatBoostClassifier is used.</span>
 <span class="sd">    n_folds : int, default 5</span>
 <span class="sd">        Number of folds for cross-fitting.</span>
 <span class="sd">    n_rep : int, default 1</span>
-<span class="sd">        Number of repetitions for the sample splitting.</span>
-<span class="sd">    score : str, default &quot;ATE&quot;</span>
-<span class="sd">        A str (&quot;ATE&quot; or &quot;ATTE&quot;) specifying the score function.</span>
+<span class="sd">        Number of repetitions (currently only 1 supported by IRM).</span>
+<span class="sd">    score : {&quot;ATE&quot;,&quot;ATTE&quot;}, default &quot;ATE&quot;</span>
+<span class="sd">        Target estimand.</span>
 <span class="sd">    confidence_level : float, default 0.95</span>
-<span class="sd">        The confidence level for calculating confidence intervals (between 0 and 1).</span>
-<span class="sd">        </span>
+<span class="sd">        Confidence level for CI in (0,1).</span>
+<span class="sd">    normalize_ipw : bool, default False</span>
+<span class="sd">        Whether to normalize IPW terms within the score.</span>
+<span class="sd">    trimming_rule : str, default &quot;truncate&quot;</span>
+<span class="sd">        Trimming approach for propensity (only &quot;truncate&quot; supported).</span>
+<span class="sd">    trimming_threshold : float, default 1e-2</span>
+<span class="sd">        Trimming threshold for propensity.</span>
+<span class="sd">    random_state : int, optional</span>
+<span class="sd">        Random seed for fold creation.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Dict[str, Any]</span>
-<span class="sd">        A dictionary containing:</span>
-<span class="sd">        - coefficient: The estimated average treatment effect</span>
-<span class="sd">        - std_error: The standard error of the estimate</span>
-<span class="sd">        - p_value: The p-value for the null hypothesis that the effect is zero</span>
-<span class="sd">        - confidence_interval: Tuple of (lower, upper) bounds for the confidence interval</span>
-<span class="sd">        - model: The fitted DoubleMLIRM object</span>
-<span class="sd">        </span>
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        If the causaldata object doesn&#39;t have treatment, target, and confounders variables defined,</span>
-<span class="sd">        or if the treatment variable is not binary.</span>
-<span class="sd">        </span>
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from causalkit.data import generate_rct_data</span>
-<span class="sd">    &gt;&gt;&gt; from causalkit.data import CausalData</span>
-<span class="sd">    &gt;&gt;&gt; from causalkit.inference.ate import dml_ate</span>
-<span class="sd">    &gt;&gt;&gt; </span>
-<span class="sd">    &gt;&gt;&gt; # Generate data</span>
-<span class="sd">    &gt;&gt;&gt; df = generate_rct_data()</span>
-<span class="sd">    &gt;&gt;&gt; </span>
-<span class="sd">    &gt;&gt;&gt; # Create causaldata object</span>
-<span class="sd">    &gt;&gt;&gt; ck = CausalData(</span>
-<span class="sd">    ...     df=df,</span>
-<span class="sd">    ...     outcome=&#39;outcome&#39;,</span>
-<span class="sd">    ...     treatment=&#39;treatment&#39;,</span>
-<span class="sd">    ...     confounders=[&#39;age&#39;, &#39;invited_friend&#39;]</span>
-<span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; </span>
-<span class="sd">    &gt;&gt;&gt; # Estimate ATE using DoubleML</span>
-<span class="sd">    &gt;&gt;&gt; results = dml_ate(ck)</span>
-<span class="sd">    &gt;&gt;&gt; print(f&quot;ATE: {results[&#39;coefficient&#39;]:.4f}&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; print(f&quot;Standard Error: {results[&#39;std_error&#39;]:.4f}&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; print(f&quot;P-value: {results[&#39;p_value&#39;]:.4f}&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; print(f&quot;Confidence Interval: {results[&#39;confidence_interval&#39;]}&quot;)</span>
+<span class="sd">        Keys: coefficient, std_error, p_value, confidence_interval, model</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    By default, this function stores a comprehensive &#39;diagnostic_data&#39; dictionary in the result.</span>
+<span class="sd">    You can disable this by setting store_diagnostic_data=False.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Validate inputs</span>
+    <span class="c1"># Basic validations mirroring dml_ate</span>
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">treatment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CausalData object must have a treatment variable defined&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CausalData object must have a outcome variable defined&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CausalData object must have confounders variables defined&quot;</span><span class="p">)</span>
-    
+
     <span class="c1"># Check confidence level</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">confidence_level</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;confidence_level must be between 0 and 1 (exclusive)&quot;</span><span class="p">)</span>
-    
-    <span class="c1"># Set default ML models if not provided</span>
+
+    <span class="c1"># Defaults for learners</span>
     <span class="k">if</span> <span class="n">ml_g</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ml_g</span> <span class="o">=</span> <span class="n">CatBoostRegressor</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_data_in_leaf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">thread_count</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allow_writing_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ml_g</span> <span class="o">=</span> <span class="n">CatBoostRegressor</span><span class="p">(</span>
+            <span class="n">thread_count</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">allow_writing_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">ml_m</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ml_m</span> <span class="o">=</span> <span class="n">CatBoostClassifier</span><span class="p">(</span><span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_data_in_leaf</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">thread_count</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allow_writing_files</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    
-    <span class="c1"># Prepare DataFrame and normalize treatment</span>
+        <span class="n">ml_m</span> <span class="o">=</span> <span class="n">CatBoostClassifier</span><span class="p">(</span>
+            <span class="n">thread_count</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">allow_writing_files</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Normalize treatment to 0/1 if boolean (IRM will also check)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">tname</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">yname</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">xnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span>
-
-    <span class="c1"># Normalize binary treatment</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="c1"># Construct a new CausalData with coerced dtype to keep internal consistency</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="n">tname</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">confounders</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">uniq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="c1"># Ensure binary encoding</span>
+        <span class="n">uniq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">uniq</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">uniq</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Treatment must be binary 0/1 or boolean; found </span><span class="si">{</span><span class="n">uniq</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">tname</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    
-    <span class="c1"># Create DoubleMLData object with public names</span>
-    <span class="n">data_dml</span> <span class="o">=</span> <span class="n">doubleml</span><span class="o">.</span><span class="n">DoubleMLData</span><span class="p">(</span>
-        <span class="n">df</span><span class="p">,</span>
-        <span class="n">y_col</span><span class="o">=</span><span class="n">yname</span><span class="p">,</span>
-        <span class="n">d_cols</span><span class="o">=</span><span class="n">tname</span><span class="p">,</span>
-        <span class="n">x_cols</span><span class="o">=</span><span class="n">xnames</span>
-    <span class="p">)</span>
-    
-    <span class="c1"># Create and fit DoubleMLIRM object</span>
-    <span class="n">dml_irm_obj</span> <span class="o">=</span> <span class="n">doubleml</span><span class="o">.</span><span class="n">DoubleMLIRM</span><span class="p">(</span>
-        <span class="n">data_dml</span><span class="p">,</span>
-        <span class="n">ml_g</span><span class="o">=</span><span class="n">ml_g</span><span class="p">,</span>
-        <span class="n">ml_m</span><span class="o">=</span><span class="n">ml_m</span><span class="p">,</span>
-        <span class="n">n_folds</span><span class="o">=</span><span class="n">n_folds</span><span class="p">,</span>
-        <span class="n">n_rep</span><span class="o">=</span><span class="n">n_rep</span><span class="p">,</span>
-        <span class="n">score</span><span class="o">=</span><span class="n">score</span>
-    <span class="p">)</span>
-    
-    <span class="c1"># Suppress scikit-learn FutureWarning about &#39;force_all_finite&#39; rename during fit</span>
+
+    <span class="c1"># Fit IRM</span>
+    <span class="n">irm</span> <span class="o">=</span> <span class="n">IRM</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ml_g</span><span class="o">=</span><span class="n">ml_g</span><span class="p">,</span> <span class="n">ml_m</span><span class="o">=</span><span class="n">ml_m</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="n">n_folds</span><span class="p">,</span> <span class="n">n_rep</span><span class="o">=</span><span class="n">n_rep</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">score</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="n">normalize_ipw</span><span class="p">,</span>
+              <span class="n">trimming_rule</span><span class="o">=</span><span class="n">trimming_rule</span><span class="p">,</span> <span class="n">trimming_threshold</span><span class="o">=</span><span class="n">trimming_threshold</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="c1"># Suppress any benign warnings during fit similar to dml_ate</span>
     <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
-            <span class="s2">&quot;ignore&quot;</span><span class="p">,</span>
-            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*&#39;force_all_finite&#39; was renamed to &#39;ensure_all_finite&#39;.*&quot;</span><span class="p">,</span>
-            <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">dml_irm_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-    
-    <span class="c1"># Calculate confidence interval</span>
-    <span class="n">ci</span> <span class="o">=</span> <span class="n">dml_irm_obj</span><span class="o">.</span><span class="n">confint</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">confidence_level</span><span class="p">)</span>
-    
-    <span class="c1"># Extract confidence interval values robustly</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-        <span class="n">pct_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ci</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;%&quot;</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pct_cols</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">pct_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-            <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">pct_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-            <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+        <span class="n">irm</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+    <span class="c1"># Confidence interval</span>
+    <span class="n">ci_df</span> <span class="o">=</span> <span class="n">irm</span><span class="o">.</span><span class="n">confint</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">confidence_level</span><span class="p">)</span>
+    <span class="c1"># Robust extraction of CI values</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="c1"># Expect exactly two columns</span>
+        <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-    
-    <span class="c1"># Return results as a dictionary</span>
+        <span class="c1"># Fallback if implementation changes</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ci_df</span><span class="p">)</span>
+        <span class="n">ci_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">ci_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Collect diagnostic data for overlap/weight and score checks (optional)</span>
+    <span class="n">diagnostic_data</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">store_diagnostic_data</span><span class="p">:</span>
+        <span class="n">df_diag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+        <span class="n">y_diag</span> <span class="o">=</span> <span class="n">df_diag</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">d_diag</span> <span class="o">=</span> <span class="n">df_diag</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">x_diag</span> <span class="o">=</span> <span class="n">df_diag</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">confounders</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">p1_diag</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d_diag</span><span class="p">))</span>
+
+        <span class="n">diagnostic_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;m_hat&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">m_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;g0_hat&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">g0_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;g1_hat&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">g1_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_diag</span><span class="p">,</span>
+            <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="n">d_diag</span><span class="p">,</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_diag</span><span class="p">,</span>
+            <span class="s2">&quot;psi&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">psi_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;psi_a&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">psi_a_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;psi_b&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">psi_b_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="s2">&quot;folds&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">irm</span><span class="p">,</span> <span class="s2">&quot;folds_&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">irm</span><span class="p">,</span> <span class="s2">&quot;folds_&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+            <span class="s2">&quot;normalize_ipw&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">normalize_ipw</span><span class="p">),</span>
+            <span class="s2">&quot;trimming_threshold&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">trimming_threshold</span><span class="p">),</span>
+            <span class="s2">&quot;p1&quot;</span><span class="p">:</span> <span class="n">p1_diag</span><span class="p">,</span>
+        <span class="p">}</span>
+
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;coefficient&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">dml_irm_obj</span><span class="o">.</span><span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-        <span class="s2">&quot;std_error&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">dml_irm_obj</span><span class="o">.</span><span class="n">se</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-        <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">dml_irm_obj</span><span class="o">.</span><span class="n">pval</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="s2">&quot;coefficient&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">coef</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="s2">&quot;std_error&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">se</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">irm</span><span class="o">.</span><span class="n">pvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
         <span class="s2">&quot;confidence_interval&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ci_lower</span><span class="p">,</span> <span class="n">ci_upper</span><span class="p">),</span>
-        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">dml_irm_obj</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">irm</span><span class="p">,</span>
+        <span class="s2">&quot;diagnostic_data&quot;</span><span class="p">:</span> <span class="n">diagnostic_data</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 </pre></div>

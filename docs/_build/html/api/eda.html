@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3415b827" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -43,7 +44,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/eda';</script>
     <link rel="icon" href="../_static/logo.svg"/>
@@ -156,8 +157,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -276,8 +284,15 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -361,11 +376,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -374,7 +384,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis_set.html">causalkit.refutation.sensitivity_analysis_set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
 </ul>
 </details></li>
@@ -492,41 +501,70 @@ means by treatment group, absolute differences, and standardized mean difference
 CausalDataLite with explicit fields.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">causalkit.eda.eda.</span></span><span class="sig-name descname"><span class="pre">PropensityModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propensity_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitted_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_features_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">causalkit.eda.eda.</span></span><span class="sig-name descname"><span class="pre">PropensityModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitted_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_features_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propensity_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>A model for propensity scores and related diagnostics.</p>
-<p>This class encapsulates propensity scores and provides methods for:
-- Computing ROC AUC
+<p>A model for m(x) = P(D=1|X) and related diagnostics.</p>
+<p>This class encapsulates propensity m and provides methods for:
+- Computing ROC AUC (AUC of D vs m)
 - Extracting SHAP values
-- Plotting propensity score overlap
+- Plotting m overlap
 - Checking positivity/overlap</p>
-<p>The class is returned by CausalEDA.fit_propensity() and provides a cleaner
-interface for propensity score analysis.</p>
+<p>The class is returned by CausalEDA.fit_m() and provides a cleaner
+interface for propensity analysis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>propensity_scores</strong> (<em>np.ndarray</em>)</p></li>
-<li><p><strong>treatment_values</strong> (<em>np.ndarray</em>)</p></li>
+<li><p><strong>m</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>)</p></li>
+<li><p><strong>d</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>)</p></li>
 <li><p><strong>fitted_model</strong> (<em>Any</em>)</p></li>
 <li><p><strong>feature_names</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>)</p></li>
 <li><p><strong>X_for_shap</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>)</p></li>
 <li><p><strong>cat_features_for_shap</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>propensity_scores</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>)</p></li>
+<li><p><strong>treatment_values</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propensity_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitted_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_features_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitted_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_features_for_shap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propensity_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Initialize PropensityModel with fitted model artifacts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>propensity_scores</strong> (<em>np.ndarray</em>) – Array of propensity scores P(T=1|X)</p></li>
-<li><p><strong>treatment_values</strong> (<em>np.ndarray</em>) – Array of actual treatment assignments (0/1)</p></li>
-<li><p><strong>fitted_model</strong> (<em>Any</em>) – The fitted propensity score model</p></li>
+<li><p><strong>m</strong> (<em>np.ndarray</em>) – Array of m(x) = P(D=1|X)</p></li>
+<li><p><strong>d</strong> (<em>np.ndarray</em>) – Array of actual treatment assignments (0/1)</p></li>
+<li><p><strong>fitted_model</strong> (<em>Any</em>) – The fitted propensity model</p></li>
 <li><p><strong>feature_names</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – Names of features used in the model</p></li>
 <li><p><strong>X_for_shap</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>) – Preprocessed feature matrix for SHAP computation</p></li>
 <li><p><strong>cat_features_for_shap</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>]</em>) – Categorical feature indices for SHAP computation</p></li>
+<li><p><strong>propensity_scores</strong> (<em>Optional legacy aliases accepted for back-compat</em>)</p></li>
+<li><p><strong>treatment_values</strong> (<em>Optional legacy aliases accepted for back-compat</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.from_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.from_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.from_kfold" title="Link to this definition">#</a></dt>
+<dd><p>Estimate m(x) via K-fold and return a PropensityModel.</p>
+<p>Produces out-of-fold m estimates using StratifiedKFold. If no
+model is provided, a fast LogisticRegression is used. Categorical
+features are one-hot encoded and numeric features standardized by
+default using a ColumnTransformer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.PropensityModel" title="causalkit.eda.eda.PropensityModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropensityModel</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
+<li><p><strong>t</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>preprocessor</strong> (<em>ColumnTransformer</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -535,7 +573,7 @@ interface for propensity score analysis.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.roc_auc">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roc_auc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.roc_auc" title="Link to this definition">#</a></dt>
-<dd><p>Compute ROC AUC of treatment assignment vs. propensity scores.</p>
+<dd><p>Compute ROC AUC of treatment assignment vs. m(x).</p>
 <p>Higher AUC means treatment is more predictable from confounders,
 indicating stronger systematic differences between groups (potential
 confounding). Values near 0.5 suggest random-like assignment.</p>
@@ -552,55 +590,47 @@ confounding). Values near 0.5 suggest random-like assignment.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.shap">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><span class="pre">DataFrame</span></a></em><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.shap" title="Link to this definition">#</a></dt>
-<dd><p>Return SHAP values from the fitted propensity score model.</p>
-<p>SHAP values show the directional contribution of each feature to
-treatment assignment prediction, where positive values increase
-treatment probability and negative values decrease it.</p>
+<dd><p>Return feature attribution from the fitted propensity model.</p>
+<p>For CatBoost models: returns SHAP-based attributions with both signed mean (shap_mean)
+and magnitude (shap_mean_abs), sorted by shap_mean_abs.</p>
+<p>For sklearn linear models (LogisticRegression): returns absolute coefficients under
+column ‘coef_abs’ (not SHAP), sorted descending.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.propensity_scores">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">propensity_scores</span></span><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.propensity_scores" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.plot_m_overlap">
+<span class="sig-name descname"><span class="pre">plot_m_overlap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.plot_m_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.plot_m_overlap" title="Link to this definition">#</a></dt>
+<dd><p>Plot overlaid histograms of m(x) for treated vs control.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.positivity_check_m">
+<span class="sig-name descname"><span class="pre">positivity_check_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.05,</span> <span class="pre">0.95)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.positivity_check_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.positivity_check_m" title="Link to this definition">#</a></dt>
+<dd><p>Check overlap/positivity for m(x) based on thresholds.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p>For CatBoost models: DataFrame with columns ‘feature’ and ‘shap_mean’,
-where ‘shap_mean’ represents the mean SHAP value across all samples.</p>
-<p>For sklearn models: DataFrame with columns ‘feature’ and ‘importance’
-(absolute coefficient values, for backward compatibility).</p>
-</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the fitted model does not support SHAP values extraction.</p>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.ps_graph">
-<span class="sig-name descname"><span class="pre">ps_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.ps_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.ps_graph" title="Link to this definition">#</a></dt>
-<dd><p>Plot overlaid histograms of propensity scores for treated vs control.</p>
-<p>Useful to visually assess group overlap. Does not return data; it draws
-on the current matplotlib figure.</p>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">ps_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.ps_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.ps_graph" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.PropensityModel.positivity_check">
-<span class="sig-name descname"><span class="pre">positivity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.05,</span> <span class="pre">0.95)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.positivity_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.positivity_check" title="Link to this definition">#</a></dt>
-<dd><p>Check overlap/positivity based on propensity score thresholds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bounds</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><em>default</em><em> (</em><em>0.05</em><em>, </em><em>0.95</em><em>)</em>) – Lower and upper thresholds for positivity check</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with:
-- bounds: (low, high) thresholds used
-- share_below: fraction with PS &lt; low
-- share_above: fraction with PS &gt; high
-- flag: heuristic boolean True if the tails collectively exceed ~2%</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">positivity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#PropensityModel.positivity_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.PropensityModel.positivity_check" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -639,6 +669,30 @@ interface for outcome model analysis.</p>
 <li><p><strong>feature_names</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em>) – Names of features used in the model (confounders only)</p></li>
 <li><p><strong>X_for_shap</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em>) – Preprocessed feature matrix for SHAP computation</p></li>
 <li><p><strong>cat_features_for_shap</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>]</em>) – Categorical feature indices for SHAP computation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.OutcomeModel.from_kfold">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_kfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocessor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#OutcomeModel.from_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.OutcomeModel.from_kfold" title="Link to this definition">#</a></dt>
+<dd><p>Estimate an outcome model via K-fold and return an OutcomeModel.</p>
+<p>Produces out-of-fold predictions using KFold. If no model is provided,
+a fast LinearRegression is used. Categorical features are one-hot
+encoded and numeric features standardized by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.OutcomeModel" title="causalkit.eda.eda.OutcomeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">OutcomeModel</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>n_splits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>preprocessor</strong> (<em>ColumnTransformer</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -850,23 +904,25 @@ data in a clean DataFrame format suitable for reporting.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.fit_m">
+<span class="sig-name descname"><span class="pre">fit_m</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.fit_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.fit_m" title="Link to this definition">#</a></dt>
+<dd><p>Estimate cross-validated m(x) = P(D=1|X).</p>
+<p>Uses a preprocessing + classifier setup with stratified K-fold to generate
+out-of-fold probabilities. For CatBoost, data are one-hot encoded via the
+configured ColumnTransformer before fitting. Returns a PropensityModel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.PropensityModel" title="causalkit.eda.eda.PropensityModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropensityModel</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.fit_propensity">
 <span class="sig-name descname"><span class="pre">fit_propensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.fit_propensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.fit_propensity" title="Link to this definition">#</a></dt>
-<dd><p>Estimate cross-validated propensity scores P(T=1|X).</p>
-<p>Uses a preprocessing+CatBoost classifier pipeline with stratified K-fold
-cross_val_predict to generate out-of-fold probabilities. CatBoost uses
-all available threads and handles categorical features natively. Returns a
-PropensityModel instance containing propensity scores and diagnostic methods.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A PropensityModel instance with methods for:
-- roc_auc: ROC AUC score property
-- shap: SHAP values DataFrame property
-- ps_graph(): method to plot propensity score overlap
-- positivity_check(): method to check positivity/overlap</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#causalkit.eda.eda.PropensityModel" title="causalkit.eda.eda.PropensityModel">PropensityModel</a></p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#causalkit.eda.eda.PropensityModel" title="causalkit.eda.eda.PropensityModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropensityModel</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -897,13 +953,51 @@ excluding treatment. This is essential for proper causal analysis.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.auc_m">
+<span class="sig-name descname"><span class="pre">auc_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.auc_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.auc_m" title="Link to this definition">#</a></dt>
+<dd><p>Compute ROC AUC of treatment assignment vs. m(x).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.positivity_check_m">
+<span class="sig-name descname"><span class="pre">positivity_check_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.05,</span> <span class="pre">0.95)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.positivity_check_m"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.positivity_check_m" title="Link to this definition">#</a></dt>
+<dd><p>Check overlap/positivity for m(x) based on thresholds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.plot_m_overlap">
+<span class="sig-name descname"><span class="pre">plot_m_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.plot_m_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.plot_m_overlap" title="Link to this definition">#</a></dt>
+<dd><p>Plot overlaid histograms of m(x) for treated vs control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.confounders_roc_auc">
 <span class="sig-name descname"><span class="pre">confounders_roc_auc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.confounders_roc_auc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.confounders_roc_auc" title="Link to this definition">#</a></dt>
-<dd><p>Compute ROC AUC of treatment assignment vs. estimated propensity score.</p>
-<p>Interpretation: Higher AUC means treatment is more predictable from confounders,
-indicating stronger systematic differences between groups (potential
-confounding). Values near 0.5 suggest random-like assignment.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
 </dd>
@@ -916,13 +1010,7 @@ confounding). Values near 0.5 suggest random-like assignment.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.positivity_check">
 <span class="sig-name descname"><span class="pre">positivity_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.05,</span> <span class="pre">0.95)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.positivity_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.positivity_check" title="Link to this definition">#</a></dt>
-<dd><p>Check overlap/positivity based on propensity score thresholds.</p>
-<p>Returns a dict with:
-- bounds: (low, high) thresholds used
-- share_below: fraction with PS &lt; low
-- share_above: fraction with PS &gt; high
-- flag: heuristic boolean True if the tails collectively exceed ~2%</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
 </dd>
@@ -938,10 +1026,7 @@ confounding). Values near 0.5 suggest random-like assignment.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.plot_ps_overlap">
 <span class="sig-name descname"><span class="pre">plot_ps_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.plot_ps_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.plot_ps_overlap" title="Link to this definition">#</a></dt>
-<dd><p>Plot overlaid histograms of propensity scores for treated vs control.</p>
-<p>Useful to visually assess group overlap. Does not return data; it draws
-on the current matplotlib figure.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ps</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p>
 </dd>
@@ -1015,42 +1100,30 @@ and also produce a boxplot by treatment to visualize outliers.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.treatment_features">
-<span class="sig-name descname"><span class="pre">treatment_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.treatment_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.treatment_features" title="Link to this definition">#</a></dt>
-<dd><p>Return SHAP values from the fitted propensity score model.</p>
-<p>This method extracts SHAP values from the propensity score model
-that was trained during fit_propensity(). SHAP values show the directional
-contribution of each feature to treatment assignment prediction, where
-positive values increase treatment probability and negative values decrease it.</p>
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.m_features">
+<span class="sig-name descname"><span class="pre">m_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.m_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.m_features" title="Link to this definition">#</a></dt>
+<dd><p>Return feature attribution from the fitted m(x) model.
+:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
+<ul class="simple">
+<li><p>CatBoost path: SHAP attributions with columns ‘shap_mean’ and ‘shap_mean_abs’,
+sorted by ‘shap_mean_abs’. Uses transformed feature names from the preprocessor.</p></li>
+<li><p>Sklearn path (LogisticRegression): absolute coefficients reported as ‘coef_abs’.</p></li>
+</ul>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p>For CatBoost models: DataFrame with columns ‘feature’ and ‘shap_mean’,
-where ‘shap_mean’ represents the mean SHAP value across all samples.
-Positive values indicate features that increase treatment probability,
-negative values indicate features that decrease treatment probability.</p>
-<p>For sklearn models: DataFrame with columns ‘feature’ and ‘importance’
-(absolute coefficient values, for backward compatibility).</p>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If fit_propensity() has not been called yet, or if the fitted
-    model does not support SHAP values extraction.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a></p>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ps</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>  <span class="c1"># Must be called first</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shap_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">treatment_features</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">shap_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
-<span class="go">   feature  shap_mean</span>
-<span class="go">0  age         0.45  # Positive: increases treatment prob</span>
-<span class="go">1  income     -0.32  # Negative: decreases treatment prob</span>
-<span class="go">2  education   0.12  # Positive: increases treatment prob</span>
-</pre></div>
-</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.treatment_features">
+<span class="sig-name descname"><span class="pre">treatment_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/eda/eda.html#CausalEDA.treatment_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.treatment_features" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1065,16 +1138,16 @@ negative values indicate features that decrease treatment probability.</p>
 <td><p>Comprehensive outcome statistics grouped by treatment.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.fit_propensity.html#causalkit.eda.eda.CausalEDA.fit_propensity" title="causalkit.eda.eda.CausalEDA.fit_propensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.fit_propensity</span></code></a></p></td>
-<td><p>Estimate cross-validated propensity scores P(T=1|X).</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.html#causalkit.eda.eda.CausalEDA.confounders_roc_auc" title="causalkit.eda.eda.CausalEDA.confounders_roc_auc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.confounders_roc_auc</span></code></a></p></td>
-<td><p>Compute ROC AUC of treatment assignment vs.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.positivity_check.html#causalkit.eda.eda.CausalEDA.positivity_check" title="causalkit.eda.eda.CausalEDA.positivity_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.positivity_check</span></code></a></p></td>
-<td><p>Check overlap/positivity based on propensity score thresholds.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.html#causalkit.eda.eda.CausalEDA.plot_ps_overlap" title="causalkit.eda.eda.CausalEDA.plot_ps_overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.plot_ps_overlap</span></code></a></p></td>
-<td><p>Plot overlaid histograms of propensity scores for treated vs control.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.confounders_means.html#causalkit.eda.eda.CausalEDA.confounders_means" title="causalkit.eda.eda.CausalEDA.confounders_means"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.confounders_means</span></code></a></p></td>
 <td><p>Comprehensive confounders balance assessment with means by treatment group.</p></td>
@@ -1086,7 +1159,7 @@ negative values indicate features that decrease treatment probability.</p>
 <td><p>Plot the distribution of the outcome for every treatment on one plot, and also produce a boxplot by treatment to visualize outliers.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.eda.eda.CausalEDA.treatment_features.html#causalkit.eda.eda.CausalEDA.treatment_features" title="causalkit.eda.eda.CausalEDA.treatment_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CausalEDA.treatment_features</span></code></a></p></td>
-<td><p>Return SHAP values from the fitted propensity score model.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1209,14 +1282,19 @@ negative values indicate features that decrease treatment probability.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.eda.eda">CausalEDA</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel"><code class="docutils literal notranslate"><span class="pre">PropensityModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.__init__"><code class="docutils literal notranslate"><span class="pre">PropensityModel.__init__()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.from_kfold"><code class="docutils literal notranslate"><span class="pre">PropensityModel.from_kfold()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.roc_auc"><code class="docutils literal notranslate"><span class="pre">PropensityModel.roc_auc</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.shap"><code class="docutils literal notranslate"><span class="pre">PropensityModel.shap</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.propensity_scores"><code class="docutils literal notranslate"><span class="pre">PropensityModel.propensity_scores</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.plot_m_overlap"><code class="docutils literal notranslate"><span class="pre">PropensityModel.plot_m_overlap()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.positivity_check_m"><code class="docutils literal notranslate"><span class="pre">PropensityModel.positivity_check_m()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.ps_graph"><code class="docutils literal notranslate"><span class="pre">PropensityModel.ps_graph()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.PropensityModel.positivity_check"><code class="docutils literal notranslate"><span class="pre">PropensityModel.positivity_check()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel"><code class="docutils literal notranslate"><span class="pre">OutcomeModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.__init__"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.__init__()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.from_kfold"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.from_kfold()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.scores"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.scores</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.OutcomeModel.shap"><code class="docutils literal notranslate"><span class="pre">OutcomeModel.shap</span></code></a></li>
 </ul>
@@ -1233,13 +1311,18 @@ negative values indicate features that decrease treatment probability.</p>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.__init__"><code class="docutils literal notranslate"><span class="pre">CausalEDA.__init__()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.data_shape"><code class="docutils literal notranslate"><span class="pre">CausalEDA.data_shape()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.outcome_stats"><code class="docutils literal notranslate"><span class="pre">CausalEDA.outcome_stats()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.fit_m"><code class="docutils literal notranslate"><span class="pre">CausalEDA.fit_m()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.fit_propensity"><code class="docutils literal notranslate"><span class="pre">CausalEDA.fit_propensity()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.outcome_fit"><code class="docutils literal notranslate"><span class="pre">CausalEDA.outcome_fit()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.auc_m"><code class="docutils literal notranslate"><span class="pre">CausalEDA.auc_m()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.positivity_check_m"><code class="docutils literal notranslate"><span class="pre">CausalEDA.positivity_check_m()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.plot_m_overlap"><code class="docutils literal notranslate"><span class="pre">CausalEDA.plot_m_overlap()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.confounders_roc_auc"><code class="docutils literal notranslate"><span class="pre">CausalEDA.confounders_roc_auc()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.positivity_check"><code class="docutils literal notranslate"><span class="pre">CausalEDA.positivity_check()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.plot_ps_overlap"><code class="docutils literal notranslate"><span class="pre">CausalEDA.plot_ps_overlap()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.confounders_means"><code class="docutils literal notranslate"><span class="pre">CausalEDA.confounders_means()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.outcome_plots"><code class="docutils literal notranslate"><span class="pre">CausalEDA.outcome_plots()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.m_features"><code class="docutils literal notranslate"><span class="pre">CausalEDA.m_features()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.treatment_features"><code class="docutils literal notranslate"><span class="pre">CausalEDA.treatment_features()</span></code></a></li>
 </ul>
 </li>

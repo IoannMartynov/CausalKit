@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -42,7 +43,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="icon" href="_static/logo.svg"/>
@@ -153,8 +154,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -271,8 +279,15 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="research.html">
+    Research
   </a>
 </li>
 
@@ -357,10 +372,8 @@ document.write(`
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
- | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -403,23 +416,25 @@ document.write(`
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.aipw_score_ate">aipw_score_ate() (in module causalkit.refutation.orthogonality)</a>
-</li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.aipw_score_att">aipw_score_att() (in module causalkit.refutation.orthogonality)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.alpha_t">alpha_t (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.alpha_d">alpha_d (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.alpha_y">alpha_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.auc_m">auc_m() (causalkit.eda.CausalEDA method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.auc_m">(causalkit.eda.eda.CausalEDA method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.beta_t">beta_t (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.beta_d">beta_d (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -433,8 +448,6 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/design.html#causalkit.design.mde.calculate_mde">calculate_mde() (in module causalkit.design.mde)</a>
-</li>
       <li><a href="api/generated/causalkit.inference.cate_esimand.html#causalkit.inference.cate_esimand">cate_esimand() (in module causalkit.inference)</a>
 
       <ul>
@@ -457,27 +470,11 @@ document.write(`
         <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA">(class in causalkit.eda.eda)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/causalkit.inference.causalforestdml.html#causalkit.inference.causalforestdml">causalforestdml() (in module causalkit.inference)</a>
-</li>
       <li>
     causalkit.data.generators
 
       <ul>
         <li><a href="api/data.html#module-causalkit.data.generators">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.design.mde
-
-      <ul>
-        <li><a href="api/design.html#module-causalkit.design.mde">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.design.traffic_splitter
-
-      <ul>
-        <li><a href="api/design.html#module-causalkit.design.traffic_splitter">module</a>
 </li>
       </ul></li>
       <li>
@@ -494,29 +491,8 @@ document.write(`
         <li><a href="api/inference.html#module-causalkit.inference.ate.dml_ate">module</a>
 </li>
       </ul></li>
-      <li>
-    causalkit.inference.att.conversion_z_test
-
-      <ul>
-        <li><a href="api/inference.html#module-causalkit.inference.att.conversion_z_test">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.inference.att.dml_att
-
-      <ul>
-        <li><a href="api/inference.html#module-causalkit.inference.att.dml_att">module</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    causalkit.inference.att.ttest
-
-      <ul>
-        <li><a href="api/inference.html#module-causalkit.inference.att.ttest">module</a>
-</li>
-      </ul></li>
       <li>
     causalkit.inference.cate.cate_esimand
 
@@ -529,27 +505,6 @@ document.write(`
 
       <ul>
         <li><a href="api/inference.html#module-causalkit.inference.gate.gate_esimand">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.refutation.orthogonality
-
-      <ul>
-        <li><a href="api/refutation.html#module-causalkit.refutation.orthogonality">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.refutation.placebo
-
-      <ul>
-        <li><a href="api/refutation.html#module-causalkit.refutation.placebo">module</a>
-</li>
-      </ul></li>
-      <li>
-    causalkit.refutation.sensitivity
-
-      <ul>
-        <li><a href="api/refutation.html#module-causalkit.refutation.sensitivity">module</a>
 </li>
       </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.confounder_specs">confounder_specs (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
@@ -577,11 +532,9 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/generated/causalkit.inference.conversion_z_test.html#causalkit.inference.conversion_z_test">conversion_z_test() (in module causalkit.inference)</a>
-
-      <ul>
-        <li><a href="api/inference.html#causalkit.inference.att.conversion_z_test.conversion_z_test">(in module causalkit.inference.att.conversion_z_test)</a>
 </li>
-      </ul></li>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.copula_corr">copula_corr (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -604,23 +557,7 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/causalkit.inference.dml.html#causalkit.inference.dml">dml() (in module causalkit.inference)</a>
-</li>
       <li><a href="api/inference.html#causalkit.inference.ate.dml_ate.dml_ate">dml_ate() (in module causalkit.inference.ate.dml_ate)</a>
-</li>
-      <li><a href="api/generated/causalkit.inference.dml_att.html#causalkit.inference.dml_att">dml_att() (in module causalkit.inference)</a>
-
-      <ul>
-        <li><a href="api/inference.html#causalkit.inference.att.dml_att.dml_att">(in module causalkit.inference.att.dml_att)</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="E">E</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.extract_nuisances">extract_nuisances() (in module causalkit.refutation.orthogonality)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -628,10 +565,24 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.fit_m">fit_m() (causalkit.eda.CausalEDA method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.fit_m">(causalkit.eda.eda.CausalEDA method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.fit_propensity">fit_propensity() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
         <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.fit_propensity">(causalkit.eda.eda.CausalEDA method)</a>, <a href="api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.html#causalkit.eda.eda.CausalEDA.fit_propensity">[1]</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/eda.html#causalkit.eda.eda.OutcomeModel.from_kfold">from_kfold() (causalkit.eda.eda.OutcomeModel class method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.from_kfold">(causalkit.eda.eda.PropensityModel class method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -640,37 +591,23 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.g_t">g_t (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.g_d">g_d (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.g_y">g_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
-      <li><a href="api/generated/causalkit.inference.gate_esimand.html#causalkit.inference.gate_esimand">gate_esimand() (in module causalkit.inference)</a>
-
-      <ul>
-        <li><a href="api/inference.html#causalkit.inference.gate.gate_esimand.gate_esimand">(in module causalkit.inference.gate.gate_esimand)</a>
+      <li><a href="api/inference.html#causalkit.inference.gate.gate_esimand.gate_esimand">gate_esimand() (in module causalkit.inference.gate.gate_esimand)</a>
 </li>
-      </ul></li>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.generate">generate() (causalkit.data.generators.CausalDatasetGenerator method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.generate">generate() (causalkit.data.generators.CausalDatasetGenerator method)</a>
+      <li><a href="api/data.html#causalkit.data.generators.generate_rct">generate_rct() (in module causalkit.data.generators)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.generate_rct_data">generate_rct_data() (in module causalkit.data.generators)</a>, <a href="api/generated/causalkit.data.generators.generate_rct_data.html#causalkit.data.generators.generate_rct_data">[1]</a>
 </li>
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.get_df">get_df() (causalkit.data.causaldata.CausalData method)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.get_df">[1]</a>
 </li>
       <li><a href="api/generated/causalkit.refutation.get_sensitivity_summary.html#causalkit.refutation.get_sensitivity_summary">get_sensitivity_summary() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.sensitivity.get_sensitivity_summary">(in module causalkit.refutation.sensitivity)</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.influence_summary">influence_summary() (in module causalkit.refutation.orthogonality)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -686,35 +623,25 @@ document.write(`
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.m_features">m_features() (causalkit.eda.CausalEDA method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.m_features">(causalkit.eda.eda.CausalEDA method)</a>
+</li>
+      </ul></li>
       <li>
     module
 
       <ul>
         <li><a href="api/data.html#module-causalkit.data.generators">causalkit.data.generators</a>
 </li>
-        <li><a href="api/design.html#module-causalkit.design.mde">causalkit.design.mde</a>
-</li>
-        <li><a href="api/design.html#module-causalkit.design.traffic_splitter">causalkit.design.traffic_splitter</a>
-</li>
         <li><a href="api/eda.html#module-causalkit.eda.eda">causalkit.eda.eda</a>
 </li>
         <li><a href="api/inference.html#module-causalkit.inference.ate.dml_ate">causalkit.inference.ate.dml_ate</a>
 </li>
-        <li><a href="api/inference.html#module-causalkit.inference.att.conversion_z_test">causalkit.inference.att.conversion_z_test</a>
-</li>
-        <li><a href="api/inference.html#module-causalkit.inference.att.dml_att">causalkit.inference.att.dml_att</a>
-</li>
-        <li><a href="api/inference.html#module-causalkit.inference.att.ttest">causalkit.inference.att.ttest</a>
-</li>
         <li><a href="api/inference.html#module-causalkit.inference.cate.cate_esimand">causalkit.inference.cate.cate_esimand</a>
 </li>
         <li><a href="api/inference.html#module-causalkit.inference.gate.gate_esimand">causalkit.inference.gate.gate_esimand</a>
-</li>
-        <li><a href="api/refutation.html#module-causalkit.refutation.orthogonality">causalkit.refutation.orthogonality</a>
-</li>
-        <li><a href="api/refutation.html#module-causalkit.refutation.placebo">causalkit.refutation.placebo</a>
-</li>
-        <li><a href="api/refutation.html#module-causalkit.refutation.sensitivity">causalkit.refutation.sensitivity</a>
 </li>
       </ul></li>
   </ul></td>
@@ -723,13 +650,7 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.oos_moment_check">oos_moment_check() (in module causalkit.refutation.orthogonality)</a>
-</li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.oos_moment_check_with_fold_nuisances">oos_moment_check_with_fold_nuisances() (in module causalkit.refutation.orthogonality)</a>
-</li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.orthogonality_derivatives">orthogonality_derivatives() (in module causalkit.refutation.orthogonality)</a>
-</li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.orthogonality_derivatives_att">orthogonality_derivatives_att() (in module causalkit.refutation.orthogonality)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.oracle_nuisance">oracle_nuisance() (causalkit.data.generators.CausalDatasetGenerator method)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.outcome">outcome (causalkit.data.causaldata.CausalData attribute)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.outcome">[1]</a>
 
@@ -761,14 +682,20 @@ document.write(`
 </li>
       <li><a href="api/eda.html#causalkit.eda.eda.OutcomeModel">OutcomeModel (class in causalkit.eda.eda)</a>
 </li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.overlap_diagnostics_att">overlap_diagnostics_att() (in module causalkit.refutation.orthogonality)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.plot_m_overlap">plot_m_overlap() (causalkit.eda.CausalEDA method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.plot_m_overlap">(causalkit.eda.eda.CausalEDA method)</a>
+</li>
+        <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.plot_m_overlap">(causalkit.eda.eda.PropensityModel method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.plot_ps_overlap">plot_ps_overlap() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
@@ -785,6 +712,18 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.positivity_check_m">positivity_check_m() (causalkit.eda.CausalEDA method)</a>
+
+      <ul>
+        <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.positivity_check_m">(causalkit.eda.eda.CausalEDA method)</a>
+</li>
+        <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.positivity_check_m">(causalkit.eda.eda.PropensityModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.propensity_scores">propensity_scores (causalkit.eda.eda.PropensityModel property)</a>
+</li>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.propensity_sharpness">propensity_sharpness (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+</li>
       <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel">PropensityModel (class in causalkit.eda.eda)</a>
 </li>
       <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.ps_graph">ps_graph() (causalkit.eda.eda.PropensityModel method)</a>
@@ -796,31 +735,15 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.refutation.refute_irm_orthogonality.html#causalkit.refutation.refute_irm_orthogonality">refute_irm_orthogonality() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.orthogonality.refute_irm_orthogonality">(in module causalkit.refutation.orthogonality)</a>
 </li>
-      </ul></li>
       <li><a href="api/generated/causalkit.refutation.refute_placebo_outcome.html#causalkit.refutation.refute_placebo_outcome">refute_placebo_outcome() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.placebo.refute_placebo_outcome">(in module causalkit.refutation.placebo)</a>
 </li>
-      </ul></li>
       <li><a href="api/generated/causalkit.refutation.refute_placebo_treatment.html#causalkit.refutation.refute_placebo_treatment">refute_placebo_treatment() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.placebo.refute_placebo_treatment">(in module causalkit.refutation.placebo)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.refutation.refute_subset.html#causalkit.refutation.refute_subset">refute_subset() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.placebo.refute_subset">(in module causalkit.refutation.placebo)</a>
 </li>
-      </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.rng">rng (causalkit.data.generators.CausalDatasetGenerator attribute)</a>, <a href="api/data.html#id3">[1]</a>
 </li>
       <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.roc_auc">roc_auc (causalkit.eda.eda.PropensityModel property)</a>
@@ -836,17 +759,7 @@ document.write(`
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.seed">seed (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis">sensitivity_analysis() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.sensitivity.sensitivity_analysis">(in module causalkit.refutation.sensitivity)</a>
 </li>
-      </ul></li>
-      <li><a href="api/generated/causalkit.refutation.sensitivity_analysis_set.html#causalkit.refutation.sensitivity_analysis_set">sensitivity_analysis_set() (in module causalkit.refutation)</a>
-
-      <ul>
-        <li><a href="api/refutation.html#causalkit.refutation.sensitivity.sensitivity_analysis_set">(in module causalkit.refutation.sensitivity)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/eda.html#causalkit.eda.eda.OutcomeModel.shap">shap (causalkit.eda.eda.OutcomeModel property)</a>
@@ -856,8 +769,6 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.sigma_y">sigma_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
-</li>
-      <li><a href="api/design.html#causalkit.design.traffic_splitter.split_traffic">split_traffic() (in module causalkit.design.traffic_splitter)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -873,7 +784,7 @@ document.write(`
         <li><a href="api/eda.html#causalkit.eda.eda.CausalDataLite.target">(causalkit.eda.eda.CausalDataLite attribute)</a>, <a href="api/eda.html#causalkit.eda.eda.CausalDataLite.target">[1]</a>
 </li>
       </ul></li>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.target_t_rate">target_t_rate (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.target_d_rate">target_d_rate (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.tau">tau (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
@@ -881,6 +792,8 @@ document.write(`
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.to_causal_data">to_causal_data() (causalkit.data.generators.CausalDatasetGenerator method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.treatment">treatment (causalkit.data.causaldata.CausalData attribute)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.treatment">[1]</a>
 
       <ul>
@@ -891,33 +804,27 @@ document.write(`
         <li><a href="api/eda.html#causalkit.eda.eda.CausalDataLite.treatment">(causalkit.eda.eda.CausalDataLite attribute)</a>, <a href="api/eda.html#causalkit.eda.eda.CausalDataLite.treatment">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.treatment_features">treatment_features() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
         <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.treatment_features">(causalkit.eda.eda.CausalEDA method)</a>, <a href="api/generated/causalkit.eda.eda.CausalEDA.treatment_features.html#causalkit.eda.eda.CausalEDA.treatment_features">[1]</a>
 </li>
       </ul></li>
-      <li><a href="api/refutation.html#causalkit.refutation.orthogonality.trim_sensitivity_curve_att">trim_sensitivity_curve_att() (in module causalkit.refutation.orthogonality)</a>
-</li>
       <li><a href="api/generated/causalkit.inference.ttest.html#causalkit.inference.ttest">ttest() (in module causalkit.inference)</a>
-
-      <ul>
-        <li><a href="api/inference.html#causalkit.inference.att.ttest.ttest">(in module causalkit.inference.att.ttest)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.u_strength_t">u_strength_t (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.u_strength_d">u_strength_d (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.u_strength_y">u_strength_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+</li>
+      <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.use_copula">use_copula (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
   </ul></td>
 </tr></table>

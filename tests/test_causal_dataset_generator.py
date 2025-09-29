@@ -20,8 +20,8 @@ def basic_generator(random_seed):
     return CausalDatasetGenerator(
         theta=2.0,
         beta_y=np.array([1.0, -0.5, 0.2]),
-        beta_t=np.array([0.8, 1.2, -0.3]),
-        target_t_rate=0.35,
+        beta_d=np.array([0.8, 1.2, -0.3]),
+        target_d_rate=0.35,
         outcome_type="continuous",
         sigma_y=1.0,
         seed=random_seed,

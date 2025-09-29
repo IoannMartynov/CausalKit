@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -43,14 +44,14 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/refutation';</script>
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="causalkit.refutation.refute_placebo_outcome" href="generated/causalkit.refutation.refute_placebo_outcome.html" />
-    <link rel="prev" title="causalkit.inference.gate_esimand" href="generated/causalkit.inference.gate_esimand.html" />
+    <link rel="prev" title="causalkit.inference.bootstrap_diff_means" href="generated/causalkit.inference.bootstrap_diff_means.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -156,8 +157,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -276,8 +284,15 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -361,11 +376,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml.html">causalkit.inference.dml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.causalforestdml.html">causalkit.inference.causalforestdml</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml_att.html">causalkit.inference.dml_att</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.cate_esimand.html">causalkit.inference.cate_esimand</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.gate_esimand.html">causalkit.inference.gate_esimand</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Refutation Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -374,7 +384,6 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis_set.html">causalkit.refutation.sensitivity_analysis_set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
 </ul>
 </details></li>
@@ -461,564 +470,26 @@ document.write(`
 <td><p>Re-estimate the effect on a random subset (default 80 %) to check sample-stability of the estimate.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis" title="causalkit.refutation.sensitivity_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensitivity_analysis</span></code></a></p></td>
-<td><p>Perform sensitivity analysis on a causal effect estimate.</p></td>
+<td><p>Create a sensitivity-style summary for an IRM-based effect estimate.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.refutation.get_sensitivity_summary.html#causalkit.refutation.get_sensitivity_summary" title="causalkit.refutation.get_sensitivity_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sensitivity_summary</span></code></a></p></td>
-<td><p>Get the sensitivity summary string from a sensitivity-analyzed model.</p></td>
+<td><p>Get the sensitivity summary string if available.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis_set.html#causalkit.refutation.sensitivity_analysis_set" title="causalkit.refutation.sensitivity_analysis_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensitivity_analysis_set</span></code></a></p></td>
-<td><p>Benchmark a set of observed confounders to assess robustness, mirroring DoubleML's <cite>sensitivity_benchmark</cite> for DoubleMLIRM.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.refutation.refute_irm_orthogonality.html#causalkit.refutation.refute_irm_orthogonality" title="causalkit.refutation.refute_irm_orthogonality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refute_irm_orthogonality</span></code></a></p></td>
-<td><p>Comprehensive AIPW orthogonality diagnostics for DoubleML estimators.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.refutation.refute_irm_orthogonality.html#causalkit.refutation.refute_irm_orthogonality" title="causalkit.refutation.refute_irm_orthogonality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refute_irm_orthogonality</span></code></a></p></td>
+<td><p>Comprehensive AIPW orthogonality diagnostics for IRM estimators.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="module-causalkit.refutation.placebo">
-<span id="placebo-and-subset-refutation"></span><h2>Placebo and Subset Refutation<a class="headerlink" href="#module-causalkit.refutation.placebo" title="Link to this heading">#</a></h2>
-<p>Placebo / robustness checks for CausalKit.</p>
-<p>The functions below deliberately break or perturb assumptions,
-re-estimate the causal effect, and report the resulting
-theta-hat and p-value so that users can judge the credibility
-of their original estimate.</p>
-<p>All helpers share the same signature:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>def refute_xxx(</dt><dd><p>inference_fn,
-data: CausalData,
-random_state: int | None = None,
-<a href="#id1"><span class="problematic" id="id2">**</span></a>inference_kwargs,</p>
-</dd>
-</dl>
-<p>) -&gt; dict</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">param inference_fn<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any CausalKit estimator (e.g. dml_att) returning a dict that
-contains keys “coefficient” and “p_value”.</p>
-</dd>
-<dt class="field-even">type inference_fn<span class="colon">:</span></dt>
-<dd class="field-even"><p>callable</p>
-</dd>
-<dt class="field-odd">param data<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The original data object.</p>
-</dd>
-<dt class="field-even">type data<span class="colon">:</span></dt>
-<dd class="field-even"><p>CausalData</p>
-</dd>
-<dt class="field-odd">param random_state<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Seed for reproducibility.</p>
-</dd>
-<dt class="field-even">type random_state<span class="colon">:</span></dt>
-<dd class="field-even"><p>int, optional</p>
-</dd>
-<dt class="field-odd">param **inference_kwargs<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Extra keyword args forwarded verbatim to <cite>inference_fn</cite>
-(e.g. you can tweak learners, #folds, …).</p>
-</dd>
-<dt class="field-even">returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>{‘theta’: float, ‘p_value’: float}</p>
-</dd>
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.placebo.refute_placebo_outcome">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.placebo.</span></span><span class="sig-name descname"><span class="pre">refute_placebo_outcome</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/placebo.html#refute_placebo_outcome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.placebo.refute_placebo_outcome" title="Link to this definition">#</a></dt>
-<dd><p>Generate random outcome (target) variables while keeping treatment
-and covariates intact. For binary outcomes, generates random binary
-variables with the same proportion. For continuous outcomes, generates
-random variables from a normal distribution fitted to the original data.
-A valid causal design should now yield θ ≈ 0 and a large p-value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.placebo.refute_placebo_treatment">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.placebo.</span></span><span class="sig-name descname"><span class="pre">refute_placebo_treatment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/placebo.html#refute_placebo_treatment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.placebo.refute_placebo_treatment" title="Link to this definition">#</a></dt>
-<dd><p>Generate random binary treatment variables while keeping outcome and
-covariates intact. Generates random binary treatment with the same
-proportion as the original treatment. Breaks the treatment–outcome link.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.placebo.refute_subset">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.placebo.</span></span><span class="sig-name descname"><span class="pre">refute_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/placebo.html#refute_subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.placebo.refute_subset" title="Link to this definition">#</a></dt>
-<dd><p>Re-estimate the effect on a random subset (default 80 %)
-to check sample-stability of the estimate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="placebo-and-subset-refutation">
+<h2>Placebo and Subset Refutation<a class="headerlink" href="#placebo-and-subset-refutation" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-causalkit.refutation.sensitivity">
-<span id="sensitivity-analysis"></span><h2>Sensitivity Analysis<a class="headerlink" href="#module-causalkit.refutation.sensitivity" title="Link to this heading">#</a></h2>
-<p>Sensitivity analysis for causal inference using DoubleML.</p>
-<p>This module provides functions to perform sensitivity analysis on causal effect estimates
-to assess the robustness of the results to potential unobserved confounding.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.sensitivity.sensitivity_analysis">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.sensitivity.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/sensitivity.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity.sensitivity_analysis" title="Link to this definition">#</a></dt>
-<dd><p>Perform sensitivity analysis on a causal effect estimate.</p>
-<p>This function takes a DoubleML effect estimation result and performs sensitivity
-analysis to assess robustness to unobserved confounding.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results, must include:
-- ‘model’: A fitted DoubleML model object (e.g., DoubleMLIRM)
-- Other keys like ‘coefficient’, ‘std_error’, ‘p_value’, etc.</p></li>
-<li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the outcome equation (confounding strength)</p></li>
-<li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Sensitivity parameter for the treatment equation (confounding strength)</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for the sensitivity analysis</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A formatted sensitivity analysis summary report</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the effect_estimation does not contain a ‘model’ key or if the model
-    does not support sensitivity analysis</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.13)"><strong>KeyError</strong></a> – If required keys are missing from the effect_estimation dictionary</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – If the model is not a DoubleML object that supports sensitivity analysis</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span><span class="p">,</span> <span class="n">CausalData</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.sensitivity</span><span class="w"> </span><span class="kn">import</span> <span class="n">sensitivity_analysis</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data and estimate effect</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct_data</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ck</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-<span class="gp">... </span>                <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">ck</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Perform sensitivity analysis</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sensitivity_report</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.sensitivity.get_sensitivity_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.sensitivity.</span></span><span class="sig-name descname"><span class="pre">get_sensitivity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/sensitivity.html#get_sensitivity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity.get_sensitivity_summary" title="Link to this definition">#</a></dt>
-<dd><p>Get the sensitivity summary string from a sensitivity-analyzed model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – Effect estimation result containing a model that has been sensitivity-analyzed</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The sensitivity summary string if available, None otherwise</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a> or None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.sensitivity.sensitivity_analysis_set">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.sensitivity.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmarking_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_hypothesis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/sensitivity.html#sensitivity_analysis_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity.sensitivity_analysis_set" title="Link to this definition">#</a></dt>
-<dd><p>Benchmark a set of observed confounders to assess robustness, mirroring
-DoubleML’s <cite>sensitivity_benchmark</cite> for DoubleMLIRM.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results with a fitted DoubleML model under the ‘model’ key.</p></li>
-<li><p><strong>benchmarking_set</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – One or multiple names of observed confounders to benchmark (e.g., [“inc”], [“pira”], [“twoearn”]).
-Accepts:
-- a single string (benchmarks that single confounder),
-- a list of strings (interpreted as multiple single-variable benchmarks, each run separately), or
-- a list of lists/tuples of strings to specify explicit benchmarking groups (each inner list is run once together).</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level used by the benchmarking procedure.</p></li>
-<li><p><strong>null_hypothesis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.0</em>) – The null hypothesis value for the target parameter.</p></li>
-<li><p><strong>**kwargs</strong> (<em>Any</em>) – Additional keyword arguments passed through to the underlying DoubleML <cite>sensitivity_benchmark</cite> method.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p>If a single confounder/group is provided, returns the object from a single call to
-<cite>model.sensitivity_benchmark(benchmarking_set=[…])</cite>.</p></li>
-<li><p>If multiple confounders/groups are provided, returns a dict mapping each confounder (str)
-or group (tuple[str, …]) to its corresponding result object.</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><strong>TypeError</strong></a> – If inputs have invalid types or if the model does not support sensitivity benchmarking.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If required inputs are missing or invalid (e.g., empty benchmarking_set, invalid level).</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><strong>RuntimeError</strong></a> – If the underlying <cite>sensitivity_benchmark</cite> call fails.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="sensitivity-analysis">
+<h2>Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-causalkit.refutation.orthogonality">
-<span id="orthogonality-checks"></span><h2>Orthogonality Checks<a class="headerlink" href="#module-causalkit.refutation.orthogonality" title="Link to this heading">#</a></h2>
-<p>AIPW orthogonality diagnostics for DoubleML estimators.</p>
-<p>This module implements comprehensive orthogonality diagnostics for AIPW/IRM-based
-estimators like dml_ate and dml_att to validate the key assumptions required
-for valid causal inference. Based on the efficient influence function (EIF) framework.</p>
-<p>Key diagnostics implemented:
-- Out-of-sample moment check (non-tautological)
-- Orthogonality (Gateaux derivative) tests
-- Influence diagnostics</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.aipw_score_ate">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">aipw_score_ate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#aipw_score_ate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.aipw_score_ate" title="Link to this definition">#</a></dt>
-<dd><p>Efficient influence function (EIF) for ATE.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.aipw_score_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">aipw_score_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#aipw_score_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.aipw_score_att" title="Link to this definition">#</a></dt>
-<dd><p>Efficient influence function (EIF) for ATT (a.k.a. ATTE) under IRM/AIPW.</p>
-<p>ψ_ATT(W; θ, η) = [ D*(Y - m0(X) - θ)  -  (1-D)*{ g(X)/(1-g(X)) }*(Y - m0(X)) ] / E[D]</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>This matches DoubleML’s <cite>score=’ATTE’</cite> (weights ω=D/E[D], ar{ω}=m(X)/E[D]).</p></li>
-<li><p>m1 enters only via θ; ∂ψ/∂m1 = 0.</p></li>
-</ul>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.extract_nuisances">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">extract_nuisances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dml_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#extract_nuisances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.extract_nuisances" title="Link to this definition">#</a></dt>
-<dd><p>Robustly extract nuisance function predictions from DoubleML model.</p>
-<p>Handles different DoubleML prediction key layouts and provides clear error messages.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dml_model</strong> (<em>DoubleML model</em>) – Fitted DoubleML model with predictions</p></li>
-<li><p><strong>test_indices</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – If provided, extract predictions only for these indices</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(g, m0, m1) where:
-- g: propensity scores P(D=1|X)
-- m0: outcome predictions E[Y|X,D=0]
-- m1: outcome predictions E[Y|X,D=1]</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[np.ndarray, np.ndarray, np.ndarray]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.13)"><strong>KeyError</strong></a> – If required prediction keys cannot be found</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.oos_moment_check_with_fold_nuisances">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">oos_moment_check_with_fold_nuisances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_thetas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_nuisances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#oos_moment_check_with_fold_nuisances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.oos_moment_check_with_fold_nuisances" title="Link to this definition">#</a></dt>
-<dd><p>Out-of-sample moment check using fold-specific nuisances to avoid tautological results.</p>
-<p>For each fold k, evaluates the AIPW score using θ fitted on other folds and
-nuisance predictions from the fold-specific model, then tests if the combined
-moment condition holds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fold_thetas</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>) – Treatment effects estimated excluding each fold</p></li>
-<li><p><strong>fold_indices</strong> (<em>List</em><em>[</em><em>np.ndarray</em><em>]</em>) – Indices for each fold</p></li>
-<li><p><strong>fold_nuisances</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><em>np.ndarray</em><em>, </em><em>np.ndarray</em><em>, </em><em>np.ndarray</em><em>]</em><em>]</em>) – Fold-specific nuisance predictions (g, m0, m1) for each fold</p></li>
-<li><p><strong>y</strong> (<em>np.ndarray</em>) – Observed outcomes and treatments</p></li>
-<li><p><strong>d</strong> (<em>np.ndarray</em>) – Observed outcomes and treatments</p></li>
-<li><p><strong>score_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Fold-wise results and combined t-statistic</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[pd.DataFrame, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.oos_moment_check">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">oos_moment_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fold_thetas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#oos_moment_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.oos_moment_check" title="Link to this definition">#</a></dt>
-<dd><p>Out-of-sample moment check to avoid tautological results (legacy version).</p>
-<p>For each fold k, evaluates the AIPW score using θ fitted on other folds,
-then tests if the combined moment condition holds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fold_thetas</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>) – Treatment effects estimated excluding each fold</p></li>
-<li><p><strong>fold_indices</strong> (<em>List</em><em>[</em><em>np.ndarray</em><em>]</em>) – Indices for each fold</p></li>
-<li><p><strong>y</strong> (<em>np.ndarray</em>) – Data arrays (outcomes, treatment, predictions)</p></li>
-<li><p><strong>d</strong> (<em>np.ndarray</em>) – Data arrays (outcomes, treatment, predictions)</p></li>
-<li><p><strong>m0</strong> (<em>np.ndarray</em>) – Data arrays (outcomes, treatment, predictions)</p></li>
-<li><p><strong>m1</strong> (<em>np.ndarray</em>) – Data arrays (outcomes, treatment, predictions)</p></li>
-<li><p><strong>g</strong> (<em>np.ndarray</em>) – Data arrays (outcomes, treatment, predictions)</p></li>
-<li><p><strong>score_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Fold-wise results and combined t-statistic</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[pd.DataFrame, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.orthogonality_derivatives">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">orthogonality_derivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#orthogonality_derivatives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.orthogonality_derivatives" title="Link to this definition">#</a></dt>
-<dd><p>Compute orthogonality (Gateaux derivative) tests for nuisance functions.</p>
-<p>Tests directional derivatives of the AIPW signal with respect to nuisances.
-For true nuisances, these derivatives should be ≈ 0 for rich sets of directions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X_basis</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em> (</em><em>n</em><em>, </em><em>B</em><em>)</em>) – Matrix of direction functions evaluated at X (include column of 1s for calibration)</p></li>
-<li><p><strong>y</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>d</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>m0</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>m1</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>g</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.01</em>) – Clipping bound for propensity scores to avoid extreme weights</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Derivative estimates, standard errors, and t-statistics for each basis function</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.influence_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">influence_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#influence_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.influence_summary" title="Link to this definition">#</a></dt>
-<dd><p>Compute influence diagnostics showing where uncertainty comes from.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>d</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>m0</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>m1</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>g</strong> (<em>np.ndarray</em>) – Data arrays</p></li>
-<li><p><strong>theta_hat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – Estimated treatment effect</p></li>
-<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 10</em>) – Number of top influential observations to return</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Influence diagnostics including SE, heavy-tail metrics, and top-k cases</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.refute_irm_orthogonality">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">refute_irm_orthogonality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trim_propensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.02,</span> <span class="pre">0.98)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#refute_irm_orthogonality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.refute_irm_orthogonality" title="Link to this definition">#</a></dt>
-<dd><p>Comprehensive AIPW orthogonality diagnostics for DoubleML estimators.</p>
-<p>Implements three key diagnostic approaches based on the efficient influence function (EIF):
-1. Out-of-sample moment check (non-tautological)
-2. Orthogonality (Gateaux derivative) tests
-3. Influence diagnostics</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<em>Callable</em>) – The inference function (dml_ate or dml_att)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The causal data object</p></li>
-<li><p><strong>trim_propensity</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><em>default</em><em> (</em><em>0.02</em><em>, </em><em>0.98</em><em>)</em>) – Propensity score trimming bounds (min, max) to avoid extreme weights</p></li>
-<li><p><strong>n_basis_funcs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>, </em><em>default None</em><em> (</em><em>len</em><em>(</em><em>confounders</em><em>)</em><em>+1</em><em>)</em>) – Number of basis functions for orthogonality derivative tests (constant + covariates).
-If None, defaults to the number of confounders in <cite>data</cite> plus 1 for the constant term.</p></li>
-<li><p><strong>n_folds_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for out-of-sample moment check</p></li>
-<li><p><strong>**inference_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional arguments passed to inference_fn</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>strict_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing:
-- oos_moment_test: Out-of-sample moment condition results
-- orthogonality_derivatives: Gateaux derivative test results
-- influence_diagnostics: Influence function diagnostics
-- theta: Original treatment effect estimate
-- trimmed_diagnostics: Results on trimmed sample
-- overall_assessment: Summary diagnostic assessment</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="n">refute_irm_orthogonality</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Comprehensive orthogonality check</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ortho_results</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Check key diagnostics</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OOS moment t-stat: </span><span class="si">{</span><span class="n">ortho_results</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">][</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calibration issues: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ortho_results</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;abs(t_g) &gt; 2&#39;</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Assessment: </span><span class="si">{</span><span class="n">ortho_results</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.orthogonality_derivatives_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">orthogonality_derivatives_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#orthogonality_derivatives_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.orthogonality_derivatives_att" title="Link to this definition">#</a></dt>
-<dd><p>Gateaux derivatives of the ATT score wrt nuisances (m0, g). m1-derivative is 0.</p>
-<p>For ψ_ATT = [ D*(Y - m0 - θ)  -  (1-D)*(g/(1-g))*(Y - m0) ] / p1:
-:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-<blockquote>
-<div><p>∂_{m0}[h] : (1/n) Σ h(X_i) * [ ((1-D_i)*g_i/(1-g_i) - D_i) / p1 ]
-∂_{g}[s]  : (1/n) Σ s(X_i) * [ -(1-D_i)*(Y_i - m0_i) / ( p1 * (1-g_i)^2 ) ]</p>
-</div></blockquote>
-<p>Both have 0 expectation at the truth (Neyman orthogonality).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.overlap_diagnostics_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">overlap_diagnostics_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.95,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#overlap_diagnostics_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.overlap_diagnostics_att" title="Link to this definition">#</a></dt>
-<dd><p>Key overlap metrics for ATT: availability of suitable controls.
-Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; among TREATED, fraction with m(X) ≤ 1 - threshold.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>eps_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.orthogonality.trim_sensitivity_curve_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.orthogonality.</span></span><span class="sig-name descname"><span class="pre">trim_sensitivity_curve_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.9,</span> <span class="pre">0.90863636,</span> <span class="pre">0.91727273,</span> <span class="pre">0.92590909,</span> <span class="pre">0.93454545,</span> <span class="pre">0.94318182,</span> <span class="pre">0.95181818,</span> <span class="pre">0.96045455,</span> <span class="pre">0.96909091,</span> <span class="pre">0.97772727,</span> <span class="pre">0.98636364,</span> <span class="pre">0.995])</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/orthogonality.html#trim_sensitivity_curve_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.orthogonality.trim_sensitivity_curve_att" title="Link to this definition">#</a></dt>
-<dd><p>Re-estimate θ while progressively trimming CONTROLS with large m(X).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>thresholds</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="orthogonality-checks">
+<h2>Orthogonality Checks<a class="headerlink" href="#orthogonality-checks" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -1033,12 +504,12 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="generated/causalkit.inference.gate_esimand.html"
+       href="generated/causalkit.inference.bootstrap_diff_means.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.inference.gate_esimand</p>
+        <p class="prev-next-title">causalkit.inference.bootstrap_diff_means</p>
       </div>
     </a>
     <a class="right-next"
@@ -1070,32 +541,9 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference-package">API Reference (Package)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.placebo">Placebo and Subset Refutation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.placebo.refute_placebo_outcome"><code class="docutils literal notranslate"><span class="pre">refute_placebo_outcome()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.placebo.refute_placebo_treatment"><code class="docutils literal notranslate"><span class="pre">refute_placebo_treatment()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.placebo.refute_subset"><code class="docutils literal notranslate"><span class="pre">refute_subset()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.sensitivity">Sensitivity Analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.sensitivity.sensitivity_analysis"><code class="docutils literal notranslate"><span class="pre">sensitivity_analysis()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.sensitivity.get_sensitivity_summary"><code class="docutils literal notranslate"><span class="pre">get_sensitivity_summary()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.sensitivity.sensitivity_analysis_set"><code class="docutils literal notranslate"><span class="pre">sensitivity_analysis_set()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.orthogonality">Orthogonality Checks</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.aipw_score_ate"><code class="docutils literal notranslate"><span class="pre">aipw_score_ate()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.aipw_score_att"><code class="docutils literal notranslate"><span class="pre">aipw_score_att()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.extract_nuisances"><code class="docutils literal notranslate"><span class="pre">extract_nuisances()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.oos_moment_check_with_fold_nuisances"><code class="docutils literal notranslate"><span class="pre">oos_moment_check_with_fold_nuisances()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.oos_moment_check"><code class="docutils literal notranslate"><span class="pre">oos_moment_check()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.orthogonality_derivatives"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.influence_summary"><code class="docutils literal notranslate"><span class="pre">influence_summary()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.refute_irm_orthogonality"><code class="docutils literal notranslate"><span class="pre">refute_irm_orthogonality()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.orthogonality_derivatives_att"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives_att()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.overlap_diagnostics_att"><code class="docutils literal notranslate"><span class="pre">overlap_diagnostics_att()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.orthogonality.trim_sensitivity_curve_att"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_att()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo-and-subset-refutation">Placebo and Subset Refutation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality-checks">Orthogonality Checks</a></li>
 </ul>
   </nav></div>
 

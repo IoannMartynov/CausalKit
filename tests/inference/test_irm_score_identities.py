@@ -8,7 +8,7 @@ from causalkit.inference.atte.dml_atte import dml_atte
 
 
 @pytest.mark.parametrize("normalize_ipw", [False, True])
-def test_irm_att_score_identities(normalize_ipw):
+def test_irm_atte_score_identities(normalize_ipw):
     # Build a dataset with confounding so ATT is well-defined
     gen = CausalDatasetGenerator(
         theta=0.8,

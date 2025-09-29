@@ -7,7 +7,7 @@ from causalkit.inference.gate import gate_esimand
 
 
 def test_gate_esimand_default_quintiles_shape_and_columns():
-    gen = CausalDatasetGenerator(theta=1.0, seed=123, outcome_type="continuous", target_t_rate=0.4)
+    gen = CausalDatasetGenerator(theta=1.0, seed=123, outcome_type="continuous", target_d_rate=0.4)
     cd = gen.to_causal_data(n=600)
 
     res = gate_esimand(cd, n_groups=5)
@@ -25,7 +25,7 @@ def test_gate_esimand_default_quintiles_shape_and_columns():
 
 
 def test_gate_esimand_with_custom_groups_matches_group_counts():
-    gen = CausalDatasetGenerator(theta=1.5, seed=7, outcome_type="continuous", target_t_rate=0.35)
+    gen = CausalDatasetGenerator(theta=1.5, seed=7, outcome_type="continuous", target_d_rate=0.35)
     cd = gen.to_causal_data(n=500)
 
     # Create a simple custom grouping by a confounder (e.g., x1 median split)

@@ -1,0 +1,776 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Math notation for EDA, IRM, and refutation diagnostics (CausalKit) &#8212; CausalKit 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3415b827" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/math_eda_irm_refutation';</script>
+    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Real World Examples" href="../examples.html" />
+    <link rel="prev" title="Refutation and robustness" href="refutation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">CausalKit</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="causal_inference_fundamentals.html">Introduction to Causal Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="causaldata.html">CausalData at a glance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eda.html">Exploratory Data Analysis (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inference.html">Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refutation.html">Refutation and robustness</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Math notation for EDA, IRM, and refutation diagnostics (CausalKit)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Math...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="math-notation-for-eda-irm-and-refutation-diagnostics-causalkit">
+<h1>Math notation for EDA, IRM, and refutation diagnostics (CausalKit)<a class="headerlink" href="#math-notation-for-eda-irm-and-refutation-diagnostics-causalkit" title="Link to this heading">#</a></h1>
+<p>This note summarizes the core notation and formulas used by CausalKit’s EDA helpers, the IRM estimator, and refutation diagnostics. The estimator and scores follow the <strong>Double/Debiased Machine Learning (DoubleML)</strong> formulation; we implement them on top of <code class="docutils literal notranslate"><span class="pre">CausalData</span></code>. Throughout, <span class="math notranslate nohighlight">\(\mathbb E_n[\cdot]\)</span> denotes the sample mean.</p>
+<section id="variables-and-parameters">
+<h2>1. Variables and parameters<a class="headerlink" href="#variables-and-parameters" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Observed data: <span class="math notranslate nohighlight">\((Y_i, D_i, X_i)_{i=1}^n\)</span>.</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(Y\in\mathbb R\)</span> (or <span class="math notranslate nohighlight">\(\{0,1\}\)</span>) is the outcome.</p></li>
+<li><p><span class="math notranslate nohighlight">\(D\in\{0,1\}\)</span> is a binary treatment.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X\in\mathbb R^p\)</span> are observed confounders.</p></li>
+</ul>
+</li>
+<li><p>Potential outcomes: <span class="math notranslate nohighlight">\(Y(1), Y(0)\)</span>.</p></li>
+<li><p>Targets:</p>
+<ul>
+<li><p><strong>ATE</strong>: <span class="math notranslate nohighlight">\(\theta_{\mathrm{ATE}}=\mathbb E\big[Y(1)-Y(0)\big]\)</span>.</p></li>
+<li><p><strong>ATT (a.k.a. ATET/ATTE)</strong>: <span class="math notranslate nohighlight">\(\theta_{\mathrm{ATT}}=\mathbb E\big[Y(1)-Y(0)\mid D=1\big]\)</span>.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Assumptions (standard):</strong>
+Unconfoundedness <span class="math notranslate nohighlight">\((Y(1),Y(0))\perp D\mid X\)</span>; positivity <span class="math notranslate nohighlight">\(0&lt;\Pr(D=1\mid X)&lt;1\)</span> a.s.; SUTVA; and regularity for cross-fitting and ML.</p>
+</section>
+<section id="nuisance-functions-irm">
+<h2>2. Nuisance functions (IRM)<a class="headerlink" href="#nuisance-functions-irm" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Propensity: <span class="math notranslate nohighlight">\(m(x)=\Pr(D=1\mid X=x)\)</span>.</p></li>
+<li><p>Outcome regressions: <span class="math notranslate nohighlight">\(g_1(x)=\mathbb E[Y\mid X=x,D=1],\quad g_0(x)=\mathbb E[Y\mid X=x,D=0]\)</span>.</p></li>
+<li><p>Cross-fitted predictions are denoted <span class="math notranslate nohighlight">\(\hat m,\hat g_1,\hat g_0\)</span> (length <span class="math notranslate nohighlight">\(n\)</span>).</p></li>
+<li><p><strong>Clipping:</strong> <span class="math notranslate nohighlight">\(\hat m\gets \mathrm{clip}(\hat m,\varepsilon,1-\varepsilon)\)</span> with user trimming threshold <span class="math notranslate nohighlight">\(\varepsilon&gt;0\)</span>.</p></li>
+</ul>
+<p><strong>Binary outcomes.</strong> If <span class="math notranslate nohighlight">\(Y\)</span> is binary and the outcome learner is a classifier with <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>, CausalKit uses the class-1 probability as <span class="math notranslate nohighlight">\(\hat g_d(x)\)</span>. For numerical stability you may also clip <span class="math notranslate nohighlight">\(\hat g_d\)</span> into <span class="math notranslate nohighlight">\([\delta,1-\delta]\)</span> with a tiny <span class="math notranslate nohighlight">\(\delta\)</span> (e.g., <span class="math notranslate nohighlight">\(10^{-6}\)</span>).</p>
+</section>
+<section id="scores-eifs-and-estimators">
+<h2>3. Scores, EIFs, and estimators<a class="headerlink" href="#scores-eifs-and-estimators" title="Link to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(u_1=Y-\hat g_1,\; u_0=Y-\hat g_0\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+h_1=\frac{D}{\hat m},\qquad h_0=\frac{1-D}{1-\hat m}.
+\]</div>
+<p>(Optionally, CausalKit can <strong>normalize</strong> <span class="math notranslate nohighlight">\(h_1,h_0\)</span> to have sample mean 1; this is a Hájek-style, second-order variance tweak. If you normalize in estimation, also use the normalized influence values in the variance formula.)</p>
+<section id="ate-aipw-dr">
+<h3>3.1 ATE (AIPW/DR)<a class="headerlink" href="#ate-aipw-dr" title="Link to this heading">#</a></h3>
+<p>Score decomposition as <span class="math notranslate nohighlight">\(\mathbb E[\psi_a\,\theta+\psi_b]=0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\psi_a=-1,\qquad
+\psi_b=(\hat g_1-\hat g_0)+u_1 h_1 - u_0 h_0.
+\]</div>
+<p>Estimator and influence function:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat\theta_{\text{ATE}}=\mathbb E_n[\psi_b],\qquad
+\hat\psi_i=\psi_{b,i}-\hat\theta_{\text{ATE}}.
+\]</div>
+<p><strong>Efficient influence function (truth <span class="math notranslate nohighlight">\((g_d,m,\theta)\)</span>):</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\psi_{\text{ATE}}(W)=\big(g_1-g_0-\theta\big)+\frac{D}{m}(Y-g_1)-\frac{1-D}{1-m}(Y-g_0).
+\]</div>
+<p><strong>Compact identity (useful in code).</strong> With <span class="math notranslate nohighlight">\(g_D(X)=Dg_1(X)+(1-D)g_0(X)\)</span> and <span class="math notranslate nohighlight">\(r=Y-g_D(X)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\psi_{\text{ATE}}=(g_1-g_0-\theta)+\Big(\tfrac{D}{m}-\tfrac{1-D}{1-m}\Big)\,r.
+\]</div>
+</section>
+<section id="att-a-k-a-atet-atte">
+<h3>3.2 ATT (a.k.a. ATET/ATTE)<a class="headerlink" href="#att-a-k-a-atet-atte" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(p_1=\mathbb E[D]\)</span> (estimated by the sample mean <span class="math notranslate nohighlight">\(\hat p_1=\mathbb E_n[D]\)</span>). Define the control reweighting factor <span class="math notranslate nohighlight">\(r_0(X)=\frac{\hat m}{1-\hat m}\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[
+\psi_a=-\frac{D}{p_1},\qquad
+\psi_b=\frac{D}{p_1}(\hat g_1-\hat g_0)
++\frac{D}{p_1}(Y-\hat g_1)
+-\frac{1-D}{p_1}\frac{\hat m}{1-\hat m}(Y-\hat g_0).
+\]</div>
+<p>Estimator and influence function:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat\theta_{\text{ATT}}=\mathbb E_n[\psi_b],\qquad
+\hat\psi_i=\psi_{b,i}+\psi_{a,i}\hat\theta_{\text{ATT}}.
+\]</div>
+<p>Because <span class="math notranslate nohighlight">\(\mathbb E_n[D/\hat p_1]=1\)</span>, this choice centers <span class="math notranslate nohighlight">\(\hat\psi\)</span> at zero in-sample.
+If you use fold-specific <span class="math notranslate nohighlight">\(\hat p_{1,k}\)</span>, either center <span class="math notranslate nohighlight">\(\hat\psi\)</span> per fold or re-express everything with the global <span class="math notranslate nohighlight">\(\hat p_1\)</span>.</p>
+<blockquote>
+<div><p><strong>Equivalent residual-weight form.</strong> With <span class="math notranslate nohighlight">\(\bar w=\hat m/p_1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+&gt; \bar w(u_1 h_1-u_0 h_0)=\frac{D}{p_1}(Y-\hat g_1)-\frac{1-D}{p_1}\frac{\hat m}{1-\hat m}(Y-\hat g_0).
+&gt; \]</div>
+</div></blockquote>
+<p><strong>Efficient influence function (truth <span class="math notranslate nohighlight">\((g_d,m,\theta)\)</span>):</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\psi_{\text{ATT}}(W)=\frac{D}{p_1}\big(g_1-g_0-\theta\big)
++\frac{D}{p_1}(Y-g_1)
+-\frac{1-D}{p_1}\frac{m}{1-m}(Y-g_0).
+\]</div>
+<p><strong>Weight-sum identity (diagnostic).</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\!\left[\frac{1-D}{p_1}\frac{m}{1-m}\right]=\frac{1}{p_1}\,\mathbb{E}\!\left[(1-D)\frac{m}{1-m}\right]=\frac{1}{p_1}\,\mathbb{E}[m]=\frac{p_1}{p_1}=1.
+\]</div>
+<p>Equivalently, <strong>without</strong> the <span class="math notranslate nohighlight">\(1/p_1\)</span> factor:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\!\left[(1-D)\frac{m}{1-m}\right]=\mathbb{E}[D]=p_1.
+\]</div>
+<p>So in-sample diagnostics can be phrased as either:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\sum_{i}(1-d_i)\tfrac{\hat m_i}{1-\hat m_i}\approx \sum_i d_i\)</span> (raw factors), <strong>or</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sum_{i}(1-d_i)\tfrac{\hat m_i}{(1-\hat m_i)p_1}\approx n\)</span> (ATT weights match treated weights <span class="math notranslate nohighlight">\(\sum_i d_i/p_1 = n\)</span>).</p></li>
+</ul>
+</section>
+<section id="orthogonality-neyman">
+<h3>3.3 Orthogonality (Neyman)<a class="headerlink" href="#orthogonality-neyman" title="Link to this heading">#</a></h3>
+<p>For <span class="math notranslate nohighlight">\(\eta=(g_0,g_1,m)\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial}{\partial t}\,\mathbb E\big[\psi(W;\theta_0,\eta_0+t\,h)\big]\Big|_{t=0}=0
+\]</div>
+<p>for rich directions <span class="math notranslate nohighlight">\(h\)</span>. CausalKit provides OOS moment checks and numerical derivative diagnostics to assess this.</p>
+<p><strong>Useful partial derivatives (ATE):</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial\psi}{\partial g_1}=1-\frac{D}{m},\quad
+\frac{\partial\psi}{\partial g_0}=-1+\frac{1-D}{1-m},\quad
+\frac{\partial\psi}{\partial m}=-\frac{D}{m^2}(Y-g_1)-\frac{1-D}{(1-m)^2}(Y-g_0),
+\]</div>
+<p>whose conditional expectations given <span class="math notranslate nohighlight">\(X\)</span> vanish at truth.</p>
+<p><strong>Useful partial derivatives (ATT):</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial\psi}{\partial g_1}=\tfrac{D}{p_1}-\tfrac{D}{p_1}=0,\quad
+\frac{\partial\psi}{\partial g_0}=-\tfrac{D}{p_1}+\tfrac{1-D}{p_1}\tfrac{m}{1-m},\quad
+\frac{\partial\psi}{\partial m}=-\frac{1-D}{p_1}\frac{1}{(1-m)^2}(Y-g_0),
+\]</div>
+<p>and each has zero conditional mean at truth.</p>
+</section>
+</section>
+<section id="estimation-cross-fitting">
+<h2>4. Estimation (cross-fitting)<a class="headerlink" href="#estimation-cross-fitting" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Split into <span class="math notranslate nohighlight">\(K\)</span> folds (stratified by <span class="math notranslate nohighlight">\(D\)</span>).</p></li>
+<li><p>On each train fold, fit learners for <span class="math notranslate nohighlight">\(g_0,g_1,m\)</span>; predict on the held-out fold to build cross-fitted <span class="math notranslate nohighlight">\(\hat g_0,\hat g_1,\hat m\)</span>.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(\hat\theta\)</span> as above. Let <span class="math notranslate nohighlight">\(\hat\psi_i\)</span> be the estimated influence function values (computed OOS per fold).</p></li>
+</ul>
+<p><strong>Variance and CI (single parameter):</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\mathrm{Var}}(\hat\theta)=\frac{1}{n}\Big(\frac{1}{n}\sum_{i=1}^n \hat\psi_i^2\Big)
+=\frac{1}{n^2}\sum_{i=1}^n \hat\psi_i^2,\quad
+\mathrm{se}=\sqrt{\widehat{\mathrm{Var}}(\hat\theta)},\quad
+\text{CI}_{1-\alpha}=\hat\theta\pm z_{1-\alpha/2}\,\mathrm{se}.
+\]</div>
+<p><strong>Hájek normalization (optional, ATE).</strong> Replace <span class="math notranslate nohighlight">\(h_1=D/\hat m\)</span> with <span class="math notranslate nohighlight">\(h_1^\star=\dfrac{D/\hat m}{\mathbb E_n[D/\hat m]}\)</span> and similarly <span class="math notranslate nohighlight">\(h_0^\star\)</span>. This preserves asymptotics (orthogonality) and can reduce finite-sample variance; it slightly alters the finite-sample IF, so use the normalized <span class="math notranslate nohighlight">\(\hat\psi\)</span> in variance calculations. For ATT, it’s common to normalize control weights so their sum matches the count of treated (the diagnostic above already ensures this in expectation).</p>
+</section>
+<section id="positivity-overlap-trimming">
+<h2>5. Positivity (overlap) &amp; trimming<a class="headerlink" href="#positivity-overlap-trimming" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>EDA reports the distribution of <span class="math notranslate nohighlight">\(\hat m\)</span> and the share near 0 or 1.</p></li>
+<li><p><strong>Clipping</strong> <span class="math notranslate nohighlight">\(\hat m\)</span> stabilizes the IPW terms. Under positivity (true <span class="math notranslate nohighlight">\(m\)</span> bounded away from 0 and 1) it is <strong>asymptotically innocuous</strong> for ATE/ATT but may introduce <strong>small finite-sample bias</strong>; <strong>hard trimming</strong> (dropping units by a propensity threshold) <em>changes the target population</em> and should be interpreted accordingly.</p></li>
+</ul>
+</section>
+<section id="refutation-diagnostics">
+<h2>6. Refutation diagnostics<a class="headerlink" href="#refutation-diagnostics" title="Link to this heading">#</a></h2>
+<section id="oos-moment-checks">
+<h3>6.1 OOS moment checks<a class="headerlink" href="#oos-moment-checks" title="Link to this heading">#</a></h3>
+<p>Compute <span class="math notranslate nohighlight">\(\hat\psi\)</span> on each test fold using fold-specific nuisances. Verify the empirical mean of <span class="math notranslate nohighlight">\(\hat\psi\)</span> (and conditional moments against simple basis functions of <span class="math notranslate nohighlight">\(X\)</span>) is close to zero.
+APIs: <code class="docutils literal notranslate"><span class="pre">refute_irm_orthogonality</span></code>, <code class="docutils literal notranslate"><span class="pre">oos_moment_check</span></code>, <code class="docutils literal notranslate"><span class="pre">influence_summary</span></code>.</p>
+</section>
+<section id="orthogonality-derivatives">
+<h3>6.2 Orthogonality derivatives<a class="headerlink" href="#orthogonality-derivatives" title="Link to this heading">#</a></h3>
+<p>Numerically evaluate derivatives of the moment condition w.r.t. perturbations in <span class="math notranslate nohighlight">\((g_0,g_1,m)\)</span> at <span class="math notranslate nohighlight">\(\hat\theta\)</span>. Small magnitudes support Neyman orthogonality in practice.
+APIs: <code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives</span></code> (ATE) and ATT variants. (Derivatives summarized in §3.3.)</p>
+</section>
+<section id="sensitivity-heuristic-bias-bounds">
+<h3>6.3 Sensitivity (heuristic bias bounds)<a class="headerlink" href="#sensitivity-heuristic-bias-bounds" title="Link to this heading">#</a></h3>
+<p>Following the DoubleML structure, CausalKit exposes a <strong>Cauchy–Schwarz–style</strong> worst-case bias bound aligned with the score:</p>
+<ul class="simple">
+<li><p>Outcome noise scale (pooled):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\hat\sigma^2=\mathbb E_n\big[(Y-\hat g_D(X))^2\big],\quad
+\hat g_D(X)=D\hat g_1(X)+(1-D)\hat g_0(X).
+\]</div>
+<ul class="simple">
+<li><p>Score-weight norm (ATE):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\hat v^2_{\text{ATE}}=\mathbb E_n\Big[\Big(\tfrac{D}{\hat m}-\tfrac{1-D}{1-\hat m}\Big)^2\Big].
+\]</div>
+<p>(Equivalently <span class="math notranslate nohighlight">\(\mathbb E_n[(D/\hat m)^2]+\mathbb E_n[((1-D)/(1-\hat m))^2]\)</span> since <span class="math notranslate nohighlight">\(D(1-D)=0\)</span> pointwise.)</p>
+<ul class="simple">
+<li><p>Score-weight norm (ATT):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\hat v^2_{\text{ATT}}=\mathbb E_n\!\big[(D/p_1)^2\big]+\mathbb E_n\!\big[\big((1-D)\,\hat m/\{p_1(1-\hat m)\}\big)^2\big].
+\]</div>
+<p>For user-chosen sensitivity multipliers <span class="math notranslate nohighlight">\(c_y,c_d\ge0\)</span> and correlation cap <span class="math notranslate nohighlight">\(\rho\in[0,1]\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{max\_bias}(\rho)\;\le\;\rho\,\sqrt{(c_y\,\hat\sigma^2)\,(c_d\,\hat v^2)}.
+\]</div>
+<p><strong>Optional refinement (tighter but still heuristic).</strong> Split outcome variance by arm:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat\sigma_1^2=\mathbb E_n[(Y-\hat g_1)^2\mid D=1],\quad
+\hat\sigma_0^2=\mathbb E_n[(Y-\hat g_0)^2\mid D=0],
+\]</div>
+<p>and use</p>
+<div class="math notranslate nohighlight">
+\[
+\sqrt{\hat\sigma_1^2\,\mathbb E_n[(D/\hat m)^2]+\hat\sigma_0^2\,\mathbb E_n[((1-D)/(1-\hat m))^2]}
+\]</div>
+<p>in place of <span class="math notranslate nohighlight">\(\sqrt{\hat\sigma^2\,\hat v^2}\)</span> for ATE.
+APIs: <code class="docutils literal notranslate"><span class="pre">IRM.sensitivity_analysis</span></code>, <code class="docutils literal notranslate"><span class="pre">refutation/sensitivity.py</span></code>. Bounds remain <strong>heuristic</strong> (not identified).</p>
+</section>
+</section>
+<section id="implementation-guardrails">
+<h2>7. Implementation guardrails<a class="headerlink" href="#implementation-guardrails" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Abort/warn if <span class="math notranslate nohighlight">\(\hat p_1\in\{0,1\}\)</span> (ATT undefined / division by zero).</p></li>
+<li><p>Enforce small clipping on <span class="math notranslate nohighlight">\(\hat m\)</span> and (for classifiers) on <span class="math notranslate nohighlight">\(\hat g_d\)</span> to prevent exploding residual-weight products.</p></li>
+<li><p>Stratify folds by <span class="math notranslate nohighlight">\(D\)</span> when cross-fitting.</p></li>
+<li><p>If using fold-specific denominators (e.g., <span class="math notranslate nohighlight">\(\hat p_{1,k}\)</span>), ensure fold-wise centering of <span class="math notranslate nohighlight">\(\hat\psi\)</span> or re-express with global <span class="math notranslate nohighlight">\(\hat p_1\)</span>.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="refutation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Refutation and robustness</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Real World Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-and-parameters">1. Variables and parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nuisance-functions-irm">2. Nuisance functions (IRM)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores-eifs-and-estimators">3. Scores, EIFs, and estimators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ate-aipw-dr">3.1 ATE (AIPW/DR)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#att-a-k-a-atet-atte">3.2 ATT (a.k.a. ATET/ATTE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality-neyman">3.3 Orthogonality (Neyman)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-cross-fitting">4. Estimation (cross-fitting)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#positivity-overlap-trimming">5. Positivity (overlap) &amp; trimming</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation-diagnostics">6. Refutation diagnostics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oos-moment-checks">6.1 OOS moment checks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality-derivatives">6.2 Orthogonality derivatives</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-heuristic-bias-bounds">6.3 Sensitivity (heuristic bias bounds)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-guardrails">7. Implementation guardrails</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, CausalKit Team.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
