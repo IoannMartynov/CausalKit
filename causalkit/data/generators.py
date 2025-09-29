@@ -374,6 +374,36 @@ def generate_rct(
     return df
 
 
+def generate_rct_data(
+    n: int = 20_000,
+    split: float = 0.5,
+    random_state: Optional[int] = 42,
+    target_type: str = "binary",
+    target_params: Optional[Dict] = None,
+    confounder_specs: Optional[List[Dict[str, Any]]] = None,
+    k: int = 0,
+    x_sampler: Optional[Callable[[int, int, int], np.ndarray]] = None,
+    add_ancillary: bool = True,
+    deterministic_ids: bool = False,
+) -> pd.DataFrame:
+    """
+    Backward-compatible alias for generate_rct used in documentation.
+    Parameters mirror generate_rct and are forwarded directly.
+    """
+    return generate_rct(
+        n=n,
+        split=split,
+        random_state=random_state,
+        target_type=target_type,
+        target_params=target_params,
+        confounder_specs=confounder_specs,
+        k=k,
+        x_sampler=x_sampler,
+        add_ancillary=add_ancillary,
+        deterministic_ids=deterministic_ids,
+    )
+
+
 
 
 
@@ -387,9 +417,9 @@ class CausalDatasetGenerator:
     **Data model (high level)**
 
     - Confounders X ∈ R^k are drawn from user-specified distributions.
-    - Binary treatment T is assigned by a logistic model:
-        T ~ Bernoulli( sigmoid(alpha_d + f_t(X) + u_strength_d * U) ),
-      where f_t(X) = X @ beta_d + g_d(X), and U ~ N(0,1) is an optional unobserved confounder.
+    - Binary treatment D is assigned by a logistic model:
+        D ~ Bernoulli( sigmoid(alpha_d + f_d(X) + u_strength_d * U) ),
+      where f_d(X) = X @ beta_d + g_d(X), and U ~ N(0,1) is an optional unobserved confounder.
     - Outcome Y depends on treatment and confounders with link determined by `outcome_type`:
         outcome_type = "continuous":
             Y = alpha_y + f_y(X) + u_strength_y * U + T * tau(X) + ε,  ε ~ N(0, sigma_y^2)
@@ -407,7 +437,6 @@ class CausalDatasetGenerator:
       - g0  : E[Y | X, T=0] on the natural outcome scale
       - g1  : E[Y | X, T=1] on the natural outcome scale
       - cate: g1 - g0 (conditional average treatment effect on the natural outcome scale)
-      (Deprecated aliases kept for one release: propensity, mu0, mu1)
 
     Notes on effect scale:
       - For "continuous", `theta` (or tau(X)) is an additive mean difference.
@@ -504,7 +533,7 @@ class CausalDatasetGenerator:
     beta_y: Optional[np.ndarray] = None           # shape (k,)
     beta_d: Optional[np.ndarray] = None           # shape (k,)
     g_y: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear baseline outcome f_y(X)
-    g_d: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear treatment score f_t(X)
+    g_d: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear treatment score f_d(X)
 
     # Outcome/treatment intercepts and noise
     alpha_y: float = 0.0

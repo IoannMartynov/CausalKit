@@ -1,0 +1,205 @@
+Traceback (most recent call last):
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_core/utils/__init__.py", line 154, in wrapped
+    asyncio.get_running_loop()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+    ~~~~~~~~~^
+        nb,
+        ^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/jupyter_core/utils/__init__.py", line 158, in wrapped
+    return loop.run_until_complete(inner)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+        cell, index, execution_count=self.code_cells_executed + 1
+    )
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Users/ioannmartynov/miniconda3/envs/causalkit/lib/python3.13/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# Nonlinear ATT data generation with heterogeneous effects
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from causalkit.data import CausalDatasetGenerator, CausalData
+
+# Reproducibility
+np.random.seed(42)
+
+# 1) Confounders and their distributions
+#    These names define the column order in X for the custom functions.
+confounder_specs = [
+    {"name": "tenure_months",     "dist": "normal",   "mu": 24, "sd": 12},
+    {"name": "avg_sessions_week", "dist": "normal",   "mu": 5,  "sd": 2},
+    {"name": "spend_last_month",  "dist": "uniform",  "a": 0,   "b": 200},
+    {"name": "premium_user",      "dist": "bernoulli","p": 0.25},
+    {"name": "urban_resident",    "dist": "bernoulli","p": 0.60},
+]
+
+# Indices (for convenience inside g_y, g_t, tau)
+TENURE, SESS, SPEND, PREMIUM, URBAN = range(5)
+
+# 2) Nonlinear baseline for outcome f_y(X) = X @ beta_y + g_y(X)
+#    Keep a modest linear part and add meaningful nonlinearities.
+beta_y = np.array([
+    0.03,   # tenure_months
+    0.20,   # avg_sessions_week
+    0.01,   # spend_last_month
+    1.20,   # premium_user
+    0.60,   # urban_resident
+], dtype=float)
+
+def g_y(X: np.ndarray) -> np.ndarray:
+    # Nonlinearities and interactions in outcome baseline
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    return (
+        1.2 * np.sin(2.0 * np.pi * tenure_years)          # seasonal-ish tenure pattern
+        + 0.02 * (sessions - 5.0) ** 2                    # convex effect of sessions
+        + 0.0015 * (spend - 100.0) * (sessions - 5.0)     # spend × sessions interaction
+        + 0.4 * premium * (sessions - 5.0)                # premium × sessions interaction
+        + 0.3 * urban * np.tanh((spend - 100.0) / 50.0)   # nonlinear spend effect differs by urban
+    )
+
+# 3) Nonlinear treatment score f_t(X) = X @ beta_t + g_t(X)
+beta_t = np.array([
+    0.010,  # tenure_months
+    0.12,   # avg_sessions_week
+    0.001,  # spend_last_month
+    0.80,   # premium_user
+    0.25,   # urban_resident
+], dtype=float)
+
+def g_t(X: np.ndarray) -> np.ndarray:
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    # Smoothly increasing selection with spend; interactions make selection non-separable
+    soft_spend = 1.2 * np.tanh((spend - 80.0) / 40.0)
+    return (
+        0.6 * soft_spend
+        + 0.15 * (sessions - 5.0) * (tenure_years - 2.0)
+        + 0.25 * premium * (urban - 0.5)
+    )
+
+# 4) Heterogeneous, nonlinear treatment effect tau(X) on the natural scale (continuous outcome)
+def tau_fn(X: np.ndarray) -> np.ndarray:
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    # Base effect + stronger effect for higher sessions and premium users,
+    # diminishes with tenure, mild modulation by spend and urban
+    tau = (
+        1.0
+        + 0.8 * (1.0 / (1.0 + np.exp(-(sessions - 5.0))))    # sigmoid in sessions
+        + 0.5 * premium
+        - 0.6 * np.clip(tenure_years / 5.0, 0.0, 1.0)        # taper with long tenure
+        + 0.2 * urban * (spend - 100.0) / 100.0
+    )
+    # Optional: keep it in a reasonable range
+    return np.clip(tau, 0.2, 2.5)
+
+# 5) Noise and prevalence
+sigma_y = 3.5
+target_t_rate = 0.35  # enforce ~35% treated via intercept calibration
+
+# 6) Build generator
+gen = CausalDatasetGenerator(
+    outcome_type="continuous",
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=42,
+    # Confounders
+    confounder_specs=confounder_specs,
+    # Outcome/treatment structure
+    beta_y=beta_y,
+    beta_t=beta_t,
+    g_y=g_y,
+    g_t=g_t,
+    # Heterogeneous effect
+    tau=tau_fn,
+)
+
+# 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)
+n = 10000
+generated_df = gen.generate(n)
+
+# Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated
+true_att = float(generated_df.loc[generated_df["t"] == 1, "cate"].mean())
+print(f"Ground-truth ATT from the DGP: {true_att:.3f}")
+
+# 8) Wrap as CausalData for downstream workflows (keeps only y, t, and specified confounders)
+causal_data = CausalData(
+    df=generated_df,
+    treatment="t",
+    outcome="y",
+    confounders=[
+        "tenure_months",
+        "avg_sessions_week",
+        "spend_last_month",
+        "premium_user",
+        "urban_resident",
+    ],
+)
+
+# Peek at the analysis-ready view
+causal_data.df.head()
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mTypeError[39m                                 Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[1][39m[32m, line 100[39m
+[32m     97[39m target_t_rate = [32m0.35[39m  [38;5;66;03m# enforce ~35% treated via intercept calibration[39;00m
+[32m     99[39m [38;5;66;03m# 6) Build generator[39;00m
+[32m--> [39m[32m100[39m gen = CausalDatasetGenerator(
+[32m    101[39m     outcome_type=[33m"[39m[33mcontinuous[39m[33m"[39m,
+[32m    102[39m     sigma_y=sigma_y,
+[32m    103[39m     target_t_rate=target_t_rate,
+[32m    104[39m     seed=[32m42[39m,
+[32m    105[39m     [38;5;66;03m# Confounders[39;00m
+[32m    106[39m     confounder_specs=confounder_specs,
+[32m    107[39m     [38;5;66;03m# Outcome/treatment structure[39;00m
+[32m    108[39m     beta_y=beta_y,
+[32m    109[39m     beta_t=beta_t,
+[32m    110[39m     g_y=g_y,
+[32m    111[39m     g_t=g_t,
+[32m    112[39m     [38;5;66;03m# Heterogeneous effect[39;00m
+[32m    113[39m     tau=tau_fn,
+[32m    114[39m )
+[32m    116[39m [38;5;66;03m# 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)[39;00m
+[32m    117[39m n = [32m10000[39m
+
+[31mTypeError[39m: CausalDatasetGenerator.__init__() got an unexpected keyword argument 'target_t_rate'. Did you mean 'target_d_rate'?
+

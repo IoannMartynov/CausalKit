@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>causalkit.data.causaldata &#8212; CausalKit  documentation</title>
+    <title>causalkit.data.causaldata &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -37,12 +37,12 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../../_static/documentation_options.js?v=2caa9db7"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/data/causaldata';</script>
     <link rel="icon" href="../../../_static/logo.svg"/>
@@ -422,11 +422,11 @@ document.write(`
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; from causalkit.data import generate_rct_data</span>
+<span class="sd">    &gt;&gt;&gt; from causalkit.data import generate_rct</span>
 <span class="sd">    &gt;&gt;&gt; from causalkit.data import CausalData</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Generate data</span>
-<span class="sd">    &gt;&gt;&gt; df = generate_rct_data()</span>
+<span class="sd">    &gt;&gt;&gt; df = generate_rct()</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Create CausalData object</span>
 <span class="sd">    &gt;&gt;&gt; causal_data = CausalData(</span>
@@ -472,7 +472,24 @@ document.write(`
         
         <span class="c1"># Store only the relevant columns</span>
         <span class="n">columns_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns_to_keep</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns_to_keep</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="c1"># Coerce boolean columns to integers to ensure stored df is fully numeric</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_bool_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+                <span class="c1"># Use int8 for compact 0/1 storage</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int8&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Final safeguard: ensure all stored columns are numeric</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;All columns in stored DataFrame must be numeric; column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; has dtype </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Re-run duplicate-column and duplicate-row checks on the stored, normalized subset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_duplicate_column_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_duplicate_rows</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -499,45 +516,51 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome does not exist in the DataFrame.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Check if outcome column contains only int or float values</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome must contain only int or float values.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check if outcome column contains numeric or boolean values</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">])</span> <span class="ow">or</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_bool_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">])):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome must contain only int, float, or bool values.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Check if outcome column is constant (zero variance or single value)</span>
-        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome is constant (has zero variance), which is not allowed for causal inference.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check if outcome column is constant (single unique value)</span>
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="si">}</span><span class="s2">&#39; specified as outcome is constant (has zero variance / single unique value), &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;which is not allowed for causal inference.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Validate treatment column</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39; specified as treatment does not exist in the DataFrame.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Check if treatment column contains only int or float values</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]):</span>
+        <span class="c1"># Check if treatment column contains numeric or boolean values</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">])</span> <span class="ow">or</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_bool_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">])):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39; specified as treatment must contain only int or float values.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39; specified as treatment must contain only int, float, or bool values.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Check if treatment column is constant (zero variance or single value)</span>
-        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39; specified as treatment is constant (has zero variance), which is not allowed for causal inference.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check if treatment column is constant (single unique value)</span>
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="si">}</span><span class="s2">&#39; specified as treatment is constant (has zero variance / single unique value), &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;which is not allowed for causal inference.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Validate confounders columns</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; specified as confounders does not exist in the DataFrame.&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Check if column contains only int or float values</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; specified as confounders must contain only int or float values.&quot;</span><span class="p">)</span>
+            <span class="c1"># Check if confounder column contains numeric or boolean values</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">pdtypes</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span> <span class="ow">or</span> <span class="n">pdtypes</span><span class="o">.</span><span class="n">is_bool_dtype</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; specified as confounders must contain only int, float, or bool values.&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Check if confounder column is constant (zero variance or single value)</span>
-            <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; specified as confounders is constant (has zero variance), which is not allowed for causal inference.&quot;</span><span class="p">)</span>
+            <span class="c1"># Check if confounder column is constant (single unique value)</span>
+            <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; specified as confounders is constant (has zero variance / single unique value), &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;which is not allowed for causal inference.&quot;</span>
+                <span class="p">)</span>
 
-        <span class="c1"># Check for duplicate column values across all used columns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_duplicate_column_values</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-        
-        <span class="c1"># Check for duplicate rows and issue warning if found</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_check_duplicate_rows</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="c1"># Note: duplicate columns and duplicate rows are checked on the stored, normalized subset</span>
+        <span class="c1"># after dtype coercion, to reflect the actual data used by the class.</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_duplicate_column_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -547,20 +570,19 @@ document.write(`
         <span class="c1"># Get all columns that will be used in CausalData</span>
         <span class="n">columns_to_check</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treatment</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_confounders</span>
         
-        <span class="c1"># Compare each pair of columns</span>
+        <span class="c1"># Compare each pair of columns (post-normalization)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">columns_to_check</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">col2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">columns_to_check</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">:</span>  <span class="c1"># Only check each pair once</span>
-                    <span class="c1"># Check if the two columns have identical values (using element-wise comparison)</span>
-                    <span class="c1"># This handles cases where dtypes differ but values are the same (e.g., int vs float)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="n">col2</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-                        <span class="c1"># Determine the types of columns for better error message</span>
-                        <span class="n">col1_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_type</span><span class="p">(</span><span class="n">col1</span><span class="p">)</span>
-                        <span class="n">col2_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_type</span><span class="p">(</span><span class="n">col2</span><span class="p">)</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Columns &#39;</span><span class="si">{</span><span class="n">col1</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">col1_type</span><span class="si">}</span><span class="s2">) and &#39;</span><span class="si">{</span><span class="n">col2</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">col2_type</span><span class="si">}</span><span class="s2">) have identical values, &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;which is not allowed for causal inference. Only column names differ.&quot;</span>
-                        <span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns_to_check</span><span class="p">)):</span>
+                <span class="n">col2</span> <span class="o">=</span> <span class="n">columns_to_check</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="c1"># Use pandas.Series.equals for exact equality on stored subset (NaN not expected)</span>
+                <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">col1</span><span class="p">]</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col2</span><span class="p">]):</span>
+                    <span class="c1"># Determine the types of columns for better error message</span>
+                    <span class="n">col1_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_type</span><span class="p">(</span><span class="n">col1</span><span class="p">)</span>
+                    <span class="n">col2_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_column_type</span><span class="p">(</span><span class="n">col2</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Columns &#39;</span><span class="si">{</span><span class="n">col1</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">col1_type</span><span class="si">}</span><span class="s2">) and &#39;</span><span class="si">{</span><span class="n">col2</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="n">col2_type</span><span class="si">}</span><span class="s2">) have identical values, &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;which is not allowed for causal inference. Only column names differ.&quot;</span>
+                    <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_duplicate_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -573,10 +595,10 @@ document.write(`
         
         <span class="c1"># Find duplicate rows</span>
         <span class="n">duplicated_mask</span> <span class="o">=</span> <span class="n">df_subset</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span>
-        <span class="n">num_duplicates</span> <span class="o">=</span> <span class="n">duplicated_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">num_duplicates</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duplicated_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
         
         <span class="k">if</span> <span class="n">num_duplicates</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">total_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_subset</span><span class="p">)</span>
+            <span class="n">total_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_subset</span><span class="p">))</span>
             <span class="n">unique_rows</span> <span class="o">=</span> <span class="n">total_rows</span> <span class="o">-</span> <span class="n">num_duplicates</span>
             
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -585,7 +607,7 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;Duplicate rows may affect the quality of causal inference results. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Consider removing duplicates if they are not intentional.&quot;</span><span class="p">,</span>
                 <span class="ne">UserWarning</span><span class="p">,</span>
-                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_column_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
@@ -671,11 +693,11 @@ document.write(`
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; from causalkit.data import generate_rct_data</span>
+<span class="sd">        &gt;&gt;&gt; from causalkit.data import generate_rct</span>
 <span class="sd">        &gt;&gt;&gt; from causalkit.data import CausalData</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Generate data</span>
-<span class="sd">        &gt;&gt;&gt; df = generate_rct_data()</span>
+<span class="sd">        &gt;&gt;&gt; df = generate_rct()</span>
 <span class="sd">        &gt;&gt;&gt;</span>
 <span class="sd">        &gt;&gt;&gt; # Create CausalData object</span>
 <span class="sd">        &gt;&gt;&gt; causal_data = CausalData(</span>
@@ -716,10 +738,10 @@ document.write(`
         <span class="c1"># Remove duplicates while preserving order</span>
         <span class="n">cols_to_include</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">cols_to_include</span><span class="p">))</span>
 
-        <span class="c1"># Validate that all requested columns exist</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_to_include</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; does not exist in the DataFrame.&quot;</span><span class="p">)</span>
+        <span class="c1"># Validate that all requested columns exist (only needed if user passed custom columns)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols_to_include</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column(s) </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> do not exist in the DataFrame.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Return the DataFrame with selected columns</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">cols_to_include</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
