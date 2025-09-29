@@ -21,11 +21,11 @@ def _dummy_inference_fn(data: CausalData, **kwargs):
 def _make_causal_data():
     df = pd.DataFrame({
         "y": [1.0, 2.0, 3.0, 4.0, 5.0],
-        "t": [0, 1, 0, 1, 0],
+        "d": [0, 1, 0, 1, 0],
         "x1": [0.1, 0.2, 0.3, 0.4, 0.6],
         "x2": [1.0, 0.0, 1.0, 0.0, 1.0],
     })
-    return CausalData(df=df, treatment="t", outcome="y", confounders=["x1", "x2"])
+    return CausalData(df=df, treatment="d", outcome="y", confounders=["x1", "x2"])
 
 
 @pytest.mark.parametrize("fn_name", [

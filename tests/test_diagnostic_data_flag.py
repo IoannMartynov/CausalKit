@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 
 from causalkit.data.causaldata import CausalData
 from causalkit.inference.ate import dml_ate
-from causalkit.inference.att import dml_att
+from causalkit.inference.atte import dml_atte
 
 
 def _make_synth(n=120, seed=123):
@@ -47,11 +47,11 @@ def test_dml_att_store_diagnostic_data_flag():
     ml_m = LogisticRegression(max_iter=1000)
 
     # Default True
-    res_default = dml_att(data, ml_g=ml_g, ml_m=ml_m, n_folds=3)
+    res_default = dml_atte(data, ml_g=ml_g, ml_m=ml_m, n_folds=3)
     assert "diagnostic_data" in res_default
     assert res_default["diagnostic_data"] is not None
 
     # False
-    res_off = dml_att(data, ml_g=ml_g, ml_m=ml_m, n_folds=3, store_diagnostic_data=False)
+    res_off = dml_atte(data, ml_g=ml_g, ml_m=ml_m, n_folds=3, store_diagnostic_data=False)
     assert "diagnostic_data" in res_off
     assert res_off["diagnostic_data"] is None

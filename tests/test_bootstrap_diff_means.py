@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from causalkit.data import CausalData
-from causalkit.inference.att.bootstrap_diff_means import bootstrap_diff_means
+from causalkit.inference.atte.bootstrap_diff_means import bootstrap_diff_means
 
 
 @pytest.fixture

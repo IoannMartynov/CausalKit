@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression, LinearRegression
 from causalkit.data.causaldata import CausalData
 from causalkit.data.generators import generate_rct
 from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.inference.att.dml_att import dml_att
+from causalkit.inference.atte.dml_atte import dml_atte
 from causalkit.refutation import validate_unconfoundedness_balance
 
 
@@ -16,7 +16,7 @@ def test_unconfoundedness_balance_ate(normalize_ipw):
     # Generate simple RCT-like data with confounders
     df = generate_rct(n=2000, k=3, random_state=123, target_type="binary")
     confs = [c for c in df.columns if c.startswith("x")]  # ['x1','x2','x3']
-    data = CausalData(df=df, treatment='t', outcome='y', confounders=confs)
+    data = CausalData(df=df, treatment='d', outcome='y', confounders=confs)
 
     # Simple learners: regressor for outcome (works even if y is binary),
     # logistic regression for propensity with predict_proba
@@ -70,12 +70,12 @@ def test_unconfoundedness_balance_att(normalize_ipw):
     # Generate simple data with confounders
     df = generate_rct(n=2000, k=4, random_state=321, target_type="normal")
     confs = [c for c in df.columns if c.startswith("x")]  # ['x1',...]
-    data = CausalData(df=df, treatment='t', outcome='y', confounders=confs)
+    data = CausalData(df=df, treatment='d', outcome='y', confounders=confs)
 
     ml_g = LinearRegression()
     ml_m = LogisticRegression(max_iter=500)
 
-    res = dml_att(
+    res = dml_atte(
         data,
         ml_g=ml_g,
         ml_m=ml_m,

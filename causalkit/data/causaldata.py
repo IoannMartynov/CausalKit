@@ -40,11 +40,11 @@ class CausalData:
 
     Examples
     --------
-    >>> from causalkit.data import generate_rct_data
+    >>> from causalkit.data import generate_rct
     >>> from causalkit.data import CausalData
     >>>
     >>> # Generate data
-    >>> df = generate_rct_data()
+    >>> df = generate_rct()
     >>>
     >>> # Create CausalData object
     >>> causal_data = CausalData(
@@ -103,6 +103,10 @@ class CausalData:
                     f"All columns in stored DataFrame must be numeric; column '{col}' has dtype {self.df[col].dtype}."
                 )
 
+        # Re-run duplicate-column and duplicate-row checks on the stored, normalized subset
+        self._check_duplicate_column_values(self.df)
+        self._check_duplicate_rows(self.df)
+
     def _ensure_list(self, value: Union[str, List[str]]) -> List[str]:
         """
         Ensure that the value is a list of strings.
@@ -131,9 +135,12 @@ class CausalData:
         if not (pdtypes.is_numeric_dtype(df[self._target]) or pdtypes.is_bool_dtype(df[self._target])):
             raise ValueError(f"Column '{self._target}' specified as outcome must contain only int, float, or bool values.")
 
-        # Check if outcome column is constant (zero variance or single value)
-        if df[self._target].std() == 0 or pd.isna(df[self._target].std()):
-            raise ValueError(f"Column '{self._target}' specified as outcome is constant (has zero variance), which is not allowed for causal inference.")
+        # Check if outcome column is constant (single unique value)
+        if df[self._target].nunique(dropna=False) <= 1:
+            raise ValueError(
+                f"Column '{self._target}' specified as outcome is constant (has zero variance / single unique value), "
+                f"which is not allowed for causal inference."
+            )
 
         # Validate treatment column
         if self._treatment not in all_columns:
@@ -144,9 +151,12 @@ class CausalData:
             raise ValueError(
                 f"Column '{self._treatment}' specified as treatment must contain only int, float, or bool values.")
 
-        # Check if treatment column is constant (zero variance or single value)
-        if df[self._treatment].std() == 0 or pd.isna(df[self._treatment].std()):
-            raise ValueError(f"Column '{self._treatment}' specified as treatment is constant (has zero variance), which is not allowed for causal inference.")
+        # Check if treatment column is constant (single unique value)
+        if df[self._treatment].nunique(dropna=False) <= 1:
+            raise ValueError(
+                f"Column '{self._treatment}' specified as treatment is constant (has zero variance / single unique value), "
+                f"which is not allowed for causal inference."
+            )
 
         # Validate confounders columns
         for col in self._confounders:
@@ -157,15 +167,15 @@ class CausalData:
             if not (pdtypes.is_numeric_dtype(df[col]) or pdtypes.is_bool_dtype(df[col])):
                 raise ValueError(f"Column '{col}' specified as confounders must contain only int, float, or bool values.")
 
-            # Check if confounder column is constant (zero variance or single value)
-            if df[col].std() == 0 or pd.isna(df[col].std()):
-                raise ValueError(f"Column '{col}' specified as confounders is constant (has zero variance), which is not allowed for causal inference.")
+            # Check if confounder column is constant (single unique value)
+            if df[col].nunique(dropna=False) <= 1:
+                raise ValueError(
+                    f"Column '{col}' specified as confounders is constant (has zero variance / single unique value), "
+                    f"which is not allowed for causal inference."
+                )
 
-        # Check for duplicate column values across all used columns
-        self._check_duplicate_column_values(df)
-        
-        # Check for duplicate rows and issue warning if found
-        self._check_duplicate_rows(df)
+        # Note: duplicate columns and duplicate rows are checked on the stored, normalized subset
+        # after dtype coercion, to reflect the actual data used by the class.
 
     def _check_duplicate_column_values(self, df):
         """
@@ -175,20 +185,19 @@ class CausalData:
         # Get all columns that will be used in CausalData
         columns_to_check = [self._target, self._treatment] + self._confounders
         
-        # Compare each pair of columns
+        # Compare each pair of columns (post-normalization)
         for i, col1 in enumerate(columns_to_check):
-            for j, col2 in enumerate(columns_to_check):
-                if i < j:  # Only check each pair once
-                    # Check if the two columns have identical values (using element-wise comparison)
-                    # This handles cases where dtypes differ but values are the same (e.g., int vs float)
-                    if (df[col1] == df[col2]).all():
-                        # Determine the types of columns for better error message
-                        col1_type = self._get_column_type(col1)
-                        col2_type = self._get_column_type(col2)
-                        raise ValueError(
-                            f"Columns '{col1}' ({col1_type}) and '{col2}' ({col2_type}) have identical values, "
-                            f"which is not allowed for causal inference. Only column names differ."
-                        )
+            for j in range(i + 1, len(columns_to_check)):
+                col2 = columns_to_check[j]
+                # Use pandas.Series.equals for exact equality on stored subset (NaN not expected)
+                if df[col1].equals(df[col2]):
+                    # Determine the types of columns for better error message
+                    col1_type = self._get_column_type(col1)
+                    col2_type = self._get_column_type(col2)
+                    raise ValueError(
+                        f"Columns '{col1}' ({col1_type}) and '{col2}' ({col2_type}) have identical values, "
+                        f"which is not allowed for causal inference. Only column names differ."
+                    )
 
     def _check_duplicate_rows(self, df):
         """
@@ -201,10 +210,10 @@ class CausalData:
         
         # Find duplicate rows
         duplicated_mask = df_subset.duplicated()
-        num_duplicates = duplicated_mask.sum()
+        num_duplicates = int(duplicated_mask.sum())
         
         if num_duplicates > 0:
-            total_rows = len(df_subset)
+            total_rows = int(len(df_subset))
             unique_rows = total_rows - num_duplicates
             
             warnings.warn(
@@ -213,7 +222,7 @@ class CausalData:
                 f"Duplicate rows may affect the quality of causal inference results. "
                 f"Consider removing duplicates if they are not intentional.",
                 UserWarning,
-                stacklevel=3
+                stacklevel=2
             )
 
     def _get_column_type(self, column_name):
@@ -297,11 +306,11 @@ class CausalData:
 
         Examples
         --------
-        >>> from causalkit.data import generate_rct_data
+        >>> from causalkit.data import generate_rct
         >>> from causalkit.data import CausalData
         >>>
         >>> # Generate data
-        >>> df = generate_rct_data()
+        >>> df = generate_rct()
         >>>
         >>> # Create CausalData object
         >>> causal_data = CausalData(
@@ -342,10 +351,10 @@ class CausalData:
         # Remove duplicates while preserving order
         cols_to_include = list(dict.fromkeys(cols_to_include))
 
-        # Validate that all requested columns exist
-        for col in cols_to_include:
-            if col not in self.df.columns:
-                raise ValueError(f"Column '{col}' does not exist in the DataFrame.")
+        # Validate that all requested columns exist (only needed if user passed custom columns)
+        missing = [c for c in cols_to_include if c not in self.df.columns]
+        if missing:
+            raise ValueError(f"Column(s) {missing} do not exist in the DataFrame.")
 
         # Return the DataFrame with selected columns
         return self.df[cols_to_include].copy()

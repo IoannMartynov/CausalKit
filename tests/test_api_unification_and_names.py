@@ -25,11 +25,11 @@ def test_generate_rct_wrapper_binary_sets_mu_and_propensity_constant():
     # mu0/mu1 constants on natural scale
     assert np.allclose(df["mu0"].unique(), [params["p"]["A"]], atol=1e-6)
     assert np.allclose(df["mu1"].unique(), [params["p"]["B"]], atol=1e-6)
-    # y and t should be float type
+    # y and d should be float type
     assert df["y"].dtype.kind == "f"
-    assert df["t"].dtype.kind == "f"
-    # y,t in {0.0,1.0}
-    assert set(np.unique(df["t"])) <= {0.0, 1.0}
+    assert df["d"].dtype.kind == "f"
+    # y,d in {0.0,1.0}
+    assert set(np.unique(df["d"])) <= {0.0, 1.0}
     assert set(np.unique(df["y"])) <= {0.0, 1.0}
 
 

@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from causalkit.data.causaldata import CausalData
 from causalkit.data.generators import generate_rct
 from causalkit.inference.ate import dml_ate
-from causalkit.inference.att import dml_att
+from causalkit.inference.atte import dml_atte
 
 
 def make_causal_data(n=400, target_type="normal", random_state=12):
@@ -65,7 +65,7 @@ def test_diagnostic_data_expanded_dml_att():
     ml_g = RandomForestClassifier(n_estimators=50, random_state=21)
     ml_m = RandomForestClassifier(n_estimators=50, random_state=21)
 
-    res = dml_att(cd, ml_g=ml_g, ml_m=ml_m, n_folds=4, normalize_ipw=False, trimming_threshold=5e-3)
+    res = dml_atte(cd, ml_g=ml_g, ml_m=ml_m, n_folds=4, normalize_ipw=False, trimming_threshold=5e-3)
     dd = res["diagnostic_data"]
     _assert_diag(dd, n=cd.df.shape[0], k=k)
     assert dd["score"] == "ATTE"

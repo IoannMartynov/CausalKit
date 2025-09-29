@@ -49,7 +49,7 @@ def bootstrap_diff_means(
     -------
     Dict[str, Any]
         Dictionary with p_value, absolute_difference, absolute_ci, relative_difference, relative_ci
-        (matching the structure of inference.att.ttest).
+        (matching the structure of inference.atte.ttest).
 
     Raises
     ------

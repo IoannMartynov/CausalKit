@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 
 from causalkit.data.causaldata import CausalData
 from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.inference.att.dml_att import dml_att
+from causalkit.inference.atte.dml_atte import dml_atte
 
 
 def _make_synth(n=200, seed=42):
@@ -66,7 +66,7 @@ def test_dml_att_returns_diagnostic_data():
     ml_g = LinearRegression()
     ml_m = LogisticRegression(max_iter=1000, solver="lbfgs")
 
-    res = dml_att(
+    res = dml_atte(
         data,
         ml_g=ml_g,
         ml_m=ml_m,

@@ -7,11 +7,11 @@ def test_oracle_gating_raises_when_U_affects_both():
     # When U impacts both treatment and outcome, DML is not identified
     gen = CausalDatasetGenerator(
         k=2,
-        beta_t=np.array([0.5, -0.2], dtype=float),
+        beta_d=np.array([0.5, -0.2], dtype=float),
         beta_y=np.array([0.3, 0.1], dtype=float),
-        alpha_t=0.1,
+        alpha_d=0.1,
         alpha_y=0.0,
-        u_strength_t=0.7,
+        u_strength_d=0.7,
         u_strength_y=0.4,
         outcome_type="continuous",
         seed=123,
@@ -50,7 +50,7 @@ def test_m0_m1_mappings_across_outcomes():
 
 
 def test_e_reduces_to_sigmoid_when_no_U():
-    gen = CausalDatasetGenerator(k=2, beta_t=np.array([0.5, 0.1], dtype=float), alpha_t=-0.3, u_strength_t=0.0, seed=1)
+    gen = CausalDatasetGenerator(k=2, beta_d=np.array([0.5, 0.1], dtype=float), alpha_d=-0.3, u_strength_d=0.0, seed=1)
     x = np.array([1.0, -2.0], dtype=float)
 
     m_fun, _, _ = gen.oracle_nuisance()

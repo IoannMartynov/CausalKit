@@ -3,7 +3,7 @@ Two-proportion z-test for conversion data in CausalData (ATT context).
 
 Compares conversion rates between treated (T=1) and control (T=0) groups.
 Returns p-value, absolute/relative differences, and their confidence intervals
-(similar structure to inference.att.ttest).
+(similar structure to inference.atte.ttest).
 """
 
 from typing import Dict, Any

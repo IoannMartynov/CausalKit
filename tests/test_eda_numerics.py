@@ -15,7 +15,7 @@ def test_fit_propensity_produces_valid_ps():
         {"name": "x2", "dist": "bernoulli", "p": 0.4},
     ], target_t_rate=0.3)
     df = gen.generate(1000)
-    cd = CausalData(df=df, treatment="t", outcome="y", confounders=["x1", "x2"])
+    cd = CausalData(df=df, treatment="d", outcome="y", confounders=["x1", "x2"])
     eda = CausalEDA(cd)
 
     ps_model = eda.fit_propensity()

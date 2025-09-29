@@ -23,8 +23,8 @@ def test_calibrator_bracket_fallback_clamps_to_endpoint():
     confounder_specs = [{"name": "x", "dist": "normal", "mu": 100.0, "sd": 0.0}]
     gen = CausalDatasetGenerator(
         confounder_specs=confounder_specs,
-        beta_t=np.array([100.0], dtype=float),
-        target_t_rate=0.2,
+        beta_d=np.array([100.0], dtype=float),
+        target_d_rate=0.2,
         outcome_type="continuous",
         seed=123,
     )
@@ -32,7 +32,7 @@ def test_calibrator_bracket_fallback_clamps_to_endpoint():
     df = gen.generate(2000)
 
     # alpha_t should be clamped very close to an endpoint (-50 or 50)
-    assert (gen.alpha_t > 49.0) or (gen.alpha_t < -49.0)
+    assert (gen.alpha_d > 49.0) or (gen.alpha_d < -49.0)
     # Realized treatment rate should be saturated near 0 or 1 (here near 1)
-    t_rate = float(df["t"].mean())
+    t_rate = float(df["d"].mean())
     assert (t_rate > 0.95) or (t_rate < 0.05)
