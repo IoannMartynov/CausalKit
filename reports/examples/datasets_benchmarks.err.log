@@ -22,44 +22,114 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from causalkit.inference.ate import dml_ate
 
-# Estimate Average Treatment Effect (ATE)
-ate_result = dml_ate(causal_data, n_folds=4, confidence_level=0.95)
-ate_result
+import numpy as np
+import pandas as pd
+
+# If available in your environment:
+from causalkit.data import CausalDatasetGenerator
+
+# Reproducibility
+SEED = 42
+np.random.seed(SEED)
+
+# Number of observations
+n = 10000
+
+# Confounders schema
+# These are illustrative product/behavior/user attributes
+confounder_specs = [
+    {"name": "tenure_months", "dist": "normal", "mu": 18, "sd": 12},  # app tenure
+    {"name": "sessions_per_week", "dist": "normal", "mu": 6, "sd": 3},  # engagement
+    {"name": "spend_last_30d", "dist": "uniform", "a": 0, "b": 300},  # recent spend
+    {"name": "premium_user", "dist": "bernoulli", "p": 0.2},  # subscription
+    {"name": "urban_resident", "dist": "bernoulli", "p": 0.65},  # geography
+]
+
+# True causal effect on ARPPU (on the natural/mean scale)
+theta_arppu = 4.0
+
+# Outcome noise (ARPPU is positive and often heavy-tailed; this is a simple Gaussian noise)
+sigma_y = 8.0
+
+# Target share of users exposed to the feature
+target_t_rate = 0.4
+
+# How confounders affect ARPPU (baseline; additive)
+# Order must match confounder_specs
+beta_y = np.array([
+    0.08,  # + per tenure month
+    0.60,  # + per weekly session
+    0.03,  # + per recent spend unit (scaled here)
+    6.00,  # premium users have higher ARPPU
+    2.00,  # urban residents slightly higher ARPPU
+], dtype=float)
+
+# How confounders affect feature exposure (log-odds scale)
+beta_t = np.array([
+    0.02,  # tenure increases likelihood of exposure
+    0.15,  # more sessions -> more likely to get feature
+    0.004,  # recent spend -> more likely to get feature
+    1.00,  # premium users prioritized
+    0.35,  # urban residents slightly more likely
+], dtype=float)
+
+gen = CausalDatasetGenerator(
+    theta=theta_arppu,
+    outcome_type="continuous",
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=SEED,
+    confounder_specs=confounder_specs,
+    beta_y=beta_y,
+    beta_t=beta_t,
+)
+
+# Create dataset
+causal_data = gen.to_causal_data(
+    n=n,
+    confounders = [
+    "tenure_months",
+    "sessions_per_week",
+    "spend_last_30d",
+    "premium_user",
+    "urban_resident",
+]
+)
+
+# Show first few rows
+causal_data.df.head()
+
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[2], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_ate
-[1;32m      3[0m [38;5;66;03m# Estimate Average Treatment Effect (ATE)[39;00m
-[1;32m      4[0m ate_result [38;5;241m=[39m dml_ate(causal_data, n_folds[38;5;241m=[39m[38;5;241m4[39m, confidence_level[38;5;241m=[39m[38;5;241m0.95[39m)
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[1], line 52[0m
+[1;32m     43[0m [38;5;66;03m# How confounders affect feature exposure (log-odds scale)[39;00m
+[1;32m     44[0m beta_t [38;5;241m=[39m np[38;5;241m.[39marray([
+[1;32m     45[0m     [38;5;241m0.02[39m,  [38;5;66;03m# tenure increases likelihood of exposure[39;00m
+[1;32m     46[0m     [38;5;241m0.15[39m,  [38;5;66;03m# more sessions -> more likely to get feature[39;00m
+[0;32m   (...)[0m
+[1;32m     49[0m     [38;5;241m0.35[39m,  [38;5;66;03m# urban residents slightly more likely[39;00m
+[1;32m     50[0m ], dtype[38;5;241m=[39m[38;5;28mfloat[39m)
+[0;32m---> 52[0m gen [38;5;241m=[39m [43mCausalDatasetGenerator[49m[43m([49m
+[1;32m     53[0m [43m    [49m[43mtheta[49m[38;5;241;43m=[39;49m[43mtheta_arppu[49m[43m,[49m
+[1;32m     54[0m [43m    [49m[43moutcome_type[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mcontinuous[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m     55[0m [43m    [49m[43msigma_y[49m[38;5;241;43m=[39;49m[43msigma_y[49m[43m,[49m
+[1;32m     56[0m [43m    [49m[43mtarget_t_rate[49m[38;5;241;43m=[39;49m[43mtarget_t_rate[49m[43m,[49m
+[1;32m     57[0m [43m    [49m[43mseed[49m[38;5;241;43m=[39;49m[43mSEED[49m[43m,[49m
+[1;32m     58[0m [43m    [49m[43mconfounder_specs[49m[38;5;241;43m=[39;49m[43mconfounder_specs[49m[43m,[49m
+[1;32m     59[0m [43m    [49m[43mbeta_y[49m[38;5;241;43m=[39;49m[43mbeta_y[49m[43m,[49m
+[1;32m     60[0m [43m    [49m[43mbeta_t[49m[38;5;241;43m=[39;49m[43mbeta_t[49m[43m,[49m
+[1;32m     61[0m [43m)[49m
+[1;32m     63[0m [38;5;66;03m# Create dataset[39;00m
+[1;32m     64[0m causal_data [38;5;241m=[39m gen[38;5;241m.[39mto_causal_data(
+[1;32m     65[0m     n[38;5;241m=[39mn,
+[1;32m     66[0m     confounders [38;5;241m=[39m [
+[0;32m   (...)[0m
+[1;32m     72[0m ]
+[1;32m     73[0m )
 
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/__init__.py:11[0m
-[1;32m      9[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mconversion_z_test[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m conversion_z_test
-[1;32m     10[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mbootstrap_diff_means[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m bootstrap_diff_means
-[0;32m---> 11[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml_ate_source[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_ate_source [38;5;28;01mas[39;00m dml
-[1;32m     12[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01matt[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml_att_source[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_att_source
-[1;32m     13[0m [38;5;66;03m# Backward-compatible alias for convenience[39;00m
-
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/__init__.py:7[0m
-[1;32m      1[0m [38;5;124;03m"""[39;00m
-[1;32m      2[0m [38;5;124;03mAverage Treatment Effect (ATE) inference methods for causalkit.[39;00m
-[1;32m      3[0m 
-[1;32m      4[0m [38;5;124;03mThis module provides methods for estimating average treatment effects.[39;00m
-[1;32m      5[0m [38;5;124;03m"""[39;00m
-[0;32m----> 7[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml_ate_source[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_ate_source
-[1;32m      8[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdml_ate[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_ate
-[1;32m     10[0m __all__ [38;5;241m=[39m [[38;5;124m'[39m[38;5;124mdml_ate_source[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mdml_ate[39m[38;5;124m'[39m]
-
-File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/dml_ate_source.py:13[0m
-[1;32m     10[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mtyping[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Dict, Any, Optional, Union, List, Tuple
-[1;32m     12[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mdoubleml[39;00m
-[0;32m---> 13[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcatboost[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CatBoostRegressor, CatBoostClassifier
-[1;32m     14[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mensemble[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m RandomForestRegressor, RandomForestClassifier
-[1;32m     16[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01mdata[39;00m[38;5;21;01m.[39;00m[38;5;21;01mcausaldata[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalData
-
-[0;31mModuleNotFoundError[0m: No module named 'catboost'
+[0;31mTypeError[0m: CausalDatasetGenerator.__init__() got an unexpected keyword argument 'target_t_rate'
 

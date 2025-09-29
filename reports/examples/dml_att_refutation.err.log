@@ -22,27 +22,170 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from causalkit.eda import CausalEDA
-eda = CausalEDA(causal_data)
+# Nonlinear ATT data generation with heterogeneous effects
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from causalkit.data import CausalDatasetGenerator, CausalData
+
+# Reproducibility
+np.random.seed(42)
+
+# 1) Confounders and their distributions
+#    These names define the column order in X for the custom functions.
+confounder_specs = [
+    {"name": "tenure_months",     "dist": "normal",   "mu": 24, "sd": 12},
+    {"name": "avg_sessions_week", "dist": "normal",   "mu": 5,  "sd": 2},
+    {"name": "spend_last_month",  "dist": "uniform",  "a": 0,   "b": 200},
+    {"name": "premium_user",      "dist": "bernoulli","p": 0.25},
+    {"name": "urban_resident",    "dist": "bernoulli","p": 0.60},
+]
+
+# Indices (for convenience inside g_y, g_t, tau)
+TENURE, SESS, SPEND, PREMIUM, URBAN = range(5)
+
+# 2) Nonlinear baseline for outcome f_y(X) = X @ beta_y + g_y(X)
+#    Keep a modest linear part and add meaningful nonlinearities.
+beta_y = np.array([
+    0.03,   # tenure_months
+    0.20,   # avg_sessions_week
+    0.01,   # spend_last_month
+    1.20,   # premium_user
+    0.60,   # urban_resident
+], dtype=float)
+
+def g_y(X: np.ndarray) -> np.ndarray:
+    # Nonlinearities and interactions in outcome baseline
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    return (
+        1.2 * np.sin(2.0 * np.pi * tenure_years)          # seasonal-ish tenure pattern
+        + 0.02 * (sessions - 5.0) ** 2                    # convex effect of sessions
+        + 0.0015 * (spend - 100.0) * (sessions - 5.0)     # spend × sessions interaction
+        + 0.4 * premium * (sessions - 5.0)                # premium × sessions interaction
+        + 0.3 * urban * np.tanh((spend - 100.0) / 50.0)   # nonlinear spend effect differs by urban
+    )
+
+# 3) Nonlinear treatment score f_t(X) = X @ beta_t + g_t(X)
+beta_t = np.array([
+    0.010,  # tenure_months
+    0.12,   # avg_sessions_week
+    0.001,  # spend_last_month
+    0.80,   # premium_user
+    0.25,   # urban_resident
+], dtype=float)
+
+def g_t(X: np.ndarray) -> np.ndarray:
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    # Smoothly increasing selection with spend; interactions make selection non-separable
+    soft_spend = 1.2 * np.tanh((spend - 80.0) / 40.0)
+    return (
+        0.6 * soft_spend
+        + 0.15 * (sessions - 5.0) * (tenure_years - 2.0)
+        + 0.25 * premium * (urban - 0.5)
+    )
+
+# 4) Heterogeneous, nonlinear treatment effect tau(X) on the natural scale (continuous outcome)
+def tau_fn(X: np.ndarray) -> np.ndarray:
+    tenure_years = X[:, TENURE] / 12.0
+    sessions = X[:, SESS]
+    spend = X[:, SPEND]
+    premium = X[:, PREMIUM]
+    urban = X[:, URBAN]
+
+    # Base effect + stronger effect for higher sessions and premium users,
+    # diminishes with tenure, mild modulation by spend and urban
+    tau = (
+        1.0
+        + 0.8 * (1.0 / (1.0 + np.exp(-(sessions - 5.0))))    # sigmoid in sessions
+        + 0.5 * premium
+        - 0.6 * np.clip(tenure_years / 5.0, 0.0, 1.0)        # taper with long tenure
+        + 0.2 * urban * (spend - 100.0) / 100.0
+    )
+    # Optional: keep it in a reasonable range
+    return np.clip(tau, 0.2, 2.5)
+
+# 5) Noise and prevalence
+sigma_y = 1
+target_t_rate = 0.35  # enforce ~35% treated via intercept calibration
+
+# 6) Build generator
+gen = CausalDatasetGenerator(
+    outcome_type="continuous",
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=42,
+    # Confounders
+    confounder_specs=confounder_specs,
+    # Outcome/treatment structure
+    beta_y=beta_y,
+    beta_t=beta_t,
+    g_y=g_y,
+    g_t=g_t,
+    # Heterogeneous effect
+    tau=tau_fn,
+)
+
+# 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)
+n = 10000
+generated_df = gen.generate(n)
+
+# Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated
+true_att = float(generated_df.loc[generated_df["t"] == 1, "cate"].mean())
+print(f"Ground-truth ATT from the DGP: {true_att:.3f}")
+
+# 8) Wrap as CausalData for downstream workflows (keeps only y, t, and specified confounders)
+causal_data = CausalData(
+    df=generated_df,
+    treatment="t",
+    outcome="y",
+    confounders=[
+        "tenure_months",
+        "avg_sessions_week",
+        "spend_last_month",
+        "premium_user",
+        "urban_resident",
+    ],
+)
+
+# Peek at the analysis-ready view
+causal_data.df.head()
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[2], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01meda[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalEDA
-[1;32m      2[0m eda [38;5;241m=[39m CausalEDA(causal_data)
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[1], line 100[0m
+[1;32m     97[0m target_t_rate [38;5;241m=[39m [38;5;241m0.35[39m  [38;5;66;03m# enforce ~35% treated via intercept calibration[39;00m
+[1;32m     99[0m [38;5;66;03m# 6) Build generator[39;00m
+[0;32m--> 100[0m gen [38;5;241m=[39m [43mCausalDatasetGenerator[49m[43m([49m
+[1;32m    101[0m [43m    [49m[43moutcome_type[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mcontinuous[39;49m[38;5;124;43m"[39;49m[43m,[49m
+[1;32m    102[0m [43m    [49m[43msigma_y[49m[38;5;241;43m=[39;49m[43msigma_y[49m[43m,[49m
+[1;32m    103[0m [43m    [49m[43mtarget_t_rate[49m[38;5;241;43m=[39;49m[43mtarget_t_rate[49m[43m,[49m
+[1;32m    104[0m [43m    [49m[43mseed[49m[38;5;241;43m=[39;49m[38;5;241;43m42[39;49m[43m,[49m
+[1;32m    105[0m [43m    [49m[38;5;66;43;03m# Confounders[39;49;00m
+[1;32m    106[0m [43m    [49m[43mconfounder_specs[49m[38;5;241;43m=[39;49m[43mconfounder_specs[49m[43m,[49m
+[1;32m    107[0m [43m    [49m[38;5;66;43;03m# Outcome/treatment structure[39;49;00m
+[1;32m    108[0m [43m    [49m[43mbeta_y[49m[38;5;241;43m=[39;49m[43mbeta_y[49m[43m,[49m
+[1;32m    109[0m [43m    [49m[43mbeta_t[49m[38;5;241;43m=[39;49m[43mbeta_t[49m[43m,[49m
+[1;32m    110[0m [43m    [49m[43mg_y[49m[38;5;241;43m=[39;49m[43mg_y[49m[43m,[49m
+[1;32m    111[0m [43m    [49m[43mg_t[49m[38;5;241;43m=[39;49m[43mg_t[49m[43m,[49m
+[1;32m    112[0m [43m    [49m[38;5;66;43;03m# Heterogeneous effect[39;49;00m
+[1;32m    113[0m [43m    [49m[43mtau[49m[38;5;241;43m=[39;49m[43mtau_fn[49m[43m,[49m
+[1;32m    114[0m [43m)[49m
+[1;32m    116[0m [38;5;66;03m# 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)[39;00m
+[1;32m    117[0m n [38;5;241m=[39m [38;5;241m10000[39m
 
-File [0;32m~/work/CausalKit/CausalKit/causalkit/eda/__init__.py:1[0m
-[0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01m.[39;00m[38;5;21;01meda[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CausalEDA, CausalDataLite
-[1;32m      3[0m __all__ [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mCausalEDA[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mCausalDataLite[39m[38;5;124m"[39m]
-
-File [0;32m~/work/CausalKit/CausalKit/causalkit/eda/eda.py:38[0m
-[1;32m     36[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpipeline[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m Pipeline
-[1;32m     37[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01msklearn[39;00m[38;5;21;01m.[39;00m[38;5;21;01mlinear_model[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m LogisticRegression, LinearRegression
-[0;32m---> 38[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcatboost[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m CatBoostClassifier, CatBoostRegressor
-[1;32m     39[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mmatplotlib[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpyplot[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[38;5;21;01mplt[39;00m
-[1;32m     42[0m [38;5;28;01mimport[39;00m[38;5;250m [39m[38;5;21;01mwarnings[39;00m
-
-[0;31mModuleNotFoundError[0m: No module named 'catboost'
+[0;31mTypeError[0m: CausalDatasetGenerator.__init__() got an unexpected keyword argument 'target_t_rate'
 
