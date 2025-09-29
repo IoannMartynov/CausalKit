@@ -55,5 +55,5 @@ def test_e_reduces_to_sigmoid_when_no_U():
 
     m_fun, _, _ = gen.oracle_nuisance()
     base = gen._treatment_score(x.reshape(1, -1), np.zeros(1, dtype=float))[0]
-    expected = _sigmoid(gen.alpha_t + base)
+    expected = _sigmoid(gen.alpha_d + base)
     assert abs(m_fun(x) - float(expected)) < 1e-12

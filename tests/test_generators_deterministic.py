@@ -24,7 +24,7 @@ def test_to_causal_data_accepts_single_string_and_preserves_order():
 
     # When None, keep order of columns in DataFrame excluding known non-confounders
     cd2 = gen.to_causal_data(30)
-    exclude = {"y", "t", "m", "g0", "g1", "cate", "propensity", "mu0", "mu1"}
+    exclude = {"y", "d", "m", "g0", "g1", "cate", "propensity", "mu0", "mu1"}
     expected = [c for c in cd2.df.columns if c not in exclude]
     assert cd2.confounders == expected
 
