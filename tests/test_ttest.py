@@ -6,7 +6,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from causalkit.data import CausalData
-from causalkit.inference.ttest import ttest
+from causalkit.inference.atte.ttest import ttest
 
 
 @pytest.fixture

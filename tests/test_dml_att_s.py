@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data.causaldata import CausalData
 from causalkit.data.generators import generate_rct
-from causalkit.inference.att import dml_att
+from causalkit.inference.atte import dml_atte
 
 
 def make_causal_data(n=1000, target_type="normal", random_state=1):
@@ -21,7 +21,7 @@ def test_dml_att_s_binary_outcome_with_classifier():
     ml_g = RandomForestClassifier(n_estimators=60, random_state=21)
     ml_m = RandomForestClassifier(n_estimators=60, random_state=21)
 
-    res = dml_att(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3)
+    res = dml_atte(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3)
     assert np.isfinite(res["std_error"]) and np.isfinite(res["coefficient"]) 
 
 
@@ -35,4 +35,4 @@ def test_dml_att_s_raises_on_non_binary_treatment():
     ml_m = RandomForestClassifier(n_estimators=10, random_state=0)
 
     with pytest.raises(ValueError):
-        dml_att(cd_bad, ml_g=ml_g, ml_m=ml_m, n_folds=2)
+        dml_atte(cd_bad, ml_g=ml_g, ml_m=ml_m, n_folds=2)

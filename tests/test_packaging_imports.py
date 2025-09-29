@@ -11,11 +11,11 @@ def test_import_additional_subpackages():
         import causalkit.refutation.score.score_validation as ref_module
 
         # Nested subpackage inside inference should also be present
-        import causalkit.inference.att as att_module
+        import causalkit.inference.atte as att_module
 
         # Basic sanity: referenced attributes exist
         assert hasattr(eda_module, "eda") or hasattr(eda_module, "__all__") or True
         assert hasattr(ref_module, "check_orthogonality") or hasattr(ref_module, "__all__") or True
-        assert hasattr(att_module, "att") or hasattr(att_module, "__all__") or True
+        assert hasattr(att_module, "atte") or hasattr(att_module, "__all__") or True
     except ImportError as e:
         pytest.fail(f"Packaging/import error: {e}")

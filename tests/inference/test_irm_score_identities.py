@@ -4,7 +4,7 @@ import pytest
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
 from causalkit.data.generators import CausalDatasetGenerator
-from causalkit.inference.att.dml_att import dml_att
+from causalkit.inference.atte.dml_atte import dml_atte
 
 
 @pytest.mark.parametrize("normalize_ipw", [False, True])
@@ -13,7 +13,7 @@ def test_irm_att_score_identities(normalize_ipw):
     gen = CausalDatasetGenerator(
         theta=0.8,
         beta_y=np.array([0.7, -0.2, 0.3]),
-        beta_t=np.array([0.9, 0.1, -0.1]),
+        beta_d=np.array([0.9, 0.1, -0.1]),
         outcome_type="continuous",
         sigma_y=1.0,
         k=3,
@@ -24,7 +24,7 @@ def test_irm_att_score_identities(normalize_ipw):
     ml_g = LinearRegression()
     ml_m = LogisticRegression(max_iter=500)
 
-    res = dml_att(
+    res = dml_atte(
         cd,
         ml_g=ml_g,
         ml_m=ml_m,

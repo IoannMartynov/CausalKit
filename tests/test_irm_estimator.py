@@ -12,9 +12,9 @@ from causalkit.inference.estimators import IRM
 def make_causal_data(n=1000, target_type="normal", random_state=1):
     df = generate_rct(n=n, split=0.5, random_state=random_state, target_type=target_type, k=3, add_ancillary=False)
     # map to expected columns: outcome y, treatment t, confounders any x*
-    y = "y"; t = "t"
-    xcols = [c for c in df.columns if c not in {y, t, "m", "g0", "g1", "propensity", "mu0", "mu1", "cate"}]
-    cd = CausalData(df=df[[y, t] + xcols], treatment=t, outcome=y, confounders=xcols)
+    y = "y"; d = "d"
+    xcols = [c for c in df.columns if c not in {y, d, "m", "g0", "g1", "propensity", "mu0", "mu1", "cate"}]
+    cd = CausalData(df=df[[y, d] + xcols], treatment=d, outcome=y, confounders=xcols)
     return cd
 
 

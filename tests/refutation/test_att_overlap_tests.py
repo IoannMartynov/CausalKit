@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression, LinearRegression
 
 from causalkit.refutation.overlap import att_overlap_tests
 from causalkit.data.causaldata import CausalData
-from causalkit.inference.att.dml_att import dml_att
+from causalkit.inference.atte.dml_atte import dml_atte
 
 
 def test_att_overlap_tests_structure_and_basic_flags_random():
@@ -62,7 +62,7 @@ def test_att_overlap_tests_accepts_dml_att_result():
     ml_g = LinearRegression()
     ml_m = LogisticRegression(max_iter=2000)
 
-    res = dml_att(data, ml_g=ml_g, ml_m=ml_m, n_folds=4, trimming_threshold=1e-3, random_state=7)
+    res = dml_atte(data, ml_g=ml_g, ml_m=ml_m, n_folds=4, trimming_threshold=1e-3, random_state=7)
 
     out = att_overlap_tests(res)
     # Sanity checks

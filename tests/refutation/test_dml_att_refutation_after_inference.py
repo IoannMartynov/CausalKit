@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from causalkit.data import CausalData
-from causalkit.inference.att import dml_att_source
+from causalkit.inference.atte import dml_atte_source
 from causalkit.refutation.score.score_validation import (
     refute_placebo_outcome,
     refute_placebo_treatment,
@@ -20,18 +20,18 @@ def _make_synth(n=400, seed=123):
     # Treatment assignment (logit based on x1, x2)
     logits = 0.6 * x1 + 0.9 * x2 - 0.1
     p = 1.0 / (1.0 + np.exp(-logits))
-    t = rng.binomial(1, p, size=n)
-    # Outcome (continuous): baseline + tau * t + noise
+    d = rng.binomial(1, p, size=n)
+    # Outcome (continuous): baseline + tau * d + noise
     tau = 1.0
-    y = 0.4 * x1 + 0.6 * x2 + tau * t + rng.normal(0, 1.0, size=n)
+    y = 0.4 * x1 + 0.6 * x2 + tau * d + rng.normal(0, 1.0, size=n)
 
     df = pd.DataFrame({
         "y": y.astype(float),
-        "t": t.astype(int),
+        "d": d.astype(int),
         "x1": x1.astype(float),
         "x2": x2.astype(float),
     })
-    data = CausalData(df=df, treatment="t", outcome="y", confounders=["x1", "x2"])
+    data = CausalData(df=df, treatment="d", outcome="y", confounders=["x1", "x2"])
     return data
 
 
@@ -47,16 +47,16 @@ def test_refutation_after_dml_att_source_runs_and_reports_overlap():
     ml_g, ml_m = _light_models()
 
     # 1) Run ATT inference via DoubleML-based source function
-    att_result = dml_att_source(data, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1, confidence_level=0.9)
+    att_result = dml_atte_source(data, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1, confidence_level=0.9)
     # Basic sanity on inference
     assert isinstance(att_result, dict)
     for key in ["coefficient", "std_error", "p_value", "confidence_interval", "model"]:
         assert key in att_result
 
     # 2) Run placebo refutations using the same estimator function
-    placebo_y = refute_placebo_outcome(dml_att_source, data, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
-    placebo_t = refute_placebo_treatment(dml_att_source, data, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
-    subset_res = refute_subset(dml_att_source, data, fraction=0.5, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
+    placebo_y = refute_placebo_outcome(dml_atte_source, data, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
+    placebo_t = refute_placebo_treatment(dml_atte_source, data, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
+    subset_res = refute_subset(dml_atte_source, data, fraction=0.5, random_state=42, ml_g=ml_g, ml_m=ml_m, n_folds=2, n_rep=1)
 
     # Placebo/subset results have required shape
     for res in (placebo_y, placebo_t, subset_res):

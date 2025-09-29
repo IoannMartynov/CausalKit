@@ -13,7 +13,7 @@ from causalkit.refutation.unconfoundedness.uncofoundedness_validation import val
 def test_unconfoundedness_balance_extras_outputs():
     df = generate_rct(n=1500, k=4, random_state=17, target_type="binary")
     confs = [c for c in df.columns if c.startswith("x")]
-    data = CausalData(df=df, treatment='t', outcome='y', confounders=confs)
+    data = CausalData(df=df, treatment='d', outcome='y', confounders=confs)
 
     ml_g = LinearRegression()
     ml_m = LogisticRegression(max_iter=400)

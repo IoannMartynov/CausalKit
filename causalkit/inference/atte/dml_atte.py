@@ -16,7 +16,7 @@ from causalkit.data.causaldata import CausalData
 from causalkit.inference.estimators import IRM
 
 
-def dml_att(
+def dml_atte(
     data: CausalData,
     ml_g: Optional[Any] = None,
     ml_m: Optional[Any] = None,

@@ -14,7 +14,7 @@ import doubleml as doubleml
 from causalkit.data.causaldata import CausalData
 
 
-def dml_att_source(
+def dml_atte_source(
     data: CausalData,
     ml_g: Optional[Any] = None,
     ml_m: Optional[Any] = None,
@@ -62,7 +62,7 @@ def dml_att_source(
     --------
     >>> from causalkit.data import generate_rct_data
     >>> from causalkit.data import CausalData
-    >>> from causalkit.inference.att import dml_att_source
+    >>> from causalkit.inference.atte import dml_atte_source
     >>> 
     >>> # Generate data
     >>> df = generate_rct_data()
@@ -76,7 +76,7 @@ def dml_att_source(
     ... )
     >>> 
     >>> # Estimate ATT using DoubleML
-    >>> results = dml_att_source(ck)
+    >>> results = dml_atte_source(ck)
     >>> print(f"ATT: {results['coefficient']:.4f}")
     >>> print(f"Standard Error: {results['std_error']:.4f}")
     >>> print(f"P-value: {results['p_value']:.4f}")

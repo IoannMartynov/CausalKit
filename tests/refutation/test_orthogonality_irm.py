@@ -1,6 +1,6 @@
 from causalkit.data.generators import CausalDatasetGenerator
 from causalkit.refutation.score.score_validation import refute_irm_orthogonality
-from causalkit.inference.att.dml_att import dml_att
+from causalkit.inference.atte.dml_atte import dml_atte
 
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
@@ -16,7 +16,7 @@ def test_refute_irm_orthogonality_att_runs_and_returns_keys():
 
     # Run orthogonality diagnostics with ATT estimator
     res = refute_irm_orthogonality(
-        dml_att,
+        dml_atte,
         cd,
         n_folds_oos=3,
         target="ATT",  # explicit

@@ -69,14 +69,14 @@ def test_generate_continuous_outcome(basic_generator):
     
     # Check DataFrame shape and columns
     assert df.shape[0] == 100
-    assert set(df.columns) >= {"y", "t", "age", "smoker", "bmi", "propensity", "mu0", "mu1", "cate"}
+    assert set(df.columns) >= {"y", "d", "age", "smoker", "bmi", "propensity", "mu0", "mu1", "cate"}
     
     # Check data types
     assert df["y"].dtype == np.float64
-    assert df["t"].isin([0.0, 1.0]).all()
+    assert df["d"].isin([0.0, 1.0]).all()
     
     # Check treatment rate is close to outcome
-    assert abs(df["t"].mean() - 0.35) < 0.1
+    assert abs(df["d"].mean() - 0.35) < 0.1
     
     # Check CATE calculation
     assert np.allclose(df["cate"], df["mu1"] - df["mu0"])
@@ -97,11 +97,11 @@ def test_generate_binary_outcome(random_seed):
     
     # Check DataFrame shape and columns
     assert df.shape[0] == 100
-    assert set(df.columns) >= {"y", "t", "x1", "propensity", "mu0", "mu1", "cate"}
+    assert set(df.columns) >= {"y", "d", "x1", "propensity", "mu0", "mu1", "cate"}
     
     # Check data types
     assert df["y"].isin([0.0, 1.0]).all()
-    assert df["t"].isin([0.0, 1.0]).all()
+    assert df["d"].isin([0.0, 1.0]).all()
     
     # Check mu0 and mu1 are probabilities (between 0 and 1)
     assert (df["mu0"] >= 0).all() and (df["mu0"] <= 1).all()
@@ -123,12 +123,12 @@ def test_generate_poisson_outcome(random_seed):
     
     # Check DataFrame shape and columns
     assert df.shape[0] == 100
-    assert set(df.columns) >= {"y", "t", "x1", "propensity", "mu0", "mu1", "cate"}
+    assert set(df.columns) >= {"y", "d", "x1", "propensity", "mu0", "mu1", "cate"}
     
     # Check data types
     assert df["y"].dtype == np.float64
     assert (df["y"] >= 0).all()  # Poisson values are non-negative
-    assert df["t"].isin([0.0, 1.0]).all()
+    assert df["d"].isin([0.0, 1.0]).all()
     
     # Check mu0 and mu1 are non-negative (Poisson means)
     assert (df["mu0"] >= 0).all()
@@ -205,17 +205,17 @@ def test_to_causal_data(basic_generator):
     
     # Check that it has the correct columns
     assert causal_data._target == "y"
-    assert causal_data._treatment == "t"
+    assert causal_data._treatment == "d"
     assert set(causal_data.confounders) == {"age", "smoker", "bmi"}
     
     # Check that the data is accessible
     assert causal_data.df.shape[0] == 100
-    assert set(causal_data.df.columns) == {"y", "t", "age", "smoker", "bmi"}
+    assert set(causal_data.df.columns) == {"y", "d", "age", "smoker", "bmi"}
     
     # Test with specific confounders
     causal_data_specific = basic_generator.to_causal_data(100, confounders=["age"])
     assert causal_data_specific.confounders == ["age"]
-    assert set(causal_data_specific.df.columns) == {"y", "t", "age"}
+    assert set(causal_data_specific.df.columns) == {"y", "d", "age"}
 
 
 def test_invalid_outcome_type(random_seed):

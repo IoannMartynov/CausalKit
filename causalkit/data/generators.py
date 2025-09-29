@@ -9,23 +9,9 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Union, List, Tuple, Callable, Any
 from scipy.special import erfinv, erf
-import warnings
 
 from causalkit.data.causaldata import CausalData
 
-# Legacy naming deprecation warnings (warn once per process)
-_CK_NAMING_WARN_ONCE = {"propensity": False, "mu0": False, "mu1": False}
-
-def _warn_legacy(col: str) -> None:
-    if not _CK_NAMING_WARN_ONCE.get(col, False):
-        warnings.warn(
-            f"`{col}` is deprecated; use "
-            + {"propensity": "`m`", "mu0": "`g0`", "mu1": "`g1`"}[col]
-            + " instead. Will be removed in a future release.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        _CK_NAMING_WARN_ONCE[col] = True
 
 
 def _sigmoid(z):
@@ -34,68 +20,60 @@ def _sigmoid(z):
     Handles large positive/negative z without overflow warnings.
     Ensures outputs lie strictly within (0,1) and are strictly monotone in z
     even under floating-point saturation by using nextafter for exact 0/1 cases.
-    
+
+    Supports inputs of any shape; uses a flattened view to apply exact-0/1 nudges
+    and reshapes back to preserve original structure.
+
     Parameters
     ----------
     z : array-like
-        Input values
-        
+        Input values of any shape
+
     Returns
     -------
     array-like
-        Sigmoid of input values
+        Sigmoid of input values with same shape as input
     """
     z_arr = np.asarray(z, dtype=float)
-    # Use a stable formulation to avoid overflow for large |z|
     out = np.empty_like(z_arr, dtype=float)
+
     pos_mask = z_arr >= 0
     neg_mask = ~pos_mask
-    # For positive z: 1 / (1 + exp(-z))
     out[pos_mask] = 1.0 / (1.0 + np.exp(-z_arr[pos_mask]))
-    # For negative z: exp(z) / (1 + exp(z)) to avoid exp(-z) overflow
     ez = np.exp(z_arr[neg_mask])
     out[neg_mask] = ez / (1.0 + ez)
 
-    # If scalar, just nudge exact 0/1 using nextafter
     if out.ndim == 0:
         val = float(out)
         if not (0.0 < val < 1.0):
-            if val <= 0.0:
-                return float(np.nextafter(0.0, 1.0))
-            else:
-                return float(np.nextafter(1.0, 0.0))
+            return float(np.nextafter(0.0, 1.0)) if val <= 0.0 else float(np.nextafter(1.0, 0.0))
         return val
 
-    # Array: replace exact zeros/ones in an order-preserving way
-    out = out.astype(float, copy=False)
-    # Handle zeros (set to increasing subnormal positives based on z order)
-    zero_mask = out <= 0.0
-    if np.any(zero_mask):
-        idxs = np.where(zero_mask)[0]
-        # Order by z value so smaller z get smaller nudges
-        order = np.argsort(z_arr[idxs])  # ascending z
+    # Order-preserving nudge off exact 0/1 on a flattened view, then reshape back
+    flat = out.ravel()
+    zflat = z_arr.ravel()
+
+    zero_idx = np.flatnonzero(flat <= 0.0)
+    if zero_idx.size:
+        order = np.argsort(zflat[zero_idx])  # ascending z
         val = 0.0
         for j in order:
             val = np.nextafter(val, 1.0)
-            out[idxs[j]] = val
-    # Handle ones (set to decreasing values just below 1 based on z order)
-    one_mask = out >= 1.0
-    if np.any(one_mask):
-        idxs = np.where(one_mask)[0]
-        order = np.argsort(z_arr[idxs])  # ascending z; larger z -> closer to 1
-        k = len(idxs)
-        # Precompute a descending sequence of nextafter steps from 1.0
-        steps_vals = []
+            flat[zero_idx[j]] = val
+
+    one_idx = np.flatnonzero(flat >= 1.0)
+    if one_idx.size:
+        order = np.argsort(zflat[one_idx])  # ascending z
+        k = one_idx.size
         val = 1.0
+        steps = []
         for _ in range(k):
             val = np.nextafter(val, 0.0)
-            steps_vals.append(val)
-        # Assign: smallest z gets farthest from 1 (last element), largest z gets nearest (first)
+            steps.append(val)  # descending sequence < 1
         for rank, j in enumerate(order):
-            # steps_vals is descending; map rank to appropriate element from the end
-            out[idxs[j]] = steps_vals[k - rank - 1]
+            flat[one_idx[j]] = steps[k - rank - 1]
 
-    return out
+    return flat.reshape(out.shape)
 
 
 
@@ -277,7 +255,7 @@ def generate_rct(
 ) -> pd.DataFrame:
     """
     Generate an RCT dataset via CausalDatasetGenerator (thin wrapper), ensuring
-    randomized treatment independent of X. Keeps y and t as float for ML compatibility.
+    randomized treatment independent of X. Keeps y and d as float for ML compatibility.
     """
     # RNG for ancillary generation
     rng = np.random.default_rng(random_state)
@@ -346,19 +324,19 @@ def generate_rct(
         theta=theta,
         tau=None,
         beta_y=None,
-        beta_t=None,
+        beta_d=None,
         g_y=None,
-        g_t=None,
+        g_d=None,
         alpha_y=alpha_y,
-        alpha_t=_logit(split_f),
+        alpha_d=_logit(split_f),
         sigma_y=sigma_y,
         outcome_type=outcome_type_cls,
         confounder_specs=confounder_specs,
         k=int(k),
         x_sampler=x_sampler,
         use_copula=False,
-        target_t_rate=None,
-        u_strength_t=0.0,
+        target_d_rate=None,
+        u_strength_d=0.0,
         u_strength_y=0.0,
         seed=random_state,
     )
@@ -374,7 +352,7 @@ def generate_rct(
         lam_tx = np.maximum(1.5 + 2 * y, 1e-6)
         cnt_trans = rng.poisson(lam_tx, n).astype(int)
         # Platform: P(Android) = sigmoid(-0.4 + 0.8*y)
-        p_android = 1.0 / (1.0 + np.exp(-(-0.4 + 0.8 * y)))
+        p_android = _sigmoid(-0.4 + 0.8 * y)
         platform_android = rng.binomial(1, np.clip(p_android, 0.0, 1.0), n).astype(int)
         platform_ios = (1 - platform_android).astype(int)
         # Invited friend: normalized y -> [0,1]
@@ -410,8 +388,8 @@ class CausalDatasetGenerator:
 
     - Confounders X ∈ R^k are drawn from user-specified distributions.
     - Binary treatment T is assigned by a logistic model:
-        T ~ Bernoulli( sigmoid(alpha_t + f_t(X) + u_strength_t * U) ),
-      where f_t(X) = X @ beta_t + g_t(X), and U ~ N(0,1) is an optional unobserved confounder.
+        T ~ Bernoulli( sigmoid(alpha_d + f_t(X) + u_strength_d * U) ),
+      where f_t(X) = X @ beta_d + g_d(X), and U ~ N(0,1) is an optional unobserved confounder.
     - Outcome Y depends on treatment and confounders with link determined by `outcome_type`:
         outcome_type = "continuous":
             Y = alpha_y + f_y(X) + u_strength_y * U + T * tau(X) + ε,  ε ~ N(0, sigma_y^2)
@@ -423,7 +401,7 @@ class CausalDatasetGenerator:
 
     **Returned columns**
       - y: outcome
-      - t: binary treatment (0/1)
+      - d: binary treatment (0/1)
       - x1..xk (or user-provided names)
       - m   : true propensity P(T=1 | X)
       - g0  : E[Y | X, T=0] on the natural outcome scale
@@ -445,22 +423,22 @@ class CausalDatasetGenerator:
         Function tau(X) -> array-like shape (n,) for heterogeneous effects. Ignored if None.
 
     beta_y : array-like of shape (k,), optional
-        Linear coefficients of confounders in the outcome baseline f_y(X).
+        Linear coefficients of confounders in the outcome baseline f_y(X). Length must match the expanded X after one-hot encoding.
 
-    beta_t : array-like of shape (k,), optional
-        Linear coefficients of confounders in the treatment score f_t(X) (log-odds scale).
+    beta_d : array-like of shape (k,), optional
+        Linear coefficients of confounders in the treatment score f_t(X) (log-odds scale). Length must match the expanded X after one-hot encoding.
 
     g_y : callable, optional
         Nonlinear/additive function g_y(X) -> (n,) added to the outcome baseline.
 
-    g_t : callable, optional
-        Nonlinear/additive function g_t(X) -> (n,) added to the treatment score.
+    g_d : callable, optional
+        Nonlinear/additive function g_d(X) -> (n,) added to the treatment score.
 
     alpha_y : float, default=0.0
         Outcome intercept (natural scale for continuous; log-odds for binary; log-mean for Poisson).
 
-    alpha_t : float, default=0.0
-        Treatment intercept (log-odds). If `target_t_rate` is set, `alpha_t` is auto-calibrated.
+    alpha_d : float, default=0.0
+        Treatment intercept (log-odds). If `target_d_rate` is set, `alpha_d` is auto-calibrated.
 
     sigma_y : float, default=1.0
         Std. dev. of the Gaussian noise for continuous outcomes.
@@ -482,10 +460,10 @@ class CausalDatasetGenerator:
     x_sampler : callable, optional
         Custom sampler (n, k, seed) -> X ndarray of shape (n,k). Overrides `confounder_specs` and `k`.
 
-    target_t_rate : float in (0,1), optional
-        If set, calibrates `alpha_t` via bisection so that mean propensity ≈ outcome.
+    target_d_rate : float in (0,1), optional
+        If set, calibrates `alpha_d` via bisection so that mean propensity ≈ target_d_rate.
 
-    u_strength_t : float, default=0.0
+    u_strength_d : float, default=0.0
         Strength of the unobserved confounder U in treatment assignment.
 
     u_strength_y : float, default=0.0
@@ -504,8 +482,8 @@ class CausalDatasetGenerator:
     >>> gen = CausalDatasetGenerator(
     ...     theta=2.0,
     ...     beta_y=np.array([1.0, -0.5, 0.2]),
-    ...     beta_t=np.array([0.8, 1.2, -0.3]),
-    ...     target_t_rate=0.35,
+    ...     beta_d=np.array([0.8, 1.2, -0.3]),
+    ...     target_d_rate=0.35,
     ...     outcome_type="continuous",
     ...     sigma_y=1.0,
     ...     seed=42,
@@ -516,7 +494,7 @@ class CausalDatasetGenerator:
     ...     ])
     >>> df = gen.generate(10_000)
     >>> df.columns
-    Index([... 'y','t','age','smoker','bmi','propensity','mu0','mu1','cate'], dtype='object')
+    Index([... 'y','d','age','smoker','bmi','propensity','mu0','mu1','cate'], dtype='object')
     """
     # Core knobs
     theta: float = 1.0                            # constant treatment effect (ATE) if tau is None
@@ -524,13 +502,13 @@ class CausalDatasetGenerator:
 
     # Confounder -> outcome/treatment effects
     beta_y: Optional[np.ndarray] = None           # shape (k,)
-    beta_t: Optional[np.ndarray] = None           # shape (k,)
+    beta_d: Optional[np.ndarray] = None           # shape (k,)
     g_y: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear baseline outcome f_y(X)
-    g_t: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear treatment score f_t(X)
+    g_d: Optional[Callable[[np.ndarray], np.ndarray]] = None  # nonlinear treatment score f_t(X)
 
     # Outcome/treatment intercepts and noise
     alpha_y: float = 0.0
-    alpha_t: float = 0.0
+    alpha_d: float = 0.0
     sigma_y: float = 1.0                          # used when outcome_type="continuous"
     outcome_type: str = "continuous"              # "continuous" | "binary" | "poisson"
 
@@ -542,8 +520,8 @@ class CausalDatasetGenerator:
     copula_corr: Optional[np.ndarray] = None      # correlation matrix for copula (shape dxd where d=len(specs))
 
     # Practical controls
-    target_t_rate: Optional[float] = None         # e.g., 0.3 -> ~30% treated; solves for alpha_t
-    u_strength_t: float = 0.0                     # unobserved confounder effect on treatment
+    target_d_rate: Optional[float] = None         # e.g., 0.3 -> ~30% treated; solves for alpha_d
+    u_strength_d: float = 0.0                     # unobserved confounder effect on treatment
     u_strength_y: float = 0.0                     # unobserved confounder effect on outcome
     propensity_sharpness: float = 1.0             # scales the X-driven treatment score to adjust positivity difficulty
     seed: Optional[int] = None
@@ -619,27 +597,27 @@ class CausalDatasetGenerator:
         Xf = np.asarray(X, dtype=float)
         # X-driven part of the score
         score_x = np.zeros(Xf.shape[0], dtype=float)
-        if self.beta_t is not None:
-            bt = np.asarray(self.beta_t, dtype=float)
+        if self.beta_d is not None:
+            bt = np.asarray(self.beta_d, dtype=float)
             if bt.ndim != 1:
                 bt = bt.reshape(-1)
             if bt.shape[0] != Xf.shape[1]:
-                raise ValueError(f"beta_t shape {bt.shape} is incompatible with X shape {Xf.shape}")
+                raise ValueError(f"beta_d shape {bt.shape} is incompatible with X shape {Xf.shape}")
             score_x += np.sum(Xf * bt, axis=1)
-        if self.g_t is not None:
-            score_x += np.asarray(self.g_t(Xf), dtype=float)
+        if self.g_d is not None:
+            score_x += np.asarray(self.g_d(Xf), dtype=float)
         # Scale sharpness to control positivity difficulty
         s = float(getattr(self, "propensity_sharpness", 1.0))
         lin = s * score_x
         # Add unobserved confounder contribution (unscaled)
-        if self.u_strength_t != 0:
-            lin += self.u_strength_t * np.asarray(U, dtype=float)
+        if self.u_strength_d != 0:
+            lin += self.u_strength_d * np.asarray(U, dtype=float)
         return lin
 
-    def _outcome_location(self, X: np.ndarray, T: np.ndarray, U: np.ndarray, tau_x: np.ndarray) -> np.ndarray:
+    def _outcome_location(self, X: np.ndarray, D: np.ndarray, U: np.ndarray, tau_x: np.ndarray) -> np.ndarray:
         # location on natural scale for continuous; on logit/log scale for binary/poisson
         Xf = np.asarray(X, dtype=float)
-        Tf = np.asarray(T, dtype=float)
+        Df = np.asarray(D, dtype=float)
         Uf = np.asarray(U, dtype=float)
         taux = np.asarray(tau_x, dtype=float)
         loc = np.full(Xf.shape[0], float(self.alpha_y), dtype=float)
@@ -654,11 +632,11 @@ class CausalDatasetGenerator:
             loc += np.asarray(self.g_y(Xf), dtype=float)
         if self.u_strength_y != 0:
             loc += self.u_strength_y * Uf
-        loc += Tf * taux
+        loc += Df * taux
         return loc
 
-    def _calibrate_alpha_t(self, X: np.ndarray, U: np.ndarray, target: float) -> float:
-        """Calibrate alpha_t so mean propensity ~= target using robust bracketing and bisection."""
+    def _calibrate_alpha_d(self, X: np.ndarray, U: np.ndarray, target: float) -> float:
+        """Calibrate alpha_d so mean propensity ~= target using robust bracketing and bisection."""
         lo, hi = -50.0, 50.0
         # Define function whose root we seek
         def f(a: float) -> float:
@@ -693,21 +671,21 @@ class CausalDatasetGenerator:
         Returns
         -------
         pandas.DataFrame
-            Columns:
-              - y : float
-              - t : {0.0, 1.0}
-              - <confounder columns> : floats (and one-hot columns for categorical)
-              - m   : float in (0,1), true P(T=1 | X)
-              - g0  : expected outcome under control on the natural scale
-              - g1  : expected outcome under treatment on the natural scale
-              - cate: g1 - g0 (conditional treatment effect on the natural scale)
-              (Deprecated aliases also emitted for one release: propensity, mu0, mu1)
+        Columns:
+          - y : float
+          - d : {0.0, 1.0}
+          - <confounder columns> : floats (and one-hot columns for categorical)
+          - m   : float in (0,1), true P(T=1 | X)
+          - g0  : expected outcome under control on the natural scale
+          - g1  : expected outcome under treatment on the natural scale
+          - cate: g1 - g0 (conditional treatment effect on the natural scale)
+          (Deprecated aliases also emitted for one release: propensity, mu0, mu1)
 
         Notes
         -----
-        - If `target_t_rate` is set, `alpha_t` is internally recalibrated (bisection)
+        - If `target_d_rate` is set, `alpha_d` is internally recalibrated (bisection)
           on the *current draw of X and U*, so repeated calls can yield slightly different
-          alpha_t values even with the same seed unless X and U are fixed.
+          alpha_d values even with the same seed unless X and U are fixed.
         - For binary and Poisson outcomes, `cate` is reported on the natural scale
           (probability or mean), even though the structural model is specified on
           the log-odds / log-mean scale.
@@ -716,50 +694,69 @@ class CausalDatasetGenerator:
         U = self.rng.normal(size=n)  # unobserved confounder
 
         # Treatment assignment
-        if self.target_t_rate is not None:
-            self.alpha_t = self._calibrate_alpha_t(X, U, self.target_t_rate)
-        logits_t = self.alpha_t + self._treatment_score(X, U)
+        if self.target_d_rate is not None:
+            self.alpha_d = self._calibrate_alpha_d(X, U, self.target_d_rate)
+        logits_t = self.alpha_d + self._treatment_score(X, U)
         propensity = _sigmoid(logits_t)
-        T = self.rng.binomial(1, propensity).astype(float)
+        D = self.rng.binomial(1, propensity).astype(float)
 
         # Treatment effect (constant or heterogeneous)
         tau_x = (self.tau(X) if self.tau is not None else np.full(n, self.theta)).astype(float)
 
         # Outcome generation
-        loc = self._outcome_location(X, T, U, tau_x)
+        loc = self._outcome_location(X, D, U, tau_x)
 
         if self.outcome_type == "continuous":
             Y = loc + self.rng.normal(0, self.sigma_y, size=n)
-            mu0 = self._outcome_location(X, np.zeros(n), U, np.zeros(n))
-            mu1 = self._outcome_location(X, np.ones(n),  U, tau_x)
         elif self.outcome_type == "binary":
-            # logit: logit P(Y=1|T,X) = loc
+            # logit: logit P(Y=1|D,X) = loc
             p = _sigmoid(loc)
             Y = self.rng.binomial(1, p).astype(float)
-            mu0 = _sigmoid(self._outcome_location(X, np.zeros(n), U, np.zeros(n)))
-            mu1 = _sigmoid(self._outcome_location(X, np.ones(n),  U, tau_x))
         elif self.outcome_type == "poisson":
-            # log link: log E[Y|T,X] = loc; guard against overflow on link scale
+            # log link: log E[Y|D,X] = loc; guard against overflow on link scale
             loc_c = np.clip(loc, -20, 20)
             lam = np.exp(loc_c)
             Y = self.rng.poisson(lam).astype(float)
-            mu0 = np.exp(np.clip(self._outcome_location(X, np.zeros(n), U, np.zeros(n)), -20, 20))
-            mu1 = np.exp(np.clip(self._outcome_location(X, np.ones(n),  U, tau_x), -20, 20))
         else:
             raise ValueError("outcome_type must be 'continuous', 'binary', or 'poisson'")
 
-        df = pd.DataFrame({"y": Y, "t": T})
+        # Compute oracle g0/g1 marginalized over U when needed
+        if self.outcome_type in ("binary", "poisson") and float(self.u_strength_y) != 0.0:
+            gh_x, gh_w = np.polynomial.hermite.hermgauss(21)
+            gh_w = gh_w / np.sqrt(np.pi)
+            base0 = self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n))
+            base1 = self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x)
+            Uq = np.sqrt(2.0) * gh_x
+            if self.outcome_type == "binary":
+                g0 = np.sum(_sigmoid(base0[:, None] + self.u_strength_y * Uq[None, :]) * gh_w[None, :], axis=1)
+                g1 = np.sum(_sigmoid(base1[:, None] + self.u_strength_y * Uq[None, :]) * gh_w[None, :], axis=1)
+            else:  # poisson
+                g0 = np.sum(np.exp(np.clip(base0[:, None] + self.u_strength_y * Uq[None, :], -20, 20)) * gh_w[None, :], axis=1)
+                g1 = np.sum(np.exp(np.clip(base1[:, None] + self.u_strength_y * Uq[None, :], -20, 20)) * gh_w[None, :], axis=1)
+        else:
+            # existing code paths (continuous or u_strength_y == 0)
+            if self.outcome_type == "continuous":
+                g0 = self._outcome_location(X, np.zeros(n), U, np.zeros(n))
+                g1 = self._outcome_location(X, np.ones(n),  U, tau_x)
+            elif self.outcome_type == "binary":
+                g0 = _sigmoid(self._outcome_location(X, np.zeros(n), U, np.zeros(n)))
+                g1 = _sigmoid(self._outcome_location(X, np.ones(n),  U, tau_x))
+            else:
+                g0 = np.exp(np.clip(self._outcome_location(X, np.zeros(n), U, np.zeros(n)), -20, 20))
+                g1 = np.exp(np.clip(self._outcome_location(X, np.ones(n),  U, tau_x), -20, 20))
+
+        df = pd.DataFrame({"y": Y, "d": D})
         for j, name in enumerate(names):
             df[name] = X[:, j]
         # Useful ground-truth columns for evaluation (IRM naming)
         df["m"] = propensity
-        df["g0"] = mu0
-        df["g1"] = mu1
+        df["g0"] = g0
+        df["g1"] = g1
         df["cate"] = df["g1"] - df["g0"]
-        # Legacy aliases with deprecation warnings (to be removed in a future release)
-        df["propensity"] = df["m"]; _warn_legacy("propensity")
-        df["mu0"] = df["g0"]; _warn_legacy("mu0")
-        df["mu1"] = df["g1"]; _warn_legacy("mu1")
+        # Legacy aliases retained for compatibility (no warnings)
+        df["propensity"] = df["m"]
+        df["mu0"] = df["g0"]
+        df["mu1"] = df["g1"]
         return df
     
     def to_causal_data(self, n: int, confounders: Optional[Union[str, List[str]]] = None) -> CausalData:
@@ -781,17 +778,20 @@ class CausalDatasetGenerator:
         df = self.generate(n)
         
         # Determine confounders to use
+        exclude = {'y', 'd', 'm', 'g0', 'g1', 'cate', 'propensity', 'mu0', 'mu1', 'user_id'}
         if confounders is None:
-            # Keep original column order; exclude outcome/treatment/ground-truth columns
-            exclude = {'y', 't', 'm', 'g0', 'g1', 'cate', 'propensity', 'mu0', 'mu1'}
-            confounder_cols = [c for c in df.columns if c not in exclude]
+            # Keep original column order; exclude outcome/treatment/ground-truth columns and non-numeric
+            confounder_cols = [
+                c for c in df.columns
+                if c not in exclude and pd.api.types.is_numeric_dtype(df[c])
+            ]
         elif isinstance(confounders, str):
             confounder_cols = [confounders]
         else:
-            confounder_cols = list(confounders)
-            
+            confounder_cols = [c for c in confounders if c in df.columns]
+
         # Create and return CausalData object
-        return CausalData(df=df, treatment='t', outcome='y', confounders=confounder_cols)
+        return CausalData(df=df, treatment='d', outcome='y', confounders=confounder_cols)
 
     def oracle_nuisance(self, num_quad: int = 21):
         """
@@ -801,19 +801,19 @@ class CausalDatasetGenerator:
         only naming now matches IRM conventions.
 
         Behavior:
-        - If both u_strength_t != 0 and u_strength_y != 0, DML is not identified; raise ValueError.
-        - m(x): If u_strength_t == 0, closed form sigmoid(alpha_t + s * f_t(x)).
-                 If u_strength_t != 0, approximate E_U[sigmoid(alpha_t + s * f_t(x) + u_strength_t * U)]
+        - If both u_strength_d != 0 and u_strength_y != 0, DML is not identified; raise ValueError.
+        - m(x): If u_strength_d == 0, closed form sigmoid(alpha_d + s * f_t(x)).
+                 If u_strength_d != 0, approximate E_U[sigmoid(alpha_d + s * f_t(x) + u_strength_d * U)]
                  using Gauss–Hermite quadrature with `num_quad` nodes, where U ~ N(0,1).
         - g0/g1(x): closed-form mappings on the natural outcome scale evaluated with U omitted.
 
         Parameters
         ----------
         num_quad : int, default=21
-            Number of Gauss–Hermite nodes for marginalizing over U in m(x) when u_strength_t != 0.
+            Number of Gauss–Hermite nodes for marginalizing over U in m(x) when u_strength_d != 0.
         """
         # Disallow unobserved confounding for DML when U affects both T and Y
-        if (getattr(self, "u_strength_t", 0.0) != 0) and (getattr(self, "u_strength_y", 0.0) != 0):
+        if (getattr(self, "u_strength_d", 0.0) != 0) and (getattr(self, "u_strength_y", 0.0) != 0):
             raise ValueError(
                 "DML identification fails when U affects both T and Y. "
                 "Use instruments (PLIV-DML) or set one of u_strength_* to 0."
@@ -826,16 +826,16 @@ class CausalDatasetGenerator:
         def m_of_x(x_row: np.ndarray) -> float:
             x = np.asarray(x_row, dtype=float).reshape(1, -1)
             # Base score without U contribution, matching _treatment_score(X, U=0)
-            base = float(self.alpha_t)
+            base = float(self.alpha_d)
             base += float(self._treatment_score(x, np.zeros(1, dtype=float))[0])
-            ut = float(getattr(self, "u_strength_t", 0.0))
+            ut = float(getattr(self, "u_strength_d", 0.0))
             if ut == 0.0:
                 return float(_sigmoid(base))
             # Integrate over U ~ N(0,1) using Gauss–Hermite: U = sqrt(2) * gh_x
             z = base + ut * np.sqrt(2.0) * gh_x
             return float(np.sum(_sigmoid(z) * gh_w))
 
-        def g_of_x_t(x_row: np.ndarray, t: int) -> float:
+        def g_of_x_d(x_row: np.ndarray, d: int) -> float:
             x = np.asarray(x_row, dtype=float).reshape(1, -1)
             if self.tau is None:
                 tau_val = float(self.theta)
@@ -846,16 +846,24 @@ class CausalDatasetGenerator:
                 loc += float(np.sum(x * np.asarray(self.beta_y, dtype=float), axis=1))
             if self.g_y is not None:
                 loc += float(np.asarray(self.g_y(x), dtype=float))
-            loc += float(t) * tau_val
+            loc += float(d) * tau_val
 
             if self.outcome_type == "continuous":
                 return float(loc)
+
+            uy = float(getattr(self, "u_strength_y", 0.0))
             if self.outcome_type == "binary":
-                return float(_sigmoid(loc))
+                if uy == 0.0:
+                    return float(_sigmoid(loc))
+                z = loc + uy * np.sqrt(2.0) * gh_x
+                return float(np.sum(_sigmoid(z) * gh_w))
             if self.outcome_type == "poisson":
-                return float(np.exp(np.clip(loc, -20.0, 20.0)))
+                if uy == 0.0:
+                    return float(np.exp(np.clip(loc, -20.0, 20.0)))
+                z = np.clip(loc + uy * np.sqrt(2.0) * gh_x, -20.0, 20.0)
+                return float(np.sum(np.exp(z) * gh_w))
             raise ValueError("outcome_type must be 'continuous','binary','poisson'.")
 
         return (lambda x: m_of_x(x),
-                lambda x: g_of_x_t(x, 0),
-                lambda x: g_of_x_t(x, 1))
+                lambda x: g_of_x_d(x, 0),
+                lambda x: g_of_x_d(x, 1))
