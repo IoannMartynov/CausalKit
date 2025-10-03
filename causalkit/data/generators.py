@@ -128,7 +128,12 @@ def _sample_confounders_like_class(
             elif dist == "categorical":
                 categories = list(spec.get("categories", [0, 1, 2]))
                 probs = spec.get("probs", None)
-                col = rng.choice(categories, p=probs, size=n)
+                if probs is not None:
+                    p = np.asarray(probs, dtype=float)
+                    ps = p / p.sum()
+                else:
+                    ps = None
+                col = rng.choice(categories, p=ps, size=n)
                 # one-hot for all levels except the first
                 rest = categories[1:]
                 if len(rest) == 0:
@@ -201,6 +206,9 @@ def _gaussian_copula(
         name = spec.get("name") or f"x{j+1}"
         dist = str(spec.get("dist", "normal")).lower()
         u = U[:, j]
+        # keep u strictly inside (0,1) to avoid boundary issues in searchsorted
+        eps = np.finfo(float).eps
+        u = np.clip(u, eps, 1.0 - eps)
         if dist == "normal":
             mu = float(spec.get("mu", 0.0)); sd = float(spec.get("sd", 1.0))
             x = mu + sd * np.sqrt(2.0) * erfinv(2.0 * u - 1.0)
@@ -224,6 +232,12 @@ def _gaussian_copula(
             ps = p / p.sum()
             cum = np.cumsum(ps)
             idx = np.searchsorted(cum, u, side="right")
+            # Guard boundary: if u==1 (after potential numerical saturation), clamp to last index
+            if np.isscalar(idx):
+                if idx >= len(categories):
+                    idx = len(categories) - 1
+            else:
+                idx[idx == len(categories)] = len(categories) - 1
             cat_arr = np.array(categories, dtype=object)
             lab = cat_arr[idx]
             rest = categories[1:]
@@ -598,9 +612,14 @@ class CausalDatasetGenerator:
                 p = spec.get("p", 0.5)
                 col = self.rng.binomial(1, p, size=n).astype(float)
             elif dist == "categorical":
-                categories = spec.get("categories", [0,1,2])
+                categories = list(spec.get("categories", [0,1,2]))
                 probs = spec.get("probs", None)
-                col = self.rng.choice(categories, p=probs, size=n)
+                if probs is not None:
+                    p = np.asarray(probs, dtype=float)
+                    ps = p / p.sum()
+                else:
+                    ps = None
+                col = self.rng.choice(categories, p=ps, size=n)
                 # one-hot encode (except first level)
                 rest = categories[1:]
                 if len(rest) == 0:
@@ -671,14 +690,23 @@ class CausalDatasetGenerator:
         def f(a: float) -> float:
             return float(_sigmoid(a + self._treatment_score(X, U)).mean() - target)
         flo, fhi = f(lo), f(hi)
-        # If the target is not bracketed, clamp to the endpoint giving closer value
+        # If the target is not bracketed, try expanding the bracket a few times
         if flo * fhi > 0:
-            return lo if abs(flo) < abs(fhi) else hi
+            for scale in (2, 5, 10):
+                lo2, hi2 = -scale * 50.0, scale * 50.0
+                flo2, fhi2 = f(lo2), f(hi2)
+                if flo2 * fhi2 <= 0:
+                    lo, hi = lo2, hi2
+                    flo, fhi = flo2, fhi2
+                    break
+            else:
+                # Fall back to the closer endpoint
+                return lo if abs(flo) < abs(fhi) else hi
         # Standard bisection with tighter tolerance and bounded iterations
-        for _ in range(60):
+        for _ in range(80):
             mid = 0.5 * (lo + hi)
             fm = f(mid)
-            if abs(fm) < 1e-4:
+            if abs(fm) < 1e-6:
                 return mid
             if fm > 0:
                 hi = mid
@@ -726,8 +754,20 @@ class CausalDatasetGenerator:
         if self.target_d_rate is not None:
             self.alpha_d = self._calibrate_alpha_d(X, U, self.target_d_rate)
         logits_t = self.alpha_d + self._treatment_score(X, U)
-        propensity = _sigmoid(logits_t)
-        D = self.rng.binomial(1, propensity).astype(float)
+        m_obs = _sigmoid(logits_t)  # realized propensity including U
+
+        # Marginal m(x) = E[D|X] (integrate out U if it affects treatment)
+        if float(self.u_strength_d) != 0.0:
+            gh_x, gh_w = np.polynomial.hermite.hermgauss(21)
+            gh_w = gh_w / np.sqrt(np.pi)
+            base = self.alpha_d + self._treatment_score(X, np.zeros(n))
+            m = np.sum(_sigmoid(base[:, None] + self.u_strength_d * np.sqrt(2.0) * gh_x[None, :]) * gh_w[None, :], axis=1)
+        else:
+            # Closed form when U doesn't affect D
+            base = self.alpha_d + self._treatment_score(X, np.zeros(n))
+            m = _sigmoid(base)
+
+        D = self.rng.binomial(1, m_obs).astype(float)
 
         # Treatment effect (constant or heterogeneous)
         tau_x = (self.tau(X) if self.tau is not None else np.full(n, self.theta)).astype(float)
@@ -749,41 +789,52 @@ class CausalDatasetGenerator:
         else:
             raise ValueError("outcome_type must be 'continuous', 'binary', or 'poisson'")
 
-        # Compute oracle g0/g1 marginalized over U when needed
-        if self.outcome_type in ("binary", "poisson") and float(self.u_strength_y) != 0.0:
-            gh_x, gh_w = np.polynomial.hermite.hermgauss(21)
-            gh_w = gh_w / np.sqrt(np.pi)
-            base0 = self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n))
-            base1 = self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x)
-            Uq = np.sqrt(2.0) * gh_x
-            if self.outcome_type == "binary":
+        # Compute oracle g0/g1 on the natural scale, excluding U for continuous, and
+        # marginalizing over U for binary/poisson when u_strength_y != 0.
+        if self.outcome_type == "continuous":
+            # Oracle means exclude U (mean-zero unobserved)
+            g0 = self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n))
+            g1 = self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x)
+
+        elif self.outcome_type == "binary":
+            if float(self.u_strength_y) != 0.0:
+                gh_x, gh_w = np.polynomial.hermite.hermgauss(21)
+                gh_w = gh_w / np.sqrt(np.pi)
+                base0 = self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n))
+                base1 = self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x)
+                Uq = np.sqrt(2.0) * gh_x
                 g0 = np.sum(_sigmoid(base0[:, None] + self.u_strength_y * Uq[None, :]) * gh_w[None, :], axis=1)
                 g1 = np.sum(_sigmoid(base1[:, None] + self.u_strength_y * Uq[None, :]) * gh_w[None, :], axis=1)
-            else:  # poisson
+            else:
+                g0 = _sigmoid(self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n)))
+                g1 = _sigmoid(self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x))
+
+        elif self.outcome_type == "poisson":
+            if float(self.u_strength_y) != 0.0:
+                gh_x, gh_w = np.polynomial.hermite.hermgauss(21)
+                gh_w = gh_w / np.sqrt(np.pi)
+                base0 = self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n))
+                base1 = self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x)
+                Uq = np.sqrt(2.0) * gh_x
                 g0 = np.sum(np.exp(np.clip(base0[:, None] + self.u_strength_y * Uq[None, :], -20, 20)) * gh_w[None, :], axis=1)
                 g1 = np.sum(np.exp(np.clip(base1[:, None] + self.u_strength_y * Uq[None, :], -20, 20)) * gh_w[None, :], axis=1)
-        else:
-            # existing code paths (continuous or u_strength_y == 0)
-            if self.outcome_type == "continuous":
-                g0 = self._outcome_location(X, np.zeros(n), U, np.zeros(n))
-                g1 = self._outcome_location(X, np.ones(n),  U, tau_x)
-            elif self.outcome_type == "binary":
-                g0 = _sigmoid(self._outcome_location(X, np.zeros(n), U, np.zeros(n)))
-                g1 = _sigmoid(self._outcome_location(X, np.ones(n),  U, tau_x))
             else:
-                g0 = np.exp(np.clip(self._outcome_location(X, np.zeros(n), U, np.zeros(n)), -20, 20))
-                g1 = np.exp(np.clip(self._outcome_location(X, np.ones(n),  U, tau_x), -20, 20))
+                g0 = np.exp(np.clip(self._outcome_location(X, np.zeros(n), np.zeros(n), np.zeros(n)), -20, 20))
+                g1 = np.exp(np.clip(self._outcome_location(X, np.ones(n),  np.zeros(n), tau_x), -20, 20))
+        else:
+            raise ValueError("outcome_type must be 'continuous', 'binary', or 'poisson'")
 
         df = pd.DataFrame({"y": Y, "d": D})
         for j, name in enumerate(names):
             df[name] = X[:, j]
         # Useful ground-truth columns for evaluation (IRM naming)
-        df["m"] = propensity
+        df["m"] = m              # marginal E[D|X]
+        df["m_obs"] = m_obs      # realized sigmoid(alpha_d + score + u*U)
         df["g0"] = g0
         df["g1"] = g1
         df["cate"] = df["g1"] - df["g0"]
         # Legacy aliases retained for compatibility (no warnings)
-        df["propensity"] = df["m"]
+        df["propensity"] = df["m_obs"]
         df["mu0"] = df["g0"]
         df["mu1"] = df["g1"]
         return df

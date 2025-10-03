@@ -14,9 +14,6 @@ Install from github directly
 pip install git+https://github.com/ioannmartynov/causalkit.git
 ```
 
-```python
-import causalkit
-```
 
 
 

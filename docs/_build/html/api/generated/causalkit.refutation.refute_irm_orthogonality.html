@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=3415b827" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -155,8 +156,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../research.html">
+    Research
   </a>
 </li>
 
@@ -275,8 +283,15 @@ document.write(`
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../research.html">
+    Research
   </a>
 </li>
 
@@ -445,7 +460,7 @@ document.write(`
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inference_fn</strong> (<em>Callable</em>) – The inference function (dml_ate or dml_att)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The causal data object</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="../data.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The causal data object</p></li>
 <li><p><strong>trim_propensity</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><em>default</em><em> (</em><em>0.02</em><em>, </em><em>0.98</em><em>)</em>) – Propensity score trimming bounds (min, max) to avoid extreme weights</p></li>
 <li><p><strong>n_basis_funcs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>, </em><em>default None</em><em> (</em><em>len</em><em>(</em><em>confounders</em><em>)</em><em>+1</em><em>)</em>) – Number of basis functions for orthogonality derivative tests (constant + covariates).
 If None, defaults to the number of confounders in <cite>data</cite> plus 1 for the constant term.</p></li>
