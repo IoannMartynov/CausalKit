@@ -24,9 +24,8 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 ------------------
 from causalkit.inference.ate import dml_ate
 
-# Estimate Average Treatment Effect (ATT)
-att_result = dml_ate(causal_data, n_folds=4)
-att_result
+# Estimate Average Treatment Effect (ATE)
+ate_result = dml_ate(causal_data, n_folds=4, normalize_ipw=False, store_diagnostic_data=False, random_state=123)
 ------------------
 
 
@@ -34,8 +33,8 @@ att_result
 [0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
 Cell [0;32mIn[3], line 1[0m
 [0;32m----> 1[0m [38;5;28;01mfrom[39;00m[38;5;250m [39m[38;5;21;01mcausalkit[39;00m[38;5;21;01m.[39;00m[38;5;21;01minference[39;00m[38;5;21;01m.[39;00m[38;5;21;01mate[39;00m[38;5;250m [39m[38;5;28;01mimport[39;00m dml_ate
-[1;32m      3[0m [38;5;66;03m# Estimate Average Treatment Effect (ATT)[39;00m
-[1;32m      4[0m att_result [38;5;241m=[39m dml_ate(causal_data, n_folds[38;5;241m=[39m[38;5;241m4[39m)
+[1;32m      3[0m [38;5;66;03m# Estimate Average Treatment Effect (ATE)[39;00m
+[1;32m      4[0m ate_result [38;5;241m=[39m dml_ate(causal_data, n_folds[38;5;241m=[39m[38;5;241m4[39m, normalize_ipw[38;5;241m=[39m[38;5;28;01mFalse[39;00m, store_diagnostic_data[38;5;241m=[39m[38;5;28;01mFalse[39;00m, random_state[38;5;241m=[39m[38;5;241m123[39m)
 
 File [0;32m~/work/CausalKit/CausalKit/causalkit/inference/ate/__init__.py:7[0m
 [1;32m      1[0m [38;5;124;03m"""[39;00m

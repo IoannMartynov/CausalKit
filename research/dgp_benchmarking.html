@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; CausalKit 0.1.0 documentation</title>
+    <title>Linear and Nonlinear Data Generating Process benchmarking &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3415b827" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -46,10 +46,14 @@
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/dgp_benchmarking';</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'research/dgp_benchmarking';</script>
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../api.html" />
+    <link rel="prev" title="Research" href="../research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -161,7 +165,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../research.html">
     Research
   </a>
@@ -259,9 +263,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -290,7 +292,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../research.html">
     Research
   </a>
@@ -345,6 +347,18 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Linear and Nonlinear Data Generating Process benchmarking</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -377,7 +391,10 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li>
+    
+    <li class="breadcrumb-item"><a href="../research.html" class="nav-link">Research</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Linear and...</li>
   </ul>
 </nav>
 </div>
@@ -394,12 +411,118 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="linear-and-nonlinear-data-generating-process-benchmarking">
+<h1>Linear and Nonlinear Data Generating Process benchmarking<a class="headerlink" href="#linear-and-nonlinear-data-generating-process-benchmarking" title="Link to this heading">#</a></h1>
+<section id="linear-data-generating-process-dgp">
+<h2>Linear Data Generating Process (DGP)<a class="headerlink" href="#linear-data-generating-process-dgp" title="Link to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(i=1,\dots,n\)</span>. Draw confounders:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{tenure}_i \sim \mathcal N(24,\ 12^2)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{sessions}_i \sim \mathcal N(5,\ 2^2)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{spend}_i \sim \mathrm{Unif}(0,200)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{prem}_i \sim \mathrm{Bernoulli}(0.25)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{urban}_i \sim \mathrm{Bernoulli}(0.60)
+\]</div>
+<p>Stack them as</p>
+<div class="math notranslate nohighlight">
+\[
+X_i := \big[\ \text{tenure}_i,\ \text{sessions}_i,\ \text{spend}_i,\ \text{prem}_i,\ \text{urban}_i\ \big]^\top \in \mathbb{R}^5.
+\]</div>
+<hr class="docutils" />
+<section id="treatment-model-well-specified-logistic">
+<h3>Treatment model (well-specified logistic)<a class="headerlink" href="#treatment-model-well-specified-logistic" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+m(x) \equiv \Pr(D=1\mid X=x) = \sigma\big(\alpha_d + x^\top \beta_t\big),
+\qquad
+\sigma(z)=\frac{1}{1+e^{-z}},
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(\alpha_d\)</span> calibrated (by bisection) so that <span class="math notranslate nohighlight">\(\mathbb{E}[D]\approx 0.20\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+\beta_t^\top = \big[, 0.08,\ 0.12,\ 0.004,\ 0.25,\ 0.10 ,\big].
+\]</div>
+<p>Then
+$<span class="math notranslate nohighlight">\(D_i \mid X_i \sim \mathrm{Bernoulli}!\big(m(X_i)\big).\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="outcome-model-gaussian-linear-constant-effect">
+<h3>Outcome model (Gaussian, linear, constant effect)<a class="headerlink" href="#outcome-model-gaussian-linear-constant-effect" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y_i = \alpha_y + X_i^\top \beta_y + \Theta D_i + \varepsilon_i,
+\qquad
+\varepsilon_i \sim \mathcal N(0,\sigma_y^2),
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(\alpha_y=0,\ \sigma_y=1,\ \Theta=0.80\)</span>, and</p>
+<div class="math notranslate nohighlight">
+\[
+\beta_y^\top = \big[, 0.05,\ 0.60,\ 0.005,\ 0.80,\ 0.20 ,\big].
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="oracle-nuisances-irm-and-cate">
+<h3>Oracle nuisances (IRM) and CATE<a class="headerlink" href="#oracle-nuisances-irm-and-cate" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+m(x) = \sigma\!\big(\alpha_d + x^\top \beta_t\big)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+g_0(x) = \mathbb{E}[Y \mid X=x, D=0]
+       = \alpha_y + x^\top \beta_y
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
+       = \alpha_y + x^\top \beta_y + \Theta
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{CATE}(x) = g_1(x) - g_0(x)
+                 = \Theta \quad \text{(constant)}
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="targets">
+<h3>Targets<a class="headerlink" href="#targets" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\Theta_{\text{ATE}}
+= \mathbb{E}\big[Y(1)-Y(0)\big]
+= \Theta,
+\qquad
+\Theta_{\text{ATTE}}
+= \mathbb{E}\big[Y(1)-Y(0)\mid D=1\big]
+= \Theta.
+\]</div>
+<p>So under this constant-effect DGP:</p>
+<div class="math notranslate nohighlight">
+\[
+\Theta_{\text{ATE}} = \Theta_{\text{ATTE}} = 0.80.
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="lets-generate-the-data">
+<h3>Let’s generate the Data<a class="headerlink" href="#lets-generate-the-data" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="c1"># adjust import to your package/module path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
 
 <span class="n">confounder_specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
@@ -447,53 +570,48 @@ document.write(`
 <span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
     <span class="n">theta</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span>                 <span class="c1"># constant treatment effect</span>
     <span class="n">tau</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                   <span class="c1"># use theta</span>
-    <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-    <span class="n">beta_d</span><span class="o">=</span><span class="n">beta_d</span><span class="p">,</span>
+    <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>              <span class="c1"># linear connection between X and Y</span>
+    <span class="n">beta_d</span><span class="o">=</span><span class="n">beta_d</span><span class="p">,</span>              <span class="c1"># linear connection between X and D</span>
     <span class="n">g_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">g_d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>         <span class="c1"># no nonlinearities</span>
-    <span class="n">alpha_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">alpha_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">sigma_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">alpha_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>                <span class="c1"># no intercept</span>
+    <span class="n">alpha_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>                <span class="c1"># no intercept</span>
+    <span class="n">sigma_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>                <span class="c1"># noise of y</span>
     <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>  <span class="c1"># Gaussian Y</span>
     <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-    <span class="c1"># IRM-EASY: no unobserved confounding, standard sharpness</span>
-    <span class="n">u_strength_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">u_strength_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-    <span class="n">propensity_sharpness</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-    <span class="c1"># keep overall treatment share ~ 0.5 even with imbalanced features</span>
-    <span class="n">target_d_rate</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>
-    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span>
+    <span class="n">u_strength_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>           <span class="c1"># strength of latent confounder influence on treatment</span>
+    <span class="n">u_strength_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>           <span class="c1"># strength of latent confounder influence on outcome</span>
+    <span class="n">propensity_sharpness</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>   <span class="c1"># increase to make overlap harder</span>
+    <span class="n">target_d_rate</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>         <span class="c1"># rate of treatment assignment</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span>                    <span class="c1"># random seed for reproducibility</span>
 <span class="p">)</span>
 
-<span class="n">n</span> <span class="o">=</span> <span class="mi">100_000</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10_000</span>                      <span class="c1"># Number of observations</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treatment share ≈&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>        <span class="c1"># ~0.50</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(g0|g1|cate)$&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>  <span class="c1"># cate == 0.8 everywhere</span>
-<span class="c1"># Columns include: y, d, tenure_months, avg_sessions_week, spend_last_month,</span>
-<span class="c1">#                  premium_user, urban_resident, m, g0, g1, cate, ...</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treatment share ≈&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">true_ate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATE from the DGP: </span><span class="si">{</span><span class="n">true_ate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated</span>
+<span class="n">true_att</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATT from the DGP: </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Treatment share ≈ 0.19986
-         g0        g1  cate
-0  4.439569  5.239569   0.8
-1  2.914083  3.714083   0.8
-2  3.190812  3.990812   0.8
-3  2.681789  3.481789   0.8
-4  3.813471  4.613471   0.8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Treatment share ≈ 0.2052
+Ground-truth ATE from the DGP: 0.800
+Ground-truth ATT from the DGP: 0.800
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="wrap-it-in-causaldata-object">
+<h3>Wrap it in CausalData Object<a class="headerlink" href="#wrap-it-in-causaldata-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-<span class="c1"># Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated</span>
-<span class="n">true_att</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATT from the DGP: </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># 8) Wrap as CausalData for downstream workflows (keeps only y, t, and specified confounders)</span>
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">treatment</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
@@ -506,15 +624,11 @@ document.write(`
                  <span class="s2">&quot;urban_resident&quot;</span><span class="p">]</span>
 <span class="p">)</span>
 
-<span class="c1"># Peek at the analysis-ready view</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ground-truth ATT from the DGP: 0.800
-</pre></div>
-</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -545,106 +659,109 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>4.431598</td>
+      <td>1.903910</td>
       <td>0.0</td>
       <td>12.130544</td>
-      <td>5.803342</td>
-      <td>30.207326</td>
+      <td>4.056687</td>
+      <td>181.570607</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>3.089098</td>
+      <td>3.388144</td>
       <td>0.0</td>
       <td>19.586560</td>
-      <td>2.320295</td>
-      <td>68.515624</td>
+      <td>1.671561</td>
+      <td>182.793598</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>3.320877</td>
-      <td>0.0</td>
+      <td>8.456512</td>
+      <td>1.0</td>
       <td>39.455103</td>
-      <td>1.351509</td>
-      <td>41.430270</td>
-      <td>0.0</td>
+      <td>5.452889</td>
+      <td>125.185708</td>
+      <td>1.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2.212806</td>
-      <td>0.0</td>
+      <td>5.535970</td>
+      <td>1.0</td>
       <td>26.327693</td>
-      <td>1.459923</td>
-      <td>97.890030</td>
+      <td>5.051629</td>
+      <td>4.932905</td>
       <td>0.0</td>
-      <td>0.0</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3.919363</td>
-      <td>0.0</td>
-      <td>35.042771</td>
-      <td>1.938168</td>
-      <td>139.686209</td>
-      <td>0.0</td>
+      <td>4.965140</td>
       <td>1.0</td>
+      <td>35.042771</td>
+      <td>4.933996</td>
+      <td>23.577407</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
+</section>
+</section>
+<section id="estimate-ate-and-atte">
+<h2>Estimate ATE and ATTE<a class="headerlink" href="#estimate-ate-and-atte" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
-<span class="c1"># Estimate Average Treatment Effect (ATT)</span>
-<span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">att_result</span>
+<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
+<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 0.8018024278334644,
- &#39;std_error&#39;: 0.012582722109769592,
- &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (0.7771407456708402, 0.8264641099960887),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x153501e80&gt;,
- &#39;diagnostic_data&#39;: {&#39;m_hat&#39;: array([0.05190918, 0.07398433, 0.19257277, ..., 0.31383937, 0.07900672,
-         0.0542835 ], shape=(100000,)),
-  &#39;g0_hat&#39;: array([4.48090864, 2.91826276, 3.15099941, ..., 6.18059343, 4.25043893,
-         3.38260933], shape=(100000,)),
-  &#39;g1_hat&#39;: array([5.16512649, 3.52326719, 3.83909097, ..., 6.72687829, 5.14200859,
-         4.07857921], shape=(100000,)),
-  &#39;y&#39;: array([4.43159809, 3.08909757, 3.32087743, ..., 7.70334644, 5.56867371,
-         2.46455984], shape=(100000,)),
-  &#39;d&#39;: array([0, 0, 0, ..., 1, 1, 0], shape=(100000,)),
-  &#39;x&#39;: array([[ 12.1305438 ,   5.80334174,  30.20732587,   0.        ,
-            1.        ],
-         [ 19.58656018,   2.32029504,  68.51562396,   0.        ,
-            1.        ],
-         [ 39.45510314,   1.35150888,  41.43027027,   0.        ,
-            1.        ],
-         ...,
-         [ 35.2028584 ,   6.03828533, 134.46736619,   0.        ,
-            0.        ],
-         [ 16.62150359,   5.06086131,  76.87157057,   0.        ,
-            0.        ],
-         [ 17.03753078,   3.60276408,  62.57443708,   0.        ,
-            0.        ]], shape=(100000, 5)),
-  &#39;psi&#39;: array([-0.06557421, -0.38128171, -0.32410509, ...,  2.85584526,
-          5.49013201,  0.86491238], shape=(100000,)),
-  &#39;psi_a&#39;: array([-1., -1., -1., ..., -1., -1., -1.], shape=(100000,)),
-  &#39;psi_b&#39;: array([0.73622822, 0.42052072, 0.47769734, ..., 3.65764768, 6.29193444,
-         1.66671481], shape=(100000,)),
-  &#39;folds&#39;: array([2, 3, 1, ..., 0, 1, 2], shape=(100000,)),
-  &#39;score&#39;: &#39;ATE&#39;,
-  &#39;normalize_ipw&#39;: False,
-  &#39;trimming_threshold&#39;: 0.01,
-  &#39;p1&#39;: 0.19986}}
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="sd"> Average Treatment Effect (ATE) inference methods for causalkit.</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd"> This module provides methods for estimating average treatment effects.</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate_source</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate_source</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dml_ate_source&#39;</span><span class="p">,</span> <span class="s1">&#39;dml_ate&#39;</span><span class="p">]</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="n">dml_ate_source</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">13</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span><span class="w"> </span><span class="nn">doubleml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">doubleml</span>
+<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">CatBoostClassifier</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;catboost&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Real ATE = 0.8 VS Estimated = 0.7506313322797796 in (0.6668061755942251, 0.8344564889653342)
 </pre></div>
 </div>
 </div>
@@ -653,55 +770,28 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
-<span class="c1"># Estimate Average Treatment Effect (ATT)</span>
-<span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">atte_result</span>
+<span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
+<span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 0.7985062051110056,
- &#39;std_error&#39;: 0.009764942082891368,
- &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (0.7793672703174189, 0.8176451399045922),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x1159eac10&gt;,
- &#39;diagnostic_data&#39;: {&#39;m_hat&#39;: array([0.05120058, 0.0605844 , 0.18204136, ..., 0.34167015, 0.08042903,
-         0.05647513], shape=(100000,)),
-  &#39;g0_hat&#39;: array([4.43779417, 2.89041292, 3.24014891, ..., 5.9985561 , 4.28459   ,
-         3.40423816], shape=(100000,)),
-  &#39;g1_hat&#39;: array([5.00833458, 3.62301393, 3.57665938, ..., 6.56406929, 5.01704407,
-         3.86190054], shape=(100000,)),
-  &#39;y&#39;: array([4.43159809, 3.08909757, 3.32087743, ..., 7.70334644, 5.56867371,
-         2.46455984], shape=(100000,)),
-  &#39;d&#39;: array([0, 0, 0, ..., 1, 1, 0], shape=(100000,)),
-  &#39;x&#39;: array([[ 12.1305438 ,   5.80334174,  30.20732587,   0.        ,
-            1.        ],
-         [ 19.58656018,   2.32029504,  68.51562396,   0.        ,
-            1.        ],
-         [ 39.45510314,   1.35150888,  41.43027027,   0.        ,
-            1.        ],
-         ...,
-         [ 35.2028584 ,   6.03828533, 134.46736619,   0.        ,
-            0.        ],
-         [ 16.62150359,   5.06086131,  76.87157057,   0.        ,
-            0.        ],
-         [ 17.03753078,   3.60276408,  62.57443708,   0.        ,
-            0.        ]], shape=(100000, 5)),
-  &#39;psi&#39;: array([ 1.67298232e-03, -6.41123131e-02, -8.98958890e-02, ...,
-          4.53459488e+00,  2.42958825e+00,  2.81421467e-01], shape=(100000,)),
-  &#39;psi_a&#39;: array([-0.        , -0.        , -0.        , ..., -5.00350245,
-         -5.00350245, -0.        ], shape=(100000,)),
-  &#39;psi_b&#39;: array([ 1.67298232e-03, -6.41123131e-02, -8.98958890e-02, ...,
-          8.52992263e+00,  6.42491601e+00,  2.81421467e-01], shape=(100000,)),
-  &#39;folds&#39;: array([2, 3, 3, ..., 3, 2, 3], shape=(100000,)),
-  &#39;score&#39;: &#39;ATTE&#39;,
-  &#39;normalize_ipw&#39;: False,
-  &#39;trimming_threshold&#39;: 0.01,
-  &#39;p1&#39;: 0.19986}}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Real ATTE = 0.8 VS Estimated = 0.8238669785039335 in (0.7558326760362799, 0.8919012809715872)
 </pre></div>
 </div>
 </div>
 </div>
+<p>The estimated ATE and ATTE are close to the ground truth values. But we got wide confidence_intervals.
+Adding more data makes the intervals narrower. You can try it when changes the n in GDP</p>
+</section>
+</section>
 
 
                 </article>
@@ -713,6 +803,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../research.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Research</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -730,9 +838,18 @@ document.write(`
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-data-generating-process-dgp">Linear Data Generating Process (DGP)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-model-well-specified-logistic">Treatment model (well-specified logistic)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-model-gaussian-linear-constant-effect">Outcome model (Gaussian, linear, constant effect)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oracle-nuisances-irm-and-cate">Oracle nuisances (IRM) and CATE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#targets">Targets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lets-generate-the-data">Let’s generate the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wrap-it-in-causaldata-object">Wrap it in CausalData Object</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-ate-and-atte">Estimate ATE and ATTE</a></li>
+</ul>
   </nav></div>
 
 </div></div>
