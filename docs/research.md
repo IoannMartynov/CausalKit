@@ -1,7 +1,9 @@
 # Research
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
+:titlesonly:
+:class: nbsphinx-gallery
 
 research/dgp_benchmarking
 ```

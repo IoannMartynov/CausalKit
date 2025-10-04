@@ -24,14 +24,13 @@ Key utilities:
    refute_subset
    sensitivity_analysis
    get_sensitivity_summary
-   sensitivity_analysis_set
    refute_irm_orthogonality
 ```
 
 ## Placebo and Subset Refutation
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.placebo
+.. automodule:: causalkit.refutation.score.score_validation
    :members: refute_placebo_outcome, refute_placebo_treatment, refute_subset
    :undoc-members:
    :show-inheritance:
@@ -40,8 +39,8 @@ Key utilities:
 ## Sensitivity Analysis
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.sensitivity
-   :members: sensitivity_analysis, get_sensitivity_summary, sensitivity_analysis_set
+.. automodule:: causalkit.refutation.unconfoundedness.uncofoundedness_validation
+   :members: sensitivity_analysis, get_sensitivity_summary
    :undoc-members:
    :show-inheritance:
 ```
@@ -49,7 +48,7 @@ Key utilities:
 ## Orthogonality Checks
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.orthogonality
+.. automodule:: causalkit.refutation.score.score_validation
    :members: refute_irm_orthogonality
    :undoc-members:
    :show-inheritance:

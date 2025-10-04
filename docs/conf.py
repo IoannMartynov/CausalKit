@@ -8,6 +8,12 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
 import sys
 from datetime import datetime
+import warnings
+try:
+    from requests.exceptions import RequestsDependencyWarning
+    warnings.filterwarnings("ignore", category=RequestsDependencyWarning)
+except Exception:
+    pass
 
 # Add the project root directory to the Python path (robust to CWD)
 _DOCS_DIR = os.path.dirname(__file__)
@@ -103,6 +109,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 # The suffix(es) of source filenames.
 source_suffix = ['.rst', '.md', '.ipynb']
 
+nbsphinx_thumbnails = {
+'research/dgp_benchmarking': '_static/dgp_benchmarking.png',
+}
+
 # -- Options for HTML output -------------------------------------------------
 html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
@@ -155,3 +165,11 @@ intersphinx_mapping = {
 
 # -- Options for linkcheck builder -------------------------------------------
 linkcheck_ignore = [r'http://localhost:\d+/']
+
+# -- Options for MyST-NB (myst_nb) --------------------------------------------
+# Prevent executing notebooks during Sphinx builds; render existing outputs only.
+# Use both legacy and new config keys for compatibility across myst-nb versions.
+jupyter_execute_notebooks = "off"  # legacy key used by older myst-nb
+nb_execution_mode = "off"           # new key used by myst-nb >= 0.17/1.0
+# Be explicit about not raising on error if execution is ever triggered by mistake.
+nb_execution_raise_on_error = False

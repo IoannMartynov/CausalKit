@@ -26,32 +26,28 @@ At a glance:
    ttest
    conversion_z_test
    bootstrap_diff_means
-   dml
-   causalforestdml
-   dml_att
-   cate_esimand
-   gate_esimand
+   dml_atte_source
 ```
 
 ## ATT Utilities
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.att.ttest
+.. automodule:: causalkit.inference.atte.ttest
    :members: ttest
    :undoc-members:
    :show-inheritance:
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.att.conversion_z_test
+.. automodule:: causalkit.inference.atte.conversion_z_test
    :members: conversion_z_test
    :undoc-members:
    :show-inheritance:
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.att.dml_att
-   :members: dml_att
+.. automodule:: causalkit.inference.atte.dml_atte
+   :members: dml_atte
    :undoc-members:
    :show-inheritance:
 ```

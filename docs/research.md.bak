@@ -1,0 +1,10 @@
+# Research
+
+```{toctree}
+:maxdepth: 1
+:titlesonly:
+:class: nbsphinx-gallery
+:glob:
+
+research/*
+```
