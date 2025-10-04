@@ -8,7 +8,8 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 def test_refute_irm_orthogonality_att_runs_and_returns_keys():
     # Generate synthetic data and convert to CausalData
     gen = CausalDatasetGenerator(seed=123)
-    cd = gen.to_causal_data(n=300)
+    # Avoid constant columns like 'm_obs' by specifying explicit confounders
+    cd = gen.to_causal_data(n=300, confounders=['x1','x2','x3','x4','x5'])
 
     # Lightweight sklearn learners to avoid optional dependencies
     ml_g = RandomForestRegressor(n_estimators=30, random_state=1)
@@ -19,7 +20,7 @@ def test_refute_irm_orthogonality_att_runs_and_returns_keys():
         dml_atte,
         cd,
         n_folds_oos=3,
-        target="ATT",  # explicit
+        score="ATTE",  # explicit modern API
         ml_g=ml_g,
         ml_m=ml_m,
     )

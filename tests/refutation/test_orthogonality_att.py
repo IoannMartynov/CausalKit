@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 
 from causalkit.refutation.score.score_validation import (
-    aipw_score_att,
-    orthogonality_derivatives_att,
+    aipw_score_atte,
+    orthogonality_derivatives_atte,
     refute_irm_orthogonality,
 )
 from causalkit.data.causaldata import CausalData
@@ -55,7 +55,7 @@ def make_data(n=200, seed=1):
     return CausalData(df=df, treatment='d', outcome='y', confounders=['x1', 'x2'])
 
 
-def test_aipw_score_att_sign_and_norm():
+def test_aipw_score_atte_sign_and_norm():
     y = np.array([1.0, 2.0, 3.0, 4.0])
     d = np.array([1.0, 0.0, 1.0, 0.0])
     m0 = np.array([0.5, 0.5, 0.5, 0.5])
@@ -65,11 +65,11 @@ def test_aipw_score_att_sign_and_norm():
     p1 = d.mean()
     gamma = g / (1 - g)
     expected = (d * (y - m0 - theta) - (1 - d) * gamma * (y - m0)) / (p1 + 1e-12)
-    got = aipw_score_att(y, d, m0, m1, g, theta, p1=p1, eps=1e-6)
+    got = aipw_score_atte(y, d, g0=m0, g1=m1, m=g, theta=theta, p_treated=p1, trimming_threshold=1e-6)
     assert np.allclose(got, expected)
 
 
-def test_orthogonality_derivatives_att_structure():
+def test_orthogonality_derivatives_atte_structure():
     n, B = 50, 3
     rng = np.random.default_rng(0)
     X_basis = rng.normal(size=(n, B))
@@ -78,38 +78,39 @@ def test_orthogonality_derivatives_att_structure():
     m0 = rng.normal(size=n)
     g = np.clip(rng.uniform(0.1, 0.9, size=n), 0.1, 0.9)
     p1 = float(d.mean())
-    df = orthogonality_derivatives_att(X_basis, y, d, m0, g, p1, eps=1e-6)
+    df = orthogonality_derivatives_atte(X_basis, y, d, g0=m0, m=g, p_treated=p1, trimming_threshold=1e-6)
     assert len(df) == B
-    for col in ['d_m1', 'se_m1', 't_m1', 'd_m0', 'se_m0', 't_m0', 'd_g', 'se_g', 't_g']:
+    for col in ['d_g1', 'se_g1', 't_g1', 'd_g0', 'se_g0', 't_g0', 'd_m', 'se_m', 't_m']:
         assert col in df.columns
-    assert np.allclose(df['d_m1'].values, 0.0)
+    # Under ATTE, derivative wrt g1 is zero
+    assert np.allclose(df['t_g1'].values, 0.0)
 
 
 def test_refute_irm_orthogonality_att_outputs():
     data = make_data(n=120, seed=42)
     res = refute_irm_orthogonality(
         dummy_inference_fn, data,
-        target='ATTE', n_folds_oos=3, n_basis_funcs=3, trim_propensity=(0.02, 0.98), strict_oos=True
+        score='ATTE', n_folds_oos=3, n_basis_funcs=3, trim_propensity=(0.02, 0.98), strict_oos=True
     )
-    # Ensure ATT target selected
-    assert res['params']['target'] in ('ATTE', 'ATT')
-    # p1 family should be in params for ATT
-    assert 'p1' in res['params'] and 0 < res['params']['p1'] < 1
-    assert 'p1_full' in res['params'] and 0 < res['params']['p1_full'] < 1
-    assert 'p1_trim' in res['params'] and 0 < res['params']['p1_trim'] < 1
-    # Overlap diagnostics present with new column names
-    assert 'overlap_diagnostics' in res and res['overlap_diagnostics'] is not None
-    overlap = res['overlap_diagnostics']
+    # Ensure ATTE score selected
+    assert res['params']['score'] in ('ATTE', 'ATT')
+    # p_treated family should be in params for ATTE
+    assert 'p_treated' in res['params'] and 0 < res['params']['p_treated'] < 1
+    assert 'p_treated_full' in res['params'] and 0 < res['params']['p_treated_full'] < 1
+    assert 'p_treated_trim' in res['params'] and 0 < res['params']['p_treated_trim'] < 1
+    # Overlap diagnostics present with m-based column names
+    assert 'overlap_atte' in res and res['overlap_atte'] is not None
+    overlap = res['overlap_atte']
     assert all(col in overlap.columns for col in [
-        'pct_controls_with_g_ge_thr', 'pct_treated_with_g_le_1_minus_thr'
+        'pct_controls_with_m_ge_thr', 'pct_treated_with_m_le_1_minus_thr'
     ])
     # Robustness curve present (may occasionally be None if inference fails; ensure key exists)
-    assert 'robustness' in res and 'trim_curve' in res['robustness']
-    # Derivatives for ATT should be present and include m0 & g columns
+    assert 'robustness' in res and 'trim_curve_atte' in res['robustness']
+    # Derivatives for ATTE should include IRM naming columns
     ortho = res['orthogonality_derivatives']['full_sample']
     assert isinstance(ortho, pd.DataFrame)
     if len(ortho) > 0:
-        for col in ['t_m0', 't_g']:
+        for col in ['t_g0', 't_m']:
             assert col in ortho.columns
     # Strict OOS stats present and selected
     oos = res['oos_moment_test']

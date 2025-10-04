@@ -1,0 +1,613 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "# Notebook to test CausalData functionality",
+   "id": "35b4318ae82ad36f"
+  },
+  {
+   "cell_type": "code",
+   "id": "initial_id",
+   "metadata": {
+    "collapsed": true,
+    "ExecuteTime": {
+     "end_time": "2025-07-26T15:55:33.459589Z",
+     "start_time": "2025-07-26T15:55:32.624597Z"
+    }
+   },
+   "source": [
+    "from causalkit.data import generate_rct_data, CausalData\n",
+    "from causalkit.data import CausalData"
+   ],
+   "outputs": [],
+   "execution_count": 1
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:39.234417Z",
+     "start_time": "2025-07-26T16:00:39.174646Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df = generate_rct_data()",
+   "id": "970ecbd9c6095043",
+   "outputs": [],
+   "execution_count": 18
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:39.346375Z",
+     "start_time": "2025-07-26T16:00:39.342700Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "causal_data = CausalData(df=df,\n",
+    "                         outcome='outcome', cofounders=['age', 'platform_Android'],\n",
+    "                         treatment='treatment')"
+   ],
+   "id": "7d24ef042c73da7b",
+   "outputs": [],
+   "execution_count": 19
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:39.501241Z",
+     "start_time": "2025-07-26T16:00:39.497657Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "causal_data",
+   "id": "7d5ee4dc062d668e",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "CausalData(df=(20000, 4), target='target', cofounders=['age', 'platform_Android'], treatment='treatment')"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 20
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:39.624212Z",
+     "start_time": "2025-07-26T16:00:39.620668Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "causal_data.cofounders",
+   "id": "413617b680470383",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "       age  platform_Android\n",
+       "0       20                 0\n",
+       "1       44                 0\n",
+       "2       44                 0\n",
+       "3       31                 0\n",
+       "4       39                 0\n",
+       "...    ...               ...\n",
+       "19995   18                 0\n",
+       "19996   27                 0\n",
+       "19997   38                 1\n",
+       "19998   45                 0\n",
+       "19999   36                 1\n",
+       "\n",
+       "[20000 rows x 2 columns]"
+      ],
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>age</th>\n",
+       "      <th>platform_Android</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>31</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>39</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19995</th>\n",
+       "      <td>18</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19996</th>\n",
+       "      <td>27</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19997</th>\n",
+       "      <td>38</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19998</th>\n",
+       "      <td>45</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19999</th>\n",
+       "      <td>36</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>20000 rows × 2 columns</p>\n",
+       "</div>"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 21
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:39.789744Z",
+     "start_time": "2025-07-26T16:00:39.787536Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df_test = causal_data.get_df()",
+   "id": "45a2bb8949de2b2b",
+   "outputs": [],
+   "execution_count": 22
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:40.387597Z",
+     "start_time": "2025-07-26T16:00:40.364608Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df == df_test",
+   "id": "3ba10387c83cfd46",
+   "outputs": [
+    {
+     "ename": "ValueError",
+     "evalue": "Can only compare identically-labeled (both index and columns) DataFrame objects",
+     "output_type": "error",
+     "traceback": [
+      "\u001B[31m---------------------------------------------------------------------------\u001B[39m",
+      "\u001B[31mValueError\u001B[39m                                Traceback (most recent call last)",
+      "\u001B[32m/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_97568/468092360.py\u001B[39m in \u001B[36m?\u001B[39m\u001B[34m()\u001B[39m\n\u001B[32m----> \u001B[39m\u001B[32m1\u001B[39m df == df_test\n",
+      "\u001B[32m~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/ops/common.py\u001B[39m in \u001B[36m?\u001B[39m\u001B[34m(self, other)\u001B[39m\n\u001B[32m     72\u001B[39m                     \u001B[38;5;28;01mreturn\u001B[39;00m NotImplemented\n\u001B[32m     73\u001B[39m \n\u001B[32m     74\u001B[39m         other = item_from_zerodim(other)\n\u001B[32m     75\u001B[39m \n\u001B[32m---> \u001B[39m\u001B[32m76\u001B[39m         \u001B[38;5;28;01mreturn\u001B[39;00m method(self, other)\n",
+      "\u001B[32m~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/arraylike.py\u001B[39m in \u001B[36m?\u001B[39m\u001B[34m(self, other)\u001B[39m\n\u001B[32m     38\u001B[39m     @unpack_zerodim_and_defer(\u001B[33m\"__eq__\"\u001B[39m)\n\u001B[32m     39\u001B[39m     \u001B[38;5;28;01mdef\u001B[39;00m __eq__(self, other):\n\u001B[32m---> \u001B[39m\u001B[32m40\u001B[39m         \u001B[38;5;28;01mreturn\u001B[39;00m self._cmp_method(other, operator.eq)\n",
+      "\u001B[32m~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/frame.py\u001B[39m in \u001B[36m?\u001B[39m\u001B[34m(self, other, op)\u001B[39m\n\u001B[32m   7901\u001B[39m     \u001B[38;5;28;01mdef\u001B[39;00m _cmp_method(self, other, op):\n\u001B[32m   7902\u001B[39m         axis: Literal[\u001B[32m1\u001B[39m] = \u001B[32m1\u001B[39m  \u001B[38;5;66;03m# only relevant for Series other case\u001B[39;00m\n\u001B[32m   7903\u001B[39m \n\u001B[32m-> \u001B[39m\u001B[32m7904\u001B[39m         self, other = self._align_for_op(other, axis, flex=\u001B[38;5;28;01mFalse\u001B[39;00m, level=\u001B[38;5;28;01mNone\u001B[39;00m)\n\u001B[32m   7905\u001B[39m \n\u001B[32m   7906\u001B[39m         \u001B[38;5;66;03m# See GH#4537 for discussion of scalar op behavior\u001B[39;00m\n\u001B[32m   7907\u001B[39m         new_data = self._dispatch_frame_op(other, op, axis=axis)\n",
+      "\u001B[32m~/miniconda3/envs/causalkit/lib/python3.13/site-packages/pandas/core/frame.py\u001B[39m in \u001B[36m?\u001B[39m\u001B[34m(self, other, axis, flex, level)\u001B[39m\n\u001B[32m   8199\u001B[39m                     left, right = left.align(\n\u001B[32m   8200\u001B[39m                         right, join=\u001B[33m\"outer\"\u001B[39m, level=level, copy=\u001B[38;5;28;01mFalse\u001B[39;00m\n\u001B[32m   8201\u001B[39m                     )\n\u001B[32m   8202\u001B[39m                 \u001B[38;5;28;01melse\u001B[39;00m:\n\u001B[32m-> \u001B[39m\u001B[32m8203\u001B[39m                     raise ValueError(\n\u001B[32m   8204\u001B[39m                         \u001B[33m\"Can only compare identically-labeled (both index and columns) \"\u001B[39m\n\u001B[32m   8205\u001B[39m                         \u001B[33m\"DataFrame objects\"\u001B[39m\n\u001B[32m   8206\u001B[39m                     )\n",
+      "\u001B[31mValueError\u001B[39m: Can only compare identically-labeled (both index and columns) DataFrame objects"
+     ]
+    }
+   ],
+   "execution_count": 23
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:00:53.459541Z",
+     "start_time": "2025-07-26T16:00:53.456735Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df.columns",
+   "id": "fb314d64d81f2a17",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['user_id', 'treatment', 'target', 'age', 'cnt_trans',\n",
+       "       'platform_Android', 'platform_iOS', 'invited_friend'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 24
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:01:03.169227Z",
+     "start_time": "2025-07-26T16:01:03.166483Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df_test.columns",
+   "id": "5324f9e76a3cd3e3",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['target', 'age', 'platform_Android', 'treatment'], dtype='object')"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 25
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:06:30.122316Z",
+     "start_time": "2025-07-26T16:06:30.110998Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "causal_data.df",
+   "id": "8112654b528aa59f",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "       target  treatment  age  platform_Android\n",
+       "0           0          1   20                 0\n",
+       "1           0          1   44                 0\n",
+       "2           0          1   44                 0\n",
+       "3           0          1   31                 0\n",
+       "4           0          1   39                 0\n",
+       "...       ...        ...  ...               ...\n",
+       "19995       0          0   18                 0\n",
+       "19996       0          0   27                 0\n",
+       "19997       0          0   38                 1\n",
+       "19998       0          0   45                 0\n",
+       "19999       0          0   36                 1\n",
+       "\n",
+       "[20000 rows x 4 columns]"
+      ],
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>target</th>\n",
+       "      <th>treatment</th>\n",
+       "      <th>age</th>\n",
+       "      <th>platform_Android</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>31</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>39</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19995</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>18</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19996</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>27</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19997</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>38</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19998</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>45</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19999</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>36</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>20000 rows × 4 columns</p>\n",
+       "</div>"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 26
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-26T16:16:46.937298Z",
+     "start_time": "2025-07-26T16:16:46.918092Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "causal_data.get_df(include_target=True, include_treatment=True)",
+   "id": "f0db6fc259bb88d4",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "       target  age  platform_Android  treatment\n",
+       "0           0   20                 0          1\n",
+       "1           0   44                 0          1\n",
+       "2           0   44                 0          1\n",
+       "3           0   31                 0          1\n",
+       "4           0   39                 0          1\n",
+       "...       ...  ...               ...        ...\n",
+       "19995       0   18                 0          0\n",
+       "19996       0   27                 0          0\n",
+       "19997       0   38                 1          0\n",
+       "19998       0   45                 0          0\n",
+       "19999       0   36                 1          0\n",
+       "\n",
+       "[20000 rows x 4 columns]"
+      ],
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>target</th>\n",
+       "      <th>age</th>\n",
+       "      <th>platform_Android</th>\n",
+       "      <th>treatment</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>20</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0</td>\n",
+       "      <td>44</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0</td>\n",
+       "      <td>31</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0</td>\n",
+       "      <td>39</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19995</th>\n",
+       "      <td>0</td>\n",
+       "      <td>18</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19996</th>\n",
+       "      <td>0</td>\n",
+       "      <td>27</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19997</th>\n",
+       "      <td>0</td>\n",
+       "      <td>38</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19998</th>\n",
+       "      <td>0</td>\n",
+       "      <td>45</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19999</th>\n",
+       "      <td>0</td>\n",
+       "      <td>36</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>20000 rows × 4 columns</p>\n",
+       "</div>"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 27
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "",
+   "id": "98e1df5073a23fa0"
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

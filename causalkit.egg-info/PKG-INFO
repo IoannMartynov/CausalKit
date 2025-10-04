@@ -1,0 +1,72 @@
+Metadata-Version: 2.4
+Name: causalkit
+Version: 0.1.0
+Summary: A Python toolkit for causal inference and experimentation
+Author: CausalKit Team
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scipy
+Requires-Dist: statsmodels
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=7.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.3.0; extra == "docs"
+Requires-Dist: sphinx-book-theme>=1.0.0; extra == "docs"
+Requires-Dist: myst-parser>=2.0.0; extra == "docs"
+Requires-Dist: myst-nb>=1.0.0; extra == "docs"
+Requires-Dist: nbsphinx>=0.9.0; extra == "docs"
+Requires-Dist: sphinx-copybutton>=0.5.0; extra == "docs"
+Requires-Dist: sphinx-autodoc-typehints>=1.25.0; extra == "docs"
+Requires-Dist: sphinx-design>=0.5.0; extra == "docs"
+Dynamic: license-file
+
+# CausalKit
+
+A Python toolkit for causal inference and experimentation.
+
+Official documentation https://ioannmartynov.github.io/CausalKit/
+
+## Installation
+
+### Using pip
+
+```bash
+# Clone the repository
+git clone https://github.com/ioannmartynov/CausalKit.git
+cd CausalKit
+
+# Install in development mode
+pip install -e .
+
+# Install with documentation dependencies
+pip install -e ".[docs]"
+
+# Install with development dependencies
+pip install -e ".[dev]"
+```
+
+### Using conda
+
+```bash
+# Clone the repository
+git clone https://github.com/ioannmartynov/CausalKit.git
+cd CausalKit
+
+# Create and activate conda environment
+conda env create -f environment.yml
+conda activate causalkit
+
+# Install the package in development mode
+pip install -e .
+```

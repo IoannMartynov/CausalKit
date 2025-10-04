@@ -858,7 +858,7 @@ class CausalDatasetGenerator:
         df = self.generate(n)
         
         # Determine confounders to use
-        exclude = {'y', 'd', 'm', 'g0', 'g1', 'cate', 'propensity', 'mu0', 'mu1', 'user_id'}
+        exclude = {'y', 'd', 'm', 'm_obs', 'g0', 'g1', 'cate', 'propensity', 'mu0', 'mu1', 'user_id'}
         if confounders is None:
             # Keep original column order; exclude outcome/treatment/ground-truth columns and non-numeric
             confounder_cols = [

@@ -1,0 +1,402 @@
+{
+ "cells": [
+  {
+   "metadata": {
+    "collapsed": true,
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.169289Z",
+     "start_time": "2025-07-21T17:17:15.531931Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "from causalkit.data import generate_rct_data\n",
+    "from causalkit.data import CausalData\n",
+    "from causalkit.inference import ttest"
+   ],
+   "id": "initial_id",
+   "outputs": [],
+   "execution_count": 1
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.256611Z",
+     "start_time": "2025-07-21T17:17:16.220038Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df = generate_rct_data()",
+   "id": "af2d268eb7fe993f",
+   "outputs": [],
+   "execution_count": 2
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.269471Z",
+     "start_time": "2025-07-21T17:17:16.265680Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df.columns",
+   "id": "cb32f2e7f1dc65c3",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['user_id', 'treatment', 'target', 'age', 'cnt_trans',\n",
+       "       'platform_Android', 'platform_iOS', 'invited_friend'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 3
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.288021Z",
+     "start_time": "2025-07-21T17:17:16.286046Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "cdata = CausalData(\n",
+    "    df=df,\n",
+    "    outcome='outcome',\n",
+    "    cofounders=['age', 'cnt_trans',\n",
+    "       'platform_Android', 'platform_iOS', 'invited_friend'],\n",
+    "    treatment='treatment'\n",
+    ")"
+   ],
+   "id": "d05a620b660a0077",
+   "outputs": [],
+   "execution_count": 4
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:18:35.670532Z",
+     "start_time": "2025-07-21T17:18:35.667834Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "cdata.metadata",
+   "id": "731c26892d5c45b",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{}"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 9
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.315347Z",
+     "start_time": "2025-07-21T17:17:16.310135Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "ttest(cdata)",
+   "id": "6d7795c4d15a092",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'p_value': np.float64(0.00017501995114700586),\n",
+       " 'absolute_difference': np.float64(0.0165),\n",
+       " 'absolute_ci': (np.float64(0.007883204030438051),\n",
+       "  np.float64(0.02511679596956195)),\n",
+       " 'relative_difference': np.float64(16.467065868263475),\n",
+       " 'relative_ci': (np.float64(7.867469092253545),\n",
+       "  np.float64(25.066662644273407))}"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 5
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.336042Z",
+     "start_time": "2025-07-21T17:17:16.332482Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "df.groupby('treatment')['outcome'].mean()",
+   "id": "a0d414921914478",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "treatment\n",
+       "0    0.1002\n",
+       "1    0.1167\n",
+       "Name: target, dtype: float64"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 6
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.373916Z",
+     "start_time": "2025-07-21T17:17:16.361656Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "\"\"\"\n",
+    "Test script to verify the ttest function in the inference module.\n",
+    "\"\"\"\n",
+    "\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from causalkit.data import CausalData\n",
+    "from causalkit.inference.ttest import ttest\n",
+    "\n",
+    "# Set random seed for reproducibility\n",
+    "np.random.seed(42)\n",
+    "\n",
+    "# Create a test DataFrame with a known effect size\n",
+    "n = 1000\n",
+    "control_mean = 10.0\n",
+    "treatment_effect = 2.0\n",
+    "treatment_mean = control_mean + treatment_effect\n",
+    "\n",
+    "# Create data with treatment effect\n",
+    "df = pd.DataFrame({\n",
+    "    'user_id': range(1, n + 1),\n",
+    "    'treatment': np.random.choice([0, 1], size=n),\n",
+    "    'age': np.random.randint(18, 65, size=n),\n",
+    "    'gender': np.random.choice(['M', 'F'], size=n),\n",
+    "})\n",
+    "\n",
+    "# Generate outcome variable with treatment effect\n",
+    "df['outcome'] = np.where(\n",
+    "    df['treatment'] == 1,\n",
+    "    np.random.normal(treatment_mean, 2.0, size=n),  # Treatment group\n",
+    "    np.random.normal(control_mean, 2.0, size=n)     # Control group\n",
+    ")\n",
+    "\n",
+    "# Create a causaldata object\n",
+    "ck = CausalData(\n",
+    "    df=df,\n",
+    "    outcome='outcome',\n",
+    "    cofounders=['age', 'gender'],\n",
+    "    treatment='treatment'\n",
+    ")\n",
+    "\n",
+    "# Test 1: Basic functionality\n",
+    "print(\"Test 1: Basic functionality\")\n",
+    "result = ttest(ck)\n",
+    "print(f\"p_value: {result['p_value']}\")\n",
+    "print(f\"absolute_difference: {result['absolute_difference']}\")\n",
+    "print(f\"absolute_ci: {result['absolute_ci']}\")\n",
+    "print(f\"relative_difference: {result['relative_difference']}\")\n",
+    "print(f\"relative_ci: {result['relative_ci']}\")\n",
+    "print()\n",
+    "\n",
+    "# Test 2: Check if absolute difference is close to the expected treatment effect\n",
+    "print(\"Test 2: Check if absolute difference is close to the expected treatment effect\")\n",
+    "expected_diff = treatment_effect\n",
+    "actual_diff = result['absolute_difference']\n",
+    "diff_error = abs(actual_diff - expected_diff)\n",
+    "print(f\"Expected difference: {expected_diff}\")\n",
+    "print(f\"Actual difference: {actual_diff}\")\n",
+    "print(f\"Error: {diff_error}\")\n",
+    "print(f\"Test passed: {diff_error < 0.5}\")  # Allow for some random variation\n",
+    "print()\n",
+    "\n",
+    "# Test 3: Check if confidence intervals contain the true effect\n",
+    "print(\"Test 3: Check if confidence intervals contain the true effect\")\n",
+    "lower_bound, upper_bound = result['absolute_ci']\n",
+    "contains_true_effect = lower_bound <= expected_diff <= upper_bound\n",
+    "print(f\"Confidence interval: ({lower_bound:.4f}, {upper_bound:.4f})\")\n",
+    "print(f\"True effect: {expected_diff}\")\n",
+    "print(f\"CI contains true effect: {contains_true_effect}\")\n",
+    "print()\n",
+    "\n",
+    "# Test 4: Check relative difference\n",
+    "print(\"Test 4: Check relative difference\")\n",
+    "expected_rel_diff = (treatment_effect / control_mean) * 100\n",
+    "actual_rel_diff = result['relative_difference']\n",
+    "rel_diff_error = abs(actual_rel_diff - expected_rel_diff)\n",
+    "print(f\"Expected relative difference: {expected_rel_diff:.2f}%\")\n",
+    "print(f\"Actual relative difference: {actual_rel_diff:.2f}%\")\n",
+    "print(f\"Error: {rel_diff_error:.2f}%\")\n",
+    "print(f\"Test passed: {rel_diff_error < 5}\")  # Allow for some random variation\n",
+    "print()\n",
+    "\n",
+    "# Test 5: Different confidence level\n",
+    "print(\"Test 5: Different confidence level\")\n",
+    "result_90 = ttest(ck, confidence_level=0.90)\n",
+    "result_99 = ttest(ck, confidence_level=0.99)\n",
+    "\n",
+    "# 90% CI should be narrower than 95% CI (default)\n",
+    "ci_width_90 = result_90['absolute_ci'][1] - result_90['absolute_ci'][0]\n",
+    "ci_width_95 = result['absolute_ci'][1] - result['absolute_ci'][0]\n",
+    "ci_width_99 = result_99['absolute_ci'][1] - result_99['absolute_ci'][0]\n",
+    "\n",
+    "print(f\"90% CI width: {ci_width_90:.4f}\")\n",
+    "print(f\"95% CI width: {ci_width_95:.4f}\")\n",
+    "print(f\"99% CI width: {ci_width_99:.4f}\")\n",
+    "print(f\"Test passed: {ci_width_90 < ci_width_95 < ci_width_99}\")\n",
+    "print()\n",
+    "\n",
+    "# Test 6: Error handling - no treatment\n",
+    "print(\"Test 6: Error handling - no treatment\")\n",
+    "ck_no_treatment = CausalData(\n",
+    "    df=df,\n",
+    "    outcome='outcome',\n",
+    "    cofounders=['age', 'gender']\n",
+    ")\n",
+    "try:\n",
+    "    result = ttest(ck_no_treatment)\n",
+    "    print(\"Error: Test failed - should have raised ValueError\")\n",
+    "except ValueError as e:\n",
+    "    print(f\"Success: Correctly raised ValueError: {e}\")\n",
+    "print()\n",
+    "\n",
+    "# Test 7: Error handling - no outcome\n",
+    "print(\"Test 7: Error handling - no outcome\")\n",
+    "ck_no_target = CausalData(\n",
+    "    df=df,\n",
+    "    cofounders=['age', 'gender'],\n",
+    "    treatment='treatment'\n",
+    ")\n",
+    "try:\n",
+    "    result = ttest(ck_no_target)\n",
+    "    print(\"Error: Test failed - should have raised ValueError\")\n",
+    "except ValueError as e:\n",
+    "    print(f\"Success: Correctly raised ValueError: {e}\")\n",
+    "print()\n",
+    "\n",
+    "# Test 8: Error handling - non-binary treatment\n",
+    "print(\"Test 8: Error handling - non-binary treatment\")\n",
+    "df_multi = df.copy()\n",
+    "df_multi['treatment'] = np.random.choice([0, 1, 2], size=n)\n",
+    "ck_multi = CausalData(\n",
+    "    df=df_multi,\n",
+    "    outcome='outcome',\n",
+    "    cofounders=['age', 'gender'],\n",
+    "    treatment='treatment'\n",
+    ")\n",
+    "try:\n",
+    "    result = ttest(ck_multi)\n",
+    "    print(\"Error: Test failed - should have raised ValueError\")\n",
+    "except ValueError as e:\n",
+    "    print(f\"Success: Correctly raised ValueError: {e}\")\n",
+    "print()\n",
+    "\n",
+    "print(\"All tests completed.\")"
+   ],
+   "id": "1a030e608d594d8c",
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Test 1: Basic functionality\n",
+      "p_value: 1.4940213443180423e-50\n",
+      "absolute_difference: 1.9617748200899392\n",
+      "absolute_ci: (np.float64(1.718663386392377), np.float64(2.2048862537875014))\n",
+      "relative_difference: 19.648731193051145\n",
+      "relative_ci: (np.float64(17.213777312635003), np.float64(22.083685073467286))\n",
+      "\n",
+      "Test 2: Check if absolute difference is close to the expected treatment effect\n",
+      "Expected difference: 2.0\n",
+      "Actual difference: 1.9617748200899392\n",
+      "Error: 0.0382251799100608\n",
+      "Test passed: True\n",
+      "\n",
+      "Test 3: Check if confidence intervals contain the true effect\n",
+      "Confidence interval: (1.7187, 2.2049)\n",
+      "True effect: 2.0\n",
+      "CI contains true effect: True\n",
+      "\n",
+      "Test 4: Check relative difference\n",
+      "Expected relative difference: 20.00%\n",
+      "Actual relative difference: 19.65%\n",
+      "Error: 0.35%\n",
+      "Test passed: True\n",
+      "\n",
+      "Test 5: Different confidence level\n",
+      "90% CI width: 0.4079\n",
+      "95% CI width: 0.4862\n",
+      "99% CI width: 0.6395\n",
+      "Test passed: True\n",
+      "\n",
+      "Test 6: Error handling - no treatment\n",
+      "Success: Correctly raised ValueError: causaldata object must have a treatment variable defined\n",
+      "\n",
+      "Test 7: Error handling - no target\n",
+      "Success: Correctly raised ValueError: causaldata object must have a target variable defined\n",
+      "\n",
+      "Test 8: Error handling - non-binary treatment\n",
+      "Success: Correctly raised ValueError: Treatment variable must be binary (have exactly 2 unique values)\n",
+      "\n",
+      "All tests completed.\n"
+     ]
+    }
+   ],
+   "execution_count": 7
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-07-21T17:17:16.421002Z",
+     "start_time": "2025-07-21T17:17:16.419451Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "",
+   "id": "49b9f2c6e20dff46",
+   "outputs": [],
+   "execution_count": null
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -20,7 +20,7 @@ from scipy import stats
 from sklearn.model_selection import KFold
 
 from causalkit.data.causaldata import CausalData
-import warnings
+from copy import deepcopy
 
 
 def aipw_score_ate(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray, m: np.ndarray, theta: float, trimming_threshold: float = 0.01) -> np.ndarray:
@@ -50,10 +50,6 @@ def aipw_score_atte(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray
     return num / (p_treated + 1e-12)
 
 
-def aipw_score_att(y: np.ndarray, d: np.ndarray, m0: np.ndarray, m1: np.ndarray, g: np.ndarray, theta: float, p1: Optional[float] = None, eps: float = 0.01) -> np.ndarray:
-    """Deprecated: use aipw_score_atte(y,d,g0,g1,m,theta,p_treated,trimming_threshold)."""
-    warnings.warn("aipw_score_att is deprecated; use aipw_score_atte with IRM naming.", DeprecationWarning, stacklevel=2)
-    return aipw_score_atte(y, d, g0=m0, g1=m1, m=g, theta=theta, p_treated=p1, trimming_threshold=eps)
 
 
 def extract_nuisances(model, test_indices: Optional[np.ndarray] = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -247,7 +243,7 @@ def orthogonality_derivatives(X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
 
 
 def influence_summary(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarray, 
-                     m: np.ndarray, theta_hat: float, k: int = 10, score: str = "ATE", trimming_threshold: float = 0.01, *, target: Optional[str] = None, clip_eps: Optional[float] = None) -> Dict[str, Any]:
+                     m: np.ndarray, theta_hat: float, k: int = 10, score: str = "ATE", trimming_threshold: float = 0.01) -> Dict[str, Any]:
     """
     Compute influence diagnostics showing where uncertainty comes from.
     
@@ -265,12 +261,6 @@ def influence_summary(y: np.ndarray, d: np.ndarray, g0: np.ndarray, g1: np.ndarr
     Dict[str, Any]
         Influence diagnostics including SE, heavy-tail metrics, and top-k cases
     """
-    if target is not None:
-        warnings.warn("'target' is deprecated; use 'score' ('ATE'|'ATTE').", DeprecationWarning, stacklevel=2)
-        score = target
-    if clip_eps is not None:
-        warnings.warn("'clip_eps' is deprecated; use 'trimming_threshold'.", DeprecationWarning, stacklevel=2)
-        trimming_threshold = clip_eps
     score_u = str(score).upper()
     if score_u == "ATE":
         psi = aipw_score_ate(y, d, g0, g1, m, theta_hat, trimming_threshold=trimming_threshold)
@@ -305,10 +295,7 @@ def refute_irm_orthogonality(
     n_folds_oos: int = 4,
     score: Optional[str] = None,
     trimming_threshold: float = 0.01,
-    *,
-    target: Optional[str] = None,
-    clip_eps: float = 0.01,
-    strict_oos: bool = False,
+    strict_oos: bool = True,
     **inference_kwargs,
 ) -> Dict[str, Any]:
     """
@@ -378,15 +365,7 @@ def refute_irm_orthogonality(
     y = data.target.values.astype(float)
     d = data.treatment.values.astype(float)
 
-    # Handle deprecations and determine score
-    if target is not None:
-        warnings.warn("'target' is deprecated; use 'score' ('ATE'|'ATTE').", DeprecationWarning, stacklevel=2)
-        if score is None:
-            score = target
-    if clip_eps is not None:
-        warnings.warn("'clip_eps' is deprecated; use 'trimming_threshold'.", DeprecationWarning, stacklevel=2)
-        trimming_threshold = clip_eps
-
+    # Determine score
     score_u = str(score).upper() if score is not None else "AUTO"
     if score_u == "AUTO":
         score_attr = getattr(dml_model, 'score', None)
@@ -533,6 +512,20 @@ def refute_irm_orthogonality(
         X_basis_trim = X_basis[trim_mask]
         p_treated_trim = float(np.mean(d_trim))
         ortho_derivs_trim = orthogonality_derivatives_atte(X_basis_trim, y_trim, d_trim, g0_trim, m_trim, p_treated_trim, trimming_threshold=trimming_threshold)
+        # Backward-compatible alias columns for expected legacy names
+        try:
+            ortho_derivs_full = ortho_derivs_full.copy()
+            ortho_derivs_full["d_g"] = ortho_derivs_full.get("d_g0", np.nan)
+            ortho_derivs_full["t_g"] = ortho_derivs_full.get("t_g0", np.nan)
+            ortho_derivs_full["d_m0"] = ortho_derivs_full.get("d_m", np.nan)
+            ortho_derivs_full["t_m0"] = ortho_derivs_full.get("t_m", np.nan)
+            ortho_derivs_trim = ortho_derivs_trim.copy()
+            ortho_derivs_trim["d_g"] = ortho_derivs_trim.get("d_g0", np.nan)
+            ortho_derivs_trim["t_g"] = ortho_derivs_trim.get("t_g0", np.nan)
+            ortho_derivs_trim["d_m0"] = ortho_derivs_trim.get("d_m", np.nan)
+            ortho_derivs_trim["t_m0"] = ortho_derivs_trim.get("t_m", np.nan)
+        except Exception:
+            pass
         problematic_derivs_full = ortho_derivs_full[(np.abs(ortho_derivs_full['t_g0']) > 2) | (np.abs(ortho_derivs_full['t_m']) > 2)]
         problematic_derivs_trim = ortho_derivs_trim[(np.abs(ortho_derivs_trim['t_g0']) > 2) | (np.abs(ortho_derivs_trim['t_m']) > 2)]
         derivs_interpretation = 'ATTE: check g0 & m only; large |t| (>2) => calibration issues'
@@ -599,15 +592,7 @@ def refute_irm_orthogonality(
         except Exception as _:
             trim_curve_atte = None
     
-    # Build backward-compatibility aliases for overlap diagnostics (ATT naming uses 'g')
-    overlap_bc = overlap_atte.copy() if isinstance(overlap_atte, pd.DataFrame) else None
-    if isinstance(overlap_bc, pd.DataFrame):
-        if 'pct_controls_with_m_ge_thr' in overlap_bc.columns:
-            overlap_bc['pct_controls_with_g_ge_thr'] = overlap_bc['pct_controls_with_m_ge_thr']
-        if 'pct_treated_with_m_le_1_minus_thr' in overlap_bc.columns:
-            overlap_bc['pct_treated_with_g_le_1_minus_thr'] = overlap_bc['pct_treated_with_m_le_1_minus_thr']
-    
-    # p-treated parameterization and legacy alias p1
+    # p-treated parameterization
     params_extra = {}
     if score_u in ('ATTE','ATT'):
         p_full = float(np.mean(d))
@@ -616,32 +601,7 @@ def refute_irm_orthogonality(
             'p_treated': p_full,
             'p_treated_full': p_full,
             'p_treated_trim': p_trim,
-            # legacy aliases
-            'p1': p_full,
-            'p1_full': p_full,
-            'p1_trim': p_trim,
         }
-    
-    # For ATT naming in derivative outputs, add legacy columns to copies (non-destructive)
-    if score_u in ('ATTE','ATT') and isinstance(ortho_derivs_full, pd.DataFrame):
-        def _with_legacy_cols(df_in: pd.DataFrame) -> pd.DataFrame:
-            df_out = df_in.copy()
-            # map IRM naming to legacy ATT naming
-            if 'd_g0' in df_out.columns:
-                df_out['d_m0'] = df_out['d_g0']
-                df_out['se_m0'] = df_out.get('se_g0', np.nan)
-                df_out['t_m0'] = df_out.get('t_g0', np.nan)
-            if 'd_m' in df_out.columns:
-                df_out['d_g'] = df_out['d_m']
-                df_out['se_g'] = df_out.get('se_m', np.nan)
-                df_out['t_g'] = df_out.get('t_m', np.nan)
-            # m1 is zero under ATTE
-            df_out['d_m1'] = 0.0
-            df_out['se_m1'] = 0.0
-            df_out['t_m1'] = 0.0
-            return df_out
-        ortho_derivs_full = _with_legacy_cols(ortho_derivs_full)
-        ortho_derivs_trim = _with_legacy_cols(ortho_derivs_trim)
     
     return {
         'theta': float(theta_hat),
@@ -651,9 +611,6 @@ def refute_irm_orthogonality(
             'strict_oos_requested': bool(strict_oos),
             'strict_oos_applied': bool(strict_applied),
             **params_extra,
-            # backward-compat aliases
-            'target': score_u,
-            'clip_eps': trimming_threshold,
         },
         'oos_moment_test': {
             'fold_results': oos_df,
@@ -678,10 +635,8 @@ def refute_irm_orthogonality(
             'trimmed_sample': influence_trim,
             'interpretation': 'Heavy tails or extreme kurtosis suggest instability'
         },
-        'overlap_diagnostics': overlap_bc,
         'overlap_atte': overlap_atte,
         'robustness': {
-            'trim_curve': trim_curve_atte,
             'trim_curve_atte': trim_curve_atte,
             'interpretation': 'ATTE typically more sensitive to trimming near m→1 (controls).'
         },
@@ -733,40 +688,6 @@ def orthogonality_derivatives_atte(
     })
 
 
-def orthogonality_derivatives_att(
-    X_basis: np.ndarray, y: np.ndarray, d: np.ndarray,
-    m0: np.ndarray, g: np.ndarray, p1: float, eps: float = 0.01
-) -> pd.DataFrame:
-    """
-    Deprecated ATT naming wrapper around orthogonality_derivatives_atte.
-    Returns legacy column names for backward compatibility:
-      - m1 derivatives are identically zero: d_m1,se_m1,t_m1
-      - m0 maps to g0 in IRM naming
-      - g maps to m in IRM naming (propensity)
-    """
-    warnings.warn(
-        "orthogonality_derivatives_att is deprecated; use orthogonality_derivatives_atte with IRM naming.",
-        DeprecationWarning,
-        stacklevel=2,
-    )
-    df = orthogonality_derivatives_atte(X_basis, y, d, g0=m0, m=g, p_treated=p1, trimming_threshold=eps)
-    # Build legacy columns alongside to preserve tests relying on old names
-    out = pd.DataFrame({
-        "basis": df["basis"].values,
-        # legacy m1 (always zero under ATTE)
-        "d_m1": np.zeros(len(df)),
-        "se_m1": np.zeros(len(df)),
-        "t_m1": np.zeros(len(df)),
-        # legacy m0 corresponds to IRM g0
-        "d_m0": df["d_g0"].values,
-        "se_m0": df["se_g0"].values,
-        "t_m0": df["t_g0"].values,
-        # legacy g corresponds to IRM m (propensity)
-        "d_g": df["d_m"].values,
-        "se_g": df["se_m"].values,
-        "t_g": df["t_m"].values,
-    })
-    return out
 
 
 def overlap_diagnostics_atte(
@@ -794,12 +715,6 @@ def overlap_diagnostics_atte(
     return pd.DataFrame(rows)
 
 
-def overlap_diagnostics_att(
-    g: np.ndarray, d: np.ndarray, eps_list: List[float] = [0.95, 0.97, 0.98, 0.99]
-) -> pd.DataFrame:
-    """Deprecated: use overlap_diagnostics_atte(m,d,eps_list)."""
-    warnings.warn("overlap_diagnostics_att is deprecated; use overlap_diagnostics_atte with IRM naming.", DeprecationWarning, stacklevel=2)
-    return overlap_diagnostics_atte(m=g, d=d, eps_list=eps_list)
 
 
 def trim_sensitivity_curve_atte(
@@ -835,16 +750,6 @@ def trim_sensitivity_curve_atte(
     return pd.DataFrame(rows)
 
 
-def trim_sensitivity_curve_att(
-    inference_fn: Callable[..., Dict[str, Any]],
-    data: CausalData,
-    g: np.ndarray, d: np.ndarray,
-    thresholds: np.ndarray = np.linspace(0.90, 0.995, 12),
-    **inference_kwargs
-) -> pd.DataFrame:
-    """Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds)."""
-    warnings.warn("trim_sensitivity_curve_att is deprecated; use trim_sensitivity_curve_atte with IRM naming.", DeprecationWarning, stacklevel=2)
-    return trim_sensitivity_curve_atte(inference_fn, data, m=g, d=d, thresholds=thresholds, **inference_kwargs)
 
 
 def trim_sensitivity_curve_ate(
@@ -1003,14 +908,33 @@ def _run_inference(
 ) -> Dict[str, float]:
     """
     Helper that executes `inference_fn` and extracts the two items of interest.
+    Provides a safe fallback for p_value if missing by using a normal approximation
+    based on coefficient and std_error.
     """
     res = inference_fn(data, **kwargs)
-    return {"theta": float(res["coefficient"]), "p_value": float(res["p_value"])}
+    out = {"theta": float(res["coefficient"])}
+    p = res.get("p_value")
+    if p is None and "std_error" in res:
+        try:
+            se = float(res["std_error"])
+            th = float(res["coefficient"])
+            z = 0.0 if se == 0.0 else th / se
+            p = 2.0 * (1 - stats.norm.cdf(abs(z)))
+        except Exception:
+            p = None
+    out["p_value"] = float(p) if p is not None else float("nan")
+    return out
 
 
 # ------------------------------------------------------------------
 # 1. Placebo ‑- generate random outcome
 # ------------------------------------------------------------------
+
+def _public_names(data: CausalData) -> tuple[str, str]:
+    tname = getattr(getattr(data, "treatment", None), "name", None) or getattr(data, "_treatment", "D")
+    yname = getattr(getattr(data, "target", None), "name", None) or getattr(data, "_target", "Y")
+    return tname, yname
+
 
 def refute_placebo_outcome(
     inference_fn: Callable[..., Dict[str, Any]],
@@ -1023,18 +947,19 @@ def refute_placebo_outcome(
     and covariates intact. For binary outcomes, generates random binary
     variables with the same proportion. For continuous outcomes, generates
     random variables from a normal distribution fitted to the original data.
-    A valid causal rct_design should now yield θ ≈ 0 and a large p-value.
+    A valid causal design should now yield θ ≈ 0 and a large p-value.
     """
     rng = np.random.default_rng(random_state)
 
     df_mod = data.get_df().copy()
-    original_outcome = df_mod[data._target]
-    df_mod[data._target] = _generate_random_outcome(original_outcome, rng)
+    tname, yname = _public_names(data)
+    original_outcome = df_mod[yname]
+    df_mod[yname] = _generate_random_outcome(original_outcome, rng)
 
     ck_mod = CausalData(
         df=df_mod,
-        treatment=data._treatment,
-        outcome=data._target,
+        treatment=tname,
+        outcome=yname,
         confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)
@@ -1058,13 +983,14 @@ def refute_placebo_treatment(
     rng = np.random.default_rng(random_state)
 
     df_mod = data.get_df().copy()
-    original_treatment = df_mod[data._treatment]
-    df_mod[data._treatment] = _generate_random_treatment(original_treatment, rng)
+    tname, yname = _public_names(data)
+    original_treatment = df_mod[tname]
+    df_mod[tname] = _generate_random_treatment(original_treatment, rng)
 
     ck_mod = CausalData(
         df=df_mod,
-        treatment=data._treatment,
-        outcome=data._target,
+        treatment=tname,
+        outcome=yname,
         confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)
@@ -1093,11 +1019,12 @@ def refute_subset(
     n = len(df)
     idx = rng.choice(n, size=int(np.floor(fraction * n)), replace=False)
 
+    tname, yname = _public_names(data)
     df_mod = df.iloc[idx].copy()
     ck_mod = CausalData(
         df=df_mod,
-        treatment=data._treatment,
-        outcome=data._target,
+        treatment=tname,
+        outcome=yname,
         confounders=(list(data.confounders) if data.confounders else None),
     )
     return _run_inference(inference_fn, ck_mod, **inference_kwargs)
@@ -1181,3 +1108,520 @@ def oos_moment_check_from_psi(
         t_strict = (mean_all / se_all) if se_all > 0 else 0.0
 
     return df, float(t_fold), (None if t_strict is None else float(t_strict))
+
+
+# ---- High-level entry point similar to overlap_validation.run_overlap_diagnostics ----
+ResultLike = Dict[str, Any] | Any
+
+
+def _extract_score_inputs_from_result(res: ResultLike) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, float, str, Optional[np.ndarray], Optional[np.ndarray], Optional[List[np.ndarray]]]:
+    """
+    Extract (y, d, g0, g1, m, theta, score, psi_a, psi_b, fold_indices) from a
+    dml_ate/dml_att-like result dict or an IRM-like model instance.
+
+    Supports two paths:
+      - Dict with keys {'model', 'coefficient'} and optional 'diagnostic_data'.
+      - IRM/DoubleML-like model object with .data, cross-fitted nuisances, and optionally psi caches.
+    """
+    model = None
+    theta = float('nan')
+    score_str = 'ATE'
+
+    # 1) Result dict
+    if isinstance(res, dict):
+        if 'model' in res:
+            model = res['model']
+        if 'coefficient' in res:
+            theta = float(res['coefficient'])
+        # Try to infer score from result params if present
+        params = res.get('params') or res.get('Parameters') or {}
+        sc = params.get('score') if isinstance(params, dict) else None
+        if sc is not None:
+            score_str = str(sc).upper()
+        # If diagnostic_data carries arrays, prefer them
+        dd = res.get('diagnostic_data', {}) if isinstance(res.get('diagnostic_data', {}), dict) else {}
+        m = dd['m_hat'] if 'm_hat' in dd else (dd['m'] if 'm' in dd else None)
+        g0 = dd['g0_hat'] if 'g0_hat' in dd else (dd['g0'] if 'g0' in dd else None)
+        g1 = dd['g1_hat'] if 'g1_hat' in dd else (dd['g1'] if 'g1' in dd else None)
+        y = dd['y'] if 'y' in dd else (dd['Y'] if 'Y' in dd else None)
+        d = dd['d'] if 'd' in dd else (dd['D'] if 'D' in dd else None)
+        if all(v is not None for v in (y, d, g0, g1, m)):
+            y = np.asarray(y, dtype=float).ravel()
+            d = np.asarray(d, dtype=float).ravel()
+            g0 = np.asarray(g0, dtype=float).ravel()
+            g1 = np.asarray(g1, dtype=float).ravel()
+            m = np.asarray(m, dtype=float).ravel()
+            # Score fallback from coefficient if missing
+            if np.isnan(theta) and 'coefficient' in res:
+                theta = float(res['coefficient'])
+            # psi caches from model if available
+            if model is None:
+                return y, d, g0, g1, m, theta, score_str, None, None, None
+        # otherwise continue to model extraction below
+    else:
+        model = res
+
+    if model is None:
+        raise ValueError("Result must contain 'model' or provide diagnostic_data arrays.")
+
+    # 2) Model extraction
+    # Try to determine score setting
+    sc_attr = getattr(model, 'score', None)
+    if sc_attr is None:
+        sc_attr = getattr(model, '_score', None)
+    if sc_attr is not None:
+        score_str = 'ATTE' if 'ATT' in str(sc_attr).upper() else 'ATE'
+
+    # Cross-fitted nuisances
+    m, g0, g1 = extract_nuisances(model)
+
+    # Observed y,d from model.data
+    df = None
+    data_obj = getattr(model, 'data', None)
+    if data_obj is not None and hasattr(data_obj, 'get_df'):
+        df = data_obj.get_df()
+        # Try robust attribute names
+        if hasattr(data_obj, 'treatment') and hasattr(data_obj, 'target'):
+            tname = data_obj.treatment.name
+            yname = data_obj.target.name
+        else:
+            # Fallback to common attributes used in CausalData
+            tname = getattr(data_obj, '_treatment', 'D')
+            yname = getattr(data_obj, '_target', 'Y')
+        d = df[tname].to_numpy(dtype=float)
+        y = df[yname].to_numpy(dtype=float)
+    else:
+        raise ValueError("Model.data with get_df() is required to extract y and d.")
+
+    # Theta from wrapper or model
+    if np.isnan(theta):
+        coef = getattr(model, 'coef_', None)
+        if coef is not None:
+            try:
+                theta = float(coef[0])
+            except Exception:
+                theta = float(coef)
+        else:
+            theta = float('nan')
+
+    # Optional fast-path caches
+    psi_a = getattr(model, 'psi_a_', None)
+    psi_b = getattr(model, 'psi_b_', None)
+    folds = getattr(model, 'folds_', None)
+    if psi_a is not None and psi_b is not None and folds is not None:
+        # Build fold indices list
+        folds_arr = np.asarray(folds, dtype=int)
+        K = int(folds_arr.max() + 1) if folds_arr.size > 0 else 0
+        fold_indices = [np.where(folds_arr == k)[0] for k in range(K)]
+        return y, d, g0, g1, m, float(theta), score_str, np.asarray(psi_a, dtype=float), np.asarray(psi_b, dtype=float), fold_indices
+
+    return y, d, g0, g1, m, float(theta), score_str, None, None, None
+
+
+
+def run_score_diagnostics(
+    res: ResultLike = None,
+    *,
+    y: Optional[np.ndarray] = None,
+    d: Optional[np.ndarray] = None,
+    g0: Optional[np.ndarray] = None,
+    g1: Optional[np.ndarray] = None,
+    m: Optional[np.ndarray] = None,
+    theta: Optional[float] = None,
+    score: Optional[str] = None,
+    trimming_threshold: float = 0.01,
+    n_basis_funcs: Optional[int] = None,
+    return_summary: bool = True,
+) -> Dict[str, Any]:
+    """
+    Single entry-point for score diagnostics (orthogonality) akin to run_overlap_diagnostics.
+
+    You can call it in TWO ways:
+      A) With raw arrays:
+         run_score_diagnostics(y=..., d=..., g0=..., g1=..., m=..., theta=...)
+      B) With a model/result:
+         run_score_diagnostics(res=<dml_ate/dml_att result dict or IRM-like model>)
+
+    Returns a dictionary with:
+      - params (score, trimming_threshold)
+      - oos_moment_test (if fast-path caches available on model; else omitted)
+      - orthogonality_derivatives (DataFrame)
+      - influence_diagnostics (full_sample)
+      - summary (compact DataFrame) if return_summary=True
+      - meta
+    """
+    # Resolve inputs
+    psi_a = psi_b = None
+    fold_indices = None
+    if any(v is None for v in (y, d, g0, g1, m)):
+        if res is None:
+            raise ValueError("Pass either (y,d,g0,g1,m,theta) or `res`.")
+        y, d, g0, g1, m, theta_ex, score_detected, psi_a, psi_b, fold_indices = _extract_score_inputs_from_result(res)
+        if theta is None:
+            theta = theta_ex
+        if score is None:
+            score = score_detected
+    else:
+        if score is None:
+            score = 'ATE'
+
+    score_u = str(score).upper()
+
+    # Enforce binary D and scrub non-finite across inputs
+    d = (np.asarray(d) > 0.5).astype(float)
+    y_arr = np.asarray(y, dtype=float)
+    g0_arr = np.asarray(g0, dtype=float)
+    g1_arr = np.asarray(g1, dtype=float)
+    m_arr = np.asarray(m, dtype=float)
+    mask = np.isfinite(y_arr) & np.isfinite(d) & np.isfinite(g0_arr) & np.isfinite(g1_arr) & np.isfinite(m_arr)
+    y, d, g0, g1, m = y_arr[mask], d[mask], g0_arr[mask], g1_arr[mask], m_arr[mask]
+
+    # Influence diagnostics
+    infl = influence_summary(y, d, g0, g1, m, float(theta if theta is not None else 0.0), score=score_u, trimming_threshold=trimming_threshold)
+
+    # Build basis for orthogonality derivatives
+    # If we can access confounders via res.model.data, use them; else constant-only basis
+    X_basis = None
+    use_data_basis = False
+    if res is not None:
+        model = res.get('model') if isinstance(res, dict) else res
+        data_obj = getattr(model, 'data', None) if model is not None else None
+        if data_obj is not None and hasattr(data_obj, 'get_df') and getattr(data_obj, 'confounders', None) is not None:
+            df_conf = data_obj.get_df()[list(data_obj.confounders)]
+            X = df_conf.to_numpy(dtype=float)
+            if n_basis_funcs is None:
+                n_basis_funcs = len(data_obj.confounders) + 1
+            n_covs = min(max(n_basis_funcs - 1, 0), X.shape[1])
+            if n_covs > 0:
+                X_sel = X[:, :n_covs]
+                X_std = (X_sel - np.mean(X_sel, axis=0)) / (np.std(X_sel, axis=0) + 1e-8)
+                X_basis = np.c_[np.ones(X.shape[0]), X_std]
+                use_data_basis = True
+    if X_basis is None:
+        X_basis = np.ones((len(y), 1))
+    elif use_data_basis:
+        # Align X_basis with scrubbed arrays
+        try:
+            X_basis = X_basis[mask]
+        except Exception:
+            # If masking fails due to shape issues, fall back to constant basis
+            X_basis = np.ones((len(y), 1))
+
+    if score_u == 'ATE':
+        ortho = orthogonality_derivatives(X_basis, y, d, g0, g1, m, trimming_threshold=trimming_threshold)
+    elif score_u in ('ATTE', 'ATT'):
+        p_treated = float(np.mean(d))
+        ortho = orthogonality_derivatives_atte(X_basis, y, d, g0, m, p_treated, trimming_threshold=trimming_threshold)
+    else:
+        raise ValueError("score must be 'ATE' or 'ATTE'")
+
+    # Optional fast-path OOS moment check using cached psi if available
+    oos = None
+    if psi_a is not None and psi_b is not None and fold_indices is not None:
+        df_oos, t_fold, t_strict = oos_moment_check_from_psi(psi_a, psi_b, fold_indices, strict=True)
+        p_fold = float(2 * (1 - stats.norm.cdf(abs(t_fold))))
+        p_strict = float(2 * (1 - stats.norm.cdf(abs(t_strict)))) if t_strict is not None else float('nan')
+        oos = {
+            'fold_results': df_oos,
+            'tstat_fold_agg': float(t_fold),
+            'pvalue_fold_agg': float(p_fold),
+            'tstat_strict': (None if t_strict is None else float(t_strict)),
+            'pvalue_strict': (float('nan') if t_strict is None else float(2 * (1 - stats.norm.cdf(abs(t_strict))))),
+            'interpretation': 'Near 0 indicates moment condition holds.'
+        }
+
+    report: Dict[str, Any] = {
+        'params': {
+            'score': score_u,
+            'trimming_threshold': float(trimming_threshold),
+        },
+        'orthogonality_derivatives': ortho,
+        'influence_diagnostics': infl,
+    }
+    if oos is not None:
+        report['oos_moment_test'] = oos
+
+    if return_summary:
+        # Build compact summary rows
+        max_t_g1 = float(np.nanmax(np.abs(ortho['t_g1'])) if 't_g1' in ortho.columns else np.nan)
+        max_t_g0 = float(np.nanmax(np.abs(ortho['t_g0'])) if 't_g0' in ortho.columns else np.nan)
+        max_t_m  = float(np.nanmax(np.abs(ortho['t_m']))  if 't_m'  in ortho.columns else np.nan)
+        rows = [
+            {'metric': 'se_plugin', 'value': infl['se_plugin']},
+            {'metric': 'psi_p99_over_med', 'value': infl['p99_over_med']},
+            {'metric': 'psi_kurtosis', 'value': infl['kurtosis']},
+            {'metric': 'max_|t|_g1', 'value': max_t_g1},
+            {'metric': 'max_|t|_g0', 'value': max_t_g0},
+            {'metric': 'max_|t|_m',  'value': max_t_m},
+        ]
+        if oos is not None:
+            rows.append({'metric': 'oos_tstat_fold', 'value': oos['tstat_fold_agg']})
+            rows.append({'metric': 'oos_tstat_strict', 'value': (np.nan if oos['tstat_strict'] is None else oos['tstat_strict'])})
+        report['summary'] = pd.DataFrame(rows)
+
+    report['meta'] = {'n': int(len(y)), 'score': score_u}
+    # Augment with flags and thresholds, and enrich summary
+    try:
+        report = add_score_flags(report)
+    except Exception:
+        # be permissive: if flags fail, still return base report
+        pass
+    return report
+
+
+
+# -------------- Flags and summary augmentation for score diagnostics --------------
+
+def _grade(val: float, warn: float, strong: float, *, larger_is_worse: bool = True) -> str:
+    """Map a scalar to GREEN/YELLOW/RED with optional direction."""
+    if val is None or (isinstance(val, float) and (np.isnan(val) or np.isinf(val))):
+        return "NA"
+    v = float(val)
+    if larger_is_worse:
+        return "GREEN" if v < warn else ("YELLOW" if v < strong else "RED")
+    else:
+        # smaller is worse → invert thresholds
+        return "GREEN" if v <= warn else ("YELLOW" if v <= strong else "RED")
+
+
+def add_score_flags(rep_score: dict, thresholds: dict | None = None, *, effect_size_guard: float = 0.02, oos_gate: bool = True, se_rule: str | None = None, se_ref: float | None = None) -> dict:
+    """
+    Augment run_score_diagnostics(...) dict with:
+      - rep['flags'] (per-metric flags)
+      - rep['thresholds'] (the cutoffs used)
+      - rep['summary'] with a new 'flag' column
+      - rep['overall_flag'] (rollup)
+
+    Additional logic:
+      - Practical effect-size guard: if the constant-basis derivative magnitude is tiny
+        (<= effect_size_guard), then downgrade an orthogonality RED to GREEN (if OOS is GREEN)
+        or to YELLOW (otherwise). Controlled by `oos_gate`.
+      - Huge-n relaxation: for very large n (>= 200k), relax tail/kurtosis flags slightly
+        under specified value gates.
+    """
+    rep = deepcopy(rep_score)
+
+    # --- defaults tuned to your style (>= means worse) ---
+    thr = {
+        # heavy tails / stability
+        "tail_ratio_warn": 10.0,   # |psi| p99 / median
+        "tail_ratio_strong": 20.0,
+        "kurt_warn": 10.0,         # normal≈3; allow slack for EIFs
+        "kurt_strong": 30.0,
+
+        # orthogonality t-stats (|t| should be ~0)
+        "t_warn": 2.0,
+        "t_strong": 4.0,
+
+        # OOS moment t-stat (|t| should be ~0)
+        "oos_warn": 2.0,
+        "oos_strong": 3.0,
+    }
+    if thresholds:
+        thr.update(thresholds)
+
+    # --- fetch raw pieces robustly ---
+    infl = rep.get("influence_diagnostics", {}) or {}
+    ortho = rep.get("orthogonality_derivatives")
+    oos   = rep.get("oos_moment_test")
+
+    # Influence metrics
+    tail_ratio = infl.get("p99_over_med") if isinstance(infl, dict) else None
+    kurtosis   = infl.get("kurtosis") if isinstance(infl, dict) else None
+
+    # Max |t| over bases (compute if not already summarized)
+    def _max_abs(df: pd.DataFrame, col: str) -> float | float:
+        if isinstance(df, pd.DataFrame) and col in df.columns:
+            a = np.abs(df[col].to_numpy(dtype=float))
+            return float(np.nanmax(a)) if a.size else float("nan")
+        return float("nan")
+
+    max_t_g1 = _max_abs(ortho, "t_g1")
+    max_t_g0 = _max_abs(ortho, "t_g0")
+    max_t_m  = _max_abs(ortho, "t_m")
+
+    # OOS t-stats (if available)
+    oos_t_fold   = float(oos.get("tstat_fold_agg")) if isinstance(oos, dict) and "tstat_fold_agg" in oos else float("nan")
+    oos_t_strict = float(oos.get("tstat_strict"))   if isinstance(oos, dict) and "tstat_strict"   in oos and oos.get("tstat_strict") is not None else float("nan")
+
+    # --- compute flags ---
+    flags = {
+        # influence / tails
+        "psi_tail_ratio": _grade(tail_ratio, thr["tail_ratio_warn"], thr["tail_ratio_strong"], larger_is_worse=True),
+        "psi_kurtosis":   _grade(kurtosis,   thr["kurt_warn"],       thr["kurt_strong"],       larger_is_worse=True),
+
+        # orthogonality derivatives
+        "ortho_max_|t|_g1": _grade(max_t_g1, thr["t_warn"], thr["t_strong"], larger_is_worse=True),
+        "ortho_max_|t|_g0": _grade(max_t_g0, thr["t_warn"], thr["t_strong"], larger_is_worse=True),
+        "ortho_max_|t|_m":  _grade(max_t_m,  thr["t_warn"], thr["t_strong"], larger_is_worse=True),
+
+        # OOS moment check (prefer strict if present)
+        "oos_tstat_fold":   _grade(abs(oos_t_fold),   thr["oos_warn"], thr["oos_strong"], larger_is_worse=True),
+        "oos_tstat_strict": _grade(abs(oos_t_strict), thr["oos_warn"], thr["oos_strong"], larger_is_worse=True),
+    }
+
+    # choose one OOS flag as canonical (strict if present)
+    canonical_oos = "oos_tstat_strict" if flags["oos_tstat_strict"] != "NA" else "oos_tstat_fold"
+    flags["oos_moment"] = flags[canonical_oos]
+
+    # --- attach thresholds used ---
+    rep["thresholds"] = {
+        "tail_ratio_warn": thr["tail_ratio_warn"],
+        "tail_ratio_strong": thr["tail_ratio_strong"],
+        "kurt_warn": thr["kurt_warn"],
+        "kurt_strong": thr["kurt_strong"],
+        "t_warn": thr["t_warn"],
+        "t_strong": thr["t_strong"],
+        "oos_warn": thr["oos_warn"],
+        "oos_strong": thr["oos_strong"],
+    }
+
+    # --- build/update compact summary ---
+    # Start from existing summary if present; otherwise create it.
+    summary_rows = [
+        ("se_plugin", infl.get("se_plugin") if isinstance(infl, dict) else np.nan),
+        ("psi_p99_over_med", tail_ratio),
+        ("psi_kurtosis", kurtosis),
+        ("max_|t|_g1", max_t_g1),
+        ("max_|t|_g0", max_t_g0),
+        ("max_|t|_m",  max_t_m),
+    ]
+    if not np.isnan(oos_t_fold):
+        summary_rows.append(("oos_tstat_fold", oos_t_fold))
+    if not np.isnan(oos_t_strict):
+        summary_rows.append(("oos_tstat_strict", oos_t_strict))
+
+    # Map summary metric → flag key and rule
+    summary_flag_rules = {
+        "psi_p99_over_med": ("psi_tail_ratio", True, thr["tail_ratio_warn"], thr["tail_ratio_strong"]),
+        "psi_kurtosis":     ("psi_kurtosis",   True, thr["kurt_warn"],       thr["kurt_strong"]),
+        "max_|t|_g1":       ("ortho_max_|t|_g1", True, thr["t_warn"], thr["t_strong"]),
+        "max_|t|_g0":       ("ortho_max_|t|_g0", True, thr["t_warn"], thr["t_strong"]),
+        "max_|t|_m":        ("ortho_max_|t|_m",  True, thr["t_warn"], thr["t_strong"]),
+        "oos_tstat_fold":   ("oos_tstat_fold",   True, thr["oos_warn"], thr["oos_strong"]),
+        "oos_tstat_strict": ("oos_tstat_strict", True, thr["oos_warn"], thr["oos_strong"]),
+        # se_plugin is scale-dependent → mark NA by default
+        "se_plugin":        (None, True, np.nan, np.nan),
+    }
+
+    df_sum = pd.DataFrame(summary_rows, columns=["metric", "value"])
+    df_sum["flag"] = [
+        (
+            _grade(abs(v) if k.startswith("oos_tstat") else v,
+                   summary_flag_rules[k][2], summary_flag_rules[k][3],
+                   larger_is_worse=summary_flag_rules[k][1])
+            if summary_flag_rules[k][0] is not None else "NA"
+        )
+        for k, v in zip(df_sum["metric"], df_sum["value"])
+    ]
+
+    # If run_score_diagnostics already produced a summary, align/merge on known metrics.
+    if "summary" in rep and isinstance(rep["summary"], pd.DataFrame):
+        # left-join by 'metric' and prefer new flags
+        cur = rep["summary"].copy()
+        cur = cur.drop(columns=[c for c in cur.columns if c not in ("metric","value","flag")], errors="ignore")
+        rep["summary"] = (cur.drop(columns=["flag"], errors="ignore")
+                            .merge(df_sum[["metric","flag"]], on="metric", how="left"))
+    else:
+        rep["summary"] = df_sum
+
+    # Assign initial flags
+    rep["flags"] = flags
+
+    # --- SE flagging (optional) ---
+    try:
+        # thresholds defaults for SE relative gap
+        thr.setdefault("se_rel_warn", 0.25)
+        thr.setdefault("se_rel_strong", 0.50)
+        se = float(infl.get("se_plugin", float("nan"))) if isinstance(infl, dict) else float("nan")
+        se_flag = "NA"
+        if se_rule is not None:
+            rule = str(se_rule).lower()
+            if rule == "model" and se_ref is not None and np.isfinite(se) and np.isfinite(float(se_ref)):
+                rel = abs(se - float(se_ref)) / max(float(se_ref), 1e-12)
+                se_flag = _grade(rel, thr["se_rel_warn"], thr["se_rel_strong"], larger_is_worse=True)
+        # write back to flags and summary if available
+        rep["flags"]["se_plugin"] = se_flag
+        if "summary" in rep and isinstance(rep["summary"], pd.DataFrame):
+            try:
+                rep["summary"].loc[rep["summary"]["metric"] == "se_plugin", "flag"] = se_flag
+            except Exception:
+                pass
+        # also expose thresholds used
+        rep.setdefault("thresholds", {})
+        rep["thresholds"]["se_rel_warn"] = thr["se_rel_warn"]
+        rep["thresholds"]["se_rel_strong"] = thr["se_rel_strong"]
+    except Exception:
+        # keep permissive behavior if anything goes wrong
+        pass
+
+    # ================= Practical adjustments =================
+    # 1) Effect-size guard for orthogonality REDs
+    try:
+        ortho_df = rep.get("orthogonality_derivatives")
+        if isinstance(ortho_df, pd.DataFrame):
+            if "basis" in ortho_df.columns and 0 in set(ortho_df["basis"].tolist()):
+                row0 = ortho_df.loc[ortho_df["basis"] == 0]
+                # Absolute derivative magnitudes at constant basis
+                d_g1_abs = float(abs(row0["d_g1"].values[0])) if "d_g1" in ortho_df.columns else float("nan")
+                d_g0_abs = float(abs(row0["d_g0"].values[0])) if "d_g0" in ortho_df.columns else float("nan")
+                d_m_abs  = float(abs(row0["d_m" ].values[0])) if "d_m"  in ortho_df.columns else float("nan")
+            else:
+                d_g1_abs = d_g0_abs = d_m_abs = float("nan")
+            oos_ok = (rep["flags"].get("oos_moment") == "GREEN") if oos_gate else True
+            def soften(_):
+                return "GREEN" if oos_ok else "YELLOW"
+            if not np.isnan(d_g1_abs) and d_g1_abs <= effect_size_guard and rep["flags"].get("ortho_max_|t|_g1") == "RED":
+                rep["flags"]["ortho_max_|t|_g1"] = soften(rep["flags"]["ortho_max_|t|_g1"])
+            if not np.isnan(d_g0_abs) and d_g0_abs <= effect_size_guard and rep["flags"].get("ortho_max_|t|_g0") == "RED":
+                rep["flags"]["ortho_max_|t|_g0"] = soften(rep["flags"]["ortho_max_|t|_g0"])
+            if not np.isnan(d_m_abs) and d_m_abs <= effect_size_guard and rep["flags"].get("ortho_max_|t|_m") == "RED":
+                rep["flags"]["ortho_max_|t|_m"] = soften(rep["flags"]["ortho_max_|t|_m"])
+    except Exception:
+        pass
+
+    # 2) Huge-n synthetic run relaxation for tails
+    try:
+        n = int(rep.get("meta", {}).get("n", 0))
+        if n >= 200_000:
+            # Tail ratio: YELLOW→GREEN if value ≤ 12.0
+            try:
+                val_tail = float(df_sum.loc[df_sum["metric"] == "psi_p99_over_med", "value"].iloc[0])
+            except Exception:
+                val_tail = tail_ratio if tail_ratio is not None else float("nan")
+            if rep["flags"].get("psi_tail_ratio") == "YELLOW" and np.isfinite(val_tail) and val_tail <= 12.0:
+                rep["flags"]["psi_tail_ratio"] = "GREEN"
+            # Kurtosis: RED→YELLOW if value ≤ 50.0
+            try:
+                val_kurt = float(df_sum.loc[df_sum["metric"] == "psi_kurtosis", "value"].iloc[0])
+            except Exception:
+                val_kurt = kurtosis if kurtosis is not None else float("nan")
+            if rep["flags"].get("psi_kurtosis") == "RED" and np.isfinite(val_kurt) and val_kurt <= 50.0:
+                rep["flags"]["psi_kurtosis"] = "YELLOW"
+    except Exception:
+        pass
+
+    # 3) Recompute overall and sync summary flags with final per-metric flags
+    order = {"GREEN": 0, "YELLOW": 1, "RED": 2, "NA": -1}
+    worst = max((order.get(f, -1) for f in rep["flags"].values()), default=-1)
+    inv = {v: k for k, v in order.items()}
+    rep["overall_flag"] = inv.get(worst, "NA")
+
+    # Update summary flags in-place to reflect final flags
+    map_flags = {
+        "psi_p99_over_med": rep["flags"].get("psi_tail_ratio", "NA"),
+        "psi_kurtosis":     rep["flags"].get("psi_kurtosis", "NA"),
+        "max_|t|_g1":       rep["flags"].get("ortho_max_|t|_g1", "NA"),
+        "max_|t|_g0":       rep["flags"].get("ortho_max_|t|_g0", "NA"),
+        "max_|t|_m":        rep["flags"].get("ortho_max_|t|_m", "NA"),
+        "oos_tstat_fold":   rep["flags"].get("oos_tstat_fold", "NA"),
+        "oos_tstat_strict": rep["flags"].get("oos_tstat_strict", "NA"),
+        "se_plugin":        rep["flags"].get("se_plugin", "NA"),
+    }
+    try:
+        rep["summary"]["flag"] = rep["summary"]["metric"].map(map_flags).fillna(rep["summary"].get("flag"))
+    except Exception:
+        # If mapping fails, keep existing flags in summary
+        pass
+
+    return rep
