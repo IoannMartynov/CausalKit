@@ -1,0 +1,90 @@
+# Causal Inference Intuition
+As humans, we intuitively understand cause and effect relationships. 
+Without this understanding, we would not have been able to survive 
+and achieve our current level of development.
+
+How do we usually think about whether a given impact is a cause?
+* It's simple, in our heads we check whether the impact was there 
+before we saw the effect
+* We also check whether the impact has a large force capable of 
+influencing the effect. In other words, are there other factors 
+that have had a stronger effect than the impact?
+
+Now you have a simple model of casual inference in your head.
+
+# Formalization
+
+In both industry and academia, the use of universal notation 
+for causal inference serves as a critical tool for enhancing 
+communication among researchers and practitioners.
+
+**Units** are typically the people, companies or households on 
+which we are analyzing the impact.
+
+$$ i = 1, \ldots, n $$
+
+**Treatment** is an effect, in data we usually see it as 1 if 
+it was there and 0 if it was not there. (This generalizes to 
+multi-valued or continuous treatments.)
+
+$$ T_i \in \{0, 1\} $$
+
+**Outcome** is the variable by which we measure the effect. For example, 
+temperature, if we are testing a drug, or the probability of buying a 
+product if we are changing the landing page
+
+$$ Y_i $$
+
+**Covariates or cofounders**. These are variables that influence the 
+propensity to receive a treatment and simultaneously predict the target, 
+thereby causing bias in the estimate.
+
+$$ X_i $$
+
+It could look like this in a data
+
+| Client | Treatment | Outcome | Cofounder_1 | Cofounder_2 |
+|--------|-----------|---------|-------------|-------------|
+| 1      | 1         | 100     | 1           | 13          |
+| 2      | 0         | 90      | 0           | 14          |
+| 3      | 1         | 110     | 1           | 51          |
+| 4      | 1         | 97      | 1           | 63          |
+| 5      | 0         | 80      | 0           | 34          |
+| 6      | 0         | 85      | 0           | 53          |
+
+# Estimation
+
+To understand how to evaluate effects, you need to understand the 
+estimands.
+
+## ITE (and CATE)
+
+Question: What is the effect for an individual (ITE) or for people 
+like this (CATE)?
+
+$$ \text{ITE}_i \;=\; Y_i(1) - Y_i(0) $$
+
+ITE is fundamentally unobservable for any single unit; we estimate 
+its conditional average:)
+
+$$ \tau(x) \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid X=x\,\right] \quad \text{(CATE)} $$
+
+Use when: personalization, uplift targeting, heterogeneous effects.
+
+## ATT (Average Treatment effect on the Treated)
+
+Question: What was the effect on those who actually received treatment?
+
+$$ \text{ATT} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\mid T=1\,\right] $$
+
+Use when: evaluating past rollouts, “did it work for the treated?”, program 
+evaluation where treatment assignment was selective.
+
+## ATE (Average Treatment Effect)
+
+Question: What is the overall average effect in the population?
+
+$$ \text{ATE} \;=\; \mathbb{E}\!\left[\,Y(1)-Y(0)\,\right] $$
+
+Use when: policy decisions affecting the whole eligible population; 
+headline effect sizes.

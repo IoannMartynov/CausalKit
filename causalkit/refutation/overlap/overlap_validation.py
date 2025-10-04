@@ -1,9 +1,20 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
 from typing import Dict, Tuple, Optional, Any, Union
 
 # ---------- small utils ----------
+
+
+def _mask_finite_pairs(p: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Return pairs (p,y) keeping only entries where both are finite."""
+    p = np.asarray(p, dtype=float).ravel()
+    y = np.asarray(y, dtype=float).ravel()
+    if p.size == 0 or y.size == 0 or p.size != y.size:
+        return p, y
+    mask = np.isfinite(p) & np.isfinite(y)
+    return p[mask], y[mask]
 
 def _auc_mann_whitney(scores: np.ndarray, labels: np.ndarray) -> float:
     """Dependency-free AUC via Mann–Whitney U."""
@@ -36,28 +47,20 @@ def _auc_mann_whitney(scores: np.ndarray, labels: np.ndarray) -> float:
 
 
 def _ks_statistic(a: np.ndarray, b: np.ndarray) -> float:
-    """Two-sample KS statistic (D)."""
-    a = np.sort(a)
-    b = np.sort(b)
+    """Two-sample KS statistic (D) that handles ties correctly.
+
+    Computes the sup norm of the difference between empirical CDFs,
+    evaluating at the union of unique values with right-continuous CDFs.
+    """
+    a = np.sort(np.asarray(a, dtype=float))
+    b = np.sort(np.asarray(b, dtype=float))
     na, nb = a.size, b.size
-    ia = ib = 0
-    cdf_a = cdf_b = 0.0
-    d = 0.0
-    # merge-walk
-    while ia < na and ib < nb:
-        if a[ia] <= b[ib]:
-            cdf_a = (ia + 1) / na
-            ia += 1
-        else:
-            cdf_b = (ib + 1) / nb
-            ib += 1
-        d = max(d, abs(cdf_a - cdf_b))
-    # flush tails
-    if ia < na:
-        d = max(d, abs(1.0 - cdf_b))
-    if ib < nb:
-        d = max(d, abs(cdf_a - 1.0))
-    return float(d)
+    if na == 0 or nb == 0:
+        return float("nan")
+    vals = np.sort(np.unique(np.concatenate([a, b])))
+    cdf_a = np.searchsorted(a, vals, side="right") / na
+    cdf_b = np.searchsorted(b, vals, side="right") / nb
+    return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
 def _ess(w: np.ndarray) -> float:
@@ -69,9 +72,9 @@ def _ess(w: np.ndarray) -> float:
 def _q(w: np.ndarray, qs=(0.5, 0.95, 0.99, 0.999)) -> Dict[str, float]:
     if w.size == 0:
         return {f"q{int(100*q)}": float("nan") for q in qs} | {"max": float("nan")}
-    # numpy 1.24+: method="nearest" is available; fall back if needed
+    # Prefer smoother linear interpolation for quantiles; fallback for older NumPy
     try:
-        quant = np.quantile(w, qs, method="nearest")
+        quant = np.quantile(w, qs, method="linear")
     except TypeError:
         quant = np.quantile(w, qs)
     return {f"q{int(100*q)}": float(v) for q, v in zip(qs, quant)} | {"max": float(np.max(w))}
@@ -136,8 +139,15 @@ def ks_distance(m_hat: np.ndarray, D: np.ndarray) -> float:
     Math:
       KS = sup_t | F_{m|D=1}(t) - F_{m|D=0}(t) |
     """
-    m = np.asarray(m_hat, dtype=float)
-    d = np.asarray(D, dtype=int).astype(bool)
+    m = np.asarray(m_hat, dtype=float).ravel()
+    d = np.asarray(D, dtype=int).ravel().astype(bool)
+    # scrub non-finite propensities
+    mask = np.isfinite(m)
+    if mask.size != m.size:
+        # defensive, but proceed
+        pass
+    m = m[mask]
+    d = d[mask]
     if m.size == 0 or d.sum() == 0 or d.sum() == d.size:
         return float('nan')
     return _ks_statistic(m[d], m[~d])
@@ -150,8 +160,13 @@ def auc_for_m(m_hat: np.ndarray, D: np.ndarray) -> float:
     Math (Mann–Whitney relation):
       AUC = P(m_i^+ > m_j^-) + 0.5 P(m_i^+ = m_j^-)
     """
-    m = np.asarray(m_hat, dtype=float)
-    d = np.asarray(D, dtype=int)
+    m = np.asarray(m_hat, dtype=float).ravel()
+    d = np.asarray(D, dtype=int).ravel()
+    if m.size == 0 or d.size == 0 or m.size != d.size:
+        return float('nan')
+    # scrub non-finite pairs
+    m, d_f = _mask_finite_pairs(m, d)
+    d = d_f.astype(int)
     if m.size == 0 or np.unique(d).size < 2:
         return float('nan')
     return _auc_mann_whitney(m, d)
@@ -290,7 +305,8 @@ def _ate_tails_from_weights(w1: np.ndarray, w0: np.ndarray, D: np.ndarray) -> Di
 
 def _clipping_audit(m_hat: np.ndarray, m_clipped_from: Optional[Tuple[float, float]], g_clipped_share: Optional[float]) -> Dict[str, float]:
     if m_clipped_from is None:
-        clip_lower = clip_upper = 0.0
+        clip_lower = float("nan")
+        clip_upper = float("nan")
     else:
         lo, hi = m_clipped_from
         m = np.asarray(m_hat, dtype=float)
@@ -305,7 +321,271 @@ def _clipping_audit(m_hat: np.ndarray, m_clipped_from: Optional[Tuple[float, flo
 
 # ---------- main entry ----------
 
-from .propensity_calibration import calibration_report_m as _calibration_report_m
+# ---------- Propensity calibration (merged from propensity_calibration.py) ----------
+CAL_THRESHOLDS = dict(
+    ece_warn=0.10,
+    ece_strong=0.20,
+    slope_warn_lo=0.8,
+    slope_warn_hi=1.2,
+    slope_strong_lo=0.6,
+    slope_strong_hi=1.4,
+    intercept_warn=0.2,
+    intercept_strong=0.4,
+)
+
+
+def ece_binary(p: np.ndarray, y: np.ndarray, n_bins: int = 10) -> float:
+    """
+    Expected Calibration Error (ECE) for binary labels using equal-width bins on [0,1].
+
+    Parameters
+    ----------
+    p : np.ndarray
+        Predicted probabilities in [0,1]. Will be clipped to [0,1].
+    y : np.ndarray
+        Binary labels {0,1}.
+    n_bins : int, default 10
+        Number of bins.
+
+    Returns
+    -------
+    float
+        ECE value in [0,1].
+    """
+    p = np.asarray(p, dtype=float)
+    y = np.asarray(y, dtype=float)
+    p = np.clip(p, 0.0, 1.0)
+    n_bins = int(n_bins)
+    if p.size == 0 or y.size == 0 or p.size != y.size:
+        return float("nan")
+
+    # Bin indices consistent with equal-width bins on [0,1]
+    b = np.clip((p * n_bins).astype(int), 0, n_bins - 1)
+    sums = np.bincount(b, weights=p, minlength=n_bins)
+    hits = np.bincount(b, weights=y, minlength=n_bins)
+    cnts = np.bincount(b, minlength=n_bins).astype(float)
+    mask = cnts > 0
+    if not np.any(mask):
+        return float("nan")
+    return float(
+        np.average(
+            np.abs(hits[mask] / cnts[mask] - sums[mask] / cnts[mask]),
+            weights=cnts[mask] / cnts[mask].sum(),
+        )
+    )
+
+
+def _logit(x: np.ndarray) -> np.ndarray:
+    x = np.clip(x, 1e-12, 1.0 - 1e-12)
+    return np.log(x / (1.0 - x))
+
+
+def _sigmoid(z: np.ndarray) -> np.ndarray:
+    """Numerically stable sigmoid."""
+    z = np.asarray(z, dtype=float)
+    out = np.empty_like(z, dtype=float)
+    pos = z >= 0
+    # For positive z: exp(-z) is safe
+    out[pos] = 1.0 / (1.0 + np.exp(-z[pos]))
+    # For negative z: use exp(z) to avoid overflow
+    expz = np.exp(z[~pos])
+    out[~pos] = expz / (1.0 + expz)
+    return out
+
+
+def _logistic_recalibration(p: np.ndarray, y: np.ndarray, *, max_iter: int = 100, tol: float = 1e-8, ridge: float = 1e-8) -> tuple[float, float]:
+    """
+    Fit logistic recalibration model: Pr(D=1|p) = sigmoid(alpha + beta * logit(p)).
+    Uses IRLS/Newton steps with numerical guards to avoid over/underflow and singularities.
+
+    Returns (alpha, beta).
+    """
+    p = np.asarray(p, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    # Predictor on log-odds scale
+    z = _logit(p)
+
+    # Handle near-constant predictor: no meaningful slope can be estimated
+    z_mean = float(np.mean(z))
+    z_std = float(np.std(z))
+    pi = float(np.clip(np.mean(y), 1e-6, 1 - 1e-6))
+    base_intercept = float(np.log(pi / (1.0 - pi)))
+    if not np.isfinite(z_std) or z_std < 1e-12:
+        # Intercept-only calibration
+        return base_intercept, 0.0
+
+    # Standardize to improve conditioning, then back-transform at the end
+    z_stdized = (z - z_mean) / z_std
+    Xs = np.column_stack([np.ones_like(z_stdized), z_stdized])  # [1, z_std]
+
+    theta = np.array([base_intercept, 1.0], dtype=float)
+
+    for _ in range(max_iter):
+        # Linear predictor with clipping to avoid extreme magnitudes
+        with np.errstate(divide='ignore', invalid='ignore', over='ignore', under='ignore'):
+            eta = Xs @ theta
+        # Bound eta before sigmoid to avoid exp overflow inside sigmoid
+        eta = np.clip(eta, -40.0, 40.0)
+        mu = _sigmoid(eta)
+        # Guard against degenerate probabilities
+        mu = np.clip(mu, 1e-12, 1.0 - 1e-12)
+
+        # Gradient and Hessian
+        r = y - mu  # residuals
+        W = mu * (1.0 - mu)
+        # Build X^T W X and X^T r
+        with np.errstate(divide='ignore', invalid='ignore', over='ignore', under='ignore'):
+            XT_W = Xs.T * W  # broadcasting
+            H = XT_W @ Xs
+            g = Xs.T @ r
+        # Ridge for stability
+        H[0, 0] += ridge
+        H[1, 1] += ridge
+        try:
+            step = np.linalg.solve(H, g)
+        except np.linalg.LinAlgError:
+            # Fallback: pseudo-inverse
+            step = np.linalg.pinv(H) @ g
+
+        # Dampen excessively large steps to prevent parameter blow-up
+        max_step = np.max(np.abs(step))
+        if not np.isfinite(max_step):
+            break
+        if max_step > 5.0:
+            step = step * (5.0 / max_step)
+
+        theta_new = theta + step
+        if np.max(np.abs(step)) < tol:
+            theta = theta_new
+            break
+        # Bound parameters to a reasonable range to keep X@theta finite
+        theta = np.clip(theta_new, -50.0, 50.0)
+
+    # Back-transform to original scale: z = z_mean + z_std * z_stdized
+    beta = float(theta[1] / z_std)
+    alpha = float(theta[0] - theta[1] * (z_mean / z_std))
+
+    # Final sanity: ensure finite outputs
+    if not np.isfinite(alpha):
+        alpha = base_intercept
+    if not np.isfinite(beta):
+        beta = 0.0
+    return alpha, beta
+
+
+def calibration_report_m(
+    m_hat: np.ndarray,
+    D: np.ndarray,
+    n_bins: int = 10,
+    *,
+    thresholds: Optional[Dict[str, float]] = None,
+) -> Dict[str, Any]:
+    """
+    Propensity calibration report for cross-fitted propensities m_hat against treatment D.
+
+    Returns a dictionary with:
+      - auc: ROC AUC of m_hat vs D (Mann–Whitney)
+      - brier: Brier score (mean squared error)
+      - ece: Expected Calibration Error (equal-width bins)
+      - reliability_table: pd.DataFrame with per-bin stats
+      - recalibration: {'intercept': alpha, 'slope': beta} from logistic recalibration
+      - flags: {'ece': ..., 'slope': ..., 'intercept': ...} using GREEN/YELLOW/RED
+    """
+    p = np.asarray(m_hat, dtype=float).ravel()
+    y = np.asarray(D, dtype=int).ravel()
+    if p.size == 0 or y.size == 0 or p.size != y.size:
+        raise ValueError("m_hat and D must be non-empty arrays of the same length")
+
+    # Scrub non-finite pairs before clipping
+    p, y_f = _mask_finite_pairs(p, y)
+    y = y_f.astype(int)
+    if p.size == 0 or y.size == 0 or p.size != y.size:
+        raise ValueError("m_hat and D must be non-empty finite arrays of the same length")
+
+    # Clip probabilities to avoid infinities and invalid ops
+    p = np.clip(p, 1e-12, 1.0 - 1e-12)
+
+    # Metrics
+    auc = float(_auc_mann_whitney(p, y)) if np.unique(y).size == 2 else float("nan")
+    brier = float(np.mean((p - y) ** 2))
+    ece = float(ece_binary(p, y, n_bins=n_bins))
+
+    # Reliability table using same binning as ECE
+    n_bins = int(n_bins)
+    b = np.clip((p * n_bins).astype(int), 0, n_bins - 1)
+    cnts = np.bincount(b, minlength=n_bins).astype(int)
+    sum_p = np.bincount(b, weights=p, minlength=n_bins)
+    sum_y = np.bincount(b, weights=y, minlength=n_bins)
+
+    with np.errstate(divide='ignore', invalid='ignore'):
+        mean_p = np.where(cnts > 0, sum_p / cnts, np.nan)
+        frac_pos = np.where(cnts > 0, sum_y / cnts, np.nan)
+        abs_err = np.abs(frac_pos - mean_p)
+
+    edges = np.linspace(0.0, 1.0, n_bins + 1)
+    rel_df = pd.DataFrame({
+        "bin": np.arange(n_bins),
+        "lower": edges[:-1],
+        "upper": edges[1:],
+        "count": cnts,
+        "mean_p": mean_p,
+        "frac_pos": frac_pos,
+        "abs_error": abs_err,
+    })
+
+    # Logistic recalibration
+    alpha, beta = _logistic_recalibration(p, y)
+
+    thr = CAL_THRESHOLDS.copy()
+    if isinstance(thresholds, dict):
+        thr.update({k: float(v) for k, v in thresholds.items()})
+
+    # Flags
+    def _flag_ece(val: float) -> str:
+        if np.isnan(val):
+            return "NA"
+        if val > thr["ece_strong"]:
+            return "RED"
+        if val > thr["ece_warn"]:
+            return "YELLOW"
+        return "GREEN"
+
+    def _flag_slope(b: float) -> str:
+        if np.isnan(b):
+            return "NA"
+        if b < thr["slope_strong_lo"] or b > thr["slope_strong_hi"]:
+            return "RED"
+        if b < thr["slope_warn_lo"] or b > thr["slope_warn_hi"]:
+            return "YELLOW"
+        return "GREEN"
+
+    def _flag_intercept(a: float) -> str:
+        if np.isnan(a):
+            return "NA"
+        if abs(a) > thr["intercept_strong"]:
+            return "RED"
+        if abs(a) > thr["intercept_warn"]:
+            return "YELLOW"
+        return "GREEN"
+
+    flags = {
+        "ece": _flag_ece(ece),
+        "slope": _flag_slope(beta),
+        "intercept": _flag_intercept(alpha),
+    }
+
+    return {
+        "n": int(p.size),
+        "n_bins": int(n_bins),
+        "auc": auc,
+        "brier": brier,
+        "ece": ece,
+        "reliability_table": rel_df,
+        "recalibration": {"intercept": float(alpha), "slope": float(beta)},
+        "flags": flags,
+        "thresholds": thr,
+    }
 
 def positivity_overlap_checks(
     m_hat: np.ndarray,
@@ -315,6 +595,9 @@ def positivity_overlap_checks(
     g_clipped_share: Optional[float] = None,
     use_hajek: bool = False,
     thresholds: Dict[str, float] = DEFAULT_THRESHOLDS,
+    n_bins: int = 10,
+    cal_thresholds: Optional[Dict[str, float]] = None,
+    auc_flip_margin: float = 0.05,
 ) -> Dict[str, Any]:
     """
     Run positivity/overlap diagnostics for DML-IRM (ATE & ATT).
@@ -357,9 +640,10 @@ def positivity_overlap_checks(
     else:
         att_id = att_weight_sum_identity(m_hat, D.astype(int))
         att_weights = dict(lhs_sum=att_id["lhs_sum"], rhs_sum=att_id["rhs_sum"], rel_err=att_id["rel_err"])
+        m_safe = np.clip(m_hat.astype(float), 1e-12, 1.0 - 1e-12)
         with np.errstate(divide="ignore", invalid="ignore"):
             w1_att = D.astype(float) / p1
-            w0_att = ((~D).astype(float) * (m_hat / (1.0 - m_hat))) / p1
+            w0_att = ((~D).astype(float) * (m_safe / (1.0 - m_safe))) / p1
         n0 = int((~D).sum())
         att_ess = dict(
             ess_w1=float(_ess(w1_att[D])) if n1 else float("nan"),
@@ -398,7 +682,12 @@ def positivity_overlap_checks(
     if not np.isnan(auc):
         sep = max(auc, 1.0 - auc)
         flags["auc"] = "RED" if sep > thresholds["auc_strong"] else ("YELLOW" if sep > thresholds["auc_warn"] else "GREEN")
-        if auc < 0.45:
+        # flip hint if AUC noticeably below 0.5
+        try:
+            margin = float(auc_flip_margin)
+        except Exception:
+            margin = 0.05
+        if auc < (0.5 - margin):
             flags["auc_flip_suspected"] = "YELLOW"
     else:
         flags["auc"] = "NA"
@@ -455,8 +744,10 @@ def positivity_overlap_checks(
             flags[f"tails_{side}"] = "RED" if big_red else ("YELLOW" if big_yellow else "GREEN")
 
     # ATT identity
-    if "rel_err" in att_weights and not np.isnan(att_weights["rel_err"]):
-        re = att_weights["rel_err"]
+    rhs_sum = att_weights.get("rhs_sum", float("nan")) if isinstance(att_weights, dict) else float("nan")
+    rel_err_val = att_weights.get("rel_err", float("nan")) if isinstance(att_weights, dict) else float("nan")
+    if np.isfinite(rhs_sum) and rhs_sum > 0 and np.isfinite(rel_err_val):
+        re = float(rel_err_val)
         flags["att_identity"] = (
             "RED" if re > thresholds["ipw_relerr_strong"] else ("YELLOW" if re > thresholds["ipw_relerr_warn"] else "GREEN")
         )
@@ -464,17 +755,22 @@ def positivity_overlap_checks(
         flags["att_identity"] = "NA"
 
     # Clipping flags
-    clip_total = clipping["m_clip_lower"] + clipping["m_clip_upper"]
-    if clip_total > thresholds["clip_share_strong"]:
-        flags["clip_m"] = "RED"
-    elif clip_total > thresholds["clip_share_warn"]:
-        flags["clip_m"] = "YELLOW"
+    clip_lower = clipping.get("m_clip_lower", float("nan"))
+    clip_upper = clipping.get("m_clip_upper", float("nan"))
+    if np.isnan(clip_lower) or np.isnan(clip_upper):
+        flags["clip_m"] = "NA"
     else:
-        flags["clip_m"] = "GREEN"
+        clip_total = clip_lower + clip_upper
+        if clip_total > thresholds["clip_share_strong"]:
+            flags["clip_m"] = "RED"
+        elif clip_total > thresholds["clip_share_warn"]:
+            flags["clip_m"] = "YELLOW"
+        else:
+            flags["clip_m"] = "GREEN"
 
     # --- Propensity calibration (merged) ---
     try:
-        cal_report = _calibration_report_m(m_hat, D.astype(int))
+        cal_report = calibration_report_m(m_hat, D.astype(int), n_bins=int(n_bins), thresholds=cal_thresholds)
         # Merge calibration flags with clear prefixes to avoid collisions
         cal_flags = cal_report.get("flags", {})
         flags["calibration_ece"] = cal_flags.get("ece", "NA")
@@ -541,7 +837,6 @@ def _extract_diag_from_result(res: ResultLike) -> Tuple[np.ndarray, np.ndarray, 
             if df is None or d_cols is None or x_cols is None:
                 return None
             tname = d_cols[0] if isinstance(d_cols, (list, tuple)) else d_cols
-            X = df[x_cols].to_numpy()
             d = df[tname].to_numpy().astype(int)
             n = d.shape[0]
 
@@ -604,6 +899,9 @@ def overlap_report_from_result(
     *,
     use_hajek: bool = False,
     thresholds: Dict[str, float] = DEFAULT_THRESHOLDS,
+    n_bins: int = 10,
+    cal_thresholds: Optional[Dict[str, float]] = None,
+    auc_flip_margin: float = 0.05,
 ) -> Dict[str, Any]:
     """High-level helper that takes dml_ate/dml_att output (or IRM model) and returns a positivity/overlap report as a dict.
 
@@ -638,7 +936,143 @@ def overlap_report_from_result(
         g_clipped_share=None,
         use_hajek=detected_hajek,
         thresholds=thresholds,
+        n_bins=int(n_bins),
+        cal_thresholds=cal_thresholds,
+        auc_flip_margin=float(auc_flip_margin),
     )
+
+
+def run_overlap_diagnostics(
+    res: ResultLike = None,
+    *,
+    m_hat: Optional[np.ndarray] = None,
+    D: Optional[np.ndarray] = None,
+    thresholds: Dict[str, float] = DEFAULT_THRESHOLDS,
+    n_bins: int = 10,
+    use_hajek: Optional[bool] = None,
+    m_clipped_from: Optional[Tuple[float, float]] = None,
+    g_clipped_share: Optional[float] = None,
+    return_summary: bool = True,
+    cal_thresholds: Optional[Dict[str, float]] = None,
+    auc_flip_margin: float = 0.05,
+) -> Dict[str, Any]:
+    """
+    Single entry-point for overlap / positivity / calibration diagnostics.
+
+    You can call it in TWO ways:
+      A) With raw arrays:
+         run_overlap_diagnostics(m_hat=..., D=...)
+      B) With a model/result:
+         run_overlap_diagnostics(res=<dml_ate/dml_att result dict or IRM/DoubleML-like model>)
+
+    The function:
+      - Auto-extracts (m_hat, D, trimming_threshold) from `res` if provided.
+      - Auto-detects Hájek normalization if available on `res` (normalize_ipw).
+      - Runs positivity/overlap checks (edge mass, KS, AUC, ESS, tails, ATT identity),
+        clipping audit, and calibration (ECE + logistic recalibration).
+      - Returns a dict with full details and, optionally, a compact summary DataFrame.
+
+    Returns
+    -------
+    dict with keys including:
+      - n, n_treated, p1
+      - edge_mass, edge_mass_by_arm, ks, auc
+      - ate_ipw, ate_ess, ate_tails
+      - att_weights, att_ess
+      - clipping
+      - calibration (with reliability_table)
+      - flags  (GREEN/YELLOW/RED/NA)
+      - summary (pd.DataFrame) if return_summary=True
+      - meta (use_hajek, thresholds)
+    """
+    # ---- Resolve inputs (arrays vs result/model) ----
+    if m_hat is None or D is None:
+        if res is None:
+            raise ValueError("Pass either (m_hat, D) or `res`.")
+        m_hat_res, d_res, thr = _extract_diag_from_result(res)
+        m_hat, D = m_hat_res, d_res
+        # Inherit trimming as clipping audit bounds if not specified
+        if m_clipped_from is None and thr is not None:
+            m_clipped_from = (thr, 1.0 - thr)
+
+        # Auto-detect Hájek if not specified
+        detected_hajek = False
+        try:
+            if isinstance(res, dict):
+                dd = res.get("diagnostic_data", {})
+                detected_hajek = bool(dd.get("normalize_ipw", False))
+                if not detected_hajek and "model" in res and hasattr(res["model"], "normalize_ipw"):
+                    detected_hajek = bool(getattr(res["model"], "normalize_ipw"))
+            else:
+                if hasattr(res, "normalize_ipw"):
+                    detected_hajek = bool(getattr(res, "normalize_ipw"))
+        except Exception:
+            detected_hajek = False
+        if use_hajek is None:
+            use_hajek = detected_hajek
+    else:
+        if use_hajek is None:
+            use_hajek = False
+
+    # ---- Run main checks (uses your existing implementation) ----
+    report = positivity_overlap_checks(
+        m_hat=m_hat,
+        D=D,
+        m_clipped_from=m_clipped_from,
+        g_clipped_share=g_clipped_share,
+        use_hajek=use_hajek,
+        thresholds=thresholds,
+        n_bins=int(n_bins),
+        cal_thresholds=cal_thresholds,
+        auc_flip_margin=float(auc_flip_margin),
+    )
+
+    # ---- Build a compact summary table (optional) ----
+    if return_summary:
+        f = report["flags"]
+        em = report["edge_mass"]
+        tails_w1 = report["ate_tails"]["w1"]
+        tails_w0 = report["ate_tails"]["w0"]
+        clip = report["clipping"]
+        cal = report["calibration"] or {}
+        cal_ece = cal.get("ece", np.nan)
+        cal_slope = (cal.get("recalibration") or {}).get("slope", np.nan)
+        cal_int = (cal.get("recalibration") or {}).get("intercept", np.nan)
+        clip_total = (clip.get("m_clip_lower", np.nan) + clip.get("m_clip_upper", np.nan)
+                      if not (np.isnan(clip.get("m_clip_lower", np.nan)) or np.isnan(clip.get("m_clip_upper", np.nan)))
+                      else np.nan)
+
+        def _safe_ratio(num, den):
+            try:
+                num_f = float(num)
+                den_f = float(den)
+            except Exception:
+                return np.nan
+            if not (np.isfinite(num_f) and np.isfinite(den_f)) or den_f == 0.0:
+                return np.nan
+            return num_f / den_f
+
+        summary_rows = [
+            {"metric": "edge_0.01_below",      "value": em["share_below_001"],                 "flag": f["edge_mass_001"]},
+            {"metric": "edge_0.01_above",      "value": em["share_above_001"],                 "flag": f["edge_mass_001"]},
+            {"metric": "edge_0.02_below",      "value": em["share_below_002"],                 "flag": f["edge_mass_002"]},
+            {"metric": "edge_0.02_above",      "value": em["share_above_002"],                 "flag": f["edge_mass_002"]},
+            {"metric": "KS",                   "value": report["ks"],                           "flag": f["ks"]},
+            {"metric": "AUC",                  "value": report["auc"],                          "flag": f["auc"]},
+            {"metric": "ESS_treated_ratio",    "value": report["ate_ess"]["ess_ratio_w1"],      "flag": f["ess_w1"]},
+            {"metric": "ESS_control_ratio",    "value": report["ate_ess"]["ess_ratio_w0"],      "flag": f["ess_w0"]},
+            {"metric": "tails_w1_q99/med",     "value": _safe_ratio(tails_w1.get("q99", np.nan), tails_w1.get("median", np.nan)), "flag": f["tails_w1"]},
+            {"metric": "tails_w0_q99/med",     "value": _safe_ratio(tails_w0.get("q99", np.nan), tails_w0.get("median", np.nan)), "flag": f["tails_w0"]},
+            {"metric": "ATT_identity_relerr",  "value": report["att_weights"]["rel_err"],       "flag": f["att_identity"]},
+            {"metric": "clip_m_total",         "value": clip_total,                             "flag": f["clip_m"]},
+            {"metric": "calib_ECE",            "value": cal_ece,                                "flag": f.get("calibration_ece", "NA")},
+            {"metric": "calib_slope",          "value": cal_slope,                              "flag": f.get("calibration_slope", "NA")},
+            {"metric": "calib_intercept",      "value": cal_int,                                "flag": f.get("calibration_intercept", "NA")},
+        ]
+        report["summary"] = pd.DataFrame(summary_rows)
+
+    report["meta"] = dict(use_hajek=bool(use_hajek), thresholds=thresholds, n_bins=int(n_bins))
+    return report
 
 
 def att_overlap_tests(dml_att_result: dict, epsilon_list=(0.01, 0.02)) -> dict:
@@ -691,15 +1125,19 @@ def att_overlap_tests(dml_att_result: dict, epsilon_list=(0.01, 0.02)) -> dict:
     # 3) AUC of m vs D (OOS not available: uses given m_hat)
     auc_flag = "NA"
     auc_val = float("nan")
+    flip_hint = None
     if len(np.unique(D)) == 2 and np.all((m >= 0) & (m <= 1)):
         try:
             auc_val = float(_auc_mann_whitney(m, D.astype(int)))
-            if auc_val > 0.95:
+            sep = max(auc_val, 1.0 - auc_val)
+            if sep > 0.95:
                 auc_flag = "RED"
-            elif auc_val > 0.90:
+            elif sep > 0.90:
                 auc_flag = "YELLOW"
             else:
                 auc_flag = "GREEN"
+            if auc_val < 0.45:
+                flip_hint = "YELLOW"
         except Exception:
             auc_flag = "NA"
 
@@ -740,7 +1178,7 @@ def att_overlap_tests(dml_att_result: dict, epsilon_list=(0.01, 0.02)) -> dict:
     return {
         "edge_mass": edge,
         "ks": {"value": ks_val, "warn": ks_warn},
-        "auc": {"value": auc_val, "flag": auc_flag},
+        "auc": {"value": auc_val, "flag": auc_flag, "flip_suspected": (flip_hint or "NA")},
         "ess": {
             "treated": {"ess": ess1, "n": n1, "ratio": r1, "flag": f1},
             "control": {"ess": ess0, "n": n0, "ratio": r0, "flag": f0},

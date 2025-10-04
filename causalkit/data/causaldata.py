@@ -158,7 +158,9 @@ class CausalData:
                 f"which is not allowed for causal inference."
             )
 
-        # Validate confounders columns
+        # Validate confounders columns; drop constant ones with a warning
+        kept_confounders: List[str] = []
+        dropped_constants: List[str] = []
         for col in self._confounders:
             if col not in all_columns:
                 raise ValueError(f"Column '{col}' specified as confounders does not exist in the DataFrame.")
@@ -169,10 +171,18 @@ class CausalData:
 
             # Check if confounder column is constant (single unique value)
             if df[col].nunique(dropna=False) <= 1:
-                raise ValueError(
-                    f"Column '{col}' specified as confounders is constant (has zero variance / single unique value), "
-                    f"which is not allowed for causal inference."
-                )
+                dropped_constants.append(col)
+                continue
+            kept_confounders.append(col)
+
+        if dropped_constants:
+            warnings.warn(
+                "Dropping constant confounder columns (zero variance): " + ", ".join(dropped_constants),
+                UserWarning,
+                stacklevel=2,
+            )
+        # Update confounders to exclude dropped constants
+        self._confounders = kept_confounders
 
         # Note: duplicate columns and duplicate rows are checked on the stored, normalized subset
         # after dtype coercion, to reflect the actual data used by the class.

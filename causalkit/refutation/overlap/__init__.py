@@ -5,6 +5,7 @@ from .overlap_validation import (
     DEFAULT_THRESHOLDS,
     positivity_overlap_checks,
     overlap_report_from_result,
+    run_overlap_diagnostics,
     att_overlap_tests,
     edge_mass,
     ks_distance,
@@ -12,7 +13,7 @@ from .overlap_validation import (
     ess_per_group,
     att_weight_sum_identity,
 )
-from .propensity_calibration import (
+from .overlap_validation import (
     calibration_report_m,
     ece_binary,
 )
@@ -21,6 +22,7 @@ __all__ = [
     "DEFAULT_THRESHOLDS",
     "positivity_overlap_checks",
     "overlap_report_from_result",
+    "run_overlap_diagnostics",
     "att_overlap_tests",
     "edge_mass",
     "ks_distance",

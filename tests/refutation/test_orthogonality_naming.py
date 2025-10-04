@@ -7,7 +7,6 @@ from causalkit.inference.estimators.irm import IRM
 from causalkit.refutation.score.score_validation import (
     extract_nuisances,
     aipw_score_atte,
-    aipw_score_att,
     refute_irm_orthogonality,
 )
 
@@ -47,7 +46,7 @@ def test_extract_nuisances_order():
     assert np.all((m > 0) & (m < 1))
 
 
-def test_aipw_atte_wrapper_equivalence():
+def test_aipw_atte_formula_equivalence():
     n = 50
     rng = np.random.default_rng(1)
     y = rng.normal(size=n)
@@ -56,9 +55,11 @@ def test_aipw_atte_wrapper_equivalence():
     g1 = rng.normal(size=n)
     m = rng.uniform(0.05, 0.95, size=n)
     theta = 0.5
-    psi_new = aipw_score_atte(y, d, g0, g1, m, theta, p_treated=float(d.mean()), trimming_threshold=0.01)
-    psi_old = aipw_score_att(y, d, m0=g0, m1=g1, g=m, theta=theta, p1=float(d.mean()), eps=0.01)
-    assert np.allclose(psi_new, psi_old)
+    p1 = float(d.mean())
+    gamma = m / (1.0 - m)
+    expected = (d * (y - g0 - theta) - (1.0 - d) * gamma * (y - g0)) / (p1 + 1e-12)
+    psi_new = aipw_score_atte(y, d, g0, g1, m, theta, p_treated=p1, trimming_threshold=0.01)
+    assert np.allclose(psi_new, expected)
 
 
 def test_refute_irm_orthogonality_api_keys():

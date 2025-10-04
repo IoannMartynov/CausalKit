@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples">
+      <change afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/data/causaldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/data/causaldata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/data/generators.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/data/generators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/overlap/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/overlap_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/overlap/overlap_validation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/propensity_calibration.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/score/score_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/score/score_validation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/datasets_benchmarks.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_att.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_att_refutation.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/rct_benchmark.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/research/rct_benchmark.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/research.md.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_top_level_sensitivity_helpers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_dependencies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_diagnostic_data_storage.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_diagnostic_data_storage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_dml.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_dml_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml_att.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_docs_api_refs.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_api_refs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_docs_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_build.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_docs_conf_version.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_conf_version.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_docs_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_gate_esimand.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_gate_esimand.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_generators_deterministic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_generators_semantics_and_categorical.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_semantics_and_categorical.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_generators_u_and_sigmoid.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_u_and_sigmoid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_installation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_installation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_models_kfold.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_models_kfold.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_oracle_nuisance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_oracle_nuisance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_packaging_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_packaging_imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_poisson_and_calibrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_poisson_and_calibrator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_refutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_refutation.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="Jupyter Notebook" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="test" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;MERGED&quot;,
+      &quot;assignee&quot;: &quot;IoannMartynov&quot;
+    },
+    {
+      &quot;state&quot;: &quot;CLOSED&quot;,
+      &quot;assignee&quot;: &quot;IoannMartynov&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;IoannMartynov&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IoannMartynov/CausalKit.git&quot;,
+    &quot;accountId&quot;: &quot;37ea5485-1873-48d0-844b-5452414eb26d&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;IoannMartynov&quot;,
+    &quot;repository&quot;: &quot;CausalKit&quot;
+  }
+}</component>
+  <component name="JsbtTreeLayoutManager">
+    <layout place="tools.popupGrunt">
+      <scroll-view-position x="0" y="0" />
+    </layout>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="AISelfReview" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2yjqj7fe5onkkW3hLBsEDJRFIf3" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python tests.Python tests in tests.executor": "Run",
+    "Python tests.pytest for tests.test_cate_esimand.executor": "Run",
+    "Python tests.pytest for tests.test_cate_esimand.test_cate_esimand_adds_column_and_length_matches.executor": "Run",
+    "Python tests.pytest for tests.test_causalforestdml.executor": "Run",
+    "Python tests.pytest for tests.test_causalforestdml.test_causalforestdml.executor": "Run",
+    "Python tests.pytest in refutation.executor": "Run",
+    "Python tests.pytest in test_causal_dataset_generator.py.executor": "Run",
+    "Python tests.pytest in test_diagnostic_data_expanded.py.executor": "Run",
+    "Python tests.pytest in test_generators_deterministic.py.executor": "Run",
+    "Python tests.pytest in test_inference_dml_comparison.py.executor": "Run",
+    "Python tests.pytest in test_mde.py.executor": "Run",
+    "Python tests.pytest in test_oracle_nuisance.py.executor": "Run",
+    "Python.test_causaldata_get_df.executor": "Run",
+    "Python.test_ckit.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#85 on test",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "junie.project.settings",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/examples" />
+      <recent name="$PROJECT_DIR$/docs/_static" />
+      <recent name="$PROJECT_DIR$/tests/refutation" />
+      <recent name="$PROJECT_DIR$/docs/_static/css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/data" />
+      <recent name="$PROJECT_DIR$/tests/docs" />
+      <recent name="$PROJECT_DIR$/tests/inference" />
+      <recent name="$PROJECT_DIR$/docs/research" />
+      <recent name="$PROJECT_DIR$/tests/eda" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python tests.pytest in test_causal_dataset_generator.py">
+    <configuration name="Python tests in tests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_diagnostic_data_expanded.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_diagnostic_data_expanded.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_generators_deterministic.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_generators_deterministic.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in test_causal_dataset_generator.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/data/test_causal_dataset_generator.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in test_oracle_nuisance.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/data/test_oracle_nuisance.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest in test_causal_dataset_generator.py" />
+        <item itemvalue="Python tests.Python tests in tests" />
+        <item itemvalue="Python tests.pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_generators_deterministic.py" />
+        <item itemvalue="Python tests.pytest in test_oracle_nuisance.py" />
+        <item itemvalue="Python tests.pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_diagnostic_data_expanded.py" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PY-252.26199.168" />
+        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="" />
+      <created>1750358462185</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750358462185</updated>
+      <workItem from="1750358463245" duration="6779000" />
+      <workItem from="1750445906008" duration="6140000" />
+      <workItem from="1751378517681" duration="11249000" />
+      <workItem from="1751725920389" duration="600000" />
+      <workItem from="1751806022356" duration="82000" />
+      <workItem from="1751806122718" duration="7509000" />
+      <workItem from="1752003010398" duration="1419000" />
+      <workItem from="1752061050942" duration="117000" />
+      <workItem from="1752061178250" duration="1217000" />
+      <workItem from="1752322820952" duration="79000" />
+      <workItem from="1752322951631" duration="365000" />
+      <workItem from="1752323341049" duration="79000" />
+      <workItem from="1752323438764" duration="103000" />
+      <workItem from="1752325053691" duration="604000" />
+      <workItem from="1752600894509" duration="6229000" />
+      <workItem from="1752914070922" duration="43000" />
+      <workItem from="1752914120756" duration="5527000" />
+      <workItem from="1753008275564" duration="22988000" />
+      <workItem from="1753121564432" duration="2269000" />
+      <workItem from="1753123846307" duration="1740000" />
+      <workItem from="1753125620648" duration="18984000" />
+      <workItem from="1753378969636" duration="10116000" />
+      <workItem from="1753466198681" duration="3261000" />
+      <workItem from="1753510698795" duration="2975000" />
+      <workItem from="1753514571062" duration="8548000" />
+      <workItem from="1753549123350" duration="8780000" />
+      <workItem from="1753898325135" duration="128000" />
+      <workItem from="1753898460547" duration="53000" />
+      <workItem from="1753898523457" duration="33292000" />
+      <workItem from="1754629050038" duration="694000" />
+      <workItem from="1754664238445" duration="151000" />
+      <workItem from="1754664450563" duration="20896000" />
+      <workItem from="1754753278656" duration="9684000" />
+      <workItem from="1755149796826" duration="76000" />
+      <workItem from="1755149890193" duration="2485000" />
+      <workItem from="1755160237791" duration="5239000" />
+      <workItem from="1755170168612" duration="1227000" />
+      <workItem from="1755177584181" duration="3395000" />
+      <workItem from="1755184465679" duration="716000" />
+      <workItem from="1755185192586" duration="108756000" />
+      <workItem from="1755713203823" duration="20000" />
+      <workItem from="1755713231884" duration="3366000" />
+      <workItem from="1755800117034" duration="1198000" />
+      <workItem from="1756037083353" duration="1884000" />
+      <workItem from="1756215416338" duration="25000" />
+      <workItem from="1756215456754" duration="92000" />
+      <workItem from="1756215554979" duration="12354000" />
+      <workItem from="1757249718903" duration="141000" />
+      <workItem from="1757249890654" duration="10453000" />
+      <workItem from="1757438410206" duration="23290000" />
+      <workItem from="1757856456656" duration="15550000" />
+      <workItem from="1758213049661" duration="80000" />
+      <workItem from="1758213138156" duration="15089000" />
+      <workItem from="1758392624506" duration="7089000" />
+      <workItem from="1758437217341" duration="17760000" />
+      <workItem from="1758864310151" duration="54000" />
+      <workItem from="1758864633771" duration="14016000" />
+      <workItem from="1758982225595" duration="48994000" />
+      <workItem from="1759334983192" duration="1862000" />
+      <workItem from="1759426665181" duration="51845000" />
+    </task>
+    <task id="LOCAL-00061" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755539283600</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1755539283600</updated>
+    </task>
+    <task id="LOCAL-00062" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755540558692</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1755540558692</updated>
+    </task>
+    <task id="LOCAL-00063" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755594290146</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1755594290146</updated>
+    </task>
+    <task id="LOCAL-00064" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755599171082</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1755599171082</updated>
+    </task>
+    <task id="LOCAL-00065" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755599751363</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1755599751363</updated>
+    </task>
+    <task id="LOCAL-00066" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755600084021</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1755600084021</updated>
+    </task>
+    <task id="LOCAL-00067" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755600908744</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1755600908744</updated>
+    </task>
+    <task id="LOCAL-00068" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755607495158</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1755607495158</updated>
+    </task>
+    <task id="LOCAL-00069" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755607605019</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1755607605019</updated>
+    </task>
+    <task id="LOCAL-00070" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755608267584</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1755608267584</updated>
+    </task>
+    <task id="LOCAL-00071" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755618848130</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1755618848130</updated>
+    </task>
+    <task id="LOCAL-00072" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755618901257</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1755618901257</updated>
+    </task>
+    <task id="LOCAL-00073" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755618957239</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1755618957239</updated>
+    </task>
+    <task id="LOCAL-00074" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755716302922</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1755716302922</updated>
+    </task>
+    <task id="LOCAL-00075" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755803003901</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1755803003901</updated>
+    </task>
+    <task id="LOCAL-00076" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755803372130</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1755803372130</updated>
+    </task>
+    <task id="LOCAL-00077" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755803830031</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1755803830031</updated>
+    </task>
+    <task id="LOCAL-00078" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
+      <option name="closed" value="true" />
+      <created>1755805180364</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1755805180364</updated>
+    </task>
+    <task id="LOCAL-00079" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756033225089</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1756033225089</updated>
+    </task>
+    <task id="LOCAL-00080" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756035306792</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1756035306792</updated>
+    </task>
+    <task id="LOCAL-00081" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756035807168</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1756035807168</updated>
+    </task>
+    <task id="LOCAL-00082" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756036649584</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1756036649584</updated>
+    </task>
+    <task id="LOCAL-00083" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756036882805</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1756036882806</updated>
+    </task>
+    <task id="LOCAL-00084" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756037112290</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1756037112291</updated>
+    </task>
+    <task id="LOCAL-00085" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756098932486</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1756098932486</updated>
+    </task>
+    <task id="LOCAL-00086" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756224127349</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1756224127350</updated>
+    </task>
+    <task id="LOCAL-00087" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1756229813252</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1756229813252</updated>
+    </task>
+    <task id="LOCAL-00088" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1757260567645</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1757260567645</updated>
+    </task>
+    <task id="LOCAL-00089" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1757261468977</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1757261468977</updated>
+    </task>
+    <task id="LOCAL-00090" summary="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook">
+      <option name="closed" value="true" />
+      <created>1757621731872</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1757621731872</updated>
+    </task>
+    <task id="LOCAL-00091" summary="removed DML ATE and ATT source modules; migrated imports to single entrypoint; added orthogonality tests for both ATE and ATT">
+      <option name="closed" value="true" />
+      <created>1757663799451</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1757663799451</updated>
+    </task>
+    <task id="LOCAL-00092" summary="removed DML ATE and ATT source modules; migrated imports to single entrypoint; added orthogonality tests for both ATE and ATT">
+      <option name="closed" value="true" />
+      <created>1757958503720</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1757958503721</updated>
+    </task>
+    <task id="LOCAL-00093" summary="added propensity model unit tests for CatBoost and LogisticRegression; included SHAP and probability column checks; updated example notebook outputs">
+      <option name="closed" value="true" />
+      <created>1758006642327</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1758006642327</updated>
+    </task>
+    <task id="LOCAL-00094" summary="removed legacy training outputs and example notebook for DML ATE; no longer relevant to current implementation">
+      <option name="closed" value="true" />
+      <created>1758051925607</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1758051925607</updated>
+    </task>
+    <task id="LOCAL-00095" summary="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness">
+      <option name="closed" value="true" />
+      <created>1758220223308</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1758220223308</updated>
+    </task>
+    <task id="LOCAL-00096" summary="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness">
+      <option name="closed" value="true" />
+      <created>1758224488356</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1758224488356</updated>
+    </task>
+    <task id="LOCAL-00097" summary="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness">
+      <option name="closed" value="true" />
+      <created>1758224494417</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1758224494417</updated>
+    </task>
+    <task id="LOCAL-00098" summary="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness">
+      <option name="closed" value="true" />
+      <created>1758398921035</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1758398921035</updated>
+    </task>
+    <task id="LOCAL-00099" summary="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness">
+      <option name="closed" value="true" />
+      <created>1758442048050</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1758442048050</updated>
+    </task>
+    <task id="LOCAL-00100" summary="removed CausalForestDML implementation and associated tests; added overlap refutation methods with re-exported public API; included CatBoost training example JSON">
+      <option name="closed" value="true" />
+      <created>1759058077752</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1759058077752</updated>
+    </task>
+    <task id="LOCAL-00101" summary="removed outdated sensitivity analysis tests; added new comprehensive test suite covering sensitivity benchmarks, combination scenarios, label formatting, and IRM score integrity">
+      <option name="closed" value="true" />
+      <created>1759086492910</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1759086492910</updated>
+    </task>
+    <task id="LOCAL-00102" summary="removed placebo robustness checks; added extensive new calibration, overlap, and orthogonality refutation methods with associated unit tests">
+      <option name="closed" value="true" />
+      <created>1759091555314</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1759091555314</updated>
+    </task>
+    <task id="LOCAL-00103" summary="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability">
+      <option name="closed" value="true" />
+      <created>1759172531854</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1759172531854</updated>
+    </task>
+    <task id="LOCAL-00104" summary="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability">
+      <option name="closed" value="true" />
+      <created>1759178544379</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1759178544379</updated>
+    </task>
+    <task id="LOCAL-00105" summary="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability">
+      <option name="closed" value="true" />
+      <created>1759495123933</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1759495123933</updated>
+    </task>
+    <task id="LOCAL-00106" summary="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability">
+      <option name="closed" value="true" />
+      <created>1759495256427</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1759495256427</updated>
+    </task>
+    <task id="LOCAL-00107" summary="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples">
+      <option name="closed" value="true" />
+      <created>1759499505009</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1759499505009</updated>
+    </task>
+    <task id="LOCAL-00108" summary="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples">
+      <option name="closed" value="true" />
+      <created>1759573722842</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1759573722842</updated>
+    </task>
+    <task id="LOCAL-00109" summary="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples">
+      <option name="closed" value="true" />
+      <created>1759578456894</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1759578456894</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="f24c242a-7aab-4c71-bb43-a096b087e8c9" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="f24c242a-7aab-4c71-bb43-a096b087e8c9">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add conda environment support and update README with installation and testing instructions" />
+    <MESSAGE value="Remove setup.py to discontinue setuptools-based installation" />
+    <MESSAGE value="added ttest" />
+    <MESSAGE value="added analysis module for A/B testing with t-test, OLS regression, and DoubleML PLR support" />
+    <MESSAGE value="enhanced test suite with pytest fixtures, added detailed coverage for t-test, MDE, installation, causaldata, and docs build" />
+    <MESSAGE value="consolidated tests for `generate_rct_data`, `generate_obs_data`, and `CausalData.get_df` into a unified `test_data.py` for improved maintainability; renamed `causaldata` class to `CausalData` with stricter validations; updated imports and docs accordingly" />
+    <MESSAGE value="added `eda` module for exploratory data analysis and `inference` submodules for CATE and GATE estimation using DoubleML; reorganized library structure to support scalable module extensions and improve maintainability" />
+    <MESSAGE value="added `bootstrap_diff_means` and `conversion_z_test` functions to `inference.att` module for ATT-style effect estimation; updated `inference.__init__` and `inference.att.__init__` for module integration; added corresponding unit tests" />
+    <MESSAGE value="removed ttest compatibility shim in `inference` package; added CatBoost training logs and new CATE vs. GATE documentation to user guide output" />
+    <MESSAGE value="removed CatBoost training JSON and causal dataset generator examples" />
+    <MESSAGE value="added AIPW orthogonality diagnostics for DoubleML estimators and updated scenario example" />
+    <MESSAGE value="added tests for nuisance predictions and AIPW score calculations; updated scenario example notebook" />
+    <MESSAGE value="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods" />
+    <MESSAGE value="added tests for ATT orthogonality derivatives and OOS checks; integrated ATT-specific example notebook" />
+    <MESSAGE value="removed DML ATE and ATT source modules; migrated imports to single entrypoint; added orthogonality tests for both ATE and ATT" />
+    <MESSAGE value="added propensity model unit tests for CatBoost and LogisticRegression; included SHAP and probability column checks; updated example notebook outputs" />
+    <MESSAGE value="removed legacy training outputs and example notebook for DML ATE; no longer relevant to current implementation" />
+    <MESSAGE value="added extensive unit tests for causal generators; covered edge cases, determinism, copulas, and numerical stability; improved test suite completeness" />
+    <MESSAGE value="removed CausalForestDML implementation and associated tests; added overlap refutation methods with re-exported public API; included CatBoost training example JSON" />
+    <MESSAGE value="removed outdated sensitivity analysis tests; added new comprehensive test suite covering sensitivity benchmarks, combination scenarios, label formatting, and IRM score integrity" />
+    <MESSAGE value="refactored placebo checks and orthogonality methods; introduced robust propensity calibration reports with merged flags; added new tests for overlap validation, ATE sensitivity, and OOS moment checks" />
+    <MESSAGE value="refactored refutation module; consolidated placebo, orthogonality, and overlap validation into `score_validation`; added tests for propensity calibration, trim sensitivity, and orthogonality fast path methods" />
+    <MESSAGE value="removed placebo robustness checks; added extensive new calibration, overlap, and orthogonality refutation methods with associated unit tests" />
+    <MESSAGE value="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability" />
+    <MESSAGE value="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples" />
+    <option name="LAST_COMMIT_MESSAGE" value="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Ckit$test_ckit.coverage" NAME="test_ckit Coverage Results" MODIFIED="1753037125330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_for_tests_test_cate_esimand_test_cate_esimand_adds_column_and_length_matches.coverage" NAME="pytest for tests.test_cate_esimand.test_cate_esimand_adds_column_and_length_matches Coverage Results" MODIFIED="1755451371809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_for_tests_test_causalforestdml.coverage" NAME="pytest for tests.test_causalforestdml Coverage Results" MODIFIED="1755451897046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_inference_dml_comparison_py.coverage" NAME="pytest in test_inference_dml_comparison.py Coverage Results" MODIFIED="1758305677087" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$.coverage" NAME=" Coverage Results" MODIFIED="1759607833195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_oracle_nuisance_py.coverage" NAME="pytest in test_oracle_nuisance.py Coverage Results" MODIFIED="1759176542857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_for_tests_test_cate_esimand.coverage" NAME="pytest for tests.test_cate_esimand Coverage Results" MODIFIED="1755451575284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Ckit$test_causaldata_get_df.coverage" NAME="test_causaldata_get_df Coverage Results" MODIFIED="1753037054789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_refutation.coverage" NAME="pytest in refutation Coverage Results" MODIFIED="1758040082514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/refutation" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_causal_dataset_generator_py.coverage" NAME="pytest in test_causal_dataset_generator.py Coverage Results" MODIFIED="1759608060369" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_mde_py.coverage" NAME="pytest in test_mde.py Coverage Results" MODIFIED="1759057624413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_generators_deterministic_py.coverage" NAME="pytest in test_generators_deterministic.py Coverage Results" MODIFIED="1759178338617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_diagnostic_data_expanded_py.coverage" NAME="pytest in test_diagnostic_data_expanded.py Coverage Results" MODIFIED="1759176141655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_for_tests_test_causalforestdml_test_causalforestdml.coverage" NAME="pytest for tests.test_causalforestdml.test_causalforestdml Coverage Results" MODIFIED="1755451968631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+  </component>
+</project>
