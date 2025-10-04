@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=3415b827" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -245,10 +245,6 @@ document.write(`
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -396,39 +392,6 @@ document.write(`
                   
   <section id="causalkit-inference-cate-esimand">
 <h1>causalkit.inference.cate_esimand<a class="headerlink" href="#causalkit-inference-cate-esimand" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.inference.cate_esimand">
-<span class="sig-prename descclassname"><span class="pre">causalkit.inference.</span></span><span class="sig-name descname"><span class="pre">cate_esimand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_blp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/inference/cate/cate_esimand.html#cate_esimand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.inference.cate_esimand" title="Link to this definition">#</a></dt>
-<dd><p>Estimate per-observation CATEs using DoubleML IRM and return a DataFrame with a new ‘cate’ column.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="../data.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – A CausalData object with defined outcome (outcome), treatment (binary 0/1), and confounders.</p></li>
-<li><p><strong>ml_g</strong> (<em>estimator</em><em>, </em><em>optional</em>) – ML learner for outcome regression g(D, X) = E[Y | D, X] supporting fit/predict.
-Defaults to CatBoostRegressor if None.</p></li>
-<li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – ML learner for propensity m(X) = P[D=1 | X] supporting fit/predict_proba.
-Defaults to CatBoostClassifier if None.</p></li>
-<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
-<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions for sample splitting.</p></li>
-<li><p><strong>use_blp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default False</em>) – If True, and X_new is provided, returns cate from obj.blp_predict(X_new) aligned to X_new.
-If False (default), uses obj._orthogonal_signals (in-sample estimates) and appends to data.</p></li>
-<li><p><strong>X_new</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – New covariate matrix for out-of-sample CATE prediction via best linear predictor.
-Must contain the same feature columns as the confounders in <cite>data</cite>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If use_blp is False: returns a copy of data.df with a new column ‘cate’.
-If use_blp is True and X_new is provided: returns a DataFrame with ‘cate’ column for X_new rows.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If treatment is not binary 0/1 or required metadata is missing.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
@@ -447,23 +410,6 @@ If use_blp is True and X_new is provided: returns a DataFrame with ‘cate’ co
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.cate_esimand"><code class="docutils literal notranslate"><span class="pre">cate_esimand()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
