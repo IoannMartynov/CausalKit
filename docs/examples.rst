@@ -17,7 +17,4 @@ General Examples
    :maxdepth: 1
 
    examples/dml_atte
-   examples/dml_att
-   examples/datasets_benchmarks
-   examples/dml_att_refutation
-   examples/rct_benchmark
+   examples/dml_ate

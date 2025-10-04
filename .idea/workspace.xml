@@ -4,54 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples">
-      <change afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/data/causaldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/data/causaldata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/data/generators.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/data/generators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/overlap/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/overlap_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/overlap/overlap_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/propensity_calibration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/score/score_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/score/score_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/datasets_benchmarks.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/dml_att.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/dml_att_refutation.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/rct_benchmark.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/research/rct_benchmark.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/research.md.bak" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_top_level_sensitivity_helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_diagnostic_data_storage.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_diagnostic_data_storage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_dml.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_dml_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml_att.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_docs_api_refs.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_api_refs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_docs_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_build.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_docs_conf_version.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_conf_version.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_docs_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_gate_esimand.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_gate_esimand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_generators_deterministic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_generators_semantics_and_categorical.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_semantics_and_categorical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_generators_u_and_sigmoid.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_u_and_sigmoid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_installation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_installation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_models_kfold.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_models_kfold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_oracle_nuisance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_oracle_nuisance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_packaging_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_packaging_imports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_poisson_and_calibrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_poisson_and_calibrator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_refutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_refutation.py" afterDir="false" />
+    <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
+      <change beforePath="$PROJECT_DIR$/docs/examples.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples.rst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +100,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#85 on test",
+    "git-widget-placeholder": "#86 on test",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
     "node.js.detected.package.eslint": "true",
@@ -348,15 +302,7 @@
       <workItem from="1758864633771" duration="14016000" />
       <workItem from="1758982225595" duration="48994000" />
       <workItem from="1759334983192" duration="1862000" />
-      <workItem from="1759426665181" duration="51845000" />
-    </task>
-    <task id="LOCAL-00061" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755539283600</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1755539283600</updated>
+      <workItem from="1759426665181" duration="52181000" />
     </task>
     <task id="LOCAL-00062" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
       <option name="closed" value="true" />
@@ -742,7 +688,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759578456894</updated>
     </task>
-    <option name="localTasksCounter" value="110" />
+    <task id="LOCAL-00110" summary="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
+      <option name="closed" value="true" />
+      <created>1759608430849</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1759608430849</updated>
+    </task>
+    <option name="localTasksCounter" value="111" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -770,7 +724,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add conda environment support and update README with installation and testing instructions" />
     <MESSAGE value="Remove setup.py to discontinue setuptools-based installation" />
     <MESSAGE value="added ttest" />
     <MESSAGE value="added analysis module for A/B testing with t-test, OLS regression, and DoubleML PLR support" />
@@ -795,7 +748,8 @@
     <MESSAGE value="removed placebo robustness checks; added extensive new calibration, overlap, and orthogonality refutation methods with associated unit tests" />
     <MESSAGE value="renamed ATT to ATTE throughout the codebase; updated related test files, imports, and documentation for consistency and readability" />
     <MESSAGE value="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples" />
-    <option name="LAST_COMMIT_MESSAGE" value="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples" />
+    <MESSAGE value="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Ckit$test_ckit.coverage" NAME="test_ckit Coverage Results" MODIFIED="1753037125330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
