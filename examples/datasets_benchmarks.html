@@ -50,6 +50,8 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DML ATT Example" href="dml_att_refutation.html" />
+    <link rel="prev" title="DML ATT Example" href="dml_att.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,7 +156,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -255,9 +257,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -279,7 +279,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -341,6 +341,24 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dml_atte.html">DML ATE Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Datasets benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_att_refutation.html">DML ATT Example</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="rct_benchmark.html">RCT Benchmark: t-test vs Linear Regression vs DML ATE</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -373,6 +391,9 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Real World Examples</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page">Datasets benchmarks</li>
   </ul>
 </nav>
@@ -395,7 +416,7 @@ document.write(`
 <p>In this notebook we well benchmark data generators processes</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># If available in your environment:</span>
@@ -475,42 +496,91 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">52</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># How confounders affect feature exposure (log-odds scale)</span>
-<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># tenure increases likelihood of exposure</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="mf">0.15</span><span class="p">,</span>  <span class="c1"># more sessions -&gt; more likely to get feature</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">49</span>     <span class="mf">0.35</span><span class="p">,</span>  <span class="c1"># urban residents slightly more likely</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">52</span> <span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">theta</span><span class="o">=</span><span class="n">theta_arppu</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span>     <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span>     <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span>     <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span>     <span class="n">seed</span><span class="o">=</span><span class="n">SEED</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span>     <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">59</span>     <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">60</span>     <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">61</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">63</span> <span class="c1"># Create dataset</span>
-<span class="g g-Whitespace">     </span><span class="mi">64</span> <span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">65</span>     <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">66</span>     <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span> <span class="p">)</span>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="ne">TypeError</span>: CausalDatasetGenerator.__init__() got an unexpected keyword argument &#39;target_t_rate&#39;
-</pre></div>
-</div>
-</div>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y</th>
+      <th>t</th>
+      <th>tenure_months</th>
+      <th>sessions_per_week</th>
+      <th>spend_last_30d</th>
+      <th>premium_user</th>
+      <th>urban_resident</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>8.406833</td>
+      <td>0.0</td>
+      <td>21.656605</td>
+      <td>6.528831</td>
+      <td>108.828852</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>20.729293</td>
+      <td>0.0</td>
+      <td>5.520191</td>
+      <td>8.697370</td>
+      <td>282.721931</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.206321</td>
+      <td>1.0</td>
+      <td>27.005414</td>
+      <td>1.583188</td>
+      <td>76.560660</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>12.788396</td>
+      <td>1.0</td>
+      <td>29.286777</td>
+      <td>5.144106</td>
+      <td>250.488359</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>25.289485</td>
+      <td>0.0</td>
+      <td>-5.412422</td>
+      <td>8.487460</td>
+      <td>269.056688</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
@@ -530,7 +600,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
@@ -541,7 +611,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># If available in your environment:</span>
@@ -623,7 +693,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
@@ -634,7 +704,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
@@ -645,7 +715,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 
 <span class="c1"># shape of data</span>
@@ -656,7 +726,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
 <span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
 <span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
 </pre></div>
@@ -665,7 +735,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
 <span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
 
 <span class="c1"># ROC AUC - shows how predictable treatment is from confounders</span>
@@ -677,7 +747,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
 <span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
 </pre></div>
@@ -686,7 +756,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
 <span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
 <span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
 </pre></div>
@@ -705,6 +775,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="dml_att.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DML ATT Example</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="dml_att_refutation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">DML ATT Example</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

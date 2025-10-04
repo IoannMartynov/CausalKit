@@ -376,6 +376,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/causalkit.inference.dml_atte_source.html">causalkit.inference.dml_atte_source</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -475,12 +476,115 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.inference.bootstrap_diff_means.html#causalkit.inference.bootstrap_diff_means" title="causalkit.inference.bootstrap_diff_means"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bootstrap_diff_means</span></code></a></p></td>
 <td><p>Bootstrap inference for difference in means between treated (T=1) and control (T=0).</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.inference.dml_atte_source.html#causalkit.inference.dml_atte_source" title="causalkit.inference.dml_atte_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dml_atte_source</span></code></a></p></td>
+<td><p>Estimate average treatment effects on the treated using DoubleML's interactive regression model (IRM).</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="att-utilities">
-<h2>ATT Utilities<a class="headerlink" href="#att-utilities" title="Link to this heading">#</a></h2>
+<section id="module-causalkit.inference.atte.ttest">
+<span id="att-utilities"></span><h2>ATT Utilities<a class="headerlink" href="#module-causalkit.inference.atte.ttest" title="Link to this heading">#</a></h2>
+<p>T-test inference for causaldata objects (ATT context).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.inference.atte.ttest.ttest">
+<span class="sig-prename descclassname"><span class="pre">causalkit.inference.atte.ttest.</span></span><span class="sig-name descname"><span class="pre">ttest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/inference/atte/ttest.html#ttest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.inference.atte.ttest.ttest" title="Link to this definition">#</a></dt>
+<dd><p>Perform a t-test on a CausalData object to compare the outcome variable between
+treated (T=1) and control (T=0) groups. Returns differences and confidence intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The CausalData object containing treatment and outcome variables.</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing:
+- p_value: The p-value from the t-test
+- absolute_difference: The absolute difference between treatment and control means
+- absolute_ci: Tuple of (lower, upper) bounds for the absolute difference confidence interval
+- relative_difference: The relative difference (percentage change) between treatment and control means
+- relative_ci: Tuple of (lower, upper) bounds for the relative difference confidence interval</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the CausalData object doesn’t have both treatment and outcome variables defined,
+    or if the treatment variable is not binary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p id="module-causalkit.inference.atte.conversion_z_test">Two-proportion z-test for conversion data in CausalData (ATT context).</p>
+<p>Compares conversion rates between treated (T=1) and control (T=0) groups.
+Returns p-value, absolute/relative differences, and their confidence intervals
+(similar structure to inference.atte.ttest).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.inference.atte.conversion_z_test.conversion_z_test">
+<span class="sig-prename descclassname"><span class="pre">causalkit.inference.atte.conversion_z_test.</span></span><span class="sig-name descname"><span class="pre">conversion_z_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/inference/atte/conversion_z_test.html#conversion_z_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.inference.atte.conversion_z_test.conversion_z_test" title="Link to this definition">#</a></dt>
+<dd><p>Perform a two-proportion z-test on a CausalData object with a binary outcome (conversion).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The CausalData object containing treatment and outcome variables.</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing:
+- p_value: Two-sided p-value from the z-test
+- absolute_difference: Difference in conversion rates (treated - control)
+- absolute_ci: Tuple (lower, upper) for the absolute difference CI
+- relative_difference: Percentage change relative to control rate
+- relative_ci: Tuple (lower, upper) for the relative difference CI</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If treatment/outcome are missing, treatment is not binary, outcome is not binary,
+    groups are empty, or confidence_level is outside (0, 1).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p id="module-causalkit.inference.atte.dml_atte">Simple IRM-based implementation for estimating ATT (Average Treatment effect on the Treated).</p>
+<p>This module provides a function dml_att_s to estimate ATT using our internal
+DoubleML-style IRM estimator that consumes CausalData directly (not DoubleML).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.inference.atte.dml_atte.dml_atte">
+<span class="sig-prename descclassname"><span class="pre">causalkit.inference.atte.dml_atte.</span></span><span class="sig-name descname"><span class="pre">dml_atte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ml_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_ipw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_rule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'truncate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_diagnostic_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/inference/atte/dml_atte.html#dml_atte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.inference.atte.dml_atte.dml_atte" title="Link to this definition">#</a></dt>
+<dd><p>Estimate average treatment effect on the treated (ATT) using the internal IRM estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The CausalData object containing treatment, outcome, and confounders.</p></li>
+<li><p><strong>ml_g</strong> (<em>estimator</em><em>, </em><em>optional</em>) – Learner for g(D,X)=E[Y|X,D]. If outcome is binary and learner is classifier,
+predict_proba will be used; otherwise predict().</p></li>
+<li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – Learner for m(X)=E[D|X] (propensity). If None, a CatBoostClassifier is used.</p></li>
+<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
+<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions (currently only 1 supported by IRM).</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI in (0,1).</p></li>
+<li><p><strong>normalize_ipw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to normalize IPW terms within the score.</p></li>
+<li><p><strong>trimming_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default &quot;truncate&quot;</em>) – Trimming approach for propensity (only “truncate” supported).</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1e-2</em>) – Trimming threshold for propensity.</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for fold creation.</p></li>
+<li><p><strong>store_diagnostic_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Keys: coefficient, std_error, p_value, confidence_interval, model</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>By default, this function stores a comprehensive ‘diagnostic_data’ dictionary in the result.
+You can disable this by setting store_diagnostic_data=False.</p>
+</dd></dl>
+
 </section>
 <section id="module-causalkit.inference.ate.dml_ate">
 <span id="ate-utilities"></span><h2>ATE Utilities<a class="headerlink" href="#module-causalkit.inference.ate.dml_ate" title="Link to this heading">#</a></h2>
@@ -666,7 +770,12 @@ pd.qcut over the in-sample CATEs into <cite>n_groups</cite> quantiles labeled 0.
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference-package">API Reference (Package)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#att-utilities">ATT Utilities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.inference.atte.ttest">ATT Utilities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.atte.ttest.ttest"><code class="docutils literal notranslate"><span class="pre">ttest()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.atte.conversion_z_test.conversion_z_test"><code class="docutils literal notranslate"><span class="pre">conversion_z_test()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.atte.dml_atte.dml_atte"><code class="docutils literal notranslate"><span class="pre">dml_atte()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.inference.ate.dml_ate">ATE Utilities</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.inference.ate.dml_ate.dml_ate"><code class="docutils literal notranslate"><span class="pre">dml_ate()</span></code></a></li>
 </ul>

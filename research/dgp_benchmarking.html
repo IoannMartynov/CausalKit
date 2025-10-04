@@ -520,7 +520,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 <h3>Let’s generate the Data<a class="headerlink" href="#lets-generate-the-data" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
@@ -610,7 +610,7 @@ Ground-truth ATT from the DGP: 0.800
 <h3>Wrap it in CausalData Object<a class="headerlink" href="#wrap-it-in-causaldata-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
 
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -717,46 +717,17 @@ Ground-truth ATT from the DGP: 0.800
 <h2>Estimate ATE and ATTE<a class="headerlink" href="#estimate-ate-and-atte" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="sd"> Average Treatment Effect (ATE) inference methods for causalkit.</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd"> This module provides methods for estimating average treatment effects.</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate_source</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate_source</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dml_ate_source&#39;</span><span class="p">,</span> <span class="s1">&#39;dml_ate&#39;</span><span class="p">]</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="n">dml_ate_source</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">13</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span><span class="w"> </span><span class="nn">doubleml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">doubleml</span>
-<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">CatBoostClassifier</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;catboost&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -768,7 +739,7 @@ Ground-truth ATT from the DGP: 0.800
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
 <span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -778,7 +749,7 @@ Ground-truth ATT from the DGP: 0.800
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = 0.8 VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -925,7 +896,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 \]</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
 
@@ -1049,7 +1020,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
 
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1151,7 +1122,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -1161,7 +1132,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = </span><span class="si">{</span><span class="n">true_ate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = </span><span class="si">{</span><span class="n">true_ate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1173,7 +1144,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
 <span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -1183,7 +1154,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

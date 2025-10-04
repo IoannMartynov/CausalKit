@@ -50,6 +50,8 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RCT Benchmark: t-test vs Linear Regression vs DML ATE" href="rct_benchmark.html" />
+    <link rel="prev" title="Datasets benchmarks" href="datasets_benchmarks.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,7 +156,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -259,9 +261,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -283,7 +283,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -345,6 +345,24 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dml_atte.html">DML ATE Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="datasets_benchmarks.html">Datasets benchmarks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATT Example</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="rct_benchmark.html">RCT Benchmark: t-test vs Linear Regression vs DML ATE</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -377,6 +395,9 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Real World Examples</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page">DML ATT Example</li>
   </ul>
 </nav>
@@ -424,7 +445,7 @@ document.write(`
 <p>Example that generates observational data with a nonlinear outcome model, nonlinear treatment assignment, and a heterogeneous (nonlinear) treatment effect tau(X). This setup ensures that ATT ≠ ATE in general. It also shows how to compute the “ground-truth” ATT from the generated data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nonlinear ATT data generation with heterogeneous effects</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nonlinear ATT data generation with heterogeneous effects</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -567,40 +588,97 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">100</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span> <span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.35</span>  <span class="c1"># enforce ~35% treated via intercept calibration</span>
-<span class="g g-Whitespace">     </span><span class="mi">99</span> <span class="c1"># 6) Build generator</span>
-<span class="ne">--&gt; </span><span class="mi">100</span> <span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span>     <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span>     <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>     <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span>     <span class="c1"># Confounders</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span>     <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">107</span>     <span class="c1"># Outcome/treatment structure</span>
-<span class="g g-Whitespace">    </span><span class="mi">108</span>     <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">109</span>     <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">110</span>     <span class="n">g_y</span><span class="o">=</span><span class="n">g_y</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">111</span>     <span class="n">g_t</span><span class="o">=</span><span class="n">g_t</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">112</span>     <span class="c1"># Heterogeneous effect</span>
-<span class="g g-Whitespace">    </span><span class="mi">113</span>     <span class="n">tau</span><span class="o">=</span><span class="n">tau_fn</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">114</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span> <span class="c1"># 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)</span>
-<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
-
-<span class="ne">TypeError</span>: CausalDatasetGenerator.__init__() got an unexpected keyword argument &#39;target_t_rate&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ground-truth ATT from the DGP: 1.386
 </pre></div>
 </div>
-</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y</th>
+      <th>t</th>
+      <th>tenure_months</th>
+      <th>avg_sessions_week</th>
+      <th>spend_last_month</th>
+      <th>premium_user</th>
+      <th>urban_resident</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4.271022</td>
+      <td>0.0</td>
+      <td>27.656605</td>
+      <td>5.352554</td>
+      <td>72.552568</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5.587845</td>
+      <td>0.0</td>
+      <td>11.520191</td>
+      <td>6.798247</td>
+      <td>188.481287</td>
+      <td>1.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.312418</td>
+      <td>1.0</td>
+      <td>33.005414</td>
+      <td>2.055459</td>
+      <td>51.040440</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.287821</td>
+      <td>1.0</td>
+      <td>35.286777</td>
+      <td>4.429404</td>
+      <td>166.992239</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.078609</td>
+      <td>0.0</td>
+      <td>0.587578</td>
+      <td>6.658307</td>
+      <td>179.371126</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </section>
 <section id="eda">
 <h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -611,7 +689,7 @@ document.write(`
 <p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of data</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of data</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -624,7 +702,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -706,7 +784,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
 <span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -723,7 +801,7 @@ document.write(`
 <p>Now let’s examine how propensity score differ treatments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
 <span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
 <span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
 </pre></div>
@@ -803,7 +881,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
 <span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
 
 <span class="c1"># ROC AUC - shows how predictable treatment is from confounders</span>
@@ -820,7 +898,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
 <span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
 </pre></div>
@@ -834,7 +912,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
 <span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
 <span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
 </pre></div>
@@ -919,7 +997,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
 <span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -935,7 +1013,7 @@ document.write(`
 <p>Let’s analyze how confounders predict outcome</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outcome model fit</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outcome model fit</span>
 <span class="n">outcome_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
 
 <span class="c1"># RMSE and MAE of regression model</span>
@@ -951,7 +1029,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
 <span class="n">shap_outcome_df</span> <span class="o">=</span> <span class="n">outcome_model</span><span class="o">.</span><span class="n">shap</span>
 <span class="n">display</span><span class="p">(</span><span class="n">shap_outcome_df</span><span class="p">)</span>
 </pre></div>
@@ -1018,7 +1096,7 @@ document.write(`
 <p>Now time to estimate ATE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATT)</span>
 <span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">normalize_ipw</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -1028,7 +1106,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 <span class="c1">#</span>
 <span class="c1"># # Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">normalize_ipw</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
@@ -1038,7 +1116,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ate_result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ate_result</span>
 </pre></div>
 </div>
 </div>
@@ -1048,21 +1126,21 @@ document.write(`
 <h2>Refutation<a class="headerlink" href="#refutation" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.overlap.overlap_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">overlap_report_from_result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.overlap.overlap_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">overlap_report_from_result</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span> <span class="o">=</span> <span class="n">overlap_report_from_result</span><span class="p">(</span><span class="n">ate_result</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span> <span class="o">=</span> <span class="n">overlap_report_from_result</span><span class="p">(</span><span class="n">ate_result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span>
 </pre></div>
 </div>
 </div>
@@ -1132,7 +1210,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s2">&quot;flags&quot;</span><span class="p">])</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s2">&quot;flags&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1144,21 +1222,21 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_unconfoundedness_balance</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_unconfoundedness_balance</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">balance</span> <span class="o">=</span> <span class="n">validate_unconfoundedness_balance</span><span class="p">(</span><span class="n">ate_result</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">balance</span> <span class="o">=</span> <span class="n">validate_unconfoundedness_balance</span><span class="p">(</span><span class="n">ate_result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">balance</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">balance</span>
 </pre></div>
 </div>
 </div>
@@ -1192,7 +1270,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">get_sensitivity_summary</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1222,7 +1300,7 @@ Sensitivity parameters: cf_y=0.01; cf_d=0.1, rho=1.0
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 <span class="n">sensitivity_benchmark</span>
 <span class="p">)</span>
 
@@ -1239,7 +1317,7 @@ t  0.000013  8.152891e-07  1.0     1.23773     1.537911 -0.300181
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct_data</span>
 </pre></div>
 </div>
 </div>
@@ -1267,6 +1345,24 @@ t  0.000013  8.152891e-07  1.0     1.23773     1.537911 -0.300181
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="datasets_benchmarks.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Datasets benchmarks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rct_benchmark.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RCT Benchmark: t-test vs Linear Regression vs DML ATE</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

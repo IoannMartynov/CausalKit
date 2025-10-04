@@ -50,6 +50,8 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Research" href="../research.html" />
+    <link rel="prev" title="DML ATT Example" href="dml_att_refutation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,7 +156,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -259,9 +261,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -283,7 +283,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Real World Examples
   </a>
@@ -345,6 +345,24 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dml_atte.html">DML ATE Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="datasets_benchmarks.html">Datasets benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_att_refutation.html">DML ATT Example</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RCT Benchmark: t-test vs Linear Regression vs DML ATE</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -377,6 +395,9 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Real World Examples</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page">RCT...</li>
   </ul>
 </nav>
@@ -398,7 +419,7 @@ document.write(`
 <h1>RCT Benchmark: t-test vs Linear Regression vs DML ATE<a class="headerlink" href="#rct-benchmark-t-test-vs-linear-regression-vs-dml-ate" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.generators</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct</span>
@@ -410,43 +431,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte.ttest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttest</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate_source</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate_source</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="sd"> Average Treatment Effect (ATE) inference methods for causalkit.</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd"> This module provides methods for estimating average treatment effects.</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate_source</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate_source</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate.dml_ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dml_ate_source&#39;</span><span class="p">,</span> <span class="s1">&#39;dml_ate&#39;</span><span class="p">]</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">CausalKit</span><span class="o">/</span><span class="n">causalkit</span><span class="o">/</span><span class="n">inference</span><span class="o">/</span><span class="n">ate</span><span class="o">/</span><span class="n">dml_ate_source</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">13</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">import</span><span class="w"> </span><span class="nn">doubleml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">doubleml</span>
-<span class="ne">---&gt; </span><span class="mi">13</span> <span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostRegressor</span><span class="p">,</span> <span class="n">CatBoostClassifier</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestRegressor</span><span class="p">,</span> <span class="n">RandomForestClassifier</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;catboost&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <section id="generate-rct-data">
 <h2>Generate RCT data<a class="headerlink" href="#generate-rct-data" title="Link to this heading">#</a></h2>
 <p>We’ll generate a balanced (50/50) RCT with a continuous outcome where the treated group’s mean exceeds control by 0.5 units.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate clean RCT without legacy ancillary columns</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate clean RCT without legacy ancillary columns</span>
 <span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mf">0.5</span>
 
@@ -476,7 +467,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -630,7 +621,7 @@ document.write(`
 <p>We provide a few covariates as confounders for DML (although the data is truly randomized).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -638,7 +629,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -720,7 +711,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
 <span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
 <span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
 </pre></div>
@@ -803,7 +794,7 @@ document.write(`
 <h2>1) t-test (difference in means)<a class="headerlink" href="#t-test-difference-in-means" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt_res</span> <span class="o">=</span> <span class="n">ttest</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tt_res</span> <span class="o">=</span> <span class="n">ttest</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 <span class="n">tt_res</span>
 </pre></div>
 </div>
@@ -824,7 +815,7 @@ document.write(`
 <p>The coefficient on treatment equals the difference in group means in an RCT.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
 
@@ -898,7 +889,7 @@ document.write(`
 <p>We estimate ATE using DoubleML with default learners.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dml_res</span> <span class="o">=</span> <span class="n">dml_ate_source</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dml_res</span> <span class="o">=</span> <span class="n">dml_ate_source</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 <span class="n">dml_res</span>
 </pre></div>
 </div>
@@ -918,7 +909,7 @@ document.write(`
 <h2>Compare estimates<a class="headerlink" href="#compare-estimates" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt_ci_low</span><span class="p">,</span> <span class="n">tt_ci_high</span> <span class="o">=</span> <span class="n">tt_res</span><span class="p">[</span><span class="s1">&#39;absolute_ci&#39;</span><span class="p">]</span>              <span class="c1"># from the t-test</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tt_ci_low</span><span class="p">,</span> <span class="n">tt_ci_high</span> <span class="o">=</span> <span class="n">tt_res</span><span class="p">[</span><span class="s1">&#39;absolute_ci&#39;</span><span class="p">]</span>              <span class="c1"># from the t-test</span>
 <span class="n">lin_ci_low</span><span class="p">,</span> <span class="n">lin_ci_high</span> <span class="o">=</span> <span class="n">ci_low</span><span class="p">,</span> <span class="n">ci_high</span>                  <span class="c1"># from your delta-method calc</span>
 <span class="n">dml_ci_low</span><span class="p">,</span> <span class="n">dml_ci_high</span> <span class="o">=</span> <span class="n">dml_res</span><span class="p">[</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">]</span>   <span class="c1"># from DoubleML</span>
 
@@ -1010,6 +1001,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="dml_att_refutation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DML ATT Example</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../research.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Research</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

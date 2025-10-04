@@ -372,8 +372,10 @@ document.write(`
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -382,6 +384,7 @@ document.write(`
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  | <a href="#X"><strong>X</strong></a>
  
 </div>
@@ -416,12 +419,18 @@ document.write(`
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_ate">aipw_score_ate() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_ate">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_att">aipw_score_att() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_att">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_atte">aipw_score_atte() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.aipw_score_atte">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.alpha_d">alpha_d (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.alpha_y">alpha_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.auc_m">auc_m() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
@@ -488,19 +497,54 @@ document.write(`
 </li>
       </ul></li>
       <li>
+    causalkit.inference.atte.conversion_z_test
+
+      <ul>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.conversion_z_test">module</a>
+</li>
+      </ul></li>
+      <li>
+    causalkit.inference.atte.dml_atte
+
+      <ul>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.dml_atte">module</a>
+</li>
+      </ul></li>
+      <li>
+    causalkit.inference.atte.ttest
+
+      <ul>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.ttest">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     causalkit.inference.cate.cate_esimand
 
       <ul>
         <li><a href="api/inference.html#module-causalkit.inference.cate.cate_esimand">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     causalkit.inference.gate.gate_esimand
 
       <ul>
         <li><a href="api/inference.html#module-causalkit.inference.gate.gate_esimand">module</a>
+</li>
+      </ul></li>
+      <li>
+    causalkit.refutation.score.score_validation
+
+      <ul>
+        <li><a href="api/refutation.html#module-causalkit.refutation.score.score_validation">module</a>, <a href="api/refutation.html#module-causalkit.refutation.score.score_validation">[1]</a>
+</li>
+      </ul></li>
+      <li>
+    causalkit.refutation.unconfoundedness.uncofoundedness_validation
+
+      <ul>
+        <li><a href="api/refutation.html#module-causalkit.refutation.unconfoundedness.uncofoundedness_validation">module</a>
 </li>
       </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.confounder_specs">confounder_specs (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
@@ -528,7 +572,11 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/generated/causalkit.inference.conversion_z_test.html#causalkit.inference.conversion_z_test">conversion_z_test() (in module causalkit.inference)</a>
+
+      <ul>
+        <li><a href="api/inference.html#causalkit.inference.atte.conversion_z_test.conversion_z_test">(in module causalkit.inference.atte.conversion_z_test)</a>
 </li>
+      </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.copula_corr">copula_corr (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
   </ul></td>
@@ -554,6 +602,18 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/inference.html#causalkit.inference.ate.dml_ate.dml_ate">dml_ate() (in module causalkit.inference.ate.dml_ate)</a>
+</li>
+      <li><a href="api/inference.html#causalkit.inference.atte.dml_atte.dml_atte">dml_atte() (in module causalkit.inference.atte.dml_atte)</a>
+</li>
+      <li><a href="api/generated/causalkit.inference.dml_atte_source.html#causalkit.inference.dml_atte_source">dml_atte_source() (in module causalkit.inference)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.extract_nuisances">extract_nuisances() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.extract_nuisances">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -604,6 +664,18 @@ document.write(`
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.get_df">get_df() (causalkit.data.causaldata.CausalData method)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.get_df">[1]</a>
 </li>
       <li><a href="api/generated/causalkit.refutation.get_sensitivity_summary.html#causalkit.refutation.get_sensitivity_summary">get_sensitivity_summary() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.unconfoundedness.uncofoundedness_validation.get_sensitivity_summary">(in module causalkit.refutation.unconfoundedness.uncofoundedness_validation)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.influence_summary">influence_summary() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.influence_summary">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -635,9 +707,19 @@ document.write(`
 </li>
         <li><a href="api/inference.html#module-causalkit.inference.ate.dml_ate">causalkit.inference.ate.dml_ate</a>
 </li>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.conversion_z_test">causalkit.inference.atte.conversion_z_test</a>
+</li>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.dml_atte">causalkit.inference.atte.dml_atte</a>
+</li>
+        <li><a href="api/inference.html#module-causalkit.inference.atte.ttest">causalkit.inference.atte.ttest</a>
+</li>
         <li><a href="api/inference.html#module-causalkit.inference.cate.cate_esimand">causalkit.inference.cate.cate_esimand</a>
 </li>
         <li><a href="api/inference.html#module-causalkit.inference.gate.gate_esimand">causalkit.inference.gate.gate_esimand</a>
+</li>
+        <li><a href="api/refutation.html#module-causalkit.refutation.score.score_validation">causalkit.refutation.score.score_validation</a>, <a href="api/refutation.html#module-causalkit.refutation.score.score_validation">[1]</a>
+</li>
+        <li><a href="api/refutation.html#module-causalkit.refutation.unconfoundedness.uncofoundedness_validation">causalkit.refutation.unconfoundedness.uncofoundedness_validation</a>
 </li>
       </ul></li>
   </ul></td>
@@ -646,7 +728,19 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check">oos_moment_check() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check_from_psi">oos_moment_check_from_psi() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check_from_psi">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check_with_fold_nuisances">oos_moment_check_with_fold_nuisances() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.oos_moment_check_with_fold_nuisances">[1]</a>
+</li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.oracle_nuisance">oracle_nuisance() (causalkit.data.generators.CausalDatasetGenerator method)</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives">orthogonality_derivatives() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives_att">orthogonality_derivatives_att() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives_att">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives_atte">orthogonality_derivatives_atte() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.orthogonality_derivatives_atte">[1]</a>
 </li>
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.outcome">outcome (causalkit.data.causaldata.CausalData attribute)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.outcome">[1]</a>
 
@@ -654,14 +748,14 @@ document.write(`
         <li><a href="api/data.html#id0">(causalkit.data.causaldata.CausalData property)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#id1">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.outcome_fit">outcome_fit() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
         <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.outcome_fit">(causalkit.eda.eda.CausalEDA method)</a>, <a href="api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.html#causalkit.eda.eda.CausalEDA.outcome_fit">[1]</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.outcome_plots">outcome_plots() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
@@ -677,6 +771,10 @@ document.write(`
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.outcome_type">outcome_type (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/eda.html#causalkit.eda.eda.OutcomeModel">OutcomeModel (class in causalkit.eda.eda)</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.overlap_diagnostics_att">overlap_diagnostics_att() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.overlap_diagnostics_att">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.overlap_diagnostics_atte">overlap_diagnostics_atte() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.overlap_diagnostics_atte">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -731,15 +829,31 @@ document.write(`
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.refutation.refute_irm_orthogonality.html#causalkit.refutation.refute_irm_orthogonality">refute_irm_orthogonality() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_irm_orthogonality">(in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_irm_orthogonality">[1]</a>
 </li>
+      </ul></li>
       <li><a href="api/generated/causalkit.refutation.refute_placebo_outcome.html#causalkit.refutation.refute_placebo_outcome">refute_placebo_outcome() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_placebo_outcome">(in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_placebo_outcome">[1]</a>
 </li>
+      </ul></li>
       <li><a href="api/generated/causalkit.refutation.refute_placebo_treatment.html#causalkit.refutation.refute_placebo_treatment">refute_placebo_treatment() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_placebo_treatment">(in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_placebo_treatment">[1]</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.refutation.refute_subset.html#causalkit.refutation.refute_subset">refute_subset() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_subset">(in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.refute_subset">[1]</a>
 </li>
+      </ul></li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.rng">rng (causalkit.data.generators.CausalDatasetGenerator attribute)</a>, <a href="api/data.html#id3">[1]</a>
 </li>
       <li><a href="api/eda.html#causalkit.eda.eda.PropensityModel.roc_auc">roc_auc (causalkit.eda.eda.PropensityModel property)</a>
@@ -755,9 +869,15 @@ document.write(`
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.seed">seed (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis">sensitivity_analysis() (in module causalkit.refutation)</a>
+
+      <ul>
+        <li><a href="api/refutation.html#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_analysis">(in module causalkit.refutation.unconfoundedness.uncofoundedness_validation)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_benchmark">sensitivity_benchmark() (in module causalkit.refutation.unconfoundedness.uncofoundedness_validation)</a>
+</li>
       <li><a href="api/eda.html#causalkit.eda.eda.OutcomeModel.shap">shap (causalkit.eda.eda.OutcomeModel property)</a>
 
       <ul>
@@ -788,8 +908,6 @@ document.write(`
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.to_causal_data">to_causal_data() (causalkit.data.generators.CausalDatasetGenerator method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data.html#causalkit.data.causaldata.CausalData.treatment">treatment (causalkit.data.causaldata.CausalData attribute)</a>, <a href="api/generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData.treatment">[1]</a>
 
       <ul>
@@ -800,14 +918,26 @@ document.write(`
         <li><a href="api/eda.html#causalkit.eda.eda.CausalDataLite.treatment">(causalkit.eda.eda.CausalDataLite attribute)</a>, <a href="api/eda.html#causalkit.eda.eda.CausalDataLite.treatment">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/causalkit.eda.CausalEDA.html#causalkit.eda.CausalEDA.treatment_features">treatment_features() (causalkit.eda.CausalEDA method)</a>
 
       <ul>
         <li><a href="api/eda.html#causalkit.eda.eda.CausalEDA.treatment_features">(causalkit.eda.eda.CausalEDA method)</a>, <a href="api/generated/causalkit.eda.eda.CausalEDA.treatment_features.html#causalkit.eda.eda.CausalEDA.treatment_features">[1]</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/causalkit.inference.ttest.html#causalkit.inference.ttest">ttest() (in module causalkit.inference)</a>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_ate">trim_sensitivity_curve_ate() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_ate">[1]</a>
 </li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att">trim_sensitivity_curve_att() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att">[1]</a>
+</li>
+      <li><a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_atte">trim_sensitivity_curve_atte() (in module causalkit.refutation.score.score_validation)</a>, <a href="api/refutation.html#causalkit.refutation.score.score_validation.trim_sensitivity_curve_atte">[1]</a>
+</li>
+      <li><a href="api/generated/causalkit.inference.ttest.html#causalkit.inference.ttest">ttest() (in module causalkit.inference)</a>
+
+      <ul>
+        <li><a href="api/inference.html#causalkit.inference.atte.ttest.ttest">(in module causalkit.inference.atte.ttest)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -821,6 +951,14 @@ document.write(`
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.u_strength_y">u_strength_y (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
 </li>
       <li><a href="api/data.html#causalkit.data.generators.CausalDatasetGenerator.use_copula">use_copula (causalkit.data.generators.CausalDatasetGenerator attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/refutation.html#causalkit.refutation.unconfoundedness.uncofoundedness_validation.validate_unconfoundedness_balance">validate_unconfoundedness_balance() (in module causalkit.refutation.unconfoundedness.uncofoundedness_validation)</a>
 </li>
   </ul></td>
 </tr></table>
