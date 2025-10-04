@@ -439,11 +439,11 @@ document.write(`
 <p>Stack them as</p>
 <div class="math notranslate nohighlight">
 \[
-X_i := \big[\ \text{tenure}_i,\ \text{sessions}_i,\ \text{spend}_i,\ \text{prem}_i,\ \text{urban}_i\ \big]^\top \in \mathbb{R}^5.
+X_i := \big[\ \text{tenure}_i,\ \text{sessions}_i,\ \text{spend}_i,\ \text{prem}_i,\ \text{urban}_i\ \big]^\top \in \mathbb{R}^5
 \]</div>
 <hr class="docutils" />
-<section id="treatment-model-well-specified-logistic">
-<h3>Treatment model (well-specified logistic)<a class="headerlink" href="#treatment-model-well-specified-logistic" title="Link to this heading">#</a></h3>
+<section id="treatment-model">
+<h3>Treatment model<a class="headerlink" href="#treatment-model" title="Link to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 m(x) \equiv \Pr(D=1\mid X=x) = \sigma\big(\alpha_d + x^\top \beta_t\big),
@@ -453,14 +453,14 @@ m(x) \equiv \Pr(D=1\mid X=x) = \sigma\big(\alpha_d + x^\top \beta_t\big),
 <p>with <span class="math notranslate nohighlight">\(\alpha_d\)</span> calibrated (by bisection) so that <span class="math notranslate nohighlight">\(\mathbb{E}[D]\approx 0.20\)</span>, and</p>
 <div class="math notranslate nohighlight">
 \[
-\beta_t^\top = \big[, 0.08,\ 0.12,\ 0.004,\ 0.25,\ 0.10 ,\big].
+\beta_t^\top = \big[, 0.08,\ 0.12,\ 0.004,\ 0.25,\ 0.10 \big]
 \]</div>
 <p>Then
-$<span class="math notranslate nohighlight">\(D_i \mid X_i \sim \mathrm{Bernoulli}!\big(m(X_i)\big).\)</span>$</p>
+$<span class="math notranslate nohighlight">\(D_i \mid X_i \sim \mathrm{Bernoulli}\big(m(X_i)\big)\)</span>$</p>
 </section>
 <hr class="docutils" />
-<section id="outcome-model-gaussian-linear-constant-effect">
-<h3>Outcome model (Gaussian, linear, constant effect)<a class="headerlink" href="#outcome-model-gaussian-linear-constant-effect" title="Link to this heading">#</a></h3>
+<section id="outcome-model">
+<h3>Outcome model<a class="headerlink" href="#outcome-model" title="Link to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 Y_i = \alpha_y + X_i^\top \beta_y + \Theta D_i + \varepsilon_i,
@@ -470,7 +470,7 @@ Y_i = \alpha_y + X_i^\top \beta_y + \Theta D_i + \varepsilon_i,
 <p>with <span class="math notranslate nohighlight">\(\alpha_y=0,\ \sigma_y=1,\ \Theta=0.80\)</span>, and</p>
 <div class="math notranslate nohighlight">
 \[
-\beta_y^\top = \big[, 0.05,\ 0.60,\ 0.005,\ 0.80,\ 0.20 ,\big].
+\beta_y^\top = \big[0.05,\ 0.60,\ 0.005,\ 0.80,\ 0.20 \big]
 \]</div>
 </section>
 <hr class="docutils" />
@@ -791,6 +791,412 @@ Ground-truth ATT from the DGP: 0.800
 <p>The estimated ATE and ATTE are close to the ground truth values. But we got wide confidence_intervals.
 Adding more data makes the intervals narrower. You can try it when changes the n in GDP</p>
 </section>
+<section id="nonlinear-data-generating-process-dgp">
+<h2>Nonlinear Data Generating Process (DGP)<a class="headerlink" href="#nonlinear-data-generating-process-dgp" title="Link to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(i=1,\dots,n\)</span>. Draw confounders:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{tenure}_i \sim \mathcal N(24,\ 12^2)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{sessions}_i \sim \mathcal N(5,\ 2^2)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{spend}_i \sim \mathrm{Unif}(0,200)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{prem}_i \sim \mathrm{Bernoulli}(0.25)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{urban}_i \sim \mathrm{Bernoulli}(0.60)
+\]</div>
+<p>Stack them as</p>
+<div class="math notranslate nohighlight">
+\[
+X_i := \big[\ \text{tenure}_i,\ \text{sessions}_i,\ \text{spend}_i,\ \text{prem}_i,\ \text{urban}_i\ \big]^\top \in \mathbb{R}^5
+\]</div>
+<hr class="docutils" />
+<section id="id1">
+<h3>Treatment model<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Define
+$<span class="math notranslate nohighlight">\(
+m(x) \equiv \Pr(D=1\mid X=x) = \sigma\big(\alpha_d + g_d(x)\big),
+\qquad
+\sigma(z)=\frac{1}{1+e^{-z}},
+\)</span>$</p>
+<p>with <span class="math notranslate nohighlight">\(\alpha_d\)</span> calibrated (by bisection) so that <span class="math notranslate nohighlight">\(\mathbb{E}[D]\approx 0.20\)</span>.</p>
+<p>The nonlinear score includes <strong>alignment with the treatment effect</strong> <span class="math notranslate nohighlight">\(\tau(x)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{
+\begin{aligned}
+g_d(x) &amp;= 1.10\tanh\big(0.06(\text{spend}-100)\big)
++ 1.00\sigma\big(0.60(\text{sessions}-5)\big)
++ 0.50\log\big(1+\text{tenure}\big)
++ 0.50\text{prem}
++ 0.25\text{urban}
++ 0.90\text{prem}\cdot\mathbb{\text{spend}&gt;120}
++ 0.30\text{urban}\cdot\mathbb{\text{tenure}&lt;12}
++0.80\tau(x)
+\end{aligned}
+}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(z_+ = \max(z,0)\)</span> and <span class="math notranslate nohighlight">\(\mathbb{1}{\cdot}\)</span> is the indicator.</p>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+D_i \mid X_i \sim \mathrm{Bernoulli}\big(m(X_i)\big)
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h3>Outcome model<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y_i = \alpha_y + g_y(X_i) + D_i\tau(X_i) + \varepsilon_i,
+\qquad
+\varepsilon_i \sim \mathcal N(0,\sigma_y^2),
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(\alpha_y=0,\ \sigma_y=1\)</span>.</p>
+<p>The baseline outcome component is nonlinear:</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{
+\begin{aligned}
+g_y(x) &amp;= 0.70\tanh\big(0.03(\text{spend}-80)\big)
++ 0.50\sqrt{\text{sessions}}
++ 0.40\log\big(1+\text{tenure}\big)
++ 0.30\text{prem}
++ 0.10\text{urban}
+- 0.10\mathbb{\text{spend}&lt;20}
+\end{aligned}
+}
+\]</div>
+<p>The heterogeneous treatment effect (CATE) is</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{
+\begin{aligned}
+\tau(x) &amp;= 0.40
++ 0.60\sigma\big(-0.40(\text{sessions}-5)\big)
++ 2.00\text{prem}\cdot\mathbb{\text{spend}&gt;120} \
++ 0.10\text{urban}\cdot\mathbb{\text{tenure}&lt;12}
+\end{aligned}
+}
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h3>Oracle nuisances (IRM) and CATE<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+m(x) = \sigma\big(\alpha_d + g_d(x)\big)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+g_0(x) = \mathbb{E}[Y \mid X=x, D=0]
+= \alpha_y + g_y(x)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
+= \alpha_y + g_y(x) + \tau(x)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{CATE}(x) = g_1(x) - g_0(x)
+= \tau(x)
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h3>Targets<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\Theta_{\text{ATE}}
+= \mathbb{E}\big[\tau(X)\big],
+\qquad
+\Theta_{\text{ATTE}}
+= \mathbb{E}\big[\tau(X)\mid D=1\big].
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
+
+<span class="c1"># 1) Confounders</span>
+<span class="n">confounder_specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>     <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>    <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>  <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>   <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>   <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>      <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>    <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.60</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># 2) Feature index map</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">feature_indices_from_specs</span><span class="p">(</span><span class="n">specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+    <span class="n">idx</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">specs</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dist&quot;</span><span class="p">,</span><span class="s2">&quot;normal&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dist</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span><span class="s2">&quot;bernoulli&quot;</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span><span class="p">,);</span> <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported dist: </span><span class="si">{</span><span class="n">dist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">feat</span> <span class="o">=</span> <span class="n">feature_indices_from_specs</span><span class="p">(</span><span class="n">confounder_specs</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span> <span class="k">return</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">feat</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_log1p_pos</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sqrt_pos</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>  <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_ind</span><span class="p">(</span><span class="n">cond</span><span class="p">):</span>    <span class="k">return</span> <span class="n">cond</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>   <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
+
+<span class="c1"># 3) g_d(x) -   nonlinear connection between X and D</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">g_d</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tenure</span> <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">)</span>
+    <span class="n">sess</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">)</span>
+    <span class="n">spend</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">)</span>
+    <span class="n">prem</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">)</span>
+    <span class="n">urban</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">)</span>
+    <span class="n">tau_align</span> <span class="o">=</span> <span class="n">tau_func</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>                                       <span class="c1"># explicit alignment</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">1.10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="mf">0.06</span><span class="o">*</span><span class="p">(</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">))</span>
+      <span class="o">+</span> <span class="mf">1.00</span> <span class="o">*</span> <span class="n">_sigmoid</span><span class="p">(</span><span class="mf">0.60</span><span class="o">*</span><span class="p">(</span><span class="n">sess</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">))</span>
+      <span class="o">+</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="n">_log1p_pos</span><span class="p">(</span><span class="n">tenure</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="n">prem</span>
+      <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">urban</span>
+      <span class="o">+</span> <span class="mf">0.90</span> <span class="o">*</span> <span class="n">prem</span> <span class="o">*</span> <span class="n">_ind</span><span class="p">(</span><span class="n">spend</span> <span class="o">&gt;</span> <span class="mf">120.0</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">urban</span> <span class="o">*</span> <span class="n">_ind</span><span class="p">(</span><span class="n">tenure</span> <span class="o">&lt;</span> <span class="mf">12.0</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.80</span> <span class="o">*</span> <span class="n">tau_align</span>                                         <span class="c1"># direct alignment term (λ)</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># 4) g_y(x)  -   nonlinear connection between X and Y</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">g_y</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tenure</span> <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">)</span>
+    <span class="n">sess</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">)</span>
+    <span class="n">spend</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">)</span>
+    <span class="n">prem</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">)</span>
+    <span class="n">urban</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.70</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="mf">0.03</span><span class="o">*</span><span class="p">(</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">80.0</span><span class="p">))</span>
+      <span class="o">+</span> <span class="mf">0.50</span> <span class="o">*</span> <span class="n">_sqrt_pos</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.40</span> <span class="o">*</span> <span class="n">_log1p_pos</span><span class="p">(</span><span class="n">tenure</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">prem</span>
+      <span class="o">+</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="n">urban</span>
+      <span class="o">-</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="n">_ind</span><span class="p">(</span><span class="n">spend</span> <span class="o">&lt;</span> <span class="mf">20.0</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># 5) tau(x)  — nonlinear effect function (CATE)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tau_func</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tenure</span> <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">)</span>
+    <span class="n">sess</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">)</span>
+    <span class="n">spend</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">)</span>
+    <span class="n">prem</span>   <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">)</span>
+    <span class="n">urban</span>  <span class="o">=</span> <span class="n">col</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.40</span>
+      <span class="o">+</span> <span class="mf">0.60</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.40</span><span class="o">*</span><span class="p">(</span><span class="n">sess</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">))))</span>  <span class="c1"># sigmoid</span>
+      <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">prem</span> <span class="o">*</span> <span class="n">_ind</span><span class="p">(</span><span class="n">spend</span> <span class="o">&gt;</span> <span class="mf">120.0</span><span class="p">)</span>
+      <span class="o">+</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="n">urban</span> <span class="o">*</span> <span class="n">_ind</span><span class="p">(</span><span class="n">tenure</span> <span class="o">&lt;</span> <span class="mf">12.0</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># 6) Generator — continuous outcome</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
+    <span class="n">theta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>                 <span class="c1"># ignored; we pass tau</span>
+    <span class="n">tau</span><span class="o">=</span><span class="n">tau_func</span><span class="p">,</span>              <span class="c1"># nonlinear effect</span>
+    <span class="n">beta_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># use nonlinear g_* only</span>
+    <span class="n">g_y</span><span class="o">=</span><span class="n">g_y</span><span class="p">,</span> <span class="n">g_d</span><span class="o">=</span><span class="n">g_d</span><span class="p">,</span>          <span class="c1"># nonlinear functions</span>
+    <span class="n">alpha_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>               <span class="c1"># baseline mean level, intercept</span>
+    <span class="n">alpha_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>               <span class="c1"># will be calibrated to target_d_rate</span>
+    <span class="n">sigma_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>               <span class="c1"># noise std for Y</span>
+    <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="c1"># outcome distribution</span>
+    <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
+    <span class="n">target_d_rate</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>        <span class="c1"># 20% will be treated</span>
+    <span class="n">u_strength_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>          <span class="c1"># strength of latent confounder influence on treatment</span>
+    <span class="n">u_strength_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>          <span class="c1"># strength of latent confounder influence on outcome</span>
+    <span class="n">propensity_sharpness</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>    <span class="c1"># increase to make overlap harder</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">123</span>                   <span class="c1"># random seed for reproducibility</span>
+<span class="p">)</span>
+
+<span class="c1"># 7) Generate</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10_000</span>                     <span class="c1"># Number of observations</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treatment share ≈&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">true_ate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATE from the DGP: </span><span class="si">{</span><span class="n">true_ate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated</span>
+<span class="n">true_att</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;d&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATT from the DGP: </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Treatment share ≈ 0.2036
+Ground-truth ATE from the DGP: 0.913
+Ground-truth ATT from the DGP: 1.567
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+
+<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">treatment</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;urban_resident&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y</th>
+      <th>d</th>
+      <th>tenure_months</th>
+      <th>avg_sessions_week</th>
+      <th>spend_last_month</th>
+      <th>premium_user</th>
+      <th>urban_resident</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.689404</td>
+      <td>0.0</td>
+      <td>12.130544</td>
+      <td>4.056687</td>
+      <td>181.570607</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.045282</td>
+      <td>0.0</td>
+      <td>19.586560</td>
+      <td>1.671561</td>
+      <td>182.793598</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.173595</td>
+      <td>1.0</td>
+      <td>39.455103</td>
+      <td>5.452889</td>
+      <td>125.185708</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.926216</td>
+      <td>0.0</td>
+      <td>26.327693</td>
+      <td>5.051629</td>
+      <td>4.932905</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.225088</td>
+      <td>0.0</td>
+      <td>35.042771</td>
+      <td>4.933996</td>
+      <td>23.577407</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+
+<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
+<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATE = </span><span class="si">{</span><span class="n">true_ate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">ate_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Real ATE = 0.913 VS Estimated = 0.9917276396749556 in (0.869543879249174, 1.1139114001007373)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+
+<span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
+<span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real ATTE = </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> VS Estimated = </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">atte_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Real ATTE = 1.567 VS Estimated = 1.6433239376940343 in (1.4972790851652928, 1.7893687902227757)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The estimated ATE and ATTE are close to the ground truth values. But we got wide confidence_intervals.
+Adding more data makes the intervals narrower. You can try it when changes the n in GDP</p>
+</section>
+</section>
 </section>
 
 
@@ -840,8 +1246,8 @@ Adding more data makes the intervals narrower. You can try it when changes the n
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-data-generating-process-dgp">Linear Data Generating Process (DGP)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-model-well-specified-logistic">Treatment model (well-specified logistic)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-model-gaussian-linear-constant-effect">Outcome model (Gaussian, linear, constant effect)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-model">Treatment model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-model">Outcome model</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#oracle-nuisances-irm-and-cate">Oracle nuisances (IRM) and CATE</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#targets">Targets</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lets-generate-the-data">Let’s generate the Data</a></li>
@@ -849,6 +1255,13 @@ Adding more data makes the intervals narrower. You can try it when changes the n
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-ate-and-atte">Estimate ATE and ATTE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nonlinear-data-generating-process-dgp">Nonlinear Data Generating Process (DGP)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Treatment model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Outcome model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Oracle nuisances (IRM) and CATE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Targets</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
