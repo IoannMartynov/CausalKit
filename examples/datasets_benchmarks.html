@@ -416,82 +416,83 @@ document.write(`
 <p>In this notebook we well benchmark data generators processes</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+import numpy as np
+import pandas as pd
 
-<span class="c1"># If available in your environment:</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
+# If available in your environment:
+from causalkit.data import CausalDatasetGenerator
 
-<span class="c1"># Reproducibility</span>
-<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+# Reproducibility
+SEED = 42
+np.random.seed(SEED)
 
-<span class="c1"># Number of observations</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
+# Number of observations
+n = 10000
 
-<span class="c1"># Confounders schema</span>
-<span class="c1"># These are illustrative product/behavior/user attributes</span>
-<span class="n">confounder_specs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>  <span class="c1"># app tenure</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;sessions_per_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>  <span class="c1"># engagement</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_30d&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">},</span>  <span class="c1"># recent spend</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">},</span>  <span class="c1"># subscription</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.65</span><span class="p">},</span>  <span class="c1"># geography</span>
-<span class="p">]</span>
+# Confounders schema
+# These are illustrative product/behavior/user attributes
+confounder_specs = [
+    {&quot;name&quot;: &quot;tenure_months&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 18, &quot;sd&quot;: 12},  # app tenure
+    {&quot;name&quot;: &quot;sessions_per_week&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 6, &quot;sd&quot;: 3},  # engagement
+    {&quot;name&quot;: &quot;spend_last_30d&quot;, &quot;dist&quot;: &quot;uniform&quot;, &quot;a&quot;: 0, &quot;b&quot;: 300},  # recent spend
+    {&quot;name&quot;: &quot;premium_user&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.2},  # subscription
+    {&quot;name&quot;: &quot;urban_resident&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.65},  # geography
+]
 
-<span class="c1"># True causal effect on ARPPU (on the natural/mean scale)</span>
-<span class="n">theta_arppu</span> <span class="o">=</span> <span class="mf">4.0</span>
+# True causal effect on ARPPU (on the natural/mean scale)
+theta_arppu = 4.0
 
-<span class="c1"># Outcome noise (ARPPU is positive and often heavy-tailed; this is a simple Gaussian noise)</span>
-<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">8.0</span>
+# Outcome noise (ARPPU is positive and often heavy-tailed; this is a simple Gaussian noise)
+sigma_y = 8.0
 
-<span class="c1"># Target share of users exposed to the feature</span>
-<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.4</span>
+# Target share of users exposed to the feature
+target_t_rate = 0.4
 
-<span class="c1"># How confounders affect ARPPU (baseline; additive)</span>
-<span class="c1"># Order must match confounder_specs</span>
-<span class="n">beta_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.08</span><span class="p">,</span>  <span class="c1"># + per tenure month</span>
-    <span class="mf">0.60</span><span class="p">,</span>  <span class="c1"># + per weekly session</span>
-    <span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># + per recent spend unit (scaled here)</span>
-    <span class="mf">6.00</span><span class="p">,</span>  <span class="c1"># premium users have higher ARPPU</span>
-    <span class="mf">2.00</span><span class="p">,</span>  <span class="c1"># urban residents slightly higher ARPPU</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# How confounders affect ARPPU (baseline; additive)
+# Order must match confounder_specs
+beta_y = np.array([
+    0.08,  # + per tenure month
+    0.60,  # + per weekly session
+    0.03,  # + per recent spend unit (scaled here)
+    6.00,  # premium users have higher ARPPU
+    2.00,  # urban residents slightly higher ARPPU
+], dtype=float)
 
-<span class="c1"># How confounders affect feature exposure (log-odds scale)</span>
-<span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># tenure increases likelihood of exposure</span>
-    <span class="mf">0.15</span><span class="p">,</span>  <span class="c1"># more sessions -&gt; more likely to get feature</span>
-    <span class="mf">0.004</span><span class="p">,</span>  <span class="c1"># recent spend -&gt; more likely to get feature</span>
-    <span class="mf">1.00</span><span class="p">,</span>  <span class="c1"># premium users prioritized</span>
-    <span class="mf">0.35</span><span class="p">,</span>  <span class="c1"># urban residents slightly more likely</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# How confounders affect feature exposure (log-odds scale)
+beta_t = np.array([
+    0.02,  # tenure increases likelihood of exposure
+    0.15,  # more sessions -&gt; more likely to get feature
+    0.004,  # recent spend -&gt; more likely to get feature
+    1.00,  # premium users prioritized
+    0.35,  # urban residents slightly more likely
+], dtype=float)
 
-<span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-    <span class="n">theta</span><span class="o">=</span><span class="n">theta_arppu</span><span class="p">,</span>
-    <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-    <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
-    <span class="n">seed</span><span class="o">=</span><span class="n">SEED</span><span class="p">,</span>
-    <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-    <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-    <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
-<span class="p">)</span>
+gen = CausalDatasetGenerator(
+    theta=theta_arppu,
+    outcome_type=&quot;continuous&quot;,
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=SEED,
+    confounder_specs=confounder_specs,
+    beta_y=beta_y,
+    beta_t=beta_t,
+)
 
-<span class="c1"># Create dataset</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-    <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;sessions_per_week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;spend_last_30d&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="p">)</span>
+# Create dataset
+causal_data = gen.to_causal_data(
+    n=n,
+    confounders = [
+    &quot;tenure_months&quot;,
+    &quot;sessions_per_week&quot;,
+    &quot;spend_last_30d&quot;,
+    &quot;premium_user&quot;,
+    &quot;urban_resident&quot;,
+]
+)
 
-<span class="c1"># Show first few rows</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+# Show first few rows
+causal_data.df.head()
 </pre></div>
 </div>
 </div>
@@ -580,11 +581,11 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.ate import dml_ate
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="n">ate_result</span>
+# Estimate Average Treatment Effect (ATE)
+ate_result = dml_ate(causal_data, n_folds=4, confidence_level=0.95)
+ate_result
 </pre></div>
 </div>
 </div>
@@ -600,165 +601,166 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.atte import dml_atte
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="n">att_result</span>
+# Estimate Average Treatment Effect (ATE)
+att_result = dml_atte(causal_data, n_folds=4, confidence_level=0.95)
+att_result
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+import numpy as np
+import pandas as pd
 
-<span class="c1"># If available in your environment:</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
+# If available in your environment:
+from causalkit.data import CausalDatasetGenerator
 
-<span class="c1"># Reproducibility</span>
-<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+# Reproducibility
+SEED = 42
+np.random.seed(SEED)
 
-<span class="c1"># Number of observations</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
+# Number of observations
+n = 10000
 
-<span class="c1"># Confounders schema</span>
-<span class="c1"># These are illustrative product/behavior/user attributes</span>
-<span class="n">confounder_specs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>  <span class="c1"># app tenure</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;sessions_per_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>  <span class="c1"># engagement</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_30d&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">},</span>  <span class="c1"># recent spend</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">},</span>  <span class="c1"># subscription</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.65</span><span class="p">},</span>  <span class="c1"># geography</span>
-<span class="p">]</span>
+# Confounders schema
+# These are illustrative product/behavior/user attributes
+confounder_specs = [
+    {&quot;name&quot;: &quot;tenure_months&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 18, &quot;sd&quot;: 12},  # app tenure
+    {&quot;name&quot;: &quot;sessions_per_week&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 6, &quot;sd&quot;: 3},  # engagement
+    {&quot;name&quot;: &quot;spend_last_30d&quot;, &quot;dist&quot;: &quot;uniform&quot;, &quot;a&quot;: 0, &quot;b&quot;: 300},  # recent spend
+    {&quot;name&quot;: &quot;premium_user&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.2},  # subscription
+    {&quot;name&quot;: &quot;urban_resident&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.65},  # geography
+]
 
-<span class="c1"># True causal effect on ARPPU (on the natural/mean scale)</span>
-<span class="n">theta_arppu</span> <span class="o">=</span> <span class="mf">4.0</span>
+# True causal effect on ARPPU (on the natural/mean scale)
+theta_arppu = 4.0
 
-<span class="c1"># Outcome noise (ARPPU is positive and often heavy-tailed; this is a simple Gaussian noise)</span>
-<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">8.0</span>
+# Outcome noise (ARPPU is positive and often heavy-tailed; this is a simple Gaussian noise)
+sigma_y = 8.0
 
-<span class="c1"># Target share of users exposed to the feature</span>
-<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.4</span>
+# Target share of users exposed to the feature
+target_t_rate = 0.4
 
-<span class="c1"># How confounders affect ARPPU (baseline; additive)</span>
-<span class="c1"># Order must match confounder_specs</span>
-<span class="n">beta_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.08</span><span class="p">,</span>  <span class="c1"># + per tenure month</span>
-    <span class="mf">0.60</span><span class="p">,</span>  <span class="c1"># + per weekly session</span>
-    <span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># + per recent spend unit (scaled here)</span>
-    <span class="mf">6.00</span><span class="p">,</span>  <span class="c1"># premium users have higher ARPPU</span>
-    <span class="mf">2.00</span><span class="p">,</span>  <span class="c1"># urban residents slightly higher ARPPU</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# How confounders affect ARPPU (baseline; additive)
+# Order must match confounder_specs
+beta_y = np.array([
+    0.08,  # + per tenure month
+    0.60,  # + per weekly session
+    0.03,  # + per recent spend unit (scaled here)
+    6.00,  # premium users have higher ARPPU
+    2.00,  # urban residents slightly higher ARPPU
+], dtype=float)
 
-<span class="c1"># How confounders affect feature exposure (log-odds scale)</span>
-<span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># tenure increases likelihood of exposure</span>
-    <span class="mf">0.15</span><span class="p">,</span>  <span class="c1"># more sessions -&gt; more likely to get feature</span>
-    <span class="mf">0.9</span><span class="p">,</span>  <span class="c1"># recent spend -&gt; more likely to get feature</span>
-    <span class="mf">1.00</span><span class="p">,</span>  <span class="c1"># premium users prioritized</span>
-    <span class="mf">0.35</span><span class="p">,</span>  <span class="c1"># urban residents slightly more likely</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# How confounders affect feature exposure (log-odds scale)
+beta_t = np.array([
+    0.02,  # tenure increases likelihood of exposure
+    0.15,  # more sessions -&gt; more likely to get feature
+    0.9,  # recent spend -&gt; more likely to get feature
+    1.00,  # premium users prioritized
+    0.35,  # urban residents slightly more likely
+], dtype=float)
 
-<span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-    <span class="n">theta</span><span class="o">=</span><span class="n">theta_arppu</span><span class="p">,</span>
-    <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-    <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
-    <span class="n">seed</span><span class="o">=</span><span class="n">SEED</span><span class="p">,</span>
-    <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-    <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-    <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
-<span class="p">)</span>
+gen = CausalDatasetGenerator(
+    theta=theta_arppu,
+    outcome_type=&quot;continuous&quot;,
+    sigma_y=sigma_y,
+    target_t_rate=target_t_rate,
+    seed=SEED,
+    confounder_specs=confounder_specs,
+    beta_y=beta_y,
+    beta_t=beta_t,
+)
 
-<span class="c1"># Create dataset</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
-    <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;sessions_per_week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;spend_last_30d&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="p">)</span>
+# Create dataset
+causal_data = gen.to_causal_data(
+    n=n,
+    confounders = [
+    &quot;tenure_months&quot;,
+    &quot;sessions_per_week&quot;,
+    &quot;spend_last_30d&quot;,
+    &quot;premium_user&quot;,
+    &quot;urban_resident&quot;,
+]
+)
 
-<span class="c1"># Show first few rows</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+# Show first few rows
+causal_data.df.head()
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.ate import dml_ate
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="n">ate_result</span>
+# Estimate Average Treatment Effect (ATE)
+ate_result = dml_ate(causal_data, n_folds=4, confidence_level=0.95)
+ate_result
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.atte import dml_atte
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="n">att_result</span>
+# Estimate Average Treatment Effect (ATE)
+att_result = dml_atte(causal_data, n_folds=4, confidence_level=0.95)
+att_result
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
-<span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.eda import CausalEDA
+eda = CausalEDA(causal_data)
 
-<span class="c1"># shape of data</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
+# shape of data
+eda.data_shape()
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
-<span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
-<span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Shows means of confounders for control/treated groups, absolute differences, and SMD values
+confounders_balance_df = eda.confounders_means()
+display(confounders_balance_df)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
-<span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Propensity model fit
+ps_model = eda.fit_propensity()
 
-<span class="c1"># ROC AUC - shows how predictable treatment is from confounders</span>
-<span class="n">roc_auc_score</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ROC AUC from PropensityModel:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+# ROC AUC - shows how predictable treatment is from confounders
+roc_auc_score = ps_model.roc_auc
+print(&quot;ROC AUC from PropensityModel:&quot;, round(roc_auc_score, 4))
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
-<span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Positivity check - assess overlap between treatment groups
+positivity_result = ps_model.positivity_check()
+print(&quot;Positivity check from PropensityModel:&quot;, positivity_result)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
-<span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
-<span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># SHAP values - feature importance for treatment assignment from confounders
+shap_values_df = ps_model.shap
+display(shap_values_df)
 </pre></div>
 </div>
 </div>

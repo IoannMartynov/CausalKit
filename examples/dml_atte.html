@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>DML ATE Example &#8212; CausalKit 0.1.0 documentation</title>
+    <title>DML ATT Example &#8212; CausalKit 0.1.0 documentation</title>
   
   
   
@@ -50,7 +50,7 @@
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DML ATT Example" href="dml_att.html" />
+    <link rel="next" title="Research" href="../research.html" />
     <link rel="prev" title="Real World Examples" href="../examples.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -351,13 +351,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATE Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATT Example</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="datasets_benchmarks.html">Datasets benchmarks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dml_att_refutation.html">DML ATT Example</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="rct_benchmark.html">RCT Benchmark: t-test vs Linear Regression vs DML ATE</a></li>
 </ul>
 </div>
 </nav></div>
@@ -398,7 +393,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Real World Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">DML ATE Example</li>
+    <li class="breadcrumb-item active" aria-current="page">DML ATT Example</li>
   </ul>
 </nav>
 </div>
@@ -415,8 +410,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="dml-ate-example">
-<h1>DML ATE Example<a class="headerlink" href="#dml-ate-example" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="dml-att-example">
+<h1>DML ATT Example<a class="headerlink" href="#dml-att-example" title="Link to this heading">#</a></h1>
 <p>This notebook covers scenario:</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -433,88 +428,164 @@ document.write(`
 <td><p>Binary</p></td>
 <td><p>Continuous</p></td>
 <td><p>Yes</p></td>
-<td><p>ATE</p></td>
+<td><p>ATT</p></td>
 <td><p>Yes</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>We will estimate Average Treatment Effect (ATE) of binary treatment on continuous outcome. It shows explonatary data analysis and refutation tests</p>
+<p>We will estimate Average Treatment Effect on Treated (ATT) of binary treatment on continuous outcome. It shows explonatary data analysis and refutation tests</p>
 <section id="generate-data">
 <h2>Generate data<a class="headerlink" href="#generate-data" title="Link to this heading">#</a></h2>
-<p>Let’s generate data of how feature (Treatment) impact on ARPU (Outcome) with linear effect (theta) = 1.8</p>
+<p>Example that generates observational data with a nonlinear outcome model, nonlinear treatment assignment, and a heterogeneous (nonlinear) treatment effect tau(X). This setup ensures that ATT ≠ ATE in general. It also shows how to compute the “ground-truth” ATT from the generated data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nonlinear ATT data generation with heterogeneous effects</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
 
 <span class="c1"># Reproducibility</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 
+<span class="c1"># 1) Confounders and their distributions</span>
+<span class="c1">#    These names define the column order in X for the custom functions.</span>
 <span class="n">confounder_specs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.60</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>     <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>   <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>   <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>  <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>  <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>   <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>      <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span><span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>    <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span><span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.60</span><span class="p">},</span>
 <span class="p">]</span>
 
-<span class="c1"># Causal effect and noise</span>
-<span class="n">theta</span> <span class="o">=</span> <span class="mf">1.8</span>  <span class="c1"># ATE: +1.8 ARPU units if new_feature = 1</span>
-<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">3.5</span>  <span class="c1"># ARPU noise std</span>
-<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.35</span>  <span class="c1"># ~35% treated</span>
+<span class="c1"># Indices (for convenience inside g_y, g_t, tau)</span>
+<span class="n">TENURE</span><span class="p">,</span> <span class="n">SESS</span><span class="p">,</span> <span class="n">SPEND</span><span class="p">,</span> <span class="n">PREMIUM</span><span class="p">,</span> <span class="n">URBAN</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="c1"># Effects of confounders on ARPU (baseline, additive)</span>
-<span class="c1"># Order: tenure_months, avg_sessions_week, spend_last_month, premium_user, urban_resident</span>
+<span class="c1"># 2) Nonlinear baseline for outcome f_y(X) = X @ beta_y + g_y(X)</span>
+<span class="c1">#    Keep a modest linear part and add meaningful nonlinearities.</span>
 <span class="n">beta_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.05</span><span class="p">,</span>  <span class="c1"># tenure_months: small positive effect</span>
-    <span class="mf">0.40</span><span class="p">,</span>  <span class="c1"># avg_sessions_week: strong positive effect</span>
-    <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># spend_last_month: recent spend correlates with ARPU</span>
-    <span class="mf">2.00</span><span class="p">,</span>  <span class="c1"># premium_user: premium users have higher ARPU</span>
-    <span class="mf">1.00</span><span class="p">,</span>  <span class="c1"># urban_resident: urban users slightly higher ARPU</span>
+    <span class="mf">0.03</span><span class="p">,</span>   <span class="c1"># tenure_months</span>
+    <span class="mf">0.20</span><span class="p">,</span>   <span class="c1"># avg_sessions_week</span>
+    <span class="mf">0.01</span><span class="p">,</span>   <span class="c1"># spend_last_month</span>
+    <span class="mf">1.20</span><span class="p">,</span>   <span class="c1"># premium_user</span>
+    <span class="mf">0.60</span><span class="p">,</span>   <span class="c1"># urban_resident</span>
 <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
-<span class="c1"># Effects of confounders on treatment assignment (log-odds scale)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">g_y</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Nonlinearities and interactions in outcome baseline</span>
+    <span class="n">tenure_years</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">TENURE</span><span class="p">]</span> <span class="o">/</span> <span class="mf">12.0</span>
+    <span class="n">sessions</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SESS</span><span class="p">]</span>
+    <span class="n">spend</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SPEND</span><span class="p">]</span>
+    <span class="n">premium</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">PREMIUM</span><span class="p">]</span>
+    <span class="n">urban</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">URBAN</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">1.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">tenure_years</span><span class="p">)</span>          <span class="c1"># seasonal-ish tenure pattern</span>
+        <span class="o">+</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="p">(</span><span class="n">sessions</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>                    <span class="c1"># convex effect of sessions</span>
+        <span class="o">+</span> <span class="mf">0.0015</span> <span class="o">*</span> <span class="p">(</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sessions</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span>     <span class="c1"># spend × sessions interaction</span>
+        <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">premium</span> <span class="o">*</span> <span class="p">(</span><span class="n">sessions</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span>                <span class="c1"># premium × sessions interaction</span>
+        <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">urban</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">((</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">50.0</span><span class="p">)</span>   <span class="c1"># nonlinear spend effect differs by urban</span>
+    <span class="p">)</span>
+
+<span class="c1"># 3) Nonlinear treatment score f_t(X) = X @ beta_t + g_t(X)</span>
 <span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.015</span><span class="p">,</span>  <span class="c1"># tenure_months</span>
-    <span class="mf">0.10</span><span class="p">,</span>  <span class="c1"># avg_sessions_week</span>
-    <span class="mf">0.002</span><span class="p">,</span>  <span class="c1"># spend_last_month</span>
-    <span class="mf">0.75</span><span class="p">,</span>  <span class="c1"># premium_user</span>
-    <span class="mf">0.30</span><span class="p">,</span>  <span class="c1"># urban_resident: more likely to get the feature</span>
+    <span class="mf">0.010</span><span class="p">,</span>  <span class="c1"># tenure_months</span>
+    <span class="mf">0.12</span><span class="p">,</span>   <span class="c1"># avg_sessions_week</span>
+    <span class="mf">0.001</span><span class="p">,</span>  <span class="c1"># spend_last_month</span>
+    <span class="mf">0.80</span><span class="p">,</span>   <span class="c1"># premium_user</span>
+    <span class="mf">0.25</span><span class="p">,</span>   <span class="c1"># urban_resident</span>
 <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
+<span class="k">def</span><span class="w"> </span><span class="nf">g_t</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tenure_years</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">TENURE</span><span class="p">]</span> <span class="o">/</span> <span class="mf">12.0</span>
+    <span class="n">sessions</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SESS</span><span class="p">]</span>
+    <span class="n">spend</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SPEND</span><span class="p">]</span>
+    <span class="n">premium</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">PREMIUM</span><span class="p">]</span>
+    <span class="n">urban</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">URBAN</span><span class="p">]</span>
+
+    <span class="c1"># Smoothly increasing selection with spend; interactions make selection non-separable</span>
+    <span class="n">soft_spend</span> <span class="o">=</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">((</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">80.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">40.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="mf">0.6</span> <span class="o">*</span> <span class="n">soft_spend</span>
+        <span class="o">+</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="p">(</span><span class="n">sessions</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">tenure_years</span> <span class="o">-</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">premium</span> <span class="o">*</span> <span class="p">(</span><span class="n">urban</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># 4) Heterogeneous, nonlinear treatment effect tau(X) on the natural scale (continuous outcome)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tau_fn</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">tenure_years</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">TENURE</span><span class="p">]</span> <span class="o">/</span> <span class="mf">12.0</span>
+    <span class="n">sessions</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SESS</span><span class="p">]</span>
+    <span class="n">spend</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">SPEND</span><span class="p">]</span>
+    <span class="n">premium</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">PREMIUM</span><span class="p">]</span>
+    <span class="n">urban</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">URBAN</span><span class="p">]</span>
+
+    <span class="c1"># Base effect + stronger effect for higher sessions and premium users,</span>
+    <span class="c1"># diminishes with tenure, mild modulation by spend and urban</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">1.0</span>
+        <span class="o">+</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">sessions</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">))))</span>    <span class="c1"># sigmoid in sessions</span>
+        <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">premium</span>
+        <span class="o">-</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">tenure_years</span> <span class="o">/</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>        <span class="c1"># taper with long tenure</span>
+        <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">urban</span> <span class="o">*</span> <span class="p">(</span><span class="n">spend</span> <span class="o">-</span> <span class="mf">100.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span>
+    <span class="p">)</span>
+    <span class="c1"># Optional: keep it in a reasonable range</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+
+<span class="c1"># 5) Noise and prevalence</span>
+<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">3.5</span>
+<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.35</span>  <span class="c1"># enforce ~35% treated via intercept calibration</span>
+
+<span class="c1"># 6) Build generator</span>
 <span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-    <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
     <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
     <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
     <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="c1"># Confounders</span>
     <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
+    <span class="c1"># Outcome/treatment structure</span>
     <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
     <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
+    <span class="n">g_y</span><span class="o">=</span><span class="n">g_y</span><span class="p">,</span>
+    <span class="n">g_t</span><span class="o">=</span><span class="n">g_t</span><span class="p">,</span>
+    <span class="c1"># Heterogeneous effect</span>
+    <span class="n">tau</span><span class="o">=</span><span class="n">tau_fn</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="c1"># 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">generated_df</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-<span class="c1"># Create dataset</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-    <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+<span class="c1"># Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated</span>
+<span class="n">true_att</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">generated_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">generated_df</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;cate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ground-truth ATT from the DGP: </span><span class="si">{</span><span class="n">true_att</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 8) Wrap as CausalData for downstream workflows (keeps only y, t, and specified confounders)</span>
+<span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">generated_df</span><span class="p">,</span>
+    <span class="n">treatment</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
+    <span class="n">outcome</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
 <span class="p">)</span>
 
-<span class="c1"># Show first few rows</span>
+<span class="c1"># Peek at the analysis-ready view</span>
 <span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ground-truth ATT from the DGP: 1.386
+</pre></div>
+</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -545,8 +616,8 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>5.927714</td>
-      <td>1.0</td>
+      <td>2.237316</td>
+      <td>0.0</td>
       <td>27.656605</td>
       <td>5.352554</td>
       <td>72.552568</td>
@@ -555,8 +626,8 @@ document.write(`
     </tr>
     <tr>
       <th>1</th>
-      <td>11.122008</td>
-      <td>1.0</td>
+      <td>5.771469</td>
+      <td>0.0</td>
       <td>11.520191</td>
       <td>6.798247</td>
       <td>188.481287</td>
@@ -565,7 +636,7 @@ document.write(`
     </tr>
     <tr>
       <th>2</th>
-      <td>10.580393</td>
+      <td>6.374653</td>
       <td>1.0</td>
       <td>33.005414</td>
       <td>2.055459</td>
@@ -575,7 +646,7 @@ document.write(`
     </tr>
     <tr>
       <th>3</th>
-      <td>6.982844</td>
+      <td>2.364177</td>
       <td>1.0</td>
       <td>35.286777</td>
       <td>4.429404</td>
@@ -585,7 +656,7 @@ document.write(`
     </tr>
     <tr>
       <th>4</th>
-      <td>10.899381</td>
+      <td>8.378079</td>
       <td>0.0</td>
       <td>0.587578</td>
       <td>6.658307</td>
@@ -604,8 +675,16 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
-
-<span class="c1"># shape of data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="general-dataset-information">
+<h3>General dataset information<a class="headerlink" href="#general-dataset-information" title="Link to this heading">#</a></h3>
+<p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of data</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -616,9 +695,6 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="general-dataset-information">
-<h3>General dataset information<a class="headerlink" href="#general-dataset-information" title="Link to this heading">#</a></h3>
-<p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
@@ -673,29 +749,29 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>6523</td>
-      <td>6.014033</td>
-      <td>3.926613</td>
-      <td>-9.866447</td>
-      <td>1.013702</td>
-      <td>3.427671</td>
-      <td>6.041249</td>
-      <td>8.683796</td>
-      <td>10.958614</td>
-      <td>20.770359</td>
+      <td>6529</td>
+      <td>3.187405</td>
+      <td>3.755011</td>
+      <td>-12.770866</td>
+      <td>-1.579354</td>
+      <td>0.699513</td>
+      <td>3.149450</td>
+      <td>5.720525</td>
+      <td>7.932562</td>
+      <td>17.323664</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>3477</td>
-      <td>8.549418</td>
-      <td>3.933790</td>
-      <td>-5.507710</td>
-      <td>3.517233</td>
-      <td>5.908059</td>
-      <td>8.562984</td>
-      <td>11.207439</td>
-      <td>13.603630</td>
-      <td>21.377687</td>
+      <td>3471</td>
+      <td>5.221957</td>
+      <td>3.986130</td>
+      <td>-7.310514</td>
+      <td>0.152369</td>
+      <td>2.511003</td>
+      <td>5.205133</td>
+      <td>7.972448</td>
+      <td>10.350862</td>
+      <td>18.147842</td>
     </tr>
   </tbody>
 </table>
@@ -710,8 +786,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5113d167eb451051463762dbdf02ee89ea684c9505993ad299e83b0dca0af1c8.png" src="../_images/5113d167eb451051463762dbdf02ee89ea684c9505993ad299e83b0dca0af1c8.png" />
-<img alt="../_images/32a5381206d36e3dbe47687f0323c70a37741aac00a80f5e92f9f68c09d4e9bf.png" src="../_images/32a5381206d36e3dbe47687f0323c70a37741aac00a80f5e92f9f68c09d4e9bf.png" />
+<img alt="../_images/6df624ffacf19362eeecb34fffb99e58406d2997675ca652b701fa5831d66f03.png" src="../_images/6df624ffacf19362eeecb34fffb99e58406d2997675ca652b701fa5831d66f03.png" />
+<img alt="../_images/9bfe2bcbf2c62a2f972a32b3084488c3ae6a31ac7870f1b03e3c7727b767f79f.png" src="../_images/9bfe2bcbf2c62a2f972a32b3084488c3ae6a31ac7870f1b03e3c7727b767f79f.png" />
 </div>
 </div>
 </section>
@@ -760,39 +836,39 @@ document.write(`
   </thead>
   <tbody>
     <tr>
+      <th>spend_last_month</th>
+      <td>90.246033</td>
+      <td>119.504887</td>
+      <td>29.258855</td>
+      <td>0.527431</td>
+    </tr>
+    <tr>
       <th>premium_user</th>
-      <td>0.198682</td>
-      <td>0.347426</td>
-      <td>0.148744</td>
-      <td>0.338573</td>
+      <td>0.194823</td>
+      <td>0.354941</td>
+      <td>0.160118</td>
+      <td>0.364510</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>4.908586</td>
-      <td>5.288561</td>
-      <td>0.379975</td>
-      <td>0.190228</td>
-    </tr>
-    <tr>
-      <th>tenure_months</th>
-      <td>23.174130</td>
-      <td>25.195619</td>
-      <td>2.021489</td>
-      <td>0.167898</td>
+      <td>4.903527</td>
+      <td>5.298734</td>
+      <td>0.395206</td>
+      <td>0.197970</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.577802</td>
-      <td>0.644234</td>
-      <td>0.066432</td>
-      <td>0.136568</td>
+      <td>0.576811</td>
+      <td>0.646211</td>
+      <td>0.069400</td>
+      <td>0.142734</td>
     </tr>
     <tr>
-      <th>spend_last_month</th>
-      <td>97.786313</td>
-      <td>105.308510</td>
-      <td>7.522196</td>
-      <td>0.130139</td>
+      <th>tenure_months</th>
+      <td>23.337260</td>
+      <td>24.892263</td>
+      <td>1.555004</td>
+      <td>0.128836</td>
     </tr>
   </tbody>
 </table>
@@ -810,7 +886,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6052
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6924
 </pre></div>
 </div>
 </div>
@@ -824,7 +900,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.001, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0123, &#39;share_above&#39;: 0.0003, &#39;flag&#39;: False}
 </pre></div>
 </div>
 </div>
@@ -867,141 +943,48 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>num__spend_last_month</td>
-      <td>-0.000304</td>
-      <td>0.165514</td>
-      <td>1.179999</td>
-      <td>0.038370</td>
-      <td>-0.000069</td>
+      <td>num__avg_sessions_week</td>
+      <td>-0.000709</td>
+      <td>0.231318</td>
+      <td>1.260259</td>
+      <td>0.053972</td>
+      <td>-0.000160</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>num__avg_sessions_week</td>
-      <td>0.000255</td>
-      <td>0.196429</td>
-      <td>1.217049</td>
-      <td>0.045715</td>
-      <td>0.000058</td>
+      <td>num__tenure_months</td>
+      <td>0.000493</td>
+      <td>0.176727</td>
+      <td>1.193305</td>
+      <td>0.040955</td>
+      <td>0.000111</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>num__urban_resident</td>
-      <td>-0.000109</td>
-      <td>0.149617</td>
-      <td>1.161390</td>
-      <td>0.034613</td>
-      <td>-0.000025</td>
+      <td>num__premium_user</td>
+      <td>0.000182</td>
+      <td>0.350892</td>
+      <td>1.420334</td>
+      <td>0.082963</td>
+      <td>0.000041</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>num__premium_user</td>
-      <td>0.000100</td>
-      <td>0.300758</td>
-      <td>1.350882</td>
-      <td>0.070847</td>
-      <td>0.000023</td>
+      <td>num__urban_resident</td>
+      <td>0.000045</td>
+      <td>0.169130</td>
+      <td>1.184274</td>
+      <td>0.039157</td>
+      <td>0.000010</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>num__tenure_months</td>
-      <td>0.000058</td>
-      <td>0.177304</td>
-      <td>1.193994</td>
-      <td>0.041165</td>
-      <td>0.000013</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If your DataFrame has a &#39;shap_mean&#39; column:</span>
-<span class="n">shap_df</span> <span class="o">=</span> <span class="n">shap_values_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;shap_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
-<span class="n">shap_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">shap_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>feature</th>
-      <th>shap_mean</th>
-      <th>shap_mean_abs</th>
-      <th>odds_mult_abs</th>
-      <th>exact_pp_change_abs</th>
-      <th>exact_pp_change_signed</th>
-      <th>mean_abs_shap</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
       <td>num__spend_last_month</td>
-      <td>-0.000304</td>
-      <td>0.165514</td>
-      <td>1.179999</td>
-      <td>0.038370</td>
-      <td>-0.000069</td>
-      <td>0.000304</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>num__avg_sessions_week</td>
-      <td>0.000255</td>
-      <td>0.196429</td>
-      <td>1.217049</td>
-      <td>0.045715</td>
-      <td>0.000058</td>
-      <td>0.000255</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>num__urban_resident</td>
-      <td>-0.000109</td>
-      <td>0.149617</td>
-      <td>1.161390</td>
-      <td>0.034613</td>
-      <td>-0.000025</td>
-      <td>0.000109</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>num__premium_user</td>
-      <td>0.000100</td>
-      <td>0.300758</td>
-      <td>1.350882</td>
-      <td>0.070847</td>
-      <td>0.000023</td>
-      <td>0.000100</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>num__tenure_months</td>
-      <td>0.000058</td>
-      <td>0.177304</td>
-      <td>1.193994</td>
-      <td>0.041165</td>
-      <td>0.000013</td>
-      <td>0.000058</td>
+      <td>-0.000011</td>
+      <td>0.571914</td>
+      <td>1.771655</td>
+      <td>0.137722</td>
+      <td>-0.000002</td>
     </tr>
   </tbody>
 </table>
@@ -1016,7 +999,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c0cd3f639eb5aa24e97a86e1622d281b1e3297027b6076464093cfbed736b8e5.png" src="../_images/c0cd3f639eb5aa24e97a86e1622d281b1e3297027b6076464093cfbed736b8e5.png" />
+<img alt="../_images/858d349d907017e563b51b13fe35faa7ac28d238cbc0ea3afb75f67a05442a52.png" src="../_images/858d349d907017e563b51b13fe35faa7ac28d238cbc0ea3afb75f67a05442a52.png" />
 </div>
 </div>
 </section>
@@ -1034,7 +1017,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.6910736220288642, &#39;mae&#39;: 2.939833306169571}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.644001419637874, &#39;mae&#39;: 2.9062081925949586}
 </pre></div>
 </div>
 </div>
@@ -1073,28 +1056,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>tenure_months</td>
-      <td>-0.001717</td>
+      <td>premium_user</td>
+      <td>0.001251</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>avg_sessions_week</td>
-      <td>0.000814</td>
+      <td>spend_last_month</td>
+      <td>-0.001191</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>premium_user</td>
-      <td>0.000805</td>
+      <td>avg_sessions_week</td>
+      <td>-0.001137</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>spend_last_month</td>
-      <td>0.000376</td>
+      <td>tenure_months</td>
+      <td>0.000659</td>
     </tr>
     <tr>
       <th>4</th>
       <td>urban_resident</td>
-      <td>-0.000277</td>
+      <td>0.000418</td>
     </tr>
   </tbody>
 </table>
@@ -1102,41 +1085,59 @@ document.write(`
 </div>
 </section>
 </section>
-<section id="inference">
-<h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="inference">
+<h1>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h1>
 <p>Now time to estimate ATE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="c1"># Estimate Average Treatment Effect (ATT)</span>
+<span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">att_result</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.7837568133024586,
- &#39;std_error&#39;: 0.08796851810878961,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.2811744560034295,
+ &#39;std_error&#39;: 0.11952472711806723,
  &#39;p_value&#39;: 0.0,
- &#39;confidence_interval&#39;: (1.6113416860358714, 1.9561719405690459),
- &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x1492070e0&gt;}
+ &#39;confidence_interval&#39;: (1.0469102955900398, 1.5154386164168192),
+ &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x15e557770&gt;}
 </pre></div>
 </div>
 </div>
 </div>
-<p>True theta in our data generating proccess was 1.8</p>
-</section>
+<p>Real ATT is 1.385</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte_source</span>
+
+<span class="c1"># Estimate Average Treatment Effect (ATT)</span>
+<span class="n">att_result</span> <span class="o">=</span> <span class="n">dml_atte_source</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="n">att_result</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.3388422571411907,
+ &#39;std_error&#39;: 0.09290445060655343,
+ &#39;p_value&#39;: 4.415346870522402e-47,
+ &#39;confidence_interval&#39;: (1.1567528799488656, 1.5209316343335157),
+ &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x15e557cb0&gt;}
+</pre></div>
+</div>
+</div>
+</div>
 <section id="refutation">
 <h2>Refutation<a class="headerlink" href="#refutation" title="Link to this heading">#</a></h2>
-<section id="placebo">
-<h3>Placebo<a class="headerlink" href="#placebo" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import refutation utilities</span>
@@ -1152,22 +1153,24 @@ document.write(`
 </div>
 </div>
 </div>
+<section id="placebo">
+<h3>Placebo<a class="headerlink" href="#placebo" title="Link to this heading">#</a></h3>
 <p>Replacing outcome with dummy random variable must broke our model and effect will be near zero</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing an outcome with placebo</span>
-<span class="n">ate_placebo_outcome</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
+<span class="n">att_placebo_outcome</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span>
+    <span class="n">dml_atte_source</span><span class="p">,</span>
     <span class="n">causal_data</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_outcome</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">att_placebo_outcome</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.0078040951760904075, &#39;p_value&#39;: 0.39168288447854893}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.0012806280371837212, &#39;p_value&#39;: 0.7044798699944812}
 </pre></div>
 </div>
 </div>
@@ -1176,18 +1179,18 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing treatment with placebo</span>
-<span class="n">ate_placebo_treatment</span> <span class="o">=</span> <span class="n">refute_placebo_treatment</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
+<span class="n">att_placebo_treatment</span> <span class="o">=</span> <span class="n">refute_placebo_treatment</span><span class="p">(</span>
+    <span class="n">dml_atte_source</span><span class="p">,</span>
     <span class="n">causal_data</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_treatment</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">att_placebo_treatment</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 0.03991094217663553, &#39;p_value&#39;: 0.6437714720309031}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: -0.029196210635696572, &#39;p_value&#39;: 0.7102486963099138}
 </pre></div>
 </div>
 </div>
@@ -1198,23 +1201,23 @@ document.write(`
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inference on subsets</span>
 <span class="n">subset_fractions</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
 
-<span class="n">ate_subset_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">att_subset_results</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">fraction</span> <span class="ow">in</span> <span class="n">subset_fractions</span><span class="p">:</span>
     <span class="n">subset_result</span> <span class="o">=</span> <span class="n">refute_subset</span><span class="p">(</span>
-        <span class="n">dml_ate</span><span class="p">,</span>
+        <span class="n">dml_atte_source</span><span class="p">,</span>
         <span class="n">causal_data</span><span class="p">,</span>
         <span class="n">fraction</span><span class="o">=</span><span class="n">fraction</span><span class="p">,</span>
         <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
     <span class="p">)</span>
-    <span class="n">ate_subset_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_result</span><span class="p">)</span>
+    <span class="n">att_subset_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_result</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; With </span><span class="si">{</span><span class="n">fraction</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% subset: theta = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p_value = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.5859, p_value = 0.0000
- With 50% subset: theta = 1.8288, p_value = 0.0000
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.1100, p_value = 0.0000
+ With 50% subset: theta = 1.4470, p_value = 0.0000
 </pre></div>
 </div>
 </div>
@@ -1222,25 +1225,36 @@ document.write(`
 </section>
 <section id="orthogonality">
 <h3>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h3>
-<p>Orthogonality tests show us “Does we correct specify the model”</p>
+<p>Orthogonality tests validate whether our ATT estimator is properly specified. We will inspect:</p>
+<ul class="simple">
+<li><p>Out-of-sample (OOS) moment check;</p></li>
+<li><p>ATT-specific orthogonality derivatives (m0 and g only);</p></li>
+<li><p>Influence diagnostics;</p></li>
+<li><p>ATT overlap diagnostics and trim-sensitivity near m→1 (controls);</p></li>
+<li><p>Trimming info and overall diagnostic conditions.</p></li>
+</ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">att_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_atte</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;ATTE&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_28797/1147422044.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
-  ate_ortho_check = refute_irm_orthogonality(dml_ate, causal_data)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_28896/3020675057.py:1: DeprecationWarning: &#39;target&#39; is deprecated; use &#39;score&#39; (&#39;ATE&#39;|&#39;ATTE&#39;).
+  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATTE&#39;)
+/var/folders/m0/gys_jqqj44n801p04bgv_ct00000gn/T/ipykernel_28896/3020675057.py:1: DeprecationWarning: &#39;clip_eps&#39; is deprecated; use &#39;trimming_threshold&#39;.
+  att_ortho_check = refute_irm_orthogonality(dml_att, causal_data, target=&#39;ATTE&#39;)
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="out-of-sample-moment-check">
+<h3>1. Out-of-sample moment check<a class="headerlink" href="#out-of-sample-moment-check" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Out-of-sample moment check</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 1. Out-of-Sample Moment Check ---&quot;</span><span class="p">)</span>
-<span class="n">oos_test</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">]</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 1. Out-of-Sample Moment Check ---&quot;</span><span class="p">)</span>
+<span class="n">oos_test</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-statistic: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;pvalue&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1251,8 +1265,8 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: 0.4923
-P-value: 0.6225
+T-statistic: -0.3333
+P-value: 0.7389
 Interpretation: Should be ≈ 0 if moment condition holds
 
 Fold-wise results:
@@ -1287,40 +1301,42 @@ Fold-wise results:
       <th>0</th>
       <td>0</td>
       <td>2500</td>
-      <td>0.140046</td>
-      <td>75.991733</td>
+      <td>0.161032</td>
+      <td>90.556348</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
       <td>2500</td>
-      <td>0.172414</td>
-      <td>77.675004</td>
+      <td>-0.497376</td>
+      <td>393.743965</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
       <td>2500</td>
-      <td>-0.066878</td>
-      <td>69.722917</td>
+      <td>0.230331</td>
+      <td>89.496856</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
       <td>2500</td>
-      <td>-0.076579</td>
-      <td>71.176671</td>
+      <td>-0.065950</td>
+      <td>91.623263</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>psi_mean is near zero on every fold, so the test is successful</p>
+<p>psi_mean is expected to be near zero on every fold if the moment condition holds.</p>
+</section>
+<section id="orthogonality-derivatives-att">
+<h3>2. Orthogonality derivatives (ATT)<a class="headerlink" href="#orthogonality-derivatives-att" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Orthogonality derivatives</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 2. Orthogonality (Gateaux Derivative) Tests ---&quot;</span><span class="p">)</span>
-<span class="n">ortho_derivs</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 2. Orthogonality (Gateaux Derivative) Tests — ATT ---&quot;</span><span class="p">)</span>
+<span class="n">ortho_derivs</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample derivatives:&quot;</span><span class="p">)</span>
@@ -1330,22 +1346,22 @@ Fold-wise results:
 <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">])</span>
 
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (full sample):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\u26A0</span><span class="s2"> PROBLEMATIC derivatives (full sample):&quot;</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in full sample&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\u2713</span><span class="s2"> No problematic derivatives in full sample&quot;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (trimmed sample):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\u26A0</span><span class="s2"> PROBLEMATIC derivatives (trimmed sample):&quot;</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in trimmed sample&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\u2713</span><span class="s2"> No problematic derivatives in trimmed sample&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 2. Orthogonality (Gateaux Derivative) Tests ---
-Interpretation: Large |t| (&gt;2) indicate calibration issues
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 2. Orthogonality (Gateaux Derivative) Tests — ATT ---
+Interpretation: ATTE: check g0 &amp; m only; large |t| (&gt;2) =&gt; calibration issues
 
 Full sample derivatives:
 </pre></div>
@@ -1378,86 +1394,149 @@ Full sample derivatives:
       <th>d_m</th>
       <th>se_m</th>
       <th>t_m</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.059500</td>
-      <td>0.016515</td>
-      <td>-3.602854</td>
-      <td>0.020506</td>
-      <td>0.008181</td>
-      <td>2.506691</td>
-      <td>-0.359189</td>
-      <td>0.398015</td>
-      <td>-0.902452</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.008439</td>
-      <td>0.018789</td>
-      <td>0.449139</td>
-      <td>0.008293</td>
-      <td>0.008950</td>
-      <td>0.926599</td>
-      <td>-0.639525</td>
-      <td>0.543632</td>
-      <td>-1.176393</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.038682</td>
+      <td>0.038963</td>
+      <td>0.992797</td>
+      <td>-7.964437</td>
+      <td>8.432958</td>
+      <td>-0.944442</td>
+      <td>0.038682</td>
+      <td>0.038963</td>
+      <td>0.992797</td>
+      <td>-7.964437</td>
+      <td>8.432958</td>
+      <td>-0.944442</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.020546</td>
-      <td>0.017640</td>
-      <td>1.164703</td>
-      <td>0.006927</td>
-      <td>0.008936</td>
-      <td>0.775167</td>
-      <td>0.126057</td>
-      <td>0.556254</td>
-      <td>0.226617</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.042164</td>
+      <td>0.038231</td>
+      <td>1.102877</td>
+      <td>-6.935440</td>
+      <td>7.420589</td>
+      <td>-0.934621</td>
+      <td>0.042164</td>
+      <td>0.038231</td>
+      <td>1.102877</td>
+      <td>-6.935440</td>
+      <td>7.420589</td>
+      <td>-0.934621</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>0.002475</td>
-      <td>0.016398</td>
-      <td>0.150957</td>
-      <td>-0.001440</td>
-      <td>0.008675</td>
-      <td>-0.165993</td>
-      <td>-0.037181</td>
-      <td>0.441771</td>
-      <td>-0.084164</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.052754</td>
+      <td>0.029836</td>
+      <td>1.768112</td>
+      <td>-3.198707</td>
+      <td>3.665548</td>
+      <td>-0.872641</td>
+      <td>0.052754</td>
+      <td>0.029836</td>
+      <td>1.768112</td>
+      <td>-3.198707</td>
+      <td>3.665548</td>
+      <td>-0.872641</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>0.001852</td>
-      <td>0.013692</td>
-      <td>0.135296</td>
-      <td>0.012502</td>
-      <td>0.010076</td>
-      <td>1.240750</td>
-      <td>-0.021918</td>
-      <td>0.318157</td>
-      <td>-0.068892</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.025439</td>
+      <td>0.038231</td>
+      <td>0.665406</td>
+      <td>-6.487625</td>
+      <td>6.551067</td>
+      <td>-0.990316</td>
+      <td>0.025439</td>
+      <td>0.038231</td>
+      <td>0.665406</td>
+      <td>-6.487625</td>
+      <td>6.551067</td>
+      <td>-0.990316</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.013815</td>
-      <td>0.017182</td>
-      <td>0.804053</td>
-      <td>0.002671</td>
-      <td>0.007965</td>
-      <td>0.335414</td>
-      <td>0.219591</td>
-      <td>0.440190</td>
-      <td>0.498856</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.006936</td>
+      <td>0.026899</td>
+      <td>0.257848</td>
+      <td>-2.740073</td>
+      <td>3.102471</td>
+      <td>-0.883191</td>
+      <td>0.006936</td>
+      <td>0.026899</td>
+      <td>0.257848</td>
+      <td>-2.740073</td>
+      <td>3.102471</td>
+      <td>-0.883191</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1492,86 +1571,149 @@ Full sample derivatives:
       <th>d_m</th>
       <th>se_m</th>
       <th>t_m</th>
+      <th>d_m0</th>
+      <th>se_m0</th>
+      <th>t_m0</th>
+      <th>d_g</th>
+      <th>se_g</th>
+      <th>t_g</th>
+      <th>d_m1</th>
+      <th>se_m1</th>
+      <th>t_m1</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.059500</td>
-      <td>0.016515</td>
-      <td>-3.602854</td>
-      <td>0.020506</td>
-      <td>0.008181</td>
-      <td>2.506691</td>
-      <td>-0.359189</td>
-      <td>0.398015</td>
-      <td>-0.902452</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1</td>
-      <td>0.008439</td>
-      <td>0.018789</td>
-      <td>0.449139</td>
-      <td>0.008293</td>
-      <td>0.008950</td>
-      <td>0.926599</td>
-      <td>-0.639525</td>
-      <td>0.543632</td>
-      <td>-1.176393</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.038132</td>
+      <td>0.038969</td>
+      <td>0.978517</td>
+      <td>-7.966467</td>
+      <td>8.435382</td>
+      <td>-0.944411</td>
+      <td>0.038132</td>
+      <td>0.038969</td>
+      <td>0.978517</td>
+      <td>-7.966467</td>
+      <td>8.435382</td>
+      <td>-0.944411</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2</td>
-      <td>0.020546</td>
-      <td>0.017640</td>
-      <td>1.164703</td>
-      <td>0.006927</td>
-      <td>0.008936</td>
-      <td>0.775167</td>
-      <td>0.126057</td>
-      <td>0.556254</td>
-      <td>0.226617</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.042828</td>
+      <td>0.038237</td>
+      <td>1.120084</td>
+      <td>-6.949009</td>
+      <td>7.422719</td>
+      <td>-0.936181</td>
+      <td>0.042828</td>
+      <td>0.038237</td>
+      <td>1.120084</td>
+      <td>-6.949009</td>
+      <td>7.422719</td>
+      <td>-0.936181</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3</td>
-      <td>0.002475</td>
-      <td>0.016398</td>
-      <td>0.150957</td>
-      <td>-0.001440</td>
-      <td>0.008675</td>
-      <td>-0.165993</td>
-      <td>-0.037181</td>
-      <td>0.441771</td>
-      <td>-0.084164</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.052521</td>
+      <td>0.029843</td>
+      <td>1.759913</td>
+      <td>-3.207026</td>
+      <td>3.666596</td>
+      <td>-0.874660</td>
+      <td>0.052521</td>
+      <td>0.029843</td>
+      <td>1.759913</td>
+      <td>-3.207026</td>
+      <td>3.666596</td>
+      <td>-0.874660</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>4</th>
       <td>4</td>
-      <td>0.001852</td>
-      <td>0.013692</td>
-      <td>0.135296</td>
-      <td>0.012502</td>
-      <td>0.010076</td>
-      <td>1.240750</td>
-      <td>-0.021918</td>
-      <td>0.318157</td>
-      <td>-0.068892</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.025984</td>
+      <td>0.038239</td>
+      <td>0.679505</td>
+      <td>-6.492960</td>
+      <td>6.552954</td>
+      <td>-0.990845</td>
+      <td>0.025984</td>
+      <td>0.038239</td>
+      <td>0.679505</td>
+      <td>-6.492960</td>
+      <td>6.552954</td>
+      <td>-0.990845</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>5</th>
       <td>5</td>
-      <td>0.013815</td>
-      <td>0.017182</td>
-      <td>0.804053</td>
-      <td>0.002671</td>
-      <td>0.007965</td>
-      <td>0.335414</td>
-      <td>0.219591</td>
-      <td>0.440190</td>
-      <td>0.498856</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.007209</td>
+      <td>0.026906</td>
+      <td>0.267918</td>
+      <td>-2.748894</td>
+      <td>3.103358</td>
+      <td>-0.885780</td>
+      <td>0.007209</td>
+      <td>0.026906</td>
+      <td>0.267918</td>
+      <td>-2.748894</td>
+      <td>3.103358</td>
+      <td>-0.885780</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1612,15 +1754,15 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.0595</td>
-      <td>0.016515</td>
-      <td>-3.602854</td>
-      <td>0.020506</td>
-      <td>0.008181</td>
-      <td>2.506691</td>
-      <td>-0.359189</td>
-      <td>0.398015</td>
-      <td>-0.902452</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.071722</td>
+      <td>0.028637</td>
+      <td>2.504561</td>
+      <td>-3.544335</td>
+      <td>3.799963</td>
+      <td>-0.932729</td>
     </tr>
   </tbody>
 </table>
@@ -1661,27 +1803,28 @@ Full sample derivatives:
     <tr>
       <th>0</th>
       <td>0</td>
-      <td>-0.0595</td>
-      <td>0.016515</td>
-      <td>-3.602854</td>
-      <td>0.020506</td>
-      <td>0.008181</td>
-      <td>2.506691</td>
-      <td>-0.359189</td>
-      <td>0.398015</td>
-      <td>-0.902452</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.071965</td>
+      <td>0.028643</td>
+      <td>2.512439</td>
+      <td>-3.539362</td>
+      <td>3.801055</td>
+      <td>-0.931153</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>t_m1, t_m0, t_g should be above 2.
-Even after trimming our data t_m1, t_m0, t_g above 2 across all confounders</p>
+<p>For ATT, focus on t-statistics for m0 and g. Large absolute t-values (|t| &gt; 2) suggest calibration issues.</p>
+</section>
+<section id="influence-diagnostics">
+<h3>3. Influence diagnostics<a class="headerlink" href="#influence-diagnostics" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Influence diagnostics</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 3. Influence Diagnostics ---&quot;</span><span class="p">)</span>
-<span class="n">influence</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">]</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 3. Influence Diagnostics ---&quot;</span><span class="p">)</span>
+<span class="n">influence</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample influence metrics:&quot;</span><span class="p">)</span>
@@ -1704,14 +1847,14 @@ Even after trimming our data t_m1, t_m0, t_g above 2 across all confounders</p>
 Interpretation: Heavy tails or extreme kurtosis suggest instability
 
 Full sample influence metrics:
-  Plugin SE: 0.0858
-  Kurtosis: 10.47
-  P99/Median ratio: 6.90
+  Plugin SE: 0.1290
+  Kurtosis: 2102.94
+  P99/Median ratio: 8.99
 
 Trimmed sample influence metrics:
-  Plugin SE: 0.0858
-  Kurtosis: 10.47
-  P99/Median ratio: 6.90
+  Plugin SE: 0.1290
+  Kurtosis: 2099.23
+  P99/Median ratio: 8.95
 
 Top influential observations (full sample):
 </pre></div>
@@ -1744,93 +1887,310 @@ Top influential observations (full sample):
   <tbody>
     <tr>
       <th>0</th>
-      <td>9368</td>
-      <td>-84.362039</td>
-      <td>0.081674</td>
-      <td>-6.769493</td>
-      <td>-0.000000</td>
+      <td>5169</td>
+      <td>-872.753752</td>
+      <td>0.976292</td>
+      <td>0.0</td>
+      <td>7.356217</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>7299</td>
-      <td>-76.682519</td>
-      <td>0.112310</td>
-      <td>-8.863792</td>
-      <td>-0.000000</td>
+      <td>8900</td>
+      <td>145.827351</td>
+      <td>0.934003</td>
+      <td>-0.0</td>
+      <td>-3.576620</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>4732</td>
-      <td>-75.571748</td>
-      <td>0.840977</td>
-      <td>0.000000</td>
-      <td>12.231674</td>
+      <td>9615</td>
+      <td>-141.800862</td>
+      <td>0.863140</td>
+      <td>0.0</td>
+      <td>7.804205</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>874</td>
-      <td>68.376059</td>
-      <td>0.091496</td>
-      <td>6.664251</td>
-      <td>0.000000</td>
+      <td>3112</td>
+      <td>113.911280</td>
+      <td>0.901686</td>
+      <td>-0.0</td>
+      <td>-4.311016</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3122</td>
-      <td>67.284889</td>
-      <td>0.065985</td>
-      <td>4.472299</td>
-      <td>0.000000</td>
+      <td>4330</td>
+      <td>104.788962</td>
+      <td>0.875907</td>
+      <td>-0.0</td>
+      <td>-5.153000</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>5563</td>
-      <td>65.500549</td>
-      <td>0.144684</td>
-      <td>9.980117</td>
-      <td>0.000000</td>
+      <td>9369</td>
+      <td>-98.128647</td>
+      <td>0.733857</td>
+      <td>0.0</td>
+      <td>12.352487</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>4273</td>
-      <td>63.943012</td>
-      <td>0.143024</td>
-      <td>9.029281</td>
-      <td>0.000000</td>
+      <td>6849</td>
+      <td>90.866796</td>
+      <td>0.827884</td>
+      <td>-0.0</td>
+      <td>-6.557095</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>1446</td>
-      <td>-61.722358</td>
-      <td>0.863437</td>
-      <td>0.000000</td>
-      <td>8.704858</td>
+      <td>323</td>
+      <td>87.549304</td>
+      <td>0.926911</td>
+      <td>-0.0</td>
+      <td>-2.396184</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>6057</td>
-      <td>58.460959</td>
-      <td>0.161539</td>
-      <td>9.430154</td>
-      <td>0.000000</td>
+      <td>3694</td>
+      <td>-87.406904</td>
+      <td>0.819597</td>
+      <td>0.0</td>
+      <td>6.677937</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>8234</td>
-      <td>52.419202</td>
-      <td>0.083391</td>
-      <td>4.438301</td>
-      <td>0.000000</td>
+      <td>5325</td>
+      <td>-80.857573</td>
+      <td>0.729825</td>
+      <td>0.0</td>
+      <td>10.389672</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
+</section>
+<section id="att-overlap-diagnostics-and-trim-sensitivity">
+<h3>4. ATT overlap diagnostics and trim-sensitivity<a class="headerlink" href="#att-overlap-diagnostics-and-trim-sensitivity" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trimming information</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Propensity Score Trimming ---&quot;</span><span class="p">)</span>
-<span class="n">trim_info</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;trimming_info&#39;</span><span class="p">]</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- ATT Overlap Diagnostics ---&quot;</span><span class="p">)</span>
+<span class="n">overlap</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;overlap_diagnostics&#39;</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">overlap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overlap diagnostics not available.&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- ATT Trim-Sensitivity Curve ---&quot;</span><span class="p">)</span>
+<span class="n">robust</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;robustness&#39;</span><span class="p">]</span>
+<span class="n">trim_curve</span> <span class="o">=</span> <span class="n">robust</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;trim_curve&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">robust</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">trim_curve</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">trim_curve</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trim-sensitivity curve not available.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- ATT Overlap Diagnostics ---
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>threshold</th>
+      <th>pct_controls_with_m_ge_thr</th>
+      <th>pct_treated_with_m_le_1_minus_thr</th>
+      <th>pct_controls_with_g_ge_thr</th>
+      <th>pct_treated_with_g_le_1_minus_thr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.95</td>
+      <td>0.015316</td>
+      <td>0.230481</td>
+      <td>0.015316</td>
+      <td>0.230481</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.97</td>
+      <td>0.015316</td>
+      <td>0.028810</td>
+      <td>0.015316</td>
+      <td>0.028810</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.98</td>
+      <td>0.000000</td>
+      <td>0.028810</td>
+      <td>0.000000</td>
+      <td>0.028810</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.99</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- ATT Trim-Sensitivity Curve ---
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>trim_threshold</th>
+      <th>n</th>
+      <th>pct_dropped</th>
+      <th>theta</th>
+      <th>se</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.900000</td>
+      <td>9996</td>
+      <td>0.04</td>
+      <td>1.406195</td>
+      <td>0.103095</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.908636</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.351316</td>
+      <td>0.096496</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.917273</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.400847</td>
+      <td>0.098057</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.925909</td>
+      <td>9997</td>
+      <td>0.03</td>
+      <td>1.301191</td>
+      <td>0.097339</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.934545</td>
+      <td>9999</td>
+      <td>0.01</td>
+      <td>1.275482</td>
+      <td>0.106366</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.943182</td>
+      <td>9999</td>
+      <td>0.01</td>
+      <td>1.361187</td>
+      <td>0.094541</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.951818</td>
+      <td>9999</td>
+      <td>0.01</td>
+      <td>1.311377</td>
+      <td>0.110577</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.960455</td>
+      <td>9999</td>
+      <td>0.01</td>
+      <td>1.363900</td>
+      <td>0.102087</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.969091</td>
+      <td>9999</td>
+      <td>0.01</td>
+      <td>1.364416</td>
+      <td>0.102742</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.977727</td>
+      <td>10000</td>
+      <td>0.00</td>
+      <td>1.253225</td>
+      <td>0.125716</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.986364</td>
+      <td>10000</td>
+      <td>0.00</td>
+      <td>1.344956</td>
+      <td>0.128773</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.995000</td>
+      <td>10000</td>
+      <td>0.00</td>
+      <td>1.269253</td>
+      <td>0.128606</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="propensity-score-trimming">
+<h3>5. Propensity score trimming<a class="headerlink" href="#propensity-score-trimming" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Propensity Score Trimming ---&quot;</span><span class="p">)</span>
+<span class="n">trim_info</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;trimming_info&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trimming bounds: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observations trimmed: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;n_trimmed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;pct_trimmed&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
 </pre></div>
@@ -1839,24 +2199,24 @@ Top influential observations (full sample):
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Propensity Score Trimming ---
 Trimming bounds: (0.02, 0.98)
-Observations trimmed: 0 (0.0%)
+Observations trimmed: 17 (0.2%)
 </pre></div>
 </div>
 </div>
 </div>
-<p>In this test we analyze distribution of theta before trimming and after. There is no big difference. So test passed</p>
+</section>
+<section id="diagnostic-conditions-breakdown">
+<h3>6. Diagnostic conditions breakdown<a class="headerlink" href="#diagnostic-conditions-breakdown" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Diagnostic conditions breakdown</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Diagnostic Conditions Assessment ---&quot;</span><span class="p">)</span>
-<span class="n">conditions</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">]</span>
-
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Diagnostic Conditions Assessment ---&quot;</span><span class="p">)</span>
+<span class="n">conditions</span> <span class="o">=</span> <span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Individual condition checks:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">condition</span><span class="p">,</span> <span class="n">passed</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ PASS&quot;</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">&quot;✗ FAIL&quot;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\u2713</span><span class="s2"> PASS&quot;</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="se">\u2717</span><span class="s2"> FAIL&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overall: </span><span class="si">{</span><span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overall: </span><span class="si">{</span><span class="n">att_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1883,7 +2243,7 @@ Overall: CAUTION: Most conditions satisfied
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">bench_sets</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">sensitivity_analysis_set</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
+    <span class="n">att_result</span><span class="p">,</span>
     <span class="n">benchmarking_set</span><span class="o">=</span><span class="n">bench_sets</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
     <span class="n">null_hypothesis</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
@@ -1928,66 +2288,60 @@ Overall: CAUTION: Most conditions satisfied
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>CI lower</th>
-      <th>theta lower</th>
-      <th>theta</th>
-      <th>theta upper</th>
-      <th>CI upper</th>
+      <th>cf_y</th>
+      <th>cf_d</th>
+      <th>rho</th>
+      <th>delta_theta</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>tenure_months</th>
-      <td>1.611342</td>
-      <td>1.770011</td>
-      <td>1.783757</td>
-      <td>1.797503</td>
-      <td>1.956172</td>
+      <td>0.053576</td>
+      <td>0.025750</td>
+      <td>0.264154</td>
+      <td>0.081161</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>1.611342</td>
-      <td>1.768202</td>
-      <td>1.783757</td>
-      <td>1.799312</td>
-      <td>1.956172</td>
+      <td>0.035180</td>
+      <td>0.059335</td>
+      <td>0.505135</td>
+      <td>0.187856</td>
     </tr>
     <tr>
       <th>spend_last_month</th>
-      <td>1.611342</td>
-      <td>1.773033</td>
-      <td>1.783757</td>
-      <td>1.794480</td>
-      <td>1.956172</td>
+      <td>0.028300</td>
+      <td>0.100006</td>
+      <td>0.803100</td>
+      <td>0.341281</td>
     </tr>
     <tr>
       <th>premium_user</th>
-      <td>1.611342</td>
-      <td>1.755566</td>
-      <td>1.783757</td>
-      <td>1.811948</td>
-      <td>1.956172</td>
+      <td>0.042281</td>
+      <td>0.081704</td>
+      <td>0.524485</td>
+      <td>0.248317</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>1.611342</td>
-      <td>1.772618</td>
-      <td>1.783757</td>
-      <td>1.794896</td>
-      <td>1.956172</td>
+      <td>0.003823</td>
+      <td>0.015243</td>
+      <td>0.158730</td>
+      <td>0.010075</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>It is business domain and data knowledge relative question. In this situation we will stop on the most influential confounder ‘premium_user’ and test theta when we do not observe anothere confounder with strength of ‘premium_user’</p>
+<p>It is business domain and data knowledge relative question. In this situation we will stop on the most influential confounder ‘spend_last_month’ and test theta when we do not observe another confounder with strength of ‘premium_user’</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run sensitivity analysis on our ATE result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run sensitivity analysis on our ATT result</span>
 <span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
-    <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
-    <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
+    <span class="n">att_result</span><span class="p">,</span>
+    <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
+    <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
     <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
 <span class="p">)</span>
 
@@ -2000,15 +2354,15 @@ Overall: CAUTION: Most conditions satisfied
 
 ------------------ Scenario          ------------------
 Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
+Sensitivity parameters: cf_y=0.02; cf_d=0.08, rho=1.0
 
 ------------------ Bounds with CI    ------------------
-          CI lower  theta lower           theta  theta upper      CI upper
-     t    1.611342     1.463349        1.783757     2.104165      1.956172
+   CI lower  theta lower     theta  theta upper  CI upper
+t  0.834104      0.98946  1.338842     1.688225  1.839559
 
 ------------------ Robustness Values ------------------
-          H_0    RV (%)  RVa (%)
-     t    0.0  4.699863 0.000000
+   H_0     RV (%)    RVa (%)
+t  0.0  14.754729  13.061519
 </pre></div>
 </div>
 </div>
@@ -2038,11 +2392,11 @@ Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
       </div>
     </a>
     <a class="right-next"
-       href="dml_att.html"
+       href="../research.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">DML ATT Example</p>
+        <p class="prev-next-title">Research</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -2064,6 +2418,7 @@ Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">DML ATT Example</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-data">Generate data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#general-dataset-information">General dataset information</a></li>
@@ -2071,14 +2426,25 @@ Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-regression">Outcome regression</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo">Placebo</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">Orthogonality</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#out-of-sample-moment-check">1. Out-of-sample moment check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality-derivatives-att">2. Orthogonality derivatives (ATT)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#influence-diagnostics">3. Influence diagnostics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#att-overlap-diagnostics-and-trim-sensitivity">4. ATT overlap diagnostics and trim-sensitivity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#propensity-score-trimming">5. Propensity score trimming</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostic-conditions-breakdown">6. Diagnostic conditions breakdown</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity analysis</a></li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

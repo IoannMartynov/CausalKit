@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -43,14 +44,12 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/dml_ate';</script>
     <link rel="icon" href="../_static/logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DML ATT Example" href="dml_att.html" />
-    <link rel="prev" title="Notebooks" href="../notebooks.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -155,9 +154,16 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -253,7 +259,9 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -275,9 +283,16 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -330,20 +345,6 @@ document.write(`
     
   </div>
   
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATE Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
-
-</ul>
-</div>
-</nav></div>
-    </div>
-  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -376,9 +377,6 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../notebooks.html" class="nav-link">Notebooks</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page">DML ATE Example</li>
   </ul>
 </nav>
@@ -426,7 +424,7 @@ document.write(`
 <p>Let’s generate data of how feature (Treatment) impact on ARPU (Outcome) with linear effect (theta) = 1.8</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
@@ -445,7 +443,7 @@ document.write(`
 <span class="c1"># Causal effect and noise</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mf">1.8</span>  <span class="c1"># ATE: +1.8 ARPU units if new_feature = 1</span>
 <span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">3.5</span>  <span class="c1"># ARPU noise std</span>
-<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.35</span>  <span class="c1"># ~35% treated</span>
+<span class="n">target_d_rate</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># ~20% treated</span>
 
 <span class="c1"># Effects of confounders on ARPU (baseline, additive)</span>
 <span class="c1"># Order: tenure_months, avg_sessions_week, spend_last_month, premium_user, urban_resident</span>
@@ -458,7 +456,7 @@ document.write(`
 <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="c1"># Effects of confounders on treatment assignment (log-odds scale)</span>
-<span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="n">beta_d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
     <span class="mf">0.015</span><span class="p">,</span>  <span class="c1"># tenure_months</span>
     <span class="mf">0.10</span><span class="p">,</span>  <span class="c1"># avg_sessions_week</span>
     <span class="mf">0.002</span><span class="p">,</span>  <span class="c1"># spend_last_month</span>
@@ -470,17 +468,17 @@ document.write(`
     <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
     <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
     <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-    <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
+    <span class="n">target_d_rate</span><span class="o">=</span><span class="n">target_d_rate</span><span class="p">,</span>
     <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
     <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
     <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-    <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
+    <span class="n">beta_d</span><span class="o">=</span><span class="n">beta_d</span><span class="p">,</span>
 <span class="p">)</span>
 
 
 <span class="c1"># Create dataset</span>
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">n</span><span class="o">=</span><span class="mi">1_000</span><span class="p">,</span>
     <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
     <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
@@ -515,7 +513,7 @@ document.write(`
     <tr style="text-align: right;">
       <th></th>
       <th>y</th>
-      <th>t</th>
+      <th>d</th>
       <th>tenure_months</th>
       <th>avg_sessions_week</th>
       <th>spend_last_month</th>
@@ -526,51 +524,51 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>5.927714</td>
-      <td>1.0</td>
-      <td>27.656605</td>
-      <td>5.352554</td>
-      <td>72.552568</td>
-      <td>1.0</td>
+      <td>5.194102</td>
       <td>0.0</td>
+      <td>27.656605</td>
+      <td>4.881435</td>
+      <td>8.469223</td>
+      <td>1.0</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>11.122008</td>
-      <td>1.0</td>
-      <td>11.520191</td>
-      <td>6.798247</td>
-      <td>188.481287</td>
-      <td>1.0</td>
+      <td>-0.063379</td>
       <td>0.0</td>
+      <td>11.520191</td>
+      <td>3.541426</td>
+      <td>88.987552</td>
+      <td>0.0</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>10.580393</td>
-      <td>1.0</td>
+      <td>9.801480</td>
+      <td>0.0</td>
       <td>33.005414</td>
-      <td>2.055459</td>
-      <td>51.040440</td>
+      <td>4.171054</td>
+      <td>109.397558</td>
       <td>0.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>6.982844</td>
+      <td>9.335186</td>
       <td>1.0</td>
       <td>35.286777</td>
-      <td>4.429404</td>
-      <td>166.992239</td>
-      <td>0.0</td>
+      <td>6.267821</td>
+      <td>29.348647</td>
+      <td>1.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>10.899381</td>
+      <td>0.401218</td>
       <td>0.0</td>
       <td>0.587578</td>
-      <td>6.658307</td>
-      <td>179.371126</td>
+      <td>5.005987</td>
+      <td>67.257166</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
@@ -583,8 +581,16 @@ document.write(`
 <h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
+
+<span class="c1"># shape of data</span>
+<span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 1000, &#39;n_columns&#39;: 7}
 </pre></div>
 </div>
 </div>
@@ -594,20 +600,7 @@ document.write(`
 <p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of data</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 10000, &#39;n_columns&#39;: 7}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
 <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -659,29 +652,29 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>6519</td>
-      <td>6.011340</td>
-      <td>3.925893</td>
-      <td>-9.866447</td>
-      <td>1.012888</td>
-      <td>3.426894</td>
-      <td>6.030504</td>
-      <td>8.676781</td>
-      <td>10.952265</td>
-      <td>20.770359</td>
+      <td>812</td>
+      <td>5.970580</td>
+      <td>3.848034</td>
+      <td>-6.508088</td>
+      <td>1.101119</td>
+      <td>3.423470</td>
+      <td>5.991853</td>
+      <td>8.422984</td>
+      <td>11.133451</td>
+      <td>18.860615</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>3481</td>
-      <td>8.553615</td>
-      <td>3.934260</td>
-      <td>-5.507710</td>
-      <td>3.525225</td>
-      <td>5.909860</td>
-      <td>8.566860</td>
-      <td>11.216054</td>
-      <td>13.602967</td>
-      <td>21.377687</td>
+      <td>188</td>
+      <td>8.372288</td>
+      <td>3.669625</td>
+      <td>-3.363263</td>
+      <td>3.911177</td>
+      <td>6.035503</td>
+      <td>8.461052</td>
+      <td>11.113742</td>
+      <td>12.522852</td>
+      <td>18.626931</td>
     </tr>
   </tbody>
 </table>
@@ -689,15 +682,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
 <span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fa149fa07c0df489aa5f7b735ce2bfee005068f3fd99c6b50e4f14ca8aca23f4.png" src="../_images/fa149fa07c0df489aa5f7b735ce2bfee005068f3fd99c6b50e4f14ca8aca23f4.png" />
-<img alt="../_images/a168dc26ca1011c1dcf5048a0961c9382dddc1e1fc85336a7f7cde711e1788df.png" src="../_images/a168dc26ca1011c1dcf5048a0961c9382dddc1e1fc85336a7f7cde711e1788df.png" />
+<img alt="../_images/2716a2e19236fe36f626cef1dc684d3c4238a9964b236ba29f637146c53bf2d1.png" src="../_images/2716a2e19236fe36f626cef1dc684d3c4238a9964b236ba29f637146c53bf2d1.png" />
+<img alt="../_images/7f34d1fd51b638011f4e28c0ee89d5e77d2901057a85d8d4d0cfdf2810185a5b.png" src="../_images/7f34d1fd51b638011f4e28c0ee89d5e77d2901057a85d8d4d0cfdf2810185a5b.png" />
 </div>
 </div>
 </section>
@@ -706,7 +699,7 @@ document.write(`
 <p>Now let’s examine how propensity score differ treatments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
 <span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
 <span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
 </pre></div>
@@ -747,38 +740,38 @@ document.write(`
   <tbody>
     <tr>
       <th>premium_user</th>
-      <td>0.198343</td>
-      <td>0.347889</td>
-      <td>0.149545</td>
-      <td>0.340423</td>
+      <td>0.205665</td>
+      <td>0.409574</td>
+      <td>0.203909</td>
+      <td>0.452193</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>4.905841</td>
-      <td>5.293265</td>
-      <td>0.387423</td>
-      <td>0.193959</td>
+      <td>4.752390</td>
+      <td>5.203737</td>
+      <td>0.451346</td>
+      <td>0.227439</td>
     </tr>
     <tr>
       <th>tenure_months</th>
-      <td>23.170108</td>
-      <td>25.200827</td>
-      <td>2.030718</td>
-      <td>0.168676</td>
-    </tr>
-    <tr>
-      <th>urban_resident</th>
-      <td>0.578003</td>
-      <td>0.643781</td>
-      <td>0.065778</td>
-      <td>0.135209</td>
+      <td>23.227969</td>
+      <td>25.490376</td>
+      <td>2.262407</td>
+      <td>0.189916</td>
     </tr>
     <tr>
       <th>spend_last_month</th>
-      <td>97.801230</td>
-      <td>105.271930</td>
-      <td>7.470700</td>
-      <td>0.129267</td>
+      <td>98.051449</td>
+      <td>102.626023</td>
+      <td>4.574574</td>
+      <td>0.077029</td>
+    </tr>
+    <tr>
+      <th>urban_resident</th>
+      <td>0.625616</td>
+      <td>0.627660</td>
+      <td>0.002044</td>
+      <td>0.004218</td>
     </tr>
   </tbody>
 </table>
@@ -786,7 +779,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
 <span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
 
 <span class="c1"># ROC AUC - shows how predictable treatment is from confounders</span>
@@ -796,28 +789,28 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6053
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6166
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
 <span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0008, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.103, &#39;share_above&#39;: 0.0, &#39;flag&#39;: True}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
 <span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
 <span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
 </pre></div>
@@ -844,33 +837,57 @@ document.write(`
       <th></th>
       <th>feature</th>
       <th>shap_mean</th>
+      <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>spend_last_month</td>
-      <td>-0.000322</td>
+      <td>num__spend_last_month</td>
+      <td>-0.002308</td>
+      <td>0.267708</td>
+      <td>1.306966</td>
+      <td>0.042589</td>
+      <td>-0.000337</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>tenure_months</td>
-      <td>0.000140</td>
+      <td>num__tenure_months</td>
+      <td>0.002188</td>
+      <td>0.264734</td>
+      <td>1.303084</td>
+      <td>0.042078</td>
+      <td>0.000320</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>avg_sessions_week</td>
-      <td>0.000122</td>
+      <td>num__avg_sessions_week</td>
+      <td>-0.001180</td>
+      <td>0.336046</td>
+      <td>1.399403</td>
+      <td>0.054563</td>
+      <td>-0.000173</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>premium_user</td>
-      <td>0.000052</td>
+      <td>num__urban_resident</td>
+      <td>0.001072</td>
+      <td>0.115448</td>
+      <td>1.122377</td>
+      <td>0.017525</td>
+      <td>0.000157</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>urban_resident</td>
-      <td>0.000008</td>
+      <td>num__premium_user</td>
+      <td>0.000227</td>
+      <td>0.400097</td>
+      <td>1.491969</td>
+      <td>0.066190</td>
+      <td>0.000033</td>
     </tr>
   </tbody>
 </table>
@@ -878,14 +895,107 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If your DataFrame has a &#39;shap_mean&#39; column:</span>
+<span class="n">shap_df</span> <span class="o">=</span> <span class="n">shap_values_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;shap_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+<span class="n">shap_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">shap_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>feature</th>
+      <th>shap_mean</th>
+      <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
+      <th>mean_abs_shap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>num__spend_last_month</td>
+      <td>-0.002308</td>
+      <td>0.267708</td>
+      <td>1.306966</td>
+      <td>0.042589</td>
+      <td>-0.000337</td>
+      <td>0.002308</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>num__tenure_months</td>
+      <td>0.002188</td>
+      <td>0.264734</td>
+      <td>1.303084</td>
+      <td>0.042078</td>
+      <td>0.000320</td>
+      <td>0.002188</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>num__avg_sessions_week</td>
+      <td>-0.001180</td>
+      <td>0.336046</td>
+      <td>1.399403</td>
+      <td>0.054563</td>
+      <td>-0.000173</td>
+      <td>0.001180</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>num__urban_resident</td>
+      <td>0.001072</td>
+      <td>0.115448</td>
+      <td>1.122377</td>
+      <td>0.017525</td>
+      <td>0.000157</td>
+      <td>0.001072</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>num__premium_user</td>
+      <td>0.000227</td>
+      <td>0.400097</td>
+      <td>1.491969</td>
+      <td>0.066190</td>
+      <td>0.000033</td>
+      <td>0.000227</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
 <span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c7c4b11eb29d99e1c57798027b7500bcb86e2a5a69b52ec614a141268dbfd6c4.png" src="../_images/c7c4b11eb29d99e1c57798027b7500bcb86e2a5a69b52ec614a141268dbfd6c4.png" />
+<img alt="../_images/a1a1d8c1b5844558d7d6e4599583eced3c61d1f2060c17934725787e421a4d7f.png" src="../_images/a1a1d8c1b5844558d7d6e4599583eced3c61d1f2060c17934725787e421a4d7f.png" />
 </div>
 </div>
 </section>
@@ -894,7 +1004,7 @@ document.write(`
 <p>Let’s analyze how confounders predict outcome</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outcome model fit</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outcome model fit</span>
 <span class="n">outcome_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
 
 <span class="c1"># RMSE and MAE of regression model</span>
@@ -903,14 +1013,14 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.6896558290948964, &#39;mae&#39;: 2.94099663606919}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.740737260683856, &#39;mae&#39;: 2.9370898272431756}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
 <span class="n">shap_outcome_df</span> <span class="o">=</span> <span class="n">outcome_model</span><span class="o">.</span><span class="n">shap</span>
 <span class="n">display</span><span class="p">(</span><span class="n">shap_outcome_df</span><span class="p">)</span>
 </pre></div>
@@ -943,27 +1053,27 @@ document.write(`
     <tr>
       <th>0</th>
       <td>spend_last_month</td>
-      <td>0.002252</td>
+      <td>0.010719</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>tenure_months</td>
-      <td>-0.001747</td>
+      <td>avg_sessions_week</td>
+      <td>-0.006534</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>avg_sessions_week</td>
-      <td>-0.000951</td>
+      <td>tenure_months</td>
+      <td>-0.004359</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>premium_user</td>
-      <td>0.000729</td>
+      <td>urban_resident</td>
+      <td>0.002220</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>urban_resident</td>
-      <td>-0.000282</td>
+      <td>premium_user</td>
+      <td>-0.002046</td>
     </tr>
   </tbody>
 </table>
@@ -976,26 +1086,1512 @@ document.write(`
 <p>Now time to estimate ATE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_result</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.7547754158492368,
- &#39;std_error&#39;: 0.08120639822820347,
- &#39;p_value&#39;: 1.4835396169728733e-103,
- &#39;confidence_interval&#39;: (1.5956138000077407, 1.913937031690733),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x14de1bb60&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.2980190527287987,
+ &#39;std_error&#39;: 0.5241281531938741,
+ &#39;p_value&#39;: 0.01326665053030518,
+ &#39;confidence_interval&#39;: (0.2707467491853135, 2.3252913562722837),
+ &#39;model&#39;: &lt;causalkit.inference.estimators.irm.IRM at 0x166be23c0&gt;,
+ &#39;diagnostic_data&#39;: {&#39;m_hat&#39;: array([0.20554844, 0.1290321 , 0.07803345, 0.38031118, 0.02856343,
+         0.35743388, 0.37884481, 0.11353256, 0.41199118, 0.09352875,
+         0.07866502, 0.35511589, 0.0693616 , 0.02622509, 0.08416825,
+         0.05340323, 0.12058671, 0.0883763 , 0.07757752, 0.07916583,
+         0.36273034, 0.15175503, 0.17368866, 0.05999416, 0.037057  ,
+         0.07536295, 0.1532815 , 0.15428353, 0.13052324, 0.36094362,
+         0.47640397, 0.25292739, 0.14913619, 0.16168426, 0.22868709,
+         0.12201928, 0.15862311, 0.13894857, 0.54909793, 0.22305202,
+         0.06945172, 0.1366775 , 0.08916942, 0.14531935, 0.38454672,
+         0.28987717, 0.56712005, 0.62165301, 0.03733184, 0.23099293,
+         0.07214677, 0.11952243, 0.06742463, 0.0994542 , 0.07029557,
+         0.1512718 , 0.21767947, 0.32131232, 0.27681429, 0.15166055,
+         0.05409393, 0.13759303, 0.22133923, 0.13672697, 0.2661381 ,
+         0.11330453, 0.05632913, 0.26729472, 0.19075795, 0.14480744,
+         0.17482654, 0.09172012, 0.15936591, 0.05170075, 0.1158795 ,
+         0.09290211, 0.07730604, 0.06595192, 0.08191307, 0.04055031,
+         0.11485927, 0.07279452, 0.16979201, 0.30676076, 0.11764655,
+         0.07899315, 0.20854466, 0.10527528, 0.25404569, 0.09038714,
+         0.25244146, 0.24566377, 0.29498848, 0.3703692 , 0.02624662,
+         0.04807552, 0.04754758, 0.21243579, 0.18664285, 0.40480925,
+         0.16316812, 0.58400375, 0.25759315, 0.47725794, 0.27305345,
+         0.24026846, 0.13022913, 0.0909041 , 0.24417423, 0.13567286,
+         0.20578643, 0.28337235, 0.0939068 , 0.24668747, 0.44684996,
+         0.25818519, 0.28016757, 0.04217115, 0.09625322, 0.21689343,
+         0.1514783 , 0.17951395, 0.05743406, 0.15587318, 0.12160756,
+         0.35911177, 0.22845933, 0.06260927, 0.20134501, 0.04253746,
+         0.08048776, 0.24875688, 0.29397797, 0.05353746, 0.140952  ,
+         0.53832793, 0.21023032, 0.18889231, 0.16597763, 0.30379892,
+         0.04649016, 0.05372455, 0.20171657, 0.1874274 , 0.08216067,
+         0.25696189, 0.18202267, 0.13568207, 0.1937682 , 0.10743444,
+         0.10392635, 0.2461134 , 0.06800973, 0.15541267, 0.46358441,
+         0.39468738, 0.43599376, 0.58409421, 0.12271784, 0.42419799,
+         0.0945955 , 0.2233993 , 0.13578634, 0.09026388, 0.06085668,
+         0.06348487, 0.30291936, 0.49560642, 0.08394891, 0.16169311,
+         0.22725663, 0.02930642, 0.16380401, 0.04773032, 0.05827151,
+         0.0760877 , 0.19438721, 0.24976255, 0.21999792, 0.10744452,
+         0.10956298, 0.16483509, 0.11849387, 0.3853026 , 0.07012802,
+         0.03600205, 0.07186879, 0.23592241, 0.03537761, 0.23737678,
+         0.22366742, 0.4724428 , 0.07898236, 0.18851826, 0.03939846,
+         0.18410656, 0.0394719 , 0.26203031, 0.1612652 , 0.03579041,
+         0.0809755 , 0.04849705, 0.43518578, 0.18373079, 0.03981566,
+         0.18176298, 0.09535474, 0.03562396, 0.05407091, 0.24836188,
+         0.27180004, 0.05167898, 0.14424959, 0.07438567, 0.10893938,
+         0.08032561, 0.08014707, 0.02873462, 0.12160166, 0.08604623,
+         0.20291378, 0.19582866, 0.2366275 , 0.23986531, 0.16375191,
+         0.30017635, 0.27879795, 0.42184509, 0.31120057, 0.15900874,
+         0.13819605, 0.10158036, 0.04217399, 0.1924277 , 0.3205389 ,
+         0.08888849, 0.09599883, 0.1100857 , 0.12663188, 0.07078576,
+         0.16180159, 0.16753188, 0.03926016, 0.0270983 , 0.47498495,
+         0.08154273, 0.22719408, 0.05400916, 0.28870619, 0.05250775,
+         0.44962346, 0.47262217, 0.04121473, 0.17696076, 0.08358853,
+         0.63905207, 0.40754261, 0.12641624, 0.18868241, 0.03008667,
+         0.12650076, 0.14294351, 0.08308828, 0.06821657, 0.08029301,
+         0.33266755, 0.05707054, 0.06348175, 0.07042963, 0.08681048,
+         0.0314751 , 0.06482399, 0.14624109, 0.31815755, 0.27348911,
+         0.16068119, 0.14260977, 0.02509026, 0.39948651, 0.15963327,
+         0.61325041, 0.08312881, 0.05423202, 0.10457918, 0.07665215,
+         0.2518928 , 0.07149126, 0.11204369, 0.2236559 , 0.10001664,
+         0.09400986, 0.22429791, 0.61446885, 0.07497413, 0.24558648,
+         0.14072208, 0.06321802, 0.09647917, 0.05102063, 0.1610989 ,
+         0.09976737, 0.20278517, 0.20901694, 0.3201379 , 0.39097235,
+         0.1268163 , 0.0903337 , 0.33505778, 0.04058614, 0.08393826,
+         0.13095134, 0.14009561, 0.06888631, 0.15743664, 0.1482799 ,
+         0.22890949, 0.43565347, 0.12863633, 0.19021762, 0.12333286,
+         0.08086733, 0.08539823, 0.11205285, 0.04758765, 0.2072546 ,
+         0.61042525, 0.14049016, 0.13441669, 0.11265203, 0.13928119,
+         0.06043211, 0.44421727, 0.42596957, 0.13507845, 0.41071862,
+         0.05914169, 0.48105199, 0.33994549, 0.13577295, 0.07579833,
+         0.02158471, 0.10093864, 0.51899066, 0.20155571, 0.02899875,
+         0.0301028 , 0.28079031, 0.19773965, 0.07235218, 0.07286648,
+         0.22098834, 0.18346911, 0.06946012, 0.16279031, 0.11841669,
+         0.13906048, 0.27927837, 0.20764241, 0.15154188, 0.15997005,
+         0.21231698, 0.11369095, 0.03393251, 0.03814609, 0.08181474,
+         0.22080299, 0.05821126, 0.02516605, 0.07051681, 0.1665858 ,
+         0.05639083, 0.28448883, 0.31393079, 0.02666359, 0.18880101,
+         0.11177261, 0.15691972, 0.04372338, 0.11541878, 0.12314094,
+         0.12606873, 0.04653255, 0.12058946, 0.47316748, 0.09418589,
+         0.10096542, 0.25378811, 0.40528456, 0.10832629, 0.09683718,
+         0.06949895, 0.06986233, 0.13633234, 0.0886301 , 0.0305626 ,
+         0.14039457, 0.22852464, 0.12175844, 0.0853836 , 0.3057212 ,
+         0.11381839, 0.10009807, 0.17509758, 0.11673784, 0.2143711 ,
+         0.18473252, 0.17238846, 0.21354077, 0.06252414, 0.1371977 ,
+         0.209374  , 0.06038305, 0.26461343, 0.20820672, 0.26412726,
+         0.13560845, 0.2709983 , 0.39284799, 0.10446858, 0.40807147,
+         0.11935211, 0.0556547 , 0.13568923, 0.05771166, 0.47012983,
+         0.0489697 , 0.22202666, 0.30431054, 0.05528835, 0.0688499 ,
+         0.1842506 , 0.08864594, 0.08796438, 0.13364151, 0.17886476,
+         0.15411974, 0.08676119, 0.38148544, 0.12058631, 0.3063025 ,
+         0.08280354, 0.13786181, 0.16010625, 0.45202221, 0.12235955,
+         0.20040238, 0.10571865, 0.63245738, 0.35628141, 0.20498002,
+         0.21199114, 0.08516183, 0.37546909, 0.2323918 , 0.47038249,
+         0.51424929, 0.29776355, 0.25873998, 0.15854659, 0.11068125,
+         0.15039488, 0.19397748, 0.17440746, 0.04248425, 0.17555064,
+         0.24939991, 0.07748962, 0.26535468, 0.14585037, 0.16368837,
+         0.22048519, 0.29299958, 0.18436294, 0.02638584, 0.34109436,
+         0.16814457, 0.32824423, 0.0576148 , 0.06496497, 0.52154253,
+         0.15705351, 0.37872144, 0.33220132, 0.14618319, 0.08612991,
+         0.04243313, 0.1676254 , 0.13713966, 0.14961523, 0.16825943,
+         0.23467284, 0.07554874, 0.02623515, 0.07104739, 0.07616642,
+         0.21430995, 0.02355119, 0.29686056, 0.04598443, 0.06907336,
+         0.09354007, 0.25954064, 0.58738098, 0.04121907, 0.36582671,
+         0.30158801, 0.06310814, 0.06890841, 0.04542501, 0.14753683,
+         0.27491249, 0.13276008, 0.33029585, 0.03786378, 0.02240416,
+         0.14958444, 0.12764407, 0.72768147, 0.06339636, 0.07710151,
+         0.55824738, 0.07890889, 0.30929986, 0.30635501, 0.42615633,
+         0.63980092, 0.18622542, 0.05741109, 0.04473538, 0.30521685,
+         0.23770355, 0.46947918, 0.15225712, 0.06239374, 0.03924389,
+         0.11333249, 0.34636349, 0.02620549, 0.02945325, 0.14444856,
+         0.17870498, 0.12760099, 0.10848686, 0.38821332, 0.03325183,
+         0.14573786, 0.15252283, 0.40600488, 0.23504753, 0.15084303,
+         0.32228672, 0.07648998, 0.14561199, 0.70534482, 0.19560206,
+         0.04704144, 0.1124183 , 0.06876299, 0.17274941, 0.20852874,
+         0.16240764, 0.10274413, 0.11537257, 0.11670093, 0.04306619,
+         0.33275238, 0.06082609, 0.10607641, 0.46781455, 0.09894244,
+         0.03668095, 0.15915208, 0.17192668, 0.08163109, 0.19368429,
+         0.02181889, 0.05745653, 0.1696372 , 0.17581642, 0.11698326,
+         0.01820503, 0.14750101, 0.1050431 , 0.06479175, 0.171802  ,
+         0.03622175, 0.3402546 , 0.0831648 , 0.11022675, 0.06563459,
+         0.02750544, 0.08958763, 0.09251045, 0.16899339, 0.10153708,
+         0.23212819, 0.21708496, 0.23022651, 0.2181238 , 0.04004557,
+         0.61655166, 0.17095698, 0.29297729, 0.06175507, 0.19931309,
+         0.31793279, 0.07189645, 0.14118258, 0.09351899, 0.1001869 ,
+         0.04362358, 0.06207395, 0.08476307, 0.28946449, 0.11444819,
+         0.27838037, 0.1100972 , 0.05121201, 0.25841682, 0.06221978,
+         0.14153506, 0.34847636, 0.16702205, 0.10552453, 0.10500696,
+         0.10977871, 0.05732811, 0.19666677, 0.1712972 , 0.38490385,
+         0.15869377, 0.07086392, 0.14055602, 0.08000077, 0.08321559,
+         0.2967441 , 0.04175332, 0.08236807, 0.15812602, 0.09261797,
+         0.04737099, 0.2261869 , 0.15355781, 0.08698441, 0.01796368,
+         0.35680734, 0.11228354, 0.08530571, 0.01558541, 0.24553341,
+         0.04657133, 0.27116491, 0.39015925, 0.08556784, 0.35170169,
+         0.45337792, 0.17652579, 0.04859225, 0.32392085, 0.18665678,
+         0.0399992 , 0.18556568, 0.21167595, 0.07384857, 0.16974793,
+         0.064678  , 0.11046929, 0.40385489, 0.21817863, 0.13638075,
+         0.42026306, 0.02733091, 0.24576964, 0.53701634, 0.1364326 ,
+         0.04401872, 0.57211548, 0.16811415, 0.03676902, 0.12161042,
+         0.24714978, 0.4729401 , 0.07244132, 0.03063451, 0.23863303,
+         0.36243434, 0.14475506, 0.11712553, 0.25255575, 0.05581384,
+         0.31158748, 0.04420615, 0.04365047, 0.18673001, 0.09750963,
+         0.27283713, 0.01974036, 0.24190281, 0.08103554, 0.08459812,
+         0.07885151, 0.10929715, 0.2540269 , 0.0192103 , 0.3096324 ,
+         0.03912224, 0.09996712, 0.13585656, 0.53007643, 0.39359962,
+         0.08846581, 0.05914738, 0.19653737, 0.11317949, 0.04378341,
+         0.58537449, 0.06122594, 0.04784709, 0.15080283, 0.07538927,
+         0.46738771, 0.0622995 , 0.05990886, 0.02634258, 0.20915668,
+         0.18206974, 0.38119266, 0.2589692 , 0.37820427, 0.3280291 ,
+         0.10485218, 0.13477474, 0.07884108, 0.04674215, 0.22666539,
+         0.19755057, 0.19944158, 0.52958259, 0.05312384, 0.03139749,
+         0.47246078, 0.63985388, 0.11448853, 0.01435252, 0.04802189,
+         0.15032782, 0.04648308, 0.06050762, 0.03043925, 0.08342391,
+         0.03937404, 0.08696807, 0.15863227, 0.13315744, 0.54276902,
+         0.0975097 , 0.08920133, 0.55532578, 0.0472319 , 0.13622192,
+         0.05163573, 0.07302856, 0.10639446, 0.17147705, 0.08693562,
+         0.10181747, 0.32465644, 0.16948308, 0.03024819, 0.73298087,
+         0.16351701, 0.22207204, 0.03739082, 0.20989068, 0.51719916,
+         0.38617089, 0.16911964, 0.18301619, 0.31143877, 0.15001606,
+         0.08882455, 0.07293363, 0.02489691, 0.53659984, 0.15321898,
+         0.23567244, 0.08462964, 0.03297372, 0.3468417 , 0.10843255,
+         0.07168909, 0.16499945, 0.13002373, 0.26265664, 0.04162184,
+         0.05958371, 0.11170948, 0.13537307, 0.12690891, 0.12806623,
+         0.18897676, 0.17472149, 0.2684265 , 0.23293531, 0.12618721,
+         0.03244628, 0.08664319, 0.13596308, 0.09139   , 0.17323829,
+         0.0380873 , 0.12782522, 0.08341369, 0.19208353, 0.21675122,
+         0.07394399, 0.09963047, 0.0783877 , 0.11845208, 0.38838478,
+         0.18906328, 0.5534086 , 0.1377649 , 0.09077533, 0.04264096,
+         0.07635251, 0.06426232, 0.10678371, 0.09324897, 0.07847329,
+         0.12947853, 0.22125664, 0.39016996, 0.15508018, 0.16549849,
+         0.21761763, 0.47404071, 0.09318718, 0.2990621 , 0.3207189 ,
+         0.06443741, 0.14742283, 0.45086093, 0.0545546 , 0.0718237 ,
+         0.05173336, 0.34815054, 0.06911311, 0.08712052, 0.28552094,
+         0.26417569, 0.43076408, 0.19527002, 0.15254038, 0.09149922,
+         0.0764318 , 0.37248724, 0.1695702 , 0.11912309, 0.03936172,
+         0.10655869, 0.43516831, 0.50825293, 0.38071855, 0.22182883,
+         0.13731734, 0.10252406, 0.38493726, 0.07153518, 0.06519517,
+         0.13707416, 0.06029433, 0.46307657, 0.07396771, 0.02889862,
+         0.05567801, 0.57298494, 0.29574104, 0.27748647, 0.04992659,
+         0.07636514, 0.23790242, 0.42680335, 0.0932648 , 0.21260721,
+         0.10178483, 0.05991236, 0.18969115, 0.01768297, 0.08442059,
+         0.07193122, 0.06139529, 0.04977671, 0.0191446 , 0.19020198,
+         0.38640872, 0.15855781, 0.25999807, 0.08374125, 0.02090529,
+         0.31335658, 0.07522008, 0.37410633, 0.28880141, 0.38147362,
+         0.08189275, 0.25585339, 0.53068316, 0.09680029, 0.11862772,
+         0.14439622, 0.32438057, 0.31384785, 0.23195604, 0.1994724 ,
+         0.08794778, 0.40815473, 0.18248278, 0.22272515, 0.06068478,
+         0.06261557, 0.09927438, 0.0411623 , 0.15416558, 0.108286  ,
+         0.41776675, 0.08037356, 0.07366396, 0.29616379, 0.06891352,
+         0.04697482, 0.07025401, 0.14115745, 0.3448739 , 0.2547385 ,
+         0.07471299, 0.15159883, 0.08156297, 0.08573061, 0.07590316,
+         0.14584796, 0.24016249, 0.1222772 , 0.12183486, 0.16238494,
+         0.0974244 , 0.33898321, 0.0199974 , 0.04206387, 0.01816502,
+         0.1079606 , 0.15090444, 0.0291754 , 0.07545738, 0.17152535,
+         0.32721197, 0.16451359, 0.35640893, 0.15336889, 0.11110262,
+         0.14673414, 0.08516274, 0.06202348, 0.1082122 , 0.11352271,
+         0.17966366, 0.17347914, 0.36070487, 0.0895733 , 0.11167254,
+         0.15732367, 0.08344607, 0.18870415, 0.06128462, 0.18417791,
+         0.07104892, 0.0546847 , 0.09306949, 0.04059855, 0.40792321,
+         0.46929506, 0.06092603, 0.12772477, 0.0811761 , 0.08940394,
+         0.21061148, 0.16169376, 0.12449529, 0.09077519, 0.16281099,
+         0.13180189, 0.24520878, 0.36894952, 0.20838303, 0.38777031,
+         0.06524383, 0.50759902, 0.13717393, 0.13962465, 0.18386036]),
+  &#39;g0_hat&#39;: array([ 7.00443618,  2.84227925,  6.89563369,  8.58976392,  6.21916843,
+          9.67625879,  1.93217025,  6.15314968,  9.94945697,  4.66365752,
+          4.14159088,  6.61895529,  5.46634051,  4.68854203,  4.21469717,
+          6.27213212,  4.90099794,  5.12987407,  9.32764884,  7.06145451,
+          7.32697301,  5.39120939,  7.22118397,  3.88966717,  4.03401157,
+          6.60218569,  6.62240331,  7.24849997,  6.55163656,  8.2952574 ,
+          9.05257705,  7.6238535 ,  4.93528803,  5.71132809,  9.38232886,
+          6.5763532 ,  5.86472532,  3.51663273,  7.24317207,  8.02728288,
+          3.84274619,  5.4424631 ,  3.58464386,  9.04532687,  8.53828749,
+          7.31351342,  7.91756769,  7.71977678,  8.1837105 ,  6.26243939,
+          5.94633675,  5.20475255,  5.00200414,  9.96002022,  1.27902941,
+          5.965435  ,  2.9950439 , 11.7347867 ,  6.8519841 ,  7.62737584,
+          3.70117595,  5.68815968,  8.16430238,  5.23506174,  8.56803682,
+          5.48569647,  3.63467022,  3.5503099 ,  8.18373529,  3.39473561,
+          6.75074213,  2.59395735,  2.94554208,  4.45743697,  3.20319759,
+          4.024429  ,  2.23504526,  5.5204173 ,  4.54891238,  5.34328604,
+          6.18467969,  5.94109585,  6.34261054,  2.62462446,  2.63361283,
+          4.65148125,  7.09016532,  9.79210361,  5.43114863,  6.14067564,
+          8.45277465,  7.57444926,  6.76802195,  8.05861367,  4.76260591,
+          5.29410625,  6.96264442,  7.77290377,  7.05438779,  5.99529634,
+          5.41450293,  6.49396639,  5.05768648,  8.93339924,  1.73587726,
+          6.664229  ,  3.46118351,  6.87328157,  7.66072307,  4.28077962,
+          7.97307126,  4.49764229,  3.29854852,  5.82869081,  7.33719047,
+          9.0680535 ,  7.1305641 ,  5.51619296, 10.19318958,  5.45787218,
+          4.4643928 ,  7.82852298,  6.04763178,  7.47007468,  5.82414359,
+          5.08772178,  6.19312882,  5.15503818,  6.53151063,  4.27196433,
+          4.14736867,  5.38028468,  7.48730878,  4.92324183,  5.91988805,
+          4.72083076,  7.21951011,  8.51978499,  5.61029787,  8.7886842 ,
+          2.60622019,  8.43356528,  3.82041181,  5.89503888,  9.59512071,
+          5.48581432,  3.80634796,  7.56506117,  4.21484331,  6.51686572,
+          6.76001586,  5.72544744,  4.33447724,  5.19090757,  7.82373313,
+          9.43950572,  8.91728442,  8.89106553,  2.20830049,  3.69612927,
+          4.90832505,  7.11446401,  8.2705507 ,  5.14114228,  5.9665393 ,
+          4.1437353 ,  7.16169179,  8.09928634,  5.57983062,  6.74504736,
+          4.5623302 ,  3.02806846,  7.77071521,  7.16362417,  2.94358381,
+          5.07579787, 10.57895009,  9.13582053,  5.92968176,  6.00012398,
+          3.10715511,  7.3313271 ,  6.33678271,  4.77973247,  5.28096492,
+          2.36671359,  6.3670598 ,  3.55505664,  6.59526962,  9.83959345,
+          9.97470831,  4.17780834,  3.12299752,  9.35943267,  5.40393228,
+          4.73928303,  5.19899362,  5.81214282,  7.25284855,  2.87311132,
+          4.11665984,  3.61229454,  7.99400903,  9.29162915,  3.77656157,
+          8.09129954,  4.85537828,  2.95756741, 10.76686029,  6.94144148,
+          9.33798165,  5.31761915,  8.43690398,  4.51156936,  4.22849609,
+          7.11203229,  6.90321291,  8.16050718,  3.05059339,  7.65134019,
+          5.14165052,  6.38105638,  6.04470509,  7.66854715,  6.92262511,
+          4.5047786 , 10.21646814,  9.17421109,  4.68380229,  6.7318588 ,
+          2.69614872,  3.54798575,  1.23688293,  9.26342145,  4.8559574 ,
+          4.70201818,  5.201369  ,  2.96490822,  5.05587339,  5.89816764,
+          3.85085406,  5.61764887,  7.47854905,  2.1443039 ,  4.61773904,
+         12.1921196 ,  3.98653287,  7.96664897,  7.65679741,  3.82285361,
+          5.51570203, 10.50450537,  6.98577824,  5.66980588,  4.20494597,
+          9.46244278,  5.6567881 ,  4.29365589, 10.09830366,  3.14243662,
+          5.85925024,  7.17632132,  6.74722194,  5.71871009,  7.0522383 ,
+          6.92979821,  4.3614462 ,  7.10028389,  1.77486249,  6.63364897,
+          6.70746911,  4.07675389,  6.9437985 ,  7.55319445,  7.02761166,
+          1.2682861 ,  6.39616507,  5.94956053,  8.90488911,  4.24558299,
+          6.77979979,  0.92909352,  6.10973656,  7.63247176,  3.76640277,
+          7.98770035,  2.03687131,  7.49936578,  8.76917264,  6.42696963,
+          8.03380156,  7.21767404, 10.32270258,  3.21474365,  5.89995564,
+          5.31293544,  6.81153454,  6.5667729 ,  1.51271672,  5.57492257,
+          2.92060317,  7.99558384,  7.97399387,  7.93446807,  5.14565422,
+          2.41804883,  5.45816162,  3.30284291,  1.20472848,  7.29328847,
+          7.94256397,  5.45475982,  9.89946971,  3.59186935,  2.94821653,
+          8.60473821,  6.89641693,  4.18075083,  7.34556876,  4.20188233,
+          7.5031553 ,  5.43761142,  6.70594358,  4.16600895, 11.44326639,
+         10.19604098,  5.53309417,  6.51459752,  3.96358438,  5.42293529,
+          4.17602771,  6.75885815,  7.08800754,  3.37605199,  9.4756836 ,
+          8.31210341,  6.92723397,  7.34482388,  7.56270469,  2.91737493,
+          6.9211649 ,  7.70204162,  7.60581459,  6.25184127,  4.04997363,
+          5.77225166,  3.48803736,  7.50050068,  3.35914939, 11.06499033,
+          9.86384496,  3.99456452,  2.26189799,  6.36983445,  7.60729191,
+          6.97038337,  8.75234457,  7.16671373,  8.26690728, 11.26148922,
+          4.13041801,  6.50391018,  3.30884839,  3.07138839, 11.68169995,
+          9.84280685,  3.23781677,  5.13352791,  7.59455571,  5.52246451,
+          3.00428057,  7.36822199,  9.09989362,  3.27492685,  9.10147409,
+         11.23748428,  5.25618072,  6.07338943,  7.85282575,  8.72950729,
+          7.61700389,  4.22590759,  6.98506411,  7.94940743,  5.94105672,
+          7.03747355,  5.8995632 ,  6.50700534,  5.25408457,  4.46043366,
+          7.19609163,  7.86486523,  3.76603478,  7.09653809,  7.20650543,
+          9.78303477,  3.8541312 ,  1.88697477,  6.7057333 ,  4.57526775,
+          7.2174    ,  6.41340441,  8.25295016,  8.30616875,  6.83534406,
+          4.4853475 ,  7.86988094,  4.62827556,  8.34772785,  4.43078701,
+          4.47279069,  7.15044865,  5.35695904,  6.3810342 ,  3.95410789,
+          7.32381053, 10.41378932,  5.63678625,  7.42847686,  9.10056999,
+          8.79523664,  8.38866872,  5.35113986,  5.13826392,  6.82425486,
+          4.54208747,  6.41067695,  9.21088259,  4.43727606,  7.04133501,
+          1.61523941,  7.53549081,  5.63812659,  3.98227322,  9.39574716,
+          4.07154283,  4.44006527,  2.78039863,  4.05138285,  6.56944004,
+          4.14021442,  7.06699942,  5.91728227,  5.74061602,  5.60755868,
+          5.68830914,  7.38462202,  3.60240263,  8.13563232,  5.57837278,
+          7.77842938,  5.64604813,  8.89336312,  9.72181083,  7.95952529,
+          2.94038476,  9.36028975,  9.62658596, 11.29888457,  6.31215347,
+          3.74663592,  6.85978115,  7.10292839,  5.14769814,  3.51575449,
+          8.64963267,  3.30100053,  3.09476255,  7.1910017 ,  4.922071  ,
+          8.9683092 ,  6.35208702,  5.49883447,  4.48707364,  6.90133103,
+          5.54097604, 10.23893293,  4.69632643,  4.17335995,  9.84874113,
+          3.28351924,  8.68163189,  6.89005569,  9.51584931,  6.08933735,
+          3.16071621,  6.19281125,  4.82132004,  2.41822154,  8.79740709,
+          9.43942017,  7.12911218,  4.38171181,  5.24981339,  5.76705778,
+          8.12925427,  3.65546056,  4.11145991,  4.59270555,  3.34322793,
+          6.33044148,  7.91314036,  6.20863027,  5.50007515,  6.76298669,
+          6.87155579,  7.88650619,  5.04939111,  7.64406748,  4.9517264 ,
+          6.22905303,  2.97870325,  4.50359743,  4.15744732,  1.35193768,
+          8.46377479,  5.448583  ,  9.11002585,  8.03893613, 14.01121146,
+          3.34817223, -1.11722498,  5.85339983,  7.38187077, 10.28013704,
+          4.03032362,  7.53858838,  7.78014663,  8.75185769,  7.64762252,
+          6.1226667 ,  6.45204153,  4.67330082,  3.58312735,  5.50262921,
+          4.57196173,  4.52037071,  2.04857663,  2.14588805,  2.04150615,
+          3.01969485,  5.36647654,  3.52586752,  2.76979775,  6.06016464,
+          6.82943769,  7.48265116,  6.27148543,  4.85307345,  4.93933689,
+          7.27332476, 10.15588941,  6.79572809, 12.43401953, 10.05851326,
+          4.17987493,  4.42391198,  3.18469826,  5.62105384,  0.48409748,
+          6.45347523,  6.09162419,  6.46434072,  4.27986904,  5.79611082,
+          6.48810367,  8.82346496,  5.94885963,  9.26373639,  5.44651802,
+          3.23994594,  4.24986767,  7.07892576,  7.58160288,  9.8821063 ,
+          5.53874221, 11.84115139,  2.28364354,  4.53627384,  7.11891038,
+          2.74084519,  3.52437416,  7.02572627,  2.31335656,  4.14115437,
+          5.784895  ,  4.9714088 ,  5.50440992,  3.63421809,  8.54104746,
+          2.96613811,  8.47399712,  3.95547676,  7.2096307 ,  3.64928749,
+          6.99895264,  7.31893777,  9.5871227 ,  8.88868029,  2.26202596,
+          8.70451162,  5.71520545,  9.13996773,  4.66438547,  6.39720103,
+          7.89039219,  5.8962542 ,  7.79022725,  9.21576479,  6.40346221,
+          5.60083077,  5.98815404,  4.1014762 ,  8.41794503,  4.90223982,
+          5.69088907,  7.11004243,  7.14623264,  4.88041895,  8.5586245 ,
+          7.1476401 ,  5.82320001,  5.29977743,  3.37452059,  7.33693142,
+          6.18644558,  3.45016488,  7.98680384,  5.91095822,  8.46679474,
+         10.21359536, 10.04787261,  8.16126347,  6.94191959,  4.6549876 ,
+          7.42287757,  4.7346085 , -0.37948272,  7.57011117,  6.58207374,
+          4.99619997,  6.41332884, 12.3764617 ,  2.09009773,  4.58509402,
+          8.0005909 ,  8.07159021,  4.09942473, 10.23751166,  8.32545335,
+         -0.41056979,  7.96754105,  3.25713136,  3.38554098,  6.6486693 ,
+          6.19082184,  5.77800648,  4.99189777,  9.68512426,  9.8696618 ,
+          5.86485409,  6.15249096,  4.43517185,  8.01187727,  6.48291268,
+          3.35466331,  6.9694984 ,  6.08738752,  3.53935314,  6.99746193,
+          6.86371338,  4.9280896 , 12.76436212,  5.70590931,  7.25378509,
+          5.97847925, 10.25812433,  9.25631356,  5.15170754,  6.03843187,
+          8.47907124,  7.98867161,  4.37182567,  3.97802079,  7.80922595,
+         10.0208753 ,  3.42253668, 10.92918207,  6.98837756,  3.85175163,
+          5.91635301,  2.45344669,  6.98064955,  7.18210671,  7.06103592,
+          5.00824989,  7.76495551,  5.07080685,  4.80589245,  7.17836146,
+          8.3617235 ,  5.91673106,  2.95928   ,  5.88437731,  7.50157165,
+          5.59915196,  7.75014372,  9.05439217,  5.49340572,  7.54846634,
+          7.26558877,  5.88544565,  4.05609876,  7.36749026,  3.63538701,
+          6.19557997,  4.9384851 ,  2.18932615,  6.62310666,  1.72501573,
+         10.13166212,  5.36681604,  5.25843343,  6.16783119,  7.64749286,
+          5.11184838,  8.57721721,  6.20260645,  2.0048379 ,  9.45019439,
+          5.59855383,  6.13879041,  6.72200307,  8.73013657,  4.311273  ,
+          5.56511058,  2.96946769,  5.00505799,  1.93248572,  2.15698576,
+          8.50399895,  9.60302424,  5.0066274 ,  4.94014287,  5.25227258,
+          7.32567242,  6.54716118,  7.29614899,  5.4501688 ,  5.42656952,
+          7.31446179,  3.41749486,  6.78461209,  7.79211078,  6.63313084,
+          6.69242475,  5.9246988 ,  5.2903816 ,  7.57833882,  5.41974749,
+          2.32529175,  6.36410423,  7.50407331,  7.05773069,  5.91746362,
+          1.51436133,  6.80829759,  6.59296278, -0.67096306,  4.31201153,
+          9.64125895,  5.08529623,  5.65011357,  9.31140207, 10.81119876,
+          6.5867267 ,  2.30811447,  4.49434817,  6.80761846,  7.49444184,
+          7.51943782,  8.17009833,  5.99198199,  7.52241921,  5.72309808,
+          4.7817697 ,  6.67857888,  5.02315172,  7.86514236,  6.6315696 ,
+          3.53129148,  4.06923355,  8.26155642,  7.27212634,  0.97290107,
+          7.6095783 ,  7.5429486 ,  6.70820621,  6.1438164 ,  4.36980207,
+          6.77660775,  4.41195404,  3.92513391,  6.43543292,  5.63862988,
+          4.80182016,  4.24940989,  6.96838099,  7.09421566,  6.73501895,
+          4.99149057,  6.37841368,  5.64006638,  7.5458396 ,  7.30549181,
+          5.77953678,  4.8891544 ,  6.27214816,  2.41499135,  5.74438479,
+          4.44732466,  7.7994118 ,  4.21014918,  8.26320182,  1.62992747,
+          2.96601494,  6.20092574,  3.61176307,  6.23738256,  4.80659227,
+          2.23288192,  6.25139602,  4.12918896,  6.97522366,  2.45036447,
+          5.79078155,  8.69507717,  9.37104062,  3.24927154,  4.84268607,
+          3.47817355,  6.52527163, 10.18932749,  7.56007771,  1.19597694,
+          5.82696857, 10.60466369,  4.72680163,  5.33467246,  5.96729727,
+          6.62684515, 11.61871131,  4.43669277,  6.04015377,  4.997986  ,
+          5.73256   ,  9.38103134,  4.91811945,  9.52013279,  5.64453852,
+          3.49974552, 11.24273541,  5.5125149 ,  3.45087207,  7.93729791,
+          7.00691743,  4.67053996,  8.36225478,  5.83338076,  6.99831991,
+          4.44084071,  1.89844055,  6.55872487,  2.03792625,  4.94200175,
+          8.40136857,  9.45729355,  8.59119081,  4.33177374,  5.80734746,
+          8.05059527,  8.4223614 ,  6.22476686,  6.16691798,  6.97984761,
+          6.31465612,  1.66320444,  6.14905755,  6.51822381,  3.10996907,
+          6.56202233,  4.45028917,  3.35155623,  2.65482278,  5.99077854,
+          5.59478268,  3.39574596,  5.49061824,  4.3600636 ,  1.83560407,
+          7.23762108,  6.31846441,  6.38496449, 11.12821367,  3.21956249,
+          5.98795357,  7.11047558,  5.71554247,  8.07953491,  2.99950135,
+          4.46749835,  5.4111421 ,  8.24107495, -0.1823537 ,  8.70972929,
+          8.90506785,  5.48300432,  4.46753023,  9.88842107,  1.68822236,
+          4.61447789,  6.87145438,  5.88355441,  6.69234293,  2.09264452,
+          6.038031  ,  2.98770772,  3.59925976,  5.0281649 ,  6.59797088,
+         10.13494689,  5.59581943,  7.09965516,  9.34373774,  5.47304273,
+          8.61307371,  2.86765762,  5.56201164,  8.90195594,  7.09884827,
+         -0.542942  ,  3.87515416,  3.69187759,  2.27422484,  9.12192389,
+          8.38382851,  6.41292345,  2.89287505,  5.83410001,  8.71511578,
+          7.32170556,  7.54254736,  4.4241881 ,  4.90676775,  2.75874842,
+         10.50201824,  5.80109941,  2.10942353,  7.54087254,  7.28571754,
+         11.43622253,  5.39298382,  2.52674234,  5.00642778,  7.02503935,
+          3.56116706,  6.58143262,  9.72392025,  8.07884585,  9.57693354,
+          7.58894427, 11.95049808,  8.06566085,  9.30360842,  3.28970493,
+          5.17258696,  6.54481413,  4.922779  ,  3.46025506,  6.45017331,
+          6.22082543,  1.85108511,  6.1863653 ,  8.43624412,  7.23308243,
+          8.36711272,  2.90757489,  5.67275761,  5.04197022,  7.37142776,
+          7.6238926 ,  8.66549928,  8.12583642,  2.5554302 ,  5.72911289,
+          6.47907195, 10.51364189,  8.92286078,  7.0172734 ,  9.18794738]),
+  &#39;g1_hat&#39;: array([ 8.6865209 ,  5.85572275,  8.17468349,  8.01063528,  5.51183717,
+          7.64885253,  0.84331611,  6.25935934, 12.42312604,  4.84949318,
+          8.12442506, 12.15039034,  9.03135589,  7.75465775,  6.00581372,
+          4.334201  ,  8.08355847,  5.45553145,  5.72596304,  8.23399053,
+          9.5881118 ,  9.23926729, 11.04681995,  5.88091118,  3.22515593,
+          7.00756039,  7.08494694,  7.27623021, 10.35323545,  6.75701757,
+          8.79221108,  6.4929819 ,  6.34794605,  5.82760982,  7.76668031,
+          7.93471623,  7.46391537,  6.33402411,  8.89893782,  9.83923225,
+          8.07719137,  5.86660009,  5.57402919,  7.20177552,  9.36753239,
+          7.75688374, 14.39690836, 10.06738899,  8.21101607, 10.09500725,
+          4.33252621, 10.16213332,  8.45843224,  6.35814844,  5.34062862,
+         12.13891283,  3.0050436 , 11.36986991,  8.11176387,  8.23423829,
+          8.28133699,  9.39649432,  8.68928709,  7.8577466 , 10.52414744,
+          9.95727011,  6.16228741,  5.44806886,  8.29154033,  3.12680862,
+          6.67658439,  4.21133634,  0.16333069,  7.3952509 ,  7.04781217,
+          7.0085132 ,  6.27981654,  7.71891982,  8.64390262,  7.97732188,
+          7.23952927,  6.24151672,  6.24399513,  1.82001859,  5.99084694,
+          6.98565801,  8.06799211, 10.2391433 , 10.95504626,  8.76591572,
+          9.58826781,  6.99122383,  9.07132183,  9.44802077,  6.93089943,
+          8.92854089,  8.58706248, 10.06376819,  7.30439461,  7.42213822,
+          8.49487608,  9.35936659,  9.57044076, 11.06432749,  5.06774996,
+          8.59796039,  5.12116306,  7.21401991,  7.33010277,  8.86100761,
+         12.72009819,  5.46225077,  3.65846846,  7.22238621,  5.76046477,
+          9.8967183 ,  8.76098991,  5.13418335,  7.64541239,  6.31991257,
+          6.41755026,  9.39779806,  7.68810523,  6.84449433,  8.96610096,
+          9.81871995, 10.21872602,  6.63159482,  7.48513669,  4.01932237,
+          5.8782303 ,  5.94258782, 11.64933246,  7.84687098,  6.69358424,
+          9.22277015, 10.07231014, 11.39649837,  8.05679309,  8.17882706,
+          8.77987184,  5.04955959,  8.69924878,  6.85019015,  8.98969356,
+          5.3614709 ,  8.69404586,  8.11690872,  6.26378397,  7.11322426,
+          8.94966106,  6.70151403,  9.02555354,  5.53092772,  9.78219123,
+          9.3192407 , 10.43785471, 13.050311  ,  1.95993437,  3.81942992,
+          4.6216644 ,  6.80717774,  7.08420125,  3.99740825,  9.30486759,
+          8.75337161,  9.45862242, 13.14480484,  8.42295963,  8.22569828,
+          4.15845909,  5.17298934,  5.62030954,  3.82188558,  4.4927538 ,
+          5.78998061, 11.63998869,  8.00999702,  7.14777328, 11.94185075,
+          9.20283461,  7.43889508,  5.98371255,  5.93350146,  9.08803772,
+         10.74745694,  8.99557806,  6.07969036,  8.62989732,  9.44455839,
+          9.85627956,  7.36351813,  3.48046737,  7.19071278,  8.84182084,
+          9.00187235,  6.60642339,  5.67115816,  8.23529701,  4.42812991,
+          5.57079879,  9.95047589,  9.76333559,  6.53513179,  5.62718307,
+         10.44674146,  6.82609374,  2.59144229,  9.35608627,  6.78282324,
+          8.40724722,  6.99802505,  8.27810247,  2.27474299,  3.04074047,
+          6.13285043, 10.43992053,  7.29078421,  5.7008778 , 10.15256553,
+          3.70035399, 10.54456489,  8.57207334,  6.86715775,  7.79744909,
+          9.32219707, 10.27229963, 10.22729829,  7.1994488 ,  8.9126252 ,
+          3.56291289,  5.03876937,  6.39937278, 10.57419451,  8.44082506,
+          4.70439217,  6.37608969,  5.51873412,  6.97581502,  7.96969492,
+          7.88152647,  7.06225408, 10.75716514,  5.87491014,  6.65501335,
+          8.90173022,  7.59526731,  6.46383899,  8.1577669 ,  5.26002551,
+          5.41642768, 10.77640263, 10.01650211,  4.90096403,  6.27782322,
+         10.75838769,  9.62833346,  7.45412565, 10.89106436,  6.24074099,
+          6.4421816 ,  8.73926363,  7.77912   ,  7.40533506, 11.58529821,
+         13.14274356,  7.13963363,  7.79026426,  6.04352283,  6.84713567,
+          8.98785367,  8.23284039,  8.10640545,  9.96485376, 12.29597415,
+          4.07065873,  4.50740135,  7.39403698,  8.82268252,  6.52471413,
+         13.05242533,  2.38664869,  8.81467191,  9.17234049,  5.94928778,
+          9.93879236,  6.64839277,  9.33487687,  9.49738972,  7.14253429,
+          7.03595526,  9.34170806,  7.8066801 ,  4.90629249,  4.31448809,
+          7.65251851,  9.43661489,  9.00910584,  6.77054791,  8.04595023,
+          7.28261034,  6.3606322 , 10.36873485,  9.18940326, -0.46141486,
+          2.56385998,  7.00972696,  8.82222902,  5.90115279,  7.24117394,
+          7.47973571,  9.62535811, 10.72987454, 10.5084488 ,  9.1089058 ,
+         12.66175754,  5.50595642,  7.93720552, 10.91371021,  7.9031091 ,
+          8.46383159,  6.99626763,  8.19679352,  6.97619505,  7.45207679,
+          9.60432878,  8.55362732,  7.90337527,  4.11987374,  6.11950063,
+          6.71037173, 10.17629216, 10.50468715,  3.18584803, 10.24199379,
+          8.73139101,  9.03055652,  8.01916387,  5.596855  ,  7.58952559,
+          6.64009953, 11.60849829,  5.81193724,  9.29311805,  5.59501943,
+         10.846721  ,  8.84232407,  8.36456767,  1.1755294 ,  8.38793672,
+         10.51435699,  8.38913608,  4.32406403,  8.22260125,  8.02768894,
+          8.25625853,  8.07674318, 10.11110172,  7.80094118,  9.72233607,
+          8.69699335,  7.4388109 ,  7.86353674,  4.13849149, 10.52802673,
+          8.83630714,  5.26501312,  7.34023184,  8.47279388,  7.63557841,
+          5.91093701,  6.7239393 ,  7.48824943,  7.66046421, 12.60017106,
+          8.08036375,  7.8405954 ,  7.46443843,  8.86338158, 13.72361144,
+          9.7471291 ,  6.76117858,  8.60238426,  8.91652373, 10.43135318,
+          6.51643694,  8.91954657,  8.11908202,  6.06662283,  6.28446353,
+         10.22694761,  8.43733645,  9.28488252,  6.75791014,  7.78353119,
+         12.82744691,  9.08999552,  5.11089705,  8.42528217,  7.75178382,
+          8.76495638,  6.95170495,  6.28056275, 10.10823029,  9.07070004,
+          8.39518763,  6.96823976,  8.76742716,  7.6720835 , 10.20698255,
+          9.42293327,  9.92145228,  8.73075725,  7.82696675,  8.64530849,
+          7.68077406,  8.47965011, 11.80726147,  8.26926164,  9.31305237,
+          9.47183154,  6.07340614,  8.10533703,  9.66605015,  6.25642859,
+          5.38572581, 11.96888637, 12.03536479,  8.61875188,  9.06689241,
+          1.29965247,  9.74902638,  8.32645973,  2.6984078 ,  9.63391563,
+          7.28507653,  3.59162194,  4.57103628,  3.06132347, 10.45036003,
+          6.50724408,  9.62710901,  8.81761715,  7.89030156,  6.22580994,
+          7.7600494 ,  9.08697494,  5.53577625, 10.47097402, 11.30774987,
+          9.17296913,  9.22828984,  9.36931267, 10.39236235, 10.66574161,
+          6.86855564,  7.99256106,  5.59823844, 10.9867227 ,  6.42173127,
+          7.94669521,  8.11182799,  8.65684567,  7.69326326, 10.66876617,
+         10.0949099 ,  5.70447041, 12.17455811, 12.9412604 ,  6.54685431,
+         11.53018926,  9.78113331,  5.21381456,  5.56416217,  9.2939337 ,
+          6.97408005,  7.56127983,  5.29907972,  6.23742461, 13.21286722,
+          7.34880844, 12.37325593,  9.08613457, 13.35030805,  8.42821055,
+          6.93775624,  8.71363654,  8.28431465,  4.14256877, 11.16749157,
+          9.06692563,  9.3528269 ,  5.40484465,  6.36124609,  6.98588675,
+         10.8290707 ,  7.46056281,  5.84297344,  7.04405104,  6.5340835 ,
+          8.61260576,  9.7319579 ,  9.82328442,  5.88970646,  5.67337136,
+         10.06617096,  8.34251436,  9.37312456, 11.55160709,  6.42894949,
+         10.05428657,  2.42773063,  8.04686805,  6.28188823,  8.26602699,
+          8.42395051,  9.84731331, 16.31065898,  8.73388871,  9.39172311,
+          5.05944492,  6.0072664 ,  9.75090155,  9.32305825, 11.12563431,
+          8.42867638,  9.86405623,  8.75653875,  6.71367893,  9.57051486,
+          9.15034455,  8.50425847,  7.55203743,  7.94269309,  9.26749092,
+          6.83875511,  7.92350527,  8.84940741,  3.50113115,  9.15251272,
+          6.06464064,  6.44128588,  5.75652102,  7.01973114,  8.19265488,
+         10.0346278 ,  8.58153962,  5.41710255,  7.05983463,  7.48125536,
+         11.77131458, 10.15419418, 10.00321203, 13.43181198,  6.54260636,
+          6.24844957,  5.7233505 ,  6.24397155,  8.24332261,  4.48611329,
+          7.21103672,  8.33935799,  6.92462629,  6.22507265,  8.04250224,
+         10.26248211,  6.55348147,  7.53618625, 10.30715066,  5.94454089,
+          8.77360696,  6.01693153, 10.65716039,  6.29258126,  8.30847127,
+          6.60044866,  9.27939758,  6.96837988,  7.39419734,  8.12113042,
+          7.92711503,  6.87247889,  6.41265006,  4.66325447,  7.07875657,
+          7.96102989,  6.54353814,  9.3327378 ,  5.53472427,  9.97059769,
+          3.45907035,  6.64309577,  8.22306071,  9.34802804,  7.56195577,
+          9.41431886,  8.82705698, 10.43951186, 12.48146281,  6.57327787,
+         11.89828169,  9.50333326, 11.57835149,  4.38326627,  9.29147269,
+         10.93101074,  8.08041809,  9.69655718,  8.65708348,  7.94080883,
+         10.35868969,  5.98489034,  9.21954296,  8.06963914,  5.74766635,
+          7.6444494 ,  7.74300525,  6.15157874,  7.07413107,  6.2725439 ,
+          9.71270311,  8.82927385,  5.34357598,  9.46561913,  8.05846294,
+          8.26087215,  2.9415937 ,  7.3452551 ,  9.17771582,  7.42538376,
+          6.13003819, 10.88346678,  7.20323577,  8.30097104,  4.49799606,
+          9.82972673,  7.82432213,  4.0344483 ,  8.77774108,  7.28658407,
+          7.91170008,  7.6044946 ,  6.13589788,  7.21486024,  6.5840889 ,
+          7.43938987,  6.1963525 ,  8.32451923, 11.35232768, 11.03384132,
+          8.19652488, 10.45666545,  9.79601956,  6.06841864,  9.89440497,
+          7.22659238,  8.79009099,  6.17973455,  8.8309043 ,  8.80119096,
+         10.91042538,  7.75408056,  5.44180765,  8.97504007,  9.10658114,
+          8.01467939,  7.3384884 ,  8.64477052,  5.74008373,  9.67509471,
+         10.45854727,  8.6749256 , 10.75526026,  6.59091792,  8.12767902,
+          6.27780381,  8.07422061,  7.79079166,  8.30849035,  7.76031465,
+          8.97560442, 11.14693327,  8.75737248,  6.88537641, 11.30783818,
+          4.87948698,  9.3328738 ,  9.08143309,  4.18138938,  5.29528572,
+          9.28854695,  5.5983736 , 10.0530711 ,  9.217025  ,  5.48875031,
+          6.80230915,  8.4312375 ,  8.0205652 ,  5.57670656,  8.1839525 ,
+          8.71520969,  6.99291942,  5.60994299,  5.73831938,  7.5462813 ,
+          9.09112247,  7.85896926, 11.19584994,  6.04081663, 10.5461459 ,
+          8.59454485,  8.38296794,  6.35558978,  9.77643006,  6.88750196,
+         11.22216689, 10.26435876,  8.35819304,  6.57554998,  4.17536339,
+         13.73143272,  7.99357169,  7.34224753,  9.88076905,  8.42507032,
+          9.29943972,  9.81763051, 12.87200541,  5.81995297,  9.96366878,
+          6.09115184,  7.8926227 ,  9.45533505,  6.83015942,  9.90130611,
+          6.94137145, 10.03270021,  9.38256315,  6.37875636,  4.52940178,
+         10.85412923,  7.56761123,  6.88106085,  6.54458295,  6.35542708,
+         11.21594192,  8.60148307, 10.80402127, 10.0365276 ,  8.00890743,
+          8.50873008,  6.31623393,  6.38157852,  9.08435944,  7.87586338,
+          9.06265133, 10.84958269,  9.98717574,  9.81407182,  5.28373107,
+          8.85620692,  7.1944229 ,  8.51227821,  9.00014725,  7.95475659,
+          3.93544975,  7.21245192,  8.39486267,  1.62907861, 10.87227333,
+          7.16259574,  8.62880157,  8.65823799,  7.50784546, 12.52134181,
+          7.27205543,  6.23739677,  4.74535389,  7.28330809, 12.29216145,
+          9.03845959,  8.18512424,  7.56418116, 11.55302422,  7.14069587,
+          6.09958478,  7.77604273,  7.2034479 ,  4.60100218,  8.58099998,
+          6.26269027,  8.36532889,  8.04438814,  9.3192979 ,  4.20678648,
+          6.67119565,  6.65535968,  5.85320951,  7.88330665,  8.52844678,
+          7.80661689,  7.26052559,  5.08775216, 10.00773159,  8.22472478,
+          4.36298987,  7.34339927,  6.21764077,  7.74885052,  9.18224288,
+          6.3212931 ,  6.56069618,  8.95042885,  8.50066891,  7.81903867,
+          9.29596157,  8.87208833,  7.46567478,  4.52725416,  2.95781287,
+          4.42610338,  9.21154695,  8.59587237,  9.21153172,  4.02938866,
+          8.81270639,  9.1427709 ,  4.64647346,  8.22382998,  9.22515607,
+          7.74089285,  7.487436  ,  6.0357762 ,  8.85577197,  4.69991832,
+          5.79808375,  8.85573117,  8.28983628, 10.15289228,  6.70948   ,
+          7.52507377,  6.73638142, 12.98814693,  7.84657875,  5.95610535,
+          6.51159576, 10.51580309,  6.35350395,  5.12894766, 12.0984682 ,
+          6.76684422,  8.47534285,  8.67758761,  7.71734374,  7.55678954,
+          6.86364891, 12.9673029 ,  6.03505791,  7.22879843,  7.69334408,
+          6.59895551,  7.80190653,  7.03565981,  9.02605415, 10.02519259,
+          7.84767127,  5.21984703,  9.92593341,  7.98933336,  8.71922519,
+          5.35205843,  2.03207587, 11.76156403,  5.52319543,  6.62126921,
+          8.45872156,  3.76286702,  9.26910249, 10.23843428,  5.16963123,
+          9.0474179 ,  8.99955502,  8.51396425,  4.16956523,  6.87219076,
+          9.89309209,  8.52056846,  8.69147695,  7.24014495,  9.30396951,
+          9.13030425,  5.35830623,  5.4170614 ,  4.16173852,  3.56418459,
+         10.58056379,  4.78750512,  6.29439292,  6.73170689,  4.10365119,
+          9.65934516,  8.01494988,  7.30960554, 10.02165048,  9.57629885,
+          8.35518617, 10.16586307,  7.58833239, 10.73354095,  8.52538113,
+          3.42721219,  6.46814757,  8.1266014 ,  3.99993947,  9.52480193,
+          7.29254137, 12.0382282 ,  7.25741886,  8.41994272,  4.23443491,
+          6.64487039,  6.08807999,  4.12204617, 10.76027993,  5.03049338,
+          8.17534044,  6.7676157 ,  8.46270892,  7.09366342,  8.52729995,
+          7.0572473 ,  6.43332237,  8.69119843,  8.32771279,  8.63519043,
+         10.43835195,  4.80982017,  6.34383011, 10.21031869, 10.54169596,
+          6.5284013 ,  8.42272917,  6.54839568,  9.99148701, 11.23501787,
+          7.85272277, 10.62862344,  5.21857253,  9.71581353,  7.47389482,
+          9.66831002,  8.54370465,  7.60198022,  4.47620559,  3.47749167,
+         11.0094248 ,  8.1471621 , 11.24828802,  8.12656662,  7.4633021 ,
+          9.71438691,  8.21444115,  2.55399317,  3.98904413,  9.2124776 ,
+          7.39745287,  9.72702086,  9.62358661,  6.00048742,  8.82106363,
+          8.05797349, 10.23110615,  7.26902629,  8.27445299,  4.03142882,
+          4.61812802,  5.82757928,  8.12993821,  9.59896234,  7.89192113,
+          8.44639809,  7.33226974, 10.1812771 , 10.95980534,  7.02446433,
+          9.88287491,  3.59852692,  7.03727163,  6.77938346,  6.18000863,
+          8.49955886,  9.53702667,  8.84786518,  7.75579784,  8.97906267,
+          7.60328033, 13.31949979,  8.60820785, 10.69161944, 10.45997034]),
+  &#39;y&#39;: array([ 5.19410197, -0.0633786 ,  9.80148024,  9.33518634,  0.40121812,
+          8.96437967, -0.33491129,  1.90317864,  5.05506897,  0.55312545,
+          9.40966387,  7.16678782,  6.3703179 ,  1.14889873,  5.50972471,
+          2.05796768,  4.66352453,  5.60682525, 16.76773035,  8.56691502,
+          5.0062409 ,  8.45160392, 15.62953882, -1.06819372,  1.32613444,
+          6.30615098,  4.10841808,  8.20141543,  3.30102171, 13.76832248,
+          7.37885914,  6.32373446,  7.89870575,  5.1998208 ,  0.84365236,
+          3.5232553 ,  6.71627712,  2.3202253 ,  9.59344884,  6.72644876,
+          6.78164584,  7.13030253,  5.41941724, 12.33161323,  5.99390553,
+          4.54868551,  8.58604538,  7.38219241,  8.17979416,  5.28348028,
+         -2.33012999,  4.40818408,  5.65121544,  5.93695768,  6.9682303 ,
+         18.62693134,  6.33546403, 15.49250147, 12.20651884, 12.54752426,
+         12.38675454, 10.34573366,  9.37603727,  5.1053615 ,  6.61798797,
+          5.52204514,  6.44057479,  1.47703972,  7.65445224, -3.3632632 ,
+         13.01856789,  2.91497017,  4.21766687,  8.75931224,  5.56717588,
+          9.94654768, -0.21598337, 15.05072982,  8.68273881,  6.40932463,
+         11.19751574,  2.74765518,  4.62978671,  8.43429195, -1.86307805,
+          5.93557637,  8.68908514, 13.82812573,  3.18480463, 11.89714476,
+          6.29150777,  5.84150638,  4.20070922,  4.54800485,  6.45217304,
+          4.00162349,  8.9981208 ,  8.54441834,  4.19877194,  6.03678704,
+          9.77262607,  4.87744591,  7.56173139, 14.37532679,  6.92351795,
+          6.176901  , -0.97272382,  6.70797906, 12.39120217,  1.13288632,
+          5.96088535,  0.99968084,  3.29802866,  4.13310695,  6.96937709,
+          3.92039349,  4.57838849,  3.32642416,  6.52832063,  0.69187828,
+          2.90389826,  6.48137138,  4.05948838,  8.46966513,  4.24824825,
+         12.04139873,  8.23326022,  1.59380534,  6.55902935,  2.80786706,
+          9.76543427,  3.71582405, 10.81374331,  5.34541017, 11.28513513,
+         13.27841612,  8.99727169,  6.16721526,  7.66853776,  6.42561975,
+         11.38467062,  5.29814323,  6.03643502,  3.37123467,  3.19662899,
+          6.91157035,  2.59662208, 10.53580984,  0.36494455,  7.95515467,
+         11.54145338, -2.91402166, 11.52620773,  3.00475936,  9.87151558,
+          9.8240302 , 11.56889401, 12.50551468,  5.17446866,  6.46469744,
+         10.18489749,  8.17465159, 13.92024368,  8.0802487 , -1.98855237,
+         15.10749107,  6.53608719, 16.59689519,  5.7998988 , 11.28792231,
+          0.82912553,  4.58732166,  6.6658676 , 10.98283803,  5.15956541,
+          7.71984686,  2.57340708,  7.78003899,  6.61889627, 10.88162696,
+         11.10449051,  5.55580286,  3.75265188, 11.45935856, -0.9117467 ,
+          6.43913378,  5.51022318,  1.74058095,  9.64678709, 12.36790385,
+         13.60169489,  6.9712837 ,  7.11050156, 11.98857833,  5.92569853,
+          4.99324348,  0.62280003,  9.63001068,  8.05554532,  0.13735682,
+         -1.76466993,  7.61452939,  7.1846172 ,  9.21341839,  7.16995359,
+          3.18578585,  6.05365352,  3.68314677,  9.17759292, 11.43940529,
+          6.69378787,  8.64638552, 10.85463726,  1.92121016,  3.11736049,
+          6.9570937 ,  7.22808174,  7.07435113,  4.48663307,  2.65353261,
+          9.80232369, 12.46776839, 10.11672819,  2.83959612,  7.40941361,
+         10.7523104 ,  6.53711229,  5.62258689,  1.57271344, 11.88225812,
+          5.60885709, -0.58811884,  6.33726459,  8.23631885,  7.42519832,
+          3.48401787,  0.88013387,  2.21696839,  4.98861894,  5.00716646,
+          7.38765461,  5.22700478,  6.06745491,  1.46425993, 17.05972944,
+          6.47267843,  4.09204507, 17.82656803,  8.50984919, -2.38387832,
+         11.6603897 ,  7.34715881,  7.95410597,  3.13052372,  3.85121495,
+         17.39118718,  9.08887233,  8.23549954, 10.97782453,  3.17826639,
+          8.29487996, 10.43720897,  7.17211132, 11.20749818, 11.81246158,
+         11.43720698,  5.81958792,  6.95978291,  0.09558145,  5.7681236 ,
+          5.92068248,  3.791223  ,  7.07984607,  8.61407403, 12.83003634,
+          7.70145529,  4.11531467,  0.65645858, 13.79428316,  6.53752612,
+         12.90399728,  1.05377154,  3.22821118, 11.80808897, 11.22526463,
+         11.79457226,  3.42780401,  9.6868555 ,  6.44011646,  4.8450571 ,
+          9.92699693,  5.86918803,  9.12844825,  3.94240226,  5.65083803,
+          3.49659094,  7.87913082,  4.98715108,  1.36825182,  3.66825979,
+          0.79260734,  9.61717063,  4.16015028,  6.31547671,  7.45127633,
+          1.61180988,  5.95821269,  2.36306076,  7.43562022,  8.6299219 ,
+         10.53085928,  7.94405585,  6.96647481,  6.90760854,  3.6972869 ,
+         13.3285232 ,  6.96138787,  2.56641148,  8.09045646,  5.05580171,
+          2.85312413,  7.11205498,  5.10502486,  1.53265984,  2.38421262,
+          3.7880373 ,  3.49872487,  5.8128001 ,  1.33760698,  8.2204322 ,
+          3.97469906,  8.23022327, 10.05016643,  0.58807991,  9.72409536,
+          3.92896484,  9.01033557,  4.23589625, 12.11006651,  4.19861948,
+          7.95479278,  4.74442132,  4.4017403 ,  7.35251801,  8.72799668,
+         13.01159505,  8.07589542, 13.83764279,  2.01370056, 11.22469739,
+          6.88605383,  9.45894015, -5.61403255,  1.54049501,  9.22583805,
+          1.50491336, 11.50307784, 10.14141824,  7.16926617,  5.7400681 ,
+          5.13565643,  3.00625197,  4.24872765,  4.9309371 ,  6.47798741,
+         13.97827252,  6.03270502, 10.30722112,  3.82330465,  7.67748671,
+          6.56506897, 12.36723122,  7.67760326,  5.63311628, 13.5130065 ,
+          8.29380705,  7.46951097, 11.71970322,  7.43422825, 10.68762918,
+         10.5009017 , -2.14684825, 11.16286803,  4.28514651,  4.80234782,
+         14.67845232,  6.4497748 ,  4.39935423,  9.95877756,  2.09190683,
+          4.53832765, 11.13629677,  6.28995408,  1.12832397,  8.05264457,
+         10.17583789, 11.16923931,  1.87949375, 11.61551797, 12.7897852 ,
+          4.3462356 ,  5.37892846, 11.30635576,  2.90163372,  9.33497695,
+          7.23834805,  5.3573278 ,  6.95658313,  5.40752715, 10.70530168,
+          5.02974821,  7.06530048,  4.52841391,  6.59438462,  6.69702195,
+         10.06268461,  6.80148949,  5.39800431,  7.12478085,  4.92511808,
+         14.71975436,  6.90581388,  7.94830323,  4.10677007,  7.11131061,
+         -0.21235195,  8.20376645,  6.38313432,  5.00252081, -2.45468283,
+         -1.38756114, 11.43739894,  9.10528615, 10.70325775, 12.58013612,
+          8.14631011,  1.88198995, -1.01372427,  8.17640428,  9.64231724,
+         13.81720363,  5.49785085, 13.42056016,  7.83787319, 10.98991528,
+         13.32072296,  3.72918483,  4.72054226,  4.70128644,  3.18530954,
+         10.28418124,  6.33799732,  8.31667477, 11.154633  ,  1.90891992,
+          8.84393864,  8.19564562,  8.43058708, 13.11719384, 10.37691835,
+          5.00501287, -0.55103558,  8.51144967,  5.15610998,  5.06976877,
+         10.12361756,  3.41046733,  1.05228693,  8.45909563,  3.1665382 ,
+          8.42044909,  3.82009143,  9.24961877,  3.55411325,  7.55626855,
+          4.77680591, 12.38840876,  7.54411299,  7.66341136, 12.17614211,
+          7.41960876,  3.33346455,  3.89012362, 11.21131554,  4.77263723,
+          1.20487344,  0.43899297,  0.40890836,  3.11986142, 10.13172195,
+          5.92486456,  8.60387223,  2.52092825,  7.4816147 ,  5.20515284,
+         10.34405593,  7.61859964,  0.53018676,  4.25709516,  0.1432754 ,
+          5.68797103,  4.50919793, 10.65700909, -0.85684803,  5.47919393,
+         10.44956949,  8.14020065,  4.3267984 ,  8.32440346,  6.37032408,
+         12.50378378,  0.17561429,  5.63686566, 14.22086389,  1.49676115,
+         -0.57278032,  4.70341129,  0.13246742,  6.39607025, 10.8797629 ,
+          3.79694184,  0.98512019,  8.44676714,  2.42871588,  4.05944462,
+          6.06239162,  6.42900527,  7.91808162,  1.53115555,  7.56357288,
+          6.38457402,  9.59190651,  8.85330853,  4.7521113 ,  3.51020191,
+          6.64308038,  7.66288215,  2.26267707,  5.46667023,  5.23870759,
+         10.48957122, 10.76930086,  6.83688103,  3.38068531, -1.90348911,
+         12.76172835,  6.8598114 ,  5.75436416,  9.67017293,  3.08011396,
+          8.14610595,  8.1465003 ,  3.64228717, 12.3155036 , 10.66165214,
+          4.89675349,  9.20057479,  8.99245965,  7.9415403 , -3.50219625,
+          0.5503855 ,  8.64098113, -0.91824577,  4.3439983 ,  5.57750763,
+         13.62587674,  4.43790058,  2.65704218, 10.02084946,  5.35585245,
+          4.78840182,  8.44563064,  5.27696969,  7.36266585, 12.11786977,
+          4.42628816, 10.80262035,  6.20649455,  9.76539686,  7.65887101,
+          5.71314076,  6.21189514,  3.6266031 ,  8.43386463,  9.52268884,
+          0.85098098,  6.2378381 , -0.30543489,  4.06509038,  9.24974681,
+          5.43378372,  9.29174676, -5.56651582,  6.5441386 ,  7.51121991,
+          8.80287236, 12.35251171,  8.44201544,  8.47912055, -1.21726184,
+          8.27594185,  2.26175764,  4.50375407,  1.5462276 , 14.23391572,
+          7.63660709,  6.51444136,  6.0834959 , -0.27411568,  9.30365652,
+          0.71509293,  2.77519572,  5.38240802,  7.76115543,  3.3340406 ,
+         -0.2139578 ,  8.54207217,  3.8790808 ,  2.36892078, 11.62420164,
+          5.17318873,  7.89059451,  5.80532925,  9.4294814 ,  6.03975059,
+         11.81165621,  3.26391096,  9.40490055,  0.50292713, -2.29137027,
+          9.51600843,  8.46269961,  9.00918848,  4.16959503,  9.81970634,
+          7.28861447,  7.56154869,  6.00621804, 11.90068262,  3.38332324,
+          2.79697856,  0.73358945, 13.61922333,  6.31732821,  5.43420916,
+         18.86061512,  7.13670574,  2.04205658,  8.2178261 ,  7.29807575,
+          3.18133759,  6.98337184,  3.70378235, -0.07402964, 12.41988758,
+          7.93887549,  5.3311606 ,  7.10177361, 10.42687172,  7.91177343,
+          9.36549838,  7.34806281,  6.84198364, 10.55068469,  8.24488968,
+          8.53623567, 13.55519754,  4.81686571,  8.83952647,  8.9931427 ,
+          5.37158778,  2.27031571,  8.60478171,  4.09572303,  1.6420366 ,
+          2.88649304, 10.58195681, 12.59566189,  6.43354492, -2.55125594,
+         10.69735393,  5.9400274 ,  6.65321947,  5.39429779,  8.32436609,
+          7.87771307,  8.16037927, 12.22296926,  5.07914409,  8.53113827,
+         11.89041773,  4.85527235, -0.46899194, 11.15842961,  2.40325428,
+          8.73620262,  2.4089414 ,  3.07365437, 12.23734324,  4.13506346,
+         11.10783575,  4.89780528,  3.97087556,  3.13673247,  0.59687839,
+          5.98979971,  4.19736234,  6.70845629, 10.44870561,  7.87530622,
+          1.72951584,  9.25935469,  5.86061076,  6.90117831,  6.97717891,
+          7.59766778,  2.39159291, 10.05813051,  5.67701336,  2.52089758,
+         11.14149745,  8.66960434,  3.16569927,  2.79742449,  5.13678112,
+         13.24563145, 11.72764101,  6.89410931, 10.5764182 , 12.9924571 ,
+          4.88183   ,  6.22400126,  7.56654805,  3.0611791 ,  5.51033082,
+          6.5741564 , -0.91909741,  9.22109959,  2.91722042,  6.40549103,
+          3.60194159,  9.50667718,  3.46342462,  9.13473586,  5.18564723,
+         13.7685646 ,  7.43526408,  6.28437766,  7.37616714,  6.52555831,
+          8.91380792,  1.3696562 ,  5.39608482,  8.28959798, 14.32218339,
+          1.67069008, 11.79594585,  6.28187027, -0.45092834, -6.50808817,
+         -1.36495215,  5.20529059,  6.83341889,  8.68785389,  4.30277169,
+         -0.68387912,  6.1239553 ,  7.43164409,  2.66538324,  4.80783792,
+         10.26605028,  5.82839538,  4.45974974,  6.2152949 , 16.35802332,
+          6.24565954,  2.75225935,  7.06432266, 13.66214875,  9.24521203,
+         12.09138465,  9.71563621,  3.8896708 , 10.09308021,  2.21358635,
+          5.49009757,  4.72705816,  2.24573611,  3.47279512,  6.65232096,
+          5.86115717,  5.62457507, -0.71761887,  5.06957019, -3.48900258,
+          6.86780606,  8.02918012,  7.36794852,  2.59023465,  7.57063608,
+          4.3670956 ,  0.85016737,  6.01681166, 10.03297568,  8.87329382,
+          2.71497728,  9.35533213,  3.98566741,  7.61089307,  6.34287669,
+          4.49073942, -1.55645328,  4.24080204,  7.20190565,  4.35571772,
+         11.82153736,  1.52278875,  6.19092872,  2.80105498,  3.99386843,
+          6.33047706, 12.4929323 ,  4.25509597,  4.63797239, -2.52588198,
+         11.81433396, 10.6614303 ,  4.0865947 ,  0.33947147,  2.1157577 ,
+          6.49975762,  8.20375467, -0.19681202,  5.29538201,  9.87918975,
+          3.61995791, 11.7679096 ,  8.3198815 ,  5.80637603,  5.44712414,
+          4.31004289,  4.79326123,  7.32630736, 10.65304483, -0.68292988,
+          7.14981545, 10.33087881,  6.19703   ,  9.67561646,  8.16233872,
+          5.81108648,  0.82667513,  6.86071894, -2.39122662,  4.63361872,
+          8.18050188, 12.17003536,  1.34244849,  2.24697199,  1.58852206,
+          9.18213793,  0.22679278,  9.2790854 ,  8.85112793,  9.09642009,
+          9.48061629,  4.60724039,  6.73641273, -1.53015492,  8.45243855,
+          1.349043  ,  1.09809611,  8.23612134,  7.38085985,  4.91549193,
+          7.49891596,  1.75072575,  7.01806651, 10.56511751,  7.42460281,
+          5.38277491,  7.7965436 , 13.0263251 ,  3.71659553,  4.64587559,
+         14.8946331 ,  0.15159466,  5.12699624,  6.19105517,  6.21588529,
+          5.74285117,  3.87849389,  3.36671206, -1.42892973, 11.37033564,
+          6.54086408,  5.53276157,  6.133243  ,  2.56025569,  1.95837777,
+          1.23880612,  5.85402421,  5.36276052, 15.78005423,  2.63468707,
+          3.10174568,  6.85285028, 11.19229203,  3.47667741,  7.94218331,
+          7.86568924,  7.76274835,  4.00323412, -0.48977906, 13.20994213,
+          1.23336831, 11.6202098 ,  6.14119444,  8.45290652,  4.57772088,
+          2.0381855 ,  2.36879236,  6.37043906,  4.85299842, -5.83602346,
+         11.32256595,  2.60801062,  5.78219978, 14.15087212,  6.91293762,
+          9.5915734 ,  9.10003435, 12.6046424 ,  4.37039326,  7.57733991,
+          9.64759877,  3.92927296,  9.44853149,  5.13521842, 11.58649636,
+         11.70013619,  5.03777859,  7.64178207,  8.98809331,  6.1563127 ,
+          3.11575653, 10.48476514,  2.91149475,  6.93580835,  5.90269739,
+         -3.24854522,  6.62084543,  1.27008387, 11.9095959 ,  8.61990791,
+          9.53796685,  7.39652141,  1.32230029,  9.01970596,  6.51679679,
+         12.75742679, 12.53989944, -1.29908237,  1.90361282,  3.99653546,
+          5.54474889,  7.84132536,  7.91279842,  9.79962423,  2.11747682,
+          3.0335081 ,  5.8987353 ,  5.32271802,  1.93194268,  3.29657655,
+          4.18471779,  2.56479832,  9.88156862,  9.48463158, 10.83310777,
+          5.49700454,  3.81626376,  5.83150958,  8.62470456,  9.80061485,
+          6.06724251,  4.58841507,  1.95580043,  6.95049228,  3.73391901,
+         10.84018727,  7.20838496, 12.80522832,  1.45902408,  2.58000007,
+          4.08735779,  5.75414688,  2.4187995 , 11.618765  , 11.2490081 ]),
+  &#39;d&#39;: array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+         0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0,
+         0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+         0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+         1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
+         0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0,
+         0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+         0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+         1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+         0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1,
+         1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+         0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
+         0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+         0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+         0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+         1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+         0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0,
+         1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0,
+         1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0,
+         0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+         0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+         0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0,
+         0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+         0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+         0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+         0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+         0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 1, 1]),
+  &#39;x&#39;: array([[ 27.65660496,   4.88143471,   8.4692228 ,   1.        ,
+            1.        ],
+         [ 11.52019073,   3.54142613,  88.98755221,   0.        ,
+            1.        ],
+         [ 33.00541435,   4.17105387, 109.39755752,   0.        ,
+            1.        ],
+         ...,
+         [ 25.45413539,   4.81691996, 152.94484383,   0.        ,
+            1.        ],
+         [ 25.56917025,   3.93835634,  89.47681456,   1.        ,
+            1.        ],
+         [ 33.88503758,   9.42830523, 149.90299551,   0.        ,
+            1.        ]], shape=(1000, 5)),
+  &#39;psi&#39;: array([ 2.66278761e+00,  5.05154952e+00, -3.17076100e+00,  1.60566094e+00,
+          3.98366687e+00, -2.21755626e+00,  1.26290960e+00,  3.60246825e+00,
+          9.49931430e+00,  3.42246906e+00, -3.03305415e+00,  3.38391060e+00,
+          1.29564441e+00,  5.40306741e+00, -9.20947765e-01,  1.21596071e+00,
+          2.15457767e+00, -1.49555032e+00,  1.37432338e+02, -1.76037078e+00,
+          4.60479965e+00, -1.05787473e+00, -7.64815399e+00,  5.96751227e+00,
+          7.05209868e-01, -5.72481196e-01,  2.13361669e+00,  4.72636692e+00,
+          6.24216725e+00, -1.14005503e+01, -4.52509403e+00, -6.88605954e-01,
+         -3.36819539e+00, -5.71576665e-01,  8.15664690e+00, -3.60934590e+01,
+         -4.41212872e+00,  2.90884499e+00,  1.62256847e+00, -1.34414845e+01,
+         -2.21819075e-01, -2.82893296e+00, -1.32302961e+00, -6.98661635e+00,
+          3.66538522e+00,  3.03880153e+00, -5.06494451e+00,  1.94185445e+00,
+         -2.10704814e+00,  3.80756587e+00,  6.00818756e+00, -4.44818060e+01,
+          1.46226017e+00, -4.32530524e-01, -3.35578501e+00,  4.77652669e+01,
+         -5.55790620e+00, -7.19967226e+00, -7.44233297e+00, -6.49089684e+00,
+         -5.90014249e+00, -2.99035273e+00, -2.32921250e+00,  1.47490823e+00,
+          3.31533381e+00,  3.13256118e+00, -1.74379510e+00,  3.42934989e+00,
+         -5.36166118e-01, -4.63845807e+01, -8.96794431e+00, -3.40694781e-02,
+         -5.59352238e+00, -2.89661627e+00, -1.27223583e-01, -4.84257827e+00,
+          5.40313532e+00, -9.30275201e+00, -1.70568133e+00,  2.24922997e-01,
+         -5.90649043e+00, -4.89938159e+01,  6.66491699e-01, -1.04830904e+01,
+          7.15546180e+00, -3.58072017e-01, -2.34041972e+00, -5.36188874e+00,
+          7.23724800e+00, -5.00126154e+00,  2.72857463e+00,  4.16063813e-01,
+         -1.55059150e+01,  5.66705054e+00, -8.64833381e-01,  3.69417326e+00,
+         -1.81069082e+00, -6.15919732e+00,  2.46288804e+00,  5.91129005e-02,
+         -3.42552963e+00,  5.45328269e+00, -1.58138969e-01,  7.77045603e+00,
+         -5.10235287e+00,  1.27715997e+00,  5.45974830e+00, -7.75448958e-01,
+          1.90987709e+01,  6.92422499e+00,  5.98256560e+00,  4.54773162e+00,
+         -9.37525379e-01,  2.34651353e+00, -2.20980150e+00, -2.36167886e+01,
+         -1.45965211e+01,  6.06150965e-01,  2.09398226e-01,  5.65003069e+00,
+          2.49421281e+00,  1.91315062e+00,  2.45174279e+00,  8.50263817e+00,
+          3.63800582e+00, -7.41708277e+00,  8.33476103e-02,  3.97762877e+00,
+         -3.78849321e-01, -2.15178821e-02, -5.67698975e+00,  1.47989256e+00,
+          2.16516644e-02,  1.17956145e+00, -6.76989594e+00, -1.53321486e+01,
+         -6.96206375e-01,  4.47913499e+00, -1.31937120e+00,  1.48635073e+00,
+         -4.33082761e+00, -1.36858989e+00, -9.61995059e+00,  2.76307525e+00,
+          5.06780851e+00, -3.34118198e+00,  5.06860233e+00, -4.18327327e+00,
+          5.52609764e+00, -2.31307037e+00, -4.44436103e+00,  1.11379529e+01,
+         -4.32347233e+00,  1.63042285e+00, -3.15709066e+00, -2.05353349e+00,
+         -4.47883218e+00, -5.82932133e+00, -4.92747316e+00, -5.98291305e+00,
+         -7.41254169e+00, -2.97046966e+00, -9.02174840e+00,  4.27905194e+01,
+          1.05108925e+01, -8.39535401e+00,  1.89637533e+00, -1.30996795e+01,
+          1.30487426e+00, -5.23647536e+00,  3.12921526e+00, -7.59427126e-01,
+         -2.12714644e+00, -8.65040077e+00, -2.10194935e+00, -3.44563280e+00,
+         -4.68788431e+01, -6.16705982e-01, -9.63533522e-01, -5.22393185e+00,
+          2.21543974e+01,  9.35505400e-01,  1.28040579e+00,  1.41973533e+01,
+          9.16880018e+00,  2.85821306e+00,  2.25368400e+00, -1.71654892e+01,
+          2.94804850e+01, -5.00833526e+00, -6.08839728e+00, -3.40742292e+00,
+         -5.27000380e+00,  2.19836631e+01,  1.59670335e+00,  2.65330357e+00,
+          4.87365820e+00, -6.61247887e+00, -1.43020466e+00,  3.09430226e+00,
+          6.55565527e+00,  8.33937955e-01,  1.90433061e+00, -3.95870151e+00,
+         -2.98150227e+00,  7.05264621e+00, -6.51883839e-01, -2.41652637e+00,
+         -1.02868049e+00, -7.44085187e+00, -8.53287077e+00, -3.12778145e+00,
+         -4.28209910e+00, -7.36315702e-01, -1.23879373e+00, -2.10872978e+00,
+          1.88551381e+00, -1.04945235e+00, -2.82573438e-01,  6.67154368e+00,
+          2.73324204e+01, -4.70343489e+00,  7.75714020e+00,  4.25334858e+00,
+         -2.79284982e+00,  8.28364332e+00, -1.46396581e+01,  5.89810030e+00,
+          5.73431074e+00,  1.95586578e+01, -3.81103561e+00,  4.79652034e+00,
+          2.39180526e+00,  1.28459380e+00, -1.49444354e+00,  4.11839566e-02,
+          4.65682283e+00,  2.09626961e+00,  6.98928421e-01,  1.73238417e+00,
+         -3.19676741e-01,  6.15846273e-01,  3.44935483e+00,  3.13157247e+00,
+          2.26446148e+01, -3.43771083e+01,  2.17418409e+00, -1.32236773e+01,
+         -1.99634551e+00,  6.68984700e+00,  1.24897978e+01,  4.96075587e+00,
+          7.22752160e-01,  1.01838952e+00,  1.16085403e+00,  1.03770480e+01,
+         -3.11943753e+00, -2.64981687e+00, -1.58932319e+00,  1.76334411e+00,
+         -3.50344697e+00, -3.53982906e+00, -7.29512800e-01, -5.50202050e+00,
+          6.06422055e+00, -1.83944146e+00, -6.62269698e-02, -4.58013867e-01,
+          4.77715439e+00, -1.36727599e-01,  1.79472111e+00,  3.16339060e+00,
+         -2.94763377e-01, -3.13199128e+00,  5.92311655e+00,  2.41006298e+01,
+         -5.26558389e-01,  5.57578255e+00, -9.52224758e+00,  1.06137102e+00,
+          4.73257152e+00,  2.35540740e-02,  4.45367348e+00, -4.42145180e+00,
+          6.97149906e+01,  8.02041297e+00,  1.81547375e+00, -1.92601851e+00,
+          2.43022880e+00,  1.17525869e+00,  2.84566718e+01,  2.56442206e+00,
+         -7.16355865e-01, -3.93106171e-01, -2.55327300e+00,  3.15536732e+00,
+          1.87419096e-01, -4.05429709e+01,  4.11204401e+00,  3.44581859e+00,
+          5.42781693e+00, -4.96703570e+00,  5.91837208e+00, -9.02023562e+00,
+         -1.06908310e+01, -8.65952419e+00, -2.96161962e-01,  5.63469609e+00,
+         -3.09607225e+00, -2.80924204e+00,  2.15388277e+01, -2.22728722e-02,
+          2.68237159e+00,  1.68326088e+00, -3.16333011e+01, -3.36710930e+00,
+         -2.80360553e+00,  4.31109417e+00, -1.25721080e+01,  1.42915572e+00,
+          4.72180847e+00,  1.61648897e+00,  1.99577460e+00,  4.27709247e+00,
+          6.13823547e+00,  1.45589827e+01,  4.08940882e+00,  9.01538445e-01,
+          1.81762503e+00, -3.85164051e+00,  1.45060288e+00, -5.27959715e-01,
+          1.05163427e+00,  1.73515846e+00, -9.53259188e-01,  3.77992813e+00,
+         -3.20878186e+00,  4.08642834e+00,  4.47074782e+01, -4.13617659e+01,
+         -2.63551505e+00,  5.89811332e+00,  3.56925140e+00,  3.64731072e-01,
+         -4.57070449e+00, -3.68758135e+00,  1.32672670e+00, -8.33306123e+00,
+         -2.03125151e+00, -4.14733163e+00,  3.17501746e+00,  8.92752895e+00,
+          9.22797613e+00,  6.32312272e+00, -2.71357572e+00,  6.33611857e+00,
+          1.02949080e+01, -2.10787605e+00, -4.70295950e-01,  3.73571382e+00,
+          1.99235964e+00,  3.58320060e+00,  2.28377737e+00, -2.16421236e+00,
+          3.21569618e+00, -7.61186163e+00,  1.39172077e+01, -4.39857099e+00,
+          3.63758251e+00, -1.77068085e+00, -2.16494654e+00,  1.78943011e+01,
+         -8.36562844e-01,  6.64728608e-01,  7.03558556e+00, -2.54551877e+00,
+         -1.33889440e+00, -5.81144758e+00,  1.85752237e-01,  1.46297607e+00,
+         -2.46780759e+00,  7.92102060e+00,  2.15523664e+01,  6.62436444e+00,
+          4.44938844e+00, -1.03181490e+01,  9.84624692e-01,  3.85802332e+00,
+         -5.76173029e+00,  3.14849128e+00,  4.58910879e+00, -4.24269550e+00,
+          1.29850172e+00,  4.91197187e+00, -1.59380792e+00, -1.71404409e+01,
+         -5.54412719e+00,  1.93442141e+00,  3.77850983e+01, -9.95323033e+00,
+          3.48946510e+00, -1.64720738e+01,  2.54324052e+01,  6.62287702e+00,
+         -2.24435978e+00, -3.65041982e+00,  8.36248542e-01, -1.19361110e-01,
+          1.16263144e+00,  8.11030098e+00,  2.94767222e+00,  1.56360466e+00,
+          3.20245887e+00, -1.21538672e-01, -3.34248354e-01,  1.66235618e+01,
+         -9.42467160e+00, -1.14423966e+01, -1.14124974e+01,  5.96844313e+00,
+         -7.34887765e+00, -2.04303520e+00,  2.98873268e-01,  4.32443618e+00,
+         -2.40759266e+00,  4.54487055e+00,  1.95536910e+00, -1.70474268e+01,
+          2.28513161e+00,  1.09256985e+01,  2.06742712e+00, -3.36592394e+00,
+         -2.41124749e+00,  5.73160482e+01, -4.93788283e+00, -2.90167694e+00,
+          6.54639893e-01,  6.62686857e+00, -6.97872800e+00, -5.51538932e-02,
+         -9.48160714e+00,  3.08215674e+00, -7.33128782e+00,  7.35680216e-01,
+         -6.81252588e+00, -8.77159711e+00,  4.49190338e+00, -2.40684943e+00,
+          6.37248920e+00,  7.44142483e+00, -3.08333168e+00,  1.52786026e+00,
+          1.01324910e-01,  2.65264237e+00,  1.28326787e+01, -9.52331228e+00,
+         -1.00726914e+00, -3.71289917e+00,  1.18273277e+01, -5.75909140e+00,
+          1.42090869e+00,  9.14833261e+00, -1.45017495e+00,  1.23876100e+00,
+         -2.60389235e+01,  2.62365141e-01,  9.86788967e-01,  1.05619965e+01,
+          2.96761227e+00,  2.42590140e+00,  1.96668294e+00,  5.71234842e+00,
+         -6.18163372e+00,  7.37313953e-01,  1.00605908e-01, -1.29326824e+01,
+         -7.17545983e+00, -3.71715802e+00, -2.96648984e+00, -2.79827717e+00,
+         -2.13943459e+00,  1.10019293e+01,  5.39032999e+00, -1.20958341e+01,
+          2.48164987e+00,  4.52153396e+00,  8.13534091e+00,  7.27867877e+00,
+         -3.98757009e-01, -5.08372407e+00,  2.92171281e+00, -8.98783367e+00,
+          1.63603053e+00, -2.58907846e+00,  5.29041701e-01, -1.41712805e+00,
+          9.21743704e+00,  5.52675611e+00,  1.50511356e+00,  5.33022073e+00,
+          1.69291396e+00,  5.11786705e+00,  3.73602847e+00,  5.72182672e+00,
+         -3.63277961e-01, -3.22647416e+00, -1.11279396e+00,  3.80178489e+00,
+          1.89680969e+00, -1.48491207e+00, -6.12654202e+00, -1.88127990e+01,
+         -5.05124465e+00, -9.63302903e+00,  5.46792778e+00,  9.28820292e+00,
+          3.95491730e+00,  3.88697372e+01,  1.15100090e+00, -2.52444891e+00,
+         -1.84829406e+00,  3.54402149e+00, -1.15521084e+00,  7.78393203e+00,
+          1.03878738e+01, -2.54117980e+00, -1.74182117e+01, -1.49260720e+01,
+          4.22265233e+00,  7.45845762e-01,  1.38608207e+00, -5.16425975e+00,
+         -3.35003183e+00,  1.81477179e+00,  4.54065439e+00, -1.36707156e+00,
+         -2.70261999e+00,  5.28294969e+00, -3.36433415e+00, -2.12818137e+01,
+         -7.34831454e+00, -6.41627531e+00, -2.78129120e+00,  1.95338401e+00,
+          9.07203911e+00, -5.03717355e+00,  5.35803381e-01, -1.32171830e+00,
+         -5.38851116e+00,  3.43339204e+00, -8.04842502e+00,  8.76103048e-01,
+          5.60034172e+00, -1.88286867e+00, -5.56372757e+00,  1.82893345e-02,
+         -5.38024041e+00, -4.47535503e+00, -4.22687164e-01,  7.74055830e+00,
+          6.50723055e+00, -1.89156724e+00,  7.50768547e+00,  5.74582577e-01,
+          1.17681366e+00,  1.25841599e+01,  1.10159523e+00,  3.97174472e+00,
+         -1.67725372e+00, -6.99374899e-01,  2.62822448e+00, -4.52087415e+00,
+          4.45629833e+00, -2.34864298e+00,  1.67964283e+01,  9.00955362e-01,
+         -2.75793398e+00, -1.33754421e+00, -4.78470509e+00, -9.07294365e-01,
+          8.60841142e-01, -2.42841764e+00,  1.88699062e+00, -5.49266142e+00,
+          1.58648673e+01,  5.99746151e+00, -1.64546247e+00,  8.86715626e+00,
+          1.18237582e-01, -6.26950830e-01,  7.09884693e+01,  2.64359992e+01,
+          1.34622395e+01,  1.64120477e+00,  2.11497110e+00, -1.23189876e+00,
+          1.64500771e+01,  1.04196000e+00,  2.81858007e+00,  6.63766302e+00,
+          3.01342381e+00,  6.65569213e+00, -2.30068908e+01,  1.74425606e+00,
+         -8.19123688e+00,  2.11468175e+00,  2.20069202e-01,  2.59561494e+00,
+          8.61222331e+00, -2.98377988e+00, -2.17604027e+02,  2.12431604e+00,
+          2.42048462e+00, -7.21966368e-01, -2.15418369e+01,  8.83831043e+00,
+          6.59277526e+00,  1.15082748e+00,  4.28236394e+00,  8.24280636e+01,
+         -3.08063839e+01, -1.46511404e+00, -1.86114150e+00, -1.97620710e+00,
+          8.72887790e-01,  3.31213318e+01, -1.60900938e+00, -3.70483364e+00,
+          8.49463792e+00,  1.51507868e+01, -4.55240499e+00,  1.24364707e+00,
+         -3.24264394e+00,  3.07443120e+00, -7.08852563e+00, -7.45448179e+00,
+         -1.15842281e+00, -3.84297924e+00, -5.23435554e+00,  2.93174349e+00,
+          3.92606225e+00,  7.23308368e+00, -9.00680084e+00, -8.03221833e-01,
+         -1.63671564e-01, -1.87437787e+01, -2.12012267e+00,  5.17631673e+00,
+         -2.01300895e+02, -1.38045283e+01,  3.54171734e+00,  2.54143717e+00,
+          4.50846320e+00,  5.16815798e+00, -6.95438635e+00, -3.46016847e+00,
+          2.25670040e+00, -2.32781802e+00, -3.24937012e+00,  4.07206527e-02,
+          1.01050826e-01, -1.16440768e+00, -3.34445741e+00,  2.10012997e+01,
+         -7.96569944e-01,  1.14258870e+01,  5.53464199e+01,  3.39059304e+00,
+          1.51086982e+01, -9.31220333e-01,  4.87061256e+00,  5.18127130e+00,
+          2.20787905e+00,  3.06483644e+00,  6.07420780e+00,  2.23566404e+00,
+         -4.23874492e+00, -6.77773154e+00,  5.27995335e-01,  1.02027682e+01,
+         -3.74799849e+00,  5.74717126e+00,  6.27959603e-01,  1.48301482e-01,
+          1.52399416e+00,  1.83305949e+00, -3.48753370e+00, -4.61119402e+00,
+         -1.55065824e+00, -4.81048499e+00,  1.04245449e+01, -6.66003954e-01,
+          9.56406644e+00, -4.15240314e+00,  2.29072728e+00,  7.58412775e+00,
+          4.83213589e+00,  4.28616731e+00, -8.61397122e+00, -4.81526989e+01,
+         -3.92571588e+00,  9.22126329e-01, -3.43117495e-03,  1.35738478e+00,
+          8.74816409e+00,  1.78739845e+00, -3.78173055e+01,  3.55819158e+00,
+         -1.12955141e+01,  1.16067687e+00,  6.10429446e+00, -2.38650905e+00,
+         -1.24444705e+00,  1.63674525e+00, -1.54071053e+00,  3.46991521e-01,
+          6.74085265e+00, -3.39337554e+00, -2.31472518e-01,  2.91553547e-01,
+         -3.23954796e+00, -2.19348428e+00,  3.01189214e+00,  5.87651281e+00,
+          2.65428552e+00,  2.45636393e+01, -5.14872798e+00,  4.43821646e+00,
+         -1.12681068e+01,  8.44874699e+00, -4.74453694e-03,  3.57329232e-01,
+          5.18484182e-01,  2.74893357e+00,  2.74151082e+00, -1.17921540e+00,
+          1.06225293e+01,  2.77459776e+00,  2.10826903e+00, -3.31182465e+00,
+         -1.42977083e+01, -3.06590993e+00,  2.31913919e+00, -3.94925161e+00,
+         -1.24878341e-01, -4.99054715e+00, -1.75094270e-01,  3.28678727e+00,
+          1.30187491e+00,  8.53035073e-02, -1.76865073e+00,  3.84361931e+00,
+         -7.91349421e+00, -5.79677608e-01,  1.18214415e+01,  6.63651625e+00,
+         -2.81939739e+00,  1.16907835e+00,  9.36501877e+00,  1.23748767e+01,
+          9.12406326e+00,  7.82406772e-01,  4.60689713e-01, -1.32310768e+00,
+          2.50770553e+00,  3.57050113e+00, -4.24662928e+00, -5.05949658e-01,
+         -2.43838994e+00,  3.40534811e+00, -4.52360878e+00, -1.03648639e+01,
+         -1.10576493e+02,  8.17005105e-01,  7.83031372e+00, -5.70516974e-02,
+          2.09671591e+00, -4.19269928e+00, -1.07771890e+01,  1.43993200e+00,
+         -4.79663340e+00, -2.95012069e+00, -1.47314804e+02,  1.18545720e-02,
+          4.26411155e+00, -9.06937361e-01,  1.93139139e+00,  3.75439722e+00,
+          2.16262286e+00,  6.28136194e-01, -1.07641054e+00,  1.13539307e+00,
+          8.80598531e+00,  3.73630377e+00,  6.59154803e+00, -1.44763161e+00,
+         -2.73298691e+00, -2.91605272e+00,  4.51158691e+00, -8.10334345e-01,
+          2.70294335e+00,  5.86641268e+00, -2.99454994e+00, -2.41573262e+00,
+         -2.41370557e+00,  4.19974445e-01, -3.79431182e+00,  1.40330803e+00,
+         -1.21203015e+00,  1.62351598e+00,  5.52362058e-01,  7.98205803e+00,
+          3.53894743e+00,  8.25150971e-02,  2.98160335e+00, -4.30603825e+00,
+          6.42378601e+00, -1.63665599e+01, -1.37587313e+01, -1.22247063e+00,
+         -3.64143435e+00, -1.03955366e+01,  3.03557591e+00,  3.63747657e+00,
+          5.44235216e+00, -5.03108513e+00, -3.12300618e+00, -7.94906258e-01,
+          7.19287215e+00, -8.74758611e+01, -6.91525022e-01, -2.56904206e+00,
+         -1.53654657e+01,  2.57069619e+00, -7.95057644e+00,  1.48391575e+00,
+         -6.97970400e+00, -1.22004357e+00, -8.92822339e+00, -3.21045352e-01,
+          1.85971635e+00, -1.42675010e+01,  6.71445264e+00, -4.28295720e+00,
+          5.48640885e+00, -2.00840760e+00, -1.91804149e+00, -1.25070128e+00,
+          5.06845231e+01,  1.76092546e+00, -4.93875859e-02,  1.45174235e+01,
+         -6.93472299e-02,  1.03281764e+01,  1.66184885e+00, -2.81745652e+00,
+         -2.15628501e+00,  4.12472704e+00,  4.66737435e+00,  4.97299640e+00,
+          2.60430661e+01,  1.47642054e+01,  4.63912027e+00, -4.44303334e+00,
+         -3.39701261e+00, -3.32471460e+00, -6.78181316e-01,  2.90903553e+00,
+          8.78880558e+00, -3.66923641e+00,  3.19612267e+00, -3.12686793e-01,
+          7.80731331e-01, -3.58245537e+00,  4.08547122e-01, -2.85004091e-01,
+          1.10550859e+01,  1.61362253e+00,  5.78593576e+00, -3.63797778e+00,
+          2.58719646e+00,  1.00352621e-01,  1.15636373e+01, -5.93014537e-01,
+         -1.18771702e+01, -7.27183435e+00,  7.16729057e+00,  2.50572350e+00,
+         -2.43039822e-01,  1.50368554e+00,  2.15292499e+00,  2.19195112e-01,
+         -4.04234489e+01,  4.37235699e+00, -1.03676980e+01,  2.14588651e+00,
+         -2.44596569e+00, -1.36265395e+00,  3.03792516e+00,  8.44632945e-01,
+          9.86013909e+00,  9.00683424e-01,  1.25981309e+00,  1.75343913e+01,
+          6.00431226e+00,  4.21286358e+00, -1.11915036e+01, -1.10948499e+01,
+          6.45215503e+00, -1.38007822e+00, -6.30999278e+00,  3.74997999e+00,
+         -1.45506018e+01, -1.64716285e+01,  1.79914905e+01,  5.50092409e+00,
+          4.23303834e+00, -5.55382972e-01, -9.19641621e-01, -1.82798204e+00,
+          3.48075746e+00,  2.91753400e+00, -3.56731360e+00,  4.94450963e+00,
+          1.05313219e+01,  8.37274180e+00,  2.89477082e+00,  1.20889864e+00,
+          2.45962151e+01,  2.93031305e-01, -3.80556215e+00,  3.74976293e+01,
+         -6.11625052e+00,  5.27738684e+00, -2.28856326e+00, -5.90799378e-01,
+         -6.07169422e-01,  3.75488837e+01,  4.13028644e+00, -2.71142438e+00,
+         -8.56028105e+00,  1.71945984e+00, -2.94167399e+00, -1.22609396e+00,
+         -3.04606403e+01,  4.00758516e+00, -3.24228618e+00,  1.00867878e+00,
+         -6.35063935e+01,  3.25211200e-01,  1.28981189e+01,  7.88648481e-01,
+          5.12866503e+00,  9.67825269e+01,  2.94012262e+01,  6.42307471e-01,
+         -8.61529030e-01,  9.06386310e+00, -2.45905196e+00, -2.55406905e-01,
+         -4.56826336e+00, -6.28878794e+00, -6.33936264e+01,  1.16391712e+00,
+          4.30575475e+00,  1.20256321e-01,  3.23236520e-01,  1.43464530e+00,
+         -5.26645647e+00,  6.34330354e+00,  4.57692463e+00, -5.49356219e+01,
+         -1.24087262e+01,  5.52575510e+00, -5.64718100e-01, -7.89053674e-01,
+          2.19499827e+00,  2.07298138e+01,  2.02455928e+00, -7.25891655e+00,
+          2.29143933e+00,  2.09048842e+00,  3.10370898e+00, -2.75403234e+01,
+         -4.32625448e+00,  3.13122634e+00, -2.61211017e+00,  4.31199720e+00,
+         -1.65967091e+00,  1.85546926e+00, -4.12691587e+00,  1.50399491e+00,
+         -7.99123213e+00,  5.28736956e+00,  7.09560942e+00,  2.38483962e+00,
+          1.11737314e+01,  5.92541885e+00,  9.01659822e+00,  4.26550943e+00]),
+  &#39;psi_a&#39;: array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+         -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.]),
+  &#39;psi_b&#39;: array([ 3.96080666e+00,  6.34956857e+00, -1.87274194e+00,  2.90368000e+00,
+          5.28168592e+00, -9.19537202e-01,  2.56092866e+00,  4.90048730e+00,
+          1.07973334e+01,  4.72048811e+00, -1.73503509e+00,  4.68192965e+00,
+          2.59366346e+00,  6.70108646e+00,  3.77071287e-01,  2.51397976e+00,
+          3.45259672e+00, -1.97531267e-01,  1.38730357e+02, -4.62351726e-01,
+          5.90281871e+00,  2.40144325e-01, -6.35013494e+00,  7.26553132e+00,
+          2.00322892e+00,  7.25537857e-01,  3.43163574e+00,  6.02438597e+00,
+          7.54018630e+00, -1.01025313e+01, -3.22707498e+00,  6.09413099e-01,
+         -2.07017633e+00,  7.26442388e-01,  9.45466595e+00, -3.47954399e+01,
+         -3.11410967e+00,  4.20686404e+00,  2.92058753e+00, -1.21434655e+01,
+          1.07619998e+00, -1.53091391e+00, -2.50105606e-02, -5.68859730e+00,
+          4.96340428e+00,  4.33682058e+00, -3.76692546e+00,  3.23987350e+00,
+         -8.09029090e-01,  5.10558492e+00,  7.30620662e+00, -4.31837870e+01,
+          2.76027922e+00,  8.65488529e-01, -2.05776596e+00,  4.90632859e+01,
+         -4.25988714e+00, -5.90165321e+00, -6.14431391e+00, -5.19287779e+00,
+         -4.60212343e+00, -1.69233367e+00, -1.03119345e+00,  2.77292728e+00,
+          4.61335286e+00,  4.43058023e+00, -4.45776043e-01,  4.72736894e+00,
+          7.61852934e-01, -4.50865617e+01, -7.66992526e+00,  1.26394957e+00,
+         -4.29550332e+00, -1.59859721e+00,  1.17079547e+00, -3.54455922e+00,
+          6.70115438e+00, -8.00473295e+00, -4.07662282e-01,  1.52294205e+00,
+         -4.60847138e+00, -4.76957968e+01,  1.96451075e+00, -9.18507136e+00,
+          8.45348085e+00,  9.39947036e-01, -1.04240067e+00, -4.06386969e+00,
+          8.53526705e+00, -3.70324249e+00,  4.02659368e+00,  1.71408287e+00,
+         -1.42078959e+01,  6.96506959e+00,  4.33185671e-01,  4.99219231e+00,
+         -5.12671768e-01, -4.86117827e+00,  3.76090709e+00,  1.35713195e+00,
+         -2.12751058e+00,  6.75130175e+00,  1.13988008e+00,  9.06847508e+00,
+         -3.80433381e+00,  2.57517903e+00,  6.75776735e+00,  5.22570095e-01,
+          2.03967900e+01,  8.22224404e+00,  7.28058465e+00,  5.84575067e+00,
+          3.60493673e-01,  3.64453259e+00, -9.11782450e-01, -2.23187695e+01,
+         -1.32985020e+01,  1.90417002e+00,  1.50741728e+00,  6.94804974e+00,
+          3.79223186e+00,  3.21116968e+00,  3.74976184e+00,  9.80065722e+00,
+          4.93602487e+00, -6.11906372e+00,  1.38136666e+00,  5.27564782e+00,
+          9.19169732e-01,  1.27650117e+00, -4.37897070e+00,  2.77791162e+00,
+          1.31967072e+00,  2.47758050e+00, -5.47187689e+00, -1.40341295e+01,
+          6.01812677e-01,  5.77715404e+00, -2.13521447e-02,  2.78436978e+00,
+         -3.03280855e+00, -7.05708389e-02, -8.32193154e+00,  4.06109430e+00,
+          6.36582756e+00, -2.04316293e+00,  6.36662139e+00, -2.88525422e+00,
+          6.82411669e+00, -1.01505132e+00, -3.14634198e+00,  1.24359719e+01,
+         -3.02545328e+00,  2.92844190e+00, -1.85907160e+00, -7.55514435e-01,
+         -3.18081313e+00, -4.53130228e+00, -3.62945411e+00, -4.68489400e+00,
+         -6.11452264e+00, -1.67245061e+00, -7.72372935e+00,  4.40885385e+01,
+          1.18089116e+01, -7.09733496e+00,  3.19439438e+00, -1.18016604e+01,
+          2.60289331e+00, -3.93845631e+00,  4.42723431e+00,  5.38591927e-01,
+         -8.29127388e-01, -7.35238172e+00, -8.03930300e-01, -2.14761375e+00,
+         -4.55808240e+01,  6.81313071e-01,  3.34485531e-01, -3.92591280e+00,
+          2.34524164e+01,  2.23352445e+00,  2.57842485e+00,  1.54953724e+01,
+          1.04668192e+01,  4.15623211e+00,  3.55170305e+00, -1.58674702e+01,
+          3.07785041e+01, -3.71031621e+00, -4.79037823e+00, -2.10940387e+00,
+         -3.97198474e+00,  2.32816822e+01,  2.89472241e+00,  3.95132263e+00,
+          6.17167726e+00, -5.31445981e+00, -1.32185610e-01,  4.39232131e+00,
+          7.85367433e+00,  2.13195701e+00,  3.20234966e+00, -2.66068246e+00,
+         -1.68348322e+00,  8.35066526e+00,  6.46135214e-01, -1.11850732e+00,
+          2.69338565e-01, -6.14283281e+00, -7.23485172e+00, -1.82976239e+00,
+         -2.98408005e+00,  5.61703351e-01,  5.92253188e-02, -8.10710724e-01,
+          3.18353286e+00,  2.48566704e-01,  1.01544562e+00,  7.96956273e+00,
+          2.86304395e+01, -3.40541584e+00,  9.05515925e+00,  5.55136764e+00,
+         -1.49483077e+00,  9.58166237e+00, -1.33416391e+01,  7.19611935e+00,
+          7.03232980e+00,  2.08566768e+01, -2.51301656e+00,  6.09453939e+00,
+          3.68982432e+00,  2.58261286e+00, -1.96424490e-01,  1.33920301e+00,
+          5.95484188e+00,  3.39428867e+00,  1.99694747e+00,  3.03040323e+00,
+          9.78342312e-01,  1.91386533e+00,  4.74737389e+00,  4.42959153e+00,
+          2.39426338e+01, -3.30790892e+01,  3.47220314e+00, -1.19256583e+01,
+         -6.98326455e-01,  7.98786605e+00,  1.37878168e+01,  6.25877492e+00,
+          2.02077121e+00,  2.31640857e+00,  2.45887309e+00,  1.16750670e+01,
+         -1.82141848e+00, -1.35179781e+00, -2.91304139e-01,  3.06136316e+00,
+         -2.20542792e+00, -2.24181000e+00,  5.68506253e-01, -4.20400145e+00,
+          7.36223960e+00, -5.41422411e-01,  1.23179208e+00,  8.40005186e-01,
+          6.07517344e+00,  1.16129145e+00,  3.09274017e+00,  4.46140966e+00,
+          1.00325568e+00, -1.83397222e+00,  7.22113560e+00,  2.53986489e+01,
+          7.71460664e-01,  6.87380161e+00, -8.22422852e+00,  2.35939007e+00,
+          6.03059057e+00,  1.32157313e+00,  5.75169254e+00, -3.12343274e+00,
+          7.10130096e+01,  9.31843202e+00,  3.11349280e+00, -6.27999453e-01,
+          3.72824786e+00,  2.47327774e+00,  2.97546908e+01,  3.86244111e+00,
+          5.81663188e-01,  9.04912882e-01, -1.25525394e+00,  4.45338637e+00,
+          1.48543815e+00, -3.92449519e+01,  5.41006306e+00,  4.74383764e+00,
+          6.72583599e+00, -3.66901664e+00,  7.21639113e+00, -7.72221656e+00,
+         -9.39281198e+00, -7.36150513e+00,  1.00185709e+00,  6.93271514e+00,
+         -1.79805319e+00, -1.51122299e+00,  2.28368467e+01,  1.27574618e+00,
+          3.98039064e+00,  2.98127994e+00, -3.03352820e+01, -2.06909025e+00,
+         -1.50558648e+00,  5.60911323e+00, -1.12740890e+01,  2.72717477e+00,
+          6.01982752e+00,  2.91450802e+00,  3.29379365e+00,  5.57511153e+00,
+          7.43625452e+00,  1.58570017e+01,  5.38742787e+00,  2.19955750e+00,
+          3.11564408e+00, -2.55362146e+00,  2.74862193e+00,  7.70059337e-01,
+          2.34965332e+00,  3.03317751e+00,  3.44759865e-01,  5.07794719e+00,
+         -1.91076281e+00,  5.38444739e+00,  4.60054973e+01, -4.00637468e+01,
+         -1.33749600e+00,  7.19613237e+00,  4.86727045e+00,  1.66275012e+00,
+         -3.27268544e+00, -2.38956230e+00,  2.62474575e+00, -7.03504218e+00,
+         -7.33232458e-01, -2.84931258e+00,  4.47303651e+00,  1.02255480e+01,
+          1.05259952e+01,  7.62114177e+00, -1.41555666e+00,  7.63413763e+00,
+          1.15929271e+01, -8.09856992e-01,  8.27723103e-01,  5.03373287e+00,
+          3.29037869e+00,  4.88121965e+00,  3.58179643e+00, -8.66193305e-01,
+          4.51371523e+00, -6.31384258e+00,  1.52152267e+01, -3.10055194e+00,
+          4.93560157e+00, -4.72661796e-01, -8.66927489e-01,  1.91923202e+01,
+          4.61456209e-01,  1.96274766e+00,  8.33360461e+00, -1.24749972e+00,
+         -4.08753479e-02, -4.51342853e+00,  1.48377129e+00,  2.76099512e+00,
+         -1.16978854e+00,  9.21903966e+00,  2.28503854e+01,  7.92238350e+00,
+          5.74740749e+00, -9.02012993e+00,  2.28264374e+00,  5.15604237e+00,
+         -4.46371124e+00,  4.44651033e+00,  5.88712784e+00, -2.94467645e+00,
+          2.59652078e+00,  6.20999092e+00, -2.95788869e-01, -1.58424218e+01,
+         -4.24610813e+00,  3.23244046e+00,  3.90831173e+01, -8.65521128e+00,
+          4.78748416e+00, -1.51740548e+01,  2.67304243e+01,  7.92089607e+00,
+         -9.46340731e-01, -2.35240077e+00,  2.13426760e+00,  1.17865794e+00,
+          2.46065050e+00,  9.40832004e+00,  4.24569127e+00,  2.86162372e+00,
+          4.50047793e+00,  1.17648038e+00,  9.63770699e-01,  1.79215809e+01,
+         -8.12665254e+00, -1.01443776e+01, -1.01144784e+01,  7.26646218e+00,
+         -6.05085860e+00, -7.45016149e-01,  1.59689232e+00,  5.62245524e+00,
+         -1.10957360e+00,  5.84288960e+00,  3.25338816e+00, -1.57494078e+01,
+          3.58315066e+00,  1.22237176e+01,  3.36544617e+00, -2.06790489e+00,
+         -1.11322843e+00,  5.86140673e+01, -3.63986378e+00, -1.60365789e+00,
+          1.95265895e+00,  7.92488763e+00, -5.68070894e+00,  1.24286516e+00,
+         -8.18358809e+00,  4.38017579e+00, -6.03326877e+00,  2.03369927e+00,
+         -5.51450683e+00, -7.47357806e+00,  5.78992243e+00, -1.10883038e+00,
+          7.67050825e+00,  8.73944388e+00, -1.78531263e+00,  2.82587931e+00,
+          1.39934396e+00,  3.95066142e+00,  1.41306977e+01, -8.22529323e+00,
+          2.90749915e-01, -2.41488012e+00,  1.31253467e+01, -4.46107235e+00,
+          2.71892774e+00,  1.04463517e+01, -1.52155901e-01,  2.53678005e+00,
+         -2.47409044e+01,  1.56038419e+00,  2.28480802e+00,  1.18600156e+01,
+          4.26563132e+00,  3.72392045e+00,  3.26470200e+00,  7.01036747e+00,
+         -4.88361467e+00,  2.03533301e+00,  1.39862496e+00, -1.16346633e+01,
+         -5.87744078e+00, -2.41913897e+00, -1.66847079e+00, -1.50025812e+00,
+         -8.41415540e-01,  1.22999483e+01,  6.68834904e+00, -1.07978150e+01,
+          3.77966893e+00,  5.81955301e+00,  9.43335996e+00,  8.57669782e+00,
+          8.99262044e-01, -3.78570501e+00,  4.21973186e+00, -7.68981462e+00,
+          2.93404958e+00, -1.29105940e+00,  1.82706075e+00, -1.19109001e-01,
+          1.05154561e+01,  6.82477516e+00,  2.80313261e+00,  6.62823978e+00,
+          2.99093301e+00,  6.41588610e+00,  5.03404752e+00,  7.01984578e+00,
+          9.34741092e-01, -1.92845510e+00,  1.85225094e-01,  5.09980394e+00,
+          3.19482874e+00, -1.86893013e-01, -4.82852297e+00, -1.75147800e+01,
+         -3.75322559e+00, -8.33500997e+00,  6.76594683e+00,  1.05862220e+01,
+          5.25293636e+00,  4.01677563e+01,  2.44901995e+00, -1.22642986e+00,
+         -5.50275010e-01,  4.84204055e+00,  1.42808217e-01,  9.08195108e+00,
+          1.16858928e+01, -1.24316075e+00, -1.61201927e+01, -1.36280529e+01,
+          5.52067138e+00,  2.04386481e+00,  2.68410113e+00, -3.86624070e+00,
+         -2.05201278e+00,  3.11279084e+00,  5.83867344e+00, -6.90525049e-02,
+         -1.40460094e+00,  6.58096875e+00, -2.06631509e+00, -1.99837947e+01,
+         -6.05029549e+00, -5.11825625e+00, -1.48327214e+00,  3.25140306e+00,
+          1.03700582e+01, -3.73915449e+00,  1.83382243e+00, -2.36992441e-02,
+         -4.09049211e+00,  4.73141110e+00, -6.75040597e+00,  2.17412210e+00,
+          6.89836077e+00, -5.84849620e-01, -4.26570852e+00,  1.31630839e+00,
+         -4.08222136e+00, -3.17733597e+00,  8.75331889e-01,  9.03857736e+00,
+          7.80524961e+00, -5.93548184e-01,  8.80570452e+00,  1.87260163e+00,
+          2.47483271e+00,  1.38821789e+01,  2.39961428e+00,  5.26976377e+00,
+         -3.79234669e-01,  5.98644154e-01,  3.92624353e+00, -3.22285509e+00,
+          5.75431738e+00, -1.05062393e+00,  1.80944474e+01,  2.19897442e+00,
+         -1.45991492e+00, -3.95251611e-02, -3.48668604e+00,  3.90724688e-01,
+          2.15886019e+00, -1.13039859e+00,  3.18500967e+00, -4.19464237e+00,
+          1.71628864e+01,  7.29548057e+00, -3.47443414e-01,  1.01651753e+01,
+          1.41625664e+00,  6.71068223e-01,  7.22864884e+01,  2.77340182e+01,
+          1.47602586e+01,  2.93922383e+00,  3.41299015e+00,  6.61202918e-02,
+          1.77480962e+01,  2.33997905e+00,  4.11659913e+00,  7.93568207e+00,
+          4.31144287e+00,  7.95371118e+00, -2.17088717e+01,  3.04227511e+00,
+         -6.89321783e+00,  3.41270080e+00,  1.51808826e+00,  3.89363399e+00,
+          9.91024236e+00, -1.68576083e+00, -2.16306008e+02,  3.42233509e+00,
+          3.71850367e+00,  5.76052685e-01, -2.02438179e+01,  1.01363295e+01,
+          7.89079431e+00,  2.44884654e+00,  5.58038300e+00,  8.37260827e+01,
+         -2.95083648e+01, -1.67094992e-01, -5.63122452e-01, -6.78188045e-01,
+          2.17090684e+00,  3.44193509e+01, -3.10990323e-01, -2.40681459e+00,
+          9.79265697e+00,  1.64488059e+01, -3.25438593e+00,  2.54166612e+00,
+         -1.94462488e+00,  4.37245025e+00, -5.79050658e+00, -6.15646274e+00,
+          1.39596239e-01, -2.54496019e+00, -3.93633649e+00,  4.22976254e+00,
+          5.22408130e+00,  8.53110273e+00, -7.70878178e+00,  4.94797219e-01,
+          1.13434749e+00, -1.74457597e+01, -8.22103615e-01,  6.47433579e+00,
+         -2.00002876e+02, -1.25065092e+01,  4.83973639e+00,  3.83945622e+00,
+          5.80648226e+00,  6.46617704e+00, -5.65636730e+00, -2.16214942e+00,
+          3.55471945e+00, -1.02979896e+00, -1.95135107e+00,  1.33873971e+00,
+          1.39906988e+00,  1.33611374e-01, -2.04643836e+00,  2.22993188e+01,
+          5.01449108e-01,  1.27239061e+01,  5.66444390e+01,  4.68861209e+00,
+          1.64067173e+01,  3.66798720e-01,  6.16863161e+00,  6.47929035e+00,
+          3.50589811e+00,  4.36285550e+00,  7.37222686e+00,  3.53368310e+00,
+         -2.94072586e+00, -5.47971249e+00,  1.82601439e+00,  1.15007872e+01,
+         -2.44997944e+00,  7.04519031e+00,  1.92597866e+00,  1.44632053e+00,
+          2.82201321e+00,  3.13107855e+00, -2.18951464e+00, -3.31317497e+00,
+         -2.52639190e-01, -3.51246594e+00,  1.17225640e+01,  6.32015099e-01,
+          1.08620855e+01, -2.85438409e+00,  3.58874633e+00,  8.88214680e+00,
+          6.13015494e+00,  5.58418636e+00, -7.31595217e+00, -4.68546799e+01,
+         -2.62769683e+00,  2.22014538e+00,  1.29458788e+00,  2.65540383e+00,
+          1.00461831e+01,  3.08541750e+00, -3.65192865e+01,  4.85621063e+00,
+         -9.99749503e+00,  2.45869593e+00,  7.40231351e+00, -1.08848999e+00,
+          5.35720035e-02,  2.93476430e+00, -2.42691476e-01,  1.64501057e+00,
+          8.03887170e+00, -2.09535649e+00,  1.06654654e+00,  1.58957260e+00,
+         -1.94152891e+00, -8.95465227e-01,  4.30991119e+00,  7.17453187e+00,
+          3.95230457e+00,  2.58616584e+01, -3.85070893e+00,  5.73623551e+00,
+         -9.97008773e+00,  9.74676604e+00,  1.29327452e+00,  1.65534828e+00,
+          1.81650324e+00,  4.04695262e+00,  4.03952987e+00,  1.18803648e-01,
+          1.19205484e+01,  4.07261681e+00,  3.40628808e+00, -2.01380560e+00,
+         -1.29996892e+01, -1.76789088e+00,  3.61715824e+00, -2.65123255e+00,
+          1.17314071e+00, -3.69252810e+00,  1.12292478e+00,  4.58480632e+00,
+          2.59989396e+00,  1.38332256e+00, -4.70631675e-01,  5.14163837e+00,
+         -6.61547516e+00,  7.18341445e-01,  1.31194606e+01,  7.93453530e+00,
+         -1.52137833e+00,  2.46709740e+00,  1.06630378e+01,  1.36728957e+01,
+          1.04220823e+01,  2.08042582e+00,  1.75870877e+00, -2.50886226e-02,
+          3.80572459e+00,  4.86852019e+00, -2.94861023e+00,  7.92069394e-01,
+         -1.14037088e+00,  4.70336716e+00, -3.22558973e+00, -9.06684482e+00,
+         -1.09278474e+02,  2.11502416e+00,  9.12833277e+00,  1.24096736e+00,
+          3.39473496e+00, -2.89468022e+00, -9.47916992e+00,  2.73795105e+00,
+         -3.49861435e+00, -1.65210164e+00, -1.46016785e+02,  1.30987362e+00,
+          5.56213060e+00,  3.91081692e-01,  3.22941044e+00,  5.05241627e+00,
+          3.46064191e+00,  1.92615525e+00,  2.21608514e-01,  2.43341212e+00,
+          1.01040044e+01,  5.03432282e+00,  7.88956708e+00, -1.49612560e-01,
+         -1.43496785e+00, -1.61803367e+00,  5.80960597e+00,  4.87684708e-01,
+          4.00096241e+00,  7.16443173e+00, -1.69653089e+00, -1.11771357e+00,
+         -1.11568652e+00,  1.71799350e+00, -2.49629277e+00,  2.70132708e+00,
+          8.59888988e-02,  2.92153503e+00,  1.85038111e+00,  9.28007709e+00,
+          4.83696648e+00,  1.38053415e+00,  4.27962241e+00, -3.00801920e+00,
+          7.72180506e+00, -1.50685408e+01, -1.24607122e+01,  7.55484199e-02,
+         -2.34341530e+00, -9.09751750e+00,  4.33359496e+00,  4.93549562e+00,
+          6.74037122e+00, -3.73306608e+00, -1.82498713e+00,  5.03112795e-01,
+          8.49089120e+00, -8.61778421e+01,  6.06494031e-01, -1.27102301e+00,
+         -1.40674466e+01,  3.86871524e+00, -6.65255738e+00,  2.78193481e+00,
+         -5.68168495e+00,  7.79754779e-02, -7.63020434e+00,  9.76973700e-01,
+          3.15773540e+00, -1.29694820e+01,  8.01247169e+00, -2.98493815e+00,
+          6.78442790e+00, -7.10388549e-01, -6.20022436e-01,  4.73177726e-02,
+          5.19825422e+01,  3.05894451e+00,  1.24863147e+00,  1.58154425e+01,
+          1.22867182e+00,  1.16261954e+01,  2.95986790e+00, -1.51943746e+00,
+         -8.58265962e-01,  5.42274609e+00,  5.96539340e+00,  6.27101545e+00,
+          2.73410851e+01,  1.60622244e+01,  5.93713932e+00, -3.14501429e+00,
+         -2.09899356e+00, -2.02669555e+00,  6.19837737e-01,  4.20705458e+00,
+          1.00868246e+01, -2.37121735e+00,  4.49414172e+00,  9.85332260e-01,
+          2.07875038e+00, -2.28443632e+00,  1.70656618e+00,  1.01301496e+00,
+          1.23531050e+01,  2.91164158e+00,  7.08395481e+00, -2.33995873e+00,
+          3.88521551e+00,  1.39837167e+00,  1.28616564e+01,  7.05004515e-01,
+         -1.05791512e+01, -5.97381530e+00,  8.46530962e+00,  3.80374255e+00,
+          1.05497923e+00,  2.80170460e+00,  3.45094404e+00,  1.51721416e+00,
+         -3.91254299e+01,  5.67037605e+00, -9.06967894e+00,  3.44390556e+00,
+         -1.14794663e+00, -6.46348930e-02,  4.33594421e+00,  2.14265200e+00,
+          1.11581581e+01,  2.19870248e+00,  2.55783215e+00,  1.88324104e+01,
+          7.30233131e+00,  5.51088263e+00, -9.89348452e+00, -9.79683084e+00,
+          7.75017408e+00, -8.20591636e-02, -5.01197372e+00,  5.04799905e+00,
+         -1.32525828e+01, -1.51736094e+01,  1.92895095e+01,  6.79894314e+00,
+          5.53105740e+00,  7.42636080e-01,  3.78377432e-01, -5.29962991e-01,
+          4.77877651e+00,  4.21555305e+00, -2.26929455e+00,  6.24252869e+00,
+          1.18293409e+01,  9.67076085e+00,  4.19278988e+00,  2.50691769e+00,
+          2.58942342e+01,  1.59105036e+00, -2.50754310e+00,  3.87956483e+01,
+         -4.81823146e+00,  6.57540589e+00, -9.90544206e-01,  7.07219675e-01,
+          6.90849631e-01,  3.88469028e+01,  5.42830549e+00, -1.41340533e+00,
+         -7.26226200e+00,  3.01747889e+00, -1.64365493e+00,  7.19250912e-02,
+         -2.91626212e+01,  5.30560421e+00, -1.94426713e+00,  2.30669784e+00,
+         -6.22083745e+01,  1.62323025e+00,  1.41961380e+01,  2.08666753e+00,
+          6.42668408e+00,  9.80805459e+01,  3.06992453e+01,  1.94032652e+00,
+          4.36490023e-01,  1.03618822e+01, -1.16103291e+00,  1.04261215e+00,
+         -3.27024431e+00, -4.99076888e+00, -6.20956073e+01,  2.46193617e+00,
+          5.60377380e+00,  1.41827537e+00,  1.62125557e+00,  2.73266435e+00,
+         -3.96843742e+00,  7.64132259e+00,  5.87494368e+00, -5.36376028e+01,
+         -1.11107071e+01,  6.82377415e+00,  7.33300952e-01,  5.08965379e-01,
+          3.49301732e+00,  2.20278328e+01,  3.32257833e+00, -5.96089750e+00,
+          3.58945839e+00,  3.38850747e+00,  4.40172803e+00, -2.62423044e+01,
+         -3.02823542e+00,  4.42924540e+00, -1.31409112e+00,  5.61001625e+00,
+         -3.61651858e-01,  3.15348831e+00, -2.82889681e+00,  2.80201397e+00,
+         -6.69321308e+00,  6.58538862e+00,  8.39362848e+00,  3.68285867e+00,
+          1.24717504e+01,  7.22343791e+00,  1.03146173e+01,  5.56352848e+00]),
+  &#39;folds&#39;: array([1, 2, 1, 2, 1, 2, 3, 0, 2, 1, 2, 0, 1, 2, 3, 1, 2, 1, 2, 0, 1, 2,
+         0, 0, 1, 1, 0, 0, 0, 3, 2, 1, 1, 0, 3, 1, 1, 3, 0, 1, 3, 3, 3, 0,
+         1, 1, 2, 0, 0, 0, 0, 0, 2, 1, 0, 1, 3, 1, 2, 3, 2, 2, 1, 3, 3, 3,
+         1, 1, 2, 1, 0, 2, 2, 1, 2, 0, 0, 3, 0, 1, 0, 2, 0, 0, 3, 2, 2, 3,
+         0, 0, 2, 1, 2, 1, 1, 1, 2, 1, 2, 0, 0, 2, 2, 0, 1, 2, 3, 1, 2, 2,
+         3, 3, 1, 2, 2, 3, 2, 2, 3, 1, 3, 0, 3, 3, 1, 1, 2, 0, 3, 0, 1, 3,
+         2, 3, 1, 3, 2, 2, 0, 0, 3, 0, 1, 1, 3, 3, 3, 2, 2, 0, 1, 1, 0, 3,
+         2, 1, 1, 0, 3, 1, 2, 3, 2, 2, 3, 3, 3, 0, 3, 2, 0, 3, 0, 1, 1, 1,
+         3, 1, 0, 1, 0, 3, 2, 3, 3, 3, 3, 3, 3, 2, 3, 2, 3, 3, 1, 2, 1, 1,
+         0, 3, 0, 0, 2, 2, 3, 2, 2, 1, 0, 2, 0, 1, 2, 0, 2, 3, 3, 3, 3, 3,
+         3, 1, 2, 1, 3, 1, 1, 0, 2, 3, 1, 0, 3, 2, 2, 2, 2, 1, 1, 1, 2, 0,
+         1, 0, 0, 2, 2, 1, 1, 0, 2, 0, 3, 0, 0, 1, 0, 3, 2, 1, 3, 0, 0, 0,
+         3, 0, 0, 2, 0, 1, 2, 2, 0, 3, 3, 1, 2, 2, 0, 3, 0, 2, 0, 2, 0, 1,
+         1, 1, 0, 3, 1, 2, 1, 0, 1, 1, 1, 2, 3, 2, 0, 2, 1, 3, 3, 2, 3, 2,
+         0, 2, 3, 0, 3, 0, 2, 3, 2, 2, 2, 0, 1, 2, 1, 1, 0, 1, 3, 1, 1, 3,
+         1, 2, 0, 0, 2, 1, 0, 0, 2, 0, 3, 3, 2, 0, 2, 3, 3, 1, 2, 3, 1, 1,
+         1, 2, 2, 0, 3, 2, 1, 0, 1, 2, 3, 0, 3, 2, 1, 0, 0, 2, 0, 3, 2, 0,
+         1, 2, 2, 3, 3, 3, 2, 3, 1, 0, 1, 0, 0, 0, 3, 3, 2, 0, 2, 2, 0, 3,
+         2, 3, 2, 1, 1, 0, 2, 2, 0, 0, 0, 3, 1, 1, 1, 1, 1, 2, 2, 0, 3, 1,
+         1, 3, 3, 1, 0, 3, 0, 1, 0, 1, 1, 2, 3, 3, 2, 2, 1, 3, 1, 1, 0, 3,
+         1, 3, 2, 3, 1, 0, 3, 2, 0, 0, 2, 3, 1, 1, 0, 2, 0, 1, 0, 1, 0, 3,
+         0, 0, 3, 3, 3, 1, 1, 0, 3, 1, 3, 2, 1, 2, 3, 0, 1, 2, 2, 2, 1, 1,
+         1, 3, 0, 2, 2, 2, 3, 3, 2, 1, 1, 3, 1, 1, 1, 3, 0, 1, 0, 1, 2, 1,
+         0, 3, 3, 0, 0, 0, 0, 2, 2, 0, 2, 3, 2, 3, 1, 0, 1, 2, 2, 3, 0, 3,
+         0, 0, 3, 3, 0, 3, 0, 2, 3, 3, 1, 3, 1, 3, 0, 1, 0, 1, 1, 2, 1, 0,
+         2, 0, 3, 2, 1, 1, 3, 0, 2, 2, 2, 1, 1, 0, 2, 1, 0, 0, 0, 1, 1, 3,
+         2, 3, 0, 1, 3, 0, 0, 2, 3, 1, 1, 2, 2, 1, 0, 3, 0, 1, 1, 0, 2, 0,
+         2, 2, 0, 1, 1, 0, 0, 1, 0, 1, 2, 2, 2, 2, 3, 0, 3, 0, 2, 3, 1, 2,
+         2, 0, 0, 0, 1, 1, 3, 2, 2, 0, 3, 3, 3, 2, 0, 3, 0, 3, 0, 1, 3, 0,
+         0, 2, 0, 3, 2, 2, 2, 1, 2, 1, 3, 2, 0, 3, 2, 1, 1, 0, 3, 1, 2, 3,
+         3, 2, 0, 2, 3, 1, 1, 3, 0, 2, 3, 3, 3, 0, 2, 0, 3, 2, 3, 0, 1, 2,
+         0, 2, 2, 2, 0, 0, 0, 0, 0, 1, 3, 1, 3, 3, 3, 0, 3, 2, 0, 2, 1, 1,
+         3, 2, 0, 2, 2, 1, 1, 2, 0, 3, 3, 2, 2, 0, 0, 2, 0, 3, 3, 1, 2, 2,
+         1, 0, 0, 3, 3, 0, 3, 0, 1, 1, 1, 3, 0, 0, 2, 0, 2, 1, 2, 3, 0, 1,
+         3, 3, 3, 1, 2, 3, 3, 3, 3, 3, 3, 1, 3, 2, 1, 3, 2, 2, 0, 0, 1, 3,
+         2, 0, 3, 1, 2, 1, 3, 1, 2, 3, 1, 1, 3, 2, 3, 3, 1, 1, 1, 1, 3, 3,
+         2, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 0, 1, 0, 2, 0, 2, 0, 3, 3,
+         3, 3, 0, 2, 0, 2, 1, 2, 2, 2, 3, 1, 1, 1, 3, 3, 1, 0, 0, 3, 3, 3,
+         2, 3, 3, 0, 2, 1, 2, 2, 0, 0, 3, 0, 1, 0, 0, 3, 1, 2, 1, 1, 2, 3,
+         1, 2, 1, 2, 2, 0, 1, 0, 2, 3, 0, 1, 3, 2, 0, 0, 0, 0, 2, 1, 2, 0,
+         1, 0, 0, 1, 0, 3, 1, 3, 1, 3, 2, 2, 1, 3, 1, 0, 0, 2, 3, 1, 3, 2,
+         0, 3, 2, 1, 0, 0, 3, 2, 0, 1, 0, 0, 1, 1, 0, 0, 2, 2, 2, 1, 0, 1,
+         2, 2, 1, 1, 0, 0, 1, 1, 2, 1, 3, 1, 0, 0, 3, 3, 2, 3, 2, 1, 3, 2,
+         2, 3, 3, 0, 3, 2, 3, 1, 0, 2, 0, 2, 2, 3, 1, 0, 0, 1, 2, 0, 1, 0,
+         1, 2, 2, 3, 1, 1, 3, 1, 3, 2, 1, 0, 3, 0, 1, 3, 0, 2, 1, 1, 2, 0,
+         3, 0, 3, 0, 0, 1, 2, 0, 3, 1]),
+  &#39;score&#39;: &#39;ATE&#39;,
+  &#39;normalize_ipw&#39;: False,
+  &#39;trimming_threshold&#39;: 0.01,
+  &#39;p1&#39;: 0.188}}
 </pre></div>
 </div>
 </div>
@@ -1004,125 +2600,17 @@ document.write(`
 </section>
 <section id="refutation">
 <h2>Refutation<a class="headerlink" href="#refutation" title="Link to this heading">#</a></h2>
-<section id="placebo">
-<h3>Placebo<a class="headerlink" href="#placebo" title="Link to this heading">#</a></h3>
+<section id="overlap">
+<h3>Overlap<a class="headerlink" href="#overlap" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import refutation utilities</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">refute_placebo_outcome</span><span class="p">,</span>
-    <span class="n">refute_placebo_treatment</span><span class="p">,</span>
-    <span class="n">refute_subset</span><span class="p">,</span>
-    <span class="n">refute_irm_orthogonality</span><span class="p">,</span>
-    <span class="n">sensitivity_analysis</span><span class="p">,</span>
-    <span class="n">sensitivity_analysis_set</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Replacing outcome with dummy random variable must broke our model and effect will be near zero</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing an outcome with placebo</span>
-<span class="n">ate_placebo_outcome</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_outcome</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w">  </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="n">rep</span> <span class="o">=</span> <span class="n">run_overlap_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
+<span class="n">rep</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 0.0010896926888271316, &#39;p_value&#39;: 0.863664499475262}
-</pre></div>
-</div>
-</div>
-</div>
-<p>Replacing treatment with dummy random variable must broke our model and effect will be near zero</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing treatment with placebo</span>
-<span class="n">ate_placebo_treatment</span> <span class="o">=</span> <span class="n">refute_placebo_treatment</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_treatment</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 0.05021278313460212, &#39;p_value&#39;: 0.5290821466624945}
-</pre></div>
-</div>
-</div>
-</div>
-<p>Let’s chanllege our dataset and romove random parts. Theta shoul be near estimated</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inference on subsets</span>
-<span class="n">subset_fractions</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
-
-<span class="n">ate_subset_results</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">fraction</span> <span class="ow">in</span> <span class="n">subset_fractions</span><span class="p">:</span>
-    <span class="n">subset_result</span> <span class="o">=</span> <span class="n">refute_subset</span><span class="p">(</span>
-        <span class="n">dml_ate</span><span class="p">,</span>
-        <span class="n">causal_data</span><span class="p">,</span>
-        <span class="n">fraction</span><span class="o">=</span><span class="n">fraction</span><span class="p">,</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-    <span class="p">)</span>
-    <span class="n">ate_subset_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_result</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; With </span><span class="si">{</span><span class="n">fraction</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% subset: theta = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p_value = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.5725, p_value = 0.0000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 50% subset: theta = 1.8468, p_value = 0.0000
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="orthogonality">
-<h3>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h3>
-<p>Orthogonality tests show us “Does we correct specify the model”</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Out-of-sample moment check</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 1. Out-of-Sample Moment Check ---&quot;</span><span class="p">)</span>
-<span class="n">oos_test</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-statistic: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;pvalue&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fold-wise results:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;fold_results&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: 0.3617
-P-value: 0.7176
-Interpretation: Should be ≈ 0 if moment condition holds
-
-Fold-wise results:
-</pre></div>
-</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1141,550 +2629,114 @@ Fold-wise results:
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>fold</th>
-      <th>n</th>
-      <th>psi_mean</th>
-      <th>psi_var</th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>2000</td>
-      <td>0.142070</td>
-      <td>64.367381</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>2000</td>
-      <td>0.114837</td>
-      <td>71.748247</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>2000</td>
-      <td>0.106751</td>
-      <td>65.548761</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>2000</td>
-      <td>0.091285</td>
-      <td>62.569903</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>2000</td>
-      <td>-0.307471</td>
-      <td>68.208318</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p>psi_mean is near zero on every fold, so the test is successful</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Orthogonality derivatives</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 2. Orthogonality (Gateaux Derivative) Tests ---&quot;</span><span class="p">)</span>
-<span class="n">ortho_derivs</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample derivatives:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample derivatives:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">])</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (full sample):&quot;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in full sample&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (trimmed sample):&quot;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in trimmed sample&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 2. Orthogonality (Gateaux Derivative) Tests ---
-Interpretation: Large |t| (&gt;2) indicate calibration issues
-
-Full sample derivatives:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>basis</th>
-      <th>d_m1</th>
-      <th>se_m1</th>
-      <th>t_m1</th>
-      <th>d_m0</th>
-      <th>se_m0</th>
-      <th>t_m0</th>
-      <th>d_g</th>
-      <th>se_g</th>
-      <th>t_g</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trimmed sample derivatives:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>basis</th>
-      <th>d_m1</th>
-      <th>se_m1</th>
-      <th>t_m1</th>
-      <th>d_m0</th>
-      <th>se_m0</th>
-      <th>t_m0</th>
-      <th>d_g</th>
-      <th>se_g</th>
-      <th>t_g</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✓ No problematic derivatives in full sample
-
-✓ No problematic derivatives in trimmed sample
-</pre></div>
-</div>
-</div>
-</div>
-<p>t_m1, t_m0, t_g should be above 2.
-Even after trimming our data t_m1, t_m0, t_g above 2 across all confounders</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Influence diagnostics</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 3. Influence Diagnostics ---&quot;</span><span class="p">)</span>
-<span class="n">influence</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample influence metrics:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample influence metrics:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Top influential observations (full sample):&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;top_influential&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 3. Influence Diagnostics ---
-Interpretation: Heavy tails or extreme kurtosis suggest instability
-
-Full sample influence metrics:
-  Plugin SE: 0.0815
-  Kurtosis: 7.64
-  P99/Median ratio: 6.59
-
-Trimmed sample influence metrics:
-  Plugin SE: 0.0815
-  Kurtosis: 7.64
-  P99/Median ratio: 6.60
-
-Top influential observations (full sample):
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>i</th>
-      <th>psi</th>
-      <th>g</th>
-      <th>res_t</th>
-      <th>res_c</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>7299</td>
-      <td>-78.668133</td>
-      <td>0.100071</td>
-      <td>-7.970469</td>
-      <td>-0.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>874</td>
-      <td>63.471801</td>
-      <td>0.116169</td>
-      <td>8.132480</td>
+      <td>edge_0.01_below</td>
       <td>0.000000</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>edge_0.01_above</td>
+      <td>0.000000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>9405</td>
-      <td>49.195863</td>
-      <td>0.169723</td>
-      <td>8.457407</td>
-      <td>0.000000</td>
+      <td>edge_0.02_below</td>
+      <td>0.010000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>9116</td>
-      <td>-46.282651</td>
-      <td>0.164969</td>
-      <td>-7.989467</td>
-      <td>-0.000000</td>
+      <td>edge_0.02_above</td>
+      <td>0.000000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>294</td>
-      <td>-44.627395</td>
-      <td>0.213603</td>
-      <td>-9.570962</td>
-      <td>-0.000000</td>
+      <td>KS</td>
+      <td>0.193559</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>7634</td>
-      <td>44.388611</td>
-      <td>0.742768</td>
-      <td>-0.000000</td>
-      <td>-12.113462</td>
+      <td>AUC</td>
+      <td>0.615298</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>8409</td>
-      <td>44.028348</td>
-      <td>0.284715</td>
-      <td>12.696785</td>
-      <td>0.000000</td>
+      <td>ESS_treated_ratio</td>
+      <td>0.505788</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>5821</td>
-      <td>-43.885460</td>
-      <td>0.153316</td>
-      <td>-6.377281</td>
-      <td>-0.000000</td>
+      <td>ESS_control_ratio</td>
+      <td>0.946579</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>8085</td>
-      <td>-43.798883</td>
-      <td>0.247829</td>
-      <td>-11.536566</td>
-      <td>-0.000000</td>
+      <td>tails_w1_q99/med</td>
+      <td>10.453078</td>
+      <td>YELLOW</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>731</td>
-      <td>43.545110</td>
-      <td>0.165439</td>
-      <td>6.820135</td>
+      <td>tails_w0_q99/med</td>
+      <td>3.212849</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>ATT_identity_relerr</td>
+      <td>0.062834</td>
+      <td>YELLOW</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>clip_m_total</td>
       <td>0.000000</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>calib_ECE</td>
+      <td>0.068333</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>calib_slope</td>
+      <td>0.405324</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>calib_intercept</td>
+      <td>-0.778044</td>
+      <td>RED</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trimming information</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Propensity Score Trimming ---&quot;</span><span class="p">)</span>
-<span class="n">trim_info</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;trimming_info&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trimming bounds: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observations trimmed: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;n_trimmed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;pct_trimmed&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### Score
 </pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Propensity Score Trimming ---
-Trimming bounds: (0.02, 0.98)
-Observations trimmed: 0 (0.0%)
-</pre></div>
-</div>
-</div>
-</div>
-<p>In this test we analyze distribution of theta before trimming and after. There is no big difference. So test passed</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Diagnostic conditions breakdown</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Diagnostic Conditions Assessment ---&quot;</span><span class="p">)</span>
-<span class="n">conditions</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Individual condition checks:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">condition</span><span class="p">,</span> <span class="n">passed</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ PASS&quot;</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">&quot;✗ FAIL&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overall: </span><span class="si">{</span><span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Diagnostic Conditions Assessment ---
-Individual condition checks:
-  oos_moment_ok: ✓ PASS
-  derivs_full_ok: ✓ PASS
-  derivs_trim_ok: ✓ PASS
-  se_reasonable: ✓ PASS
-  no_extreme_influence: ✓ PASS
-  trimming_reasonable: ✓ PASS
-
-Overall: PASS: Strong evidence for orthogonality
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="sensitivity-analysis">
-<h3>Sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Link to this heading">#</a></h3>
-<p>Let’s analyze how unobserved confounder could look</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bench_sets</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">sensitivity_analysis_set</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
-    <span class="n">benchmarking_set</span><span class="o">=</span><span class="n">bench_sets</span><span class="p">,</span>
-    <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-    <span class="n">null_hypothesis</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build a DataFrame with confounders as rows and the metrics as columns</span>
-<span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="k">else</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-<span class="p">})</span><span class="o">.</span><span class="n">T</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_df</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.score.score_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_score_diagnostics</span>
+<span class="n">rep_score</span> <span class="o">=</span> <span class="n">run_score_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
+<span class="n">rep_score</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1707,64 +2759,193 @@ Overall: PASS: Strong evidence for orthogonality
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>cf_y</th>
-      <th>cf_d</th>
-      <th>rho</th>
-      <th>delta_theta</th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>tenure_months</th>
-      <td>0.019343</td>
-      <td>0.004555</td>
-      <td>1.000000</td>
-      <td>0.125310</td>
+      <th>0</th>
+      <td>se_plugin</td>
+      <td>0.524128</td>
+      <td>NA</td>
     </tr>
     <tr>
-      <th>avg_sessions_week</th>
-      <td>0.031075</td>
-      <td>0.010474</td>
-      <td>1.000000</td>
-      <td>0.172854</td>
+      <th>1</th>
+      <td>psi_p99_over_med</td>
+      <td>18.481829</td>
+      <td>YELLOW</td>
     </tr>
     <tr>
-      <th>spend_last_month</th>
-      <td>0.080634</td>
-      <td>0.006735</td>
-      <td>0.982448</td>
-      <td>0.177995</td>
+      <th>2</th>
+      <td>psi_kurtosis</td>
+      <td>69.524320</td>
+      <td>RED</td>
     </tr>
     <tr>
-      <th>premium_user</th>
-      <td>0.062270</td>
-      <td>0.031318</td>
-      <td>1.000000</td>
-      <td>0.360557</td>
+      <th>3</th>
+      <td>max_|t|_g1</td>
+      <td>3.346027</td>
+      <td>YELLOW</td>
     </tr>
     <tr>
-      <th>urban_resident</th>
-      <td>0.018716</td>
+      <th>4</th>
+      <td>max_|t|_g0</td>
+      <td>1.127317</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>max_|t|_m</td>
+      <td>1.750722</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>oos_tstat_fold</td>
       <td>0.000000</td>
-      <td>1.000000</td>
-      <td>0.093394</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>oos_tstat_strict</td>
+      <td>0.000000</td>
+      <td>GREEN</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>It is business domain and data knowledge relative question. In this situation we will stop on the most influential confounder ‘premium_user’ and test theta when we do not observe anothere confounder with strength of ‘premium_user’</p>
+</section>
+<section id="sutva">
+<h3>SUTVA<a class="headerlink" href="#sutva" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run sensitivity analysis on our ATE result</span>
-<span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
-    <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
-    <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
-    <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">print_sutva_questions</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.) Are your clients independent (i)?
+2.) Do you measure confounders, treatment, and outcome in the same intervals?
+3.) Do you measure confounders before treatment and outcome after?
+4.) Do you have a consistent label of treatment, such as if a person does not receive a treatment, he has a label 0?
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="uncofoundedness">
+<h2>Uncofoundedness<a class="headerlink" href="#uncofoundedness" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_unconfoundedness_diagnostics</span>
+
+<span class="n">rep_uc</span> <span class="o">=</span> <span class="n">run_unconfoundedness_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
+<span class="n">rep_uc</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>balance_max_smd</td>
+      <td>6.194497e-02</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>balance_frac_violations</td>
+      <td>0.000000e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ess_treated_ratio</td>
+      <td>5.057881e-01</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ess_control_ratio</td>
+      <td>9.465794e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>w_tail_ratio_treated</td>
+      <td>2.293126e+13</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>w_tail_ratio_control</td>
+      <td>2.170917e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>top1_mass_share_treated</td>
+      <td>2.269832e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>top1_mass_share_control</td>
+      <td>2.818151e-02</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>ks_m_treated_vs_control</td>
+      <td>1.935594e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>pct_m_outside_overlap</td>
+      <td>0.000000e+00</td>
+      <td>GREEN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">get_sensitivity_summary</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report_1</span><span class="p">)</span>
+<span class="n">summary_str</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_sensitivity_summary</span><span class="p">(</span><span class="n">ate_result</span><span class="p">))</span>  <span class="c1"># or print(summary_str)</span>
 </pre></div>
 </div>
 </div>
@@ -1773,21 +2954,19 @@ Overall: PASS: Strong evidence for orthogonality
 
 ------------------ Scenario          ------------------
 Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
+Sensitivity parameters: cf_y=0.01; cf_d=0.1, rho=1.0
 
 ------------------ Bounds with CI    ------------------
-   CI lower  theta lower     theta  theta upper  CI upper
-t  1.284916     1.418741  1.754775      2.09081  2.224353
+          CI lower  theta lower           theta  theta upper      CI upper
+     d    0.270747    -5.639704        1.298019     8.235742      2.325291
 
------------------- Robustness Values ------------------
-   H_0     RV (%)    RVa (%)
-t  0.0  20.106836  18.701604
+------------------ Robustness (SNR proxy) -------------
+          H_0   SNR proxy (%)  adj (%)
+     d    0.0       28.764315 23.764315
 </pre></div>
 </div>
 </div>
 </div>
-<p>CI lower &gt;&gt; 0. It means test is passed</p>
-</section>
 </section>
 </section>
 
@@ -1801,24 +2980,6 @@ t  0.0  20.106836  18.701604
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../notebooks.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Notebooks</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="dml_att.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">DML ATT Example</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -1846,11 +3007,11 @@ t  0.0  20.106836  18.701604
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo">Placebo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">Orthogonality</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overlap">Overlap</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sutva">SUTVA</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uncofoundedness">Uncofoundedness</a></li>
 </ul>
   </nav></div>
 

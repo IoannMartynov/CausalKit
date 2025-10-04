@@ -546,29 +546,6 @@ Uses IRM naming: g0,g1 are outcome regressions E[Y|X,D=0/1], m is propensity P(D
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.aipw_score_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">aipw_score_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#aipw_score_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.aipw_score_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use aipw_score_atte(y,d,g0,g1,m,theta,p_treated,trimming_threshold).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.extract_nuisances">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">extract_nuisances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#extract_nuisances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.extract_nuisances" title="Link to this definition">#</a></dt>
 <dd><p>Extract cross-fitted nuisance predictions from an IRM-like model or a compatible dummy.</p>
@@ -679,7 +656,7 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.influence_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">influence_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#influence_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.influence_summary" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">influence_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#influence_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.influence_summary" title="Link to this definition">#</a></dt>
 <dd><p>Compute influence diagnostics showing where uncertainty comes from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -693,8 +670,6 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 <li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 10</em>) – Number of top influential observations to return</p></li>
 <li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -708,7 +683,7 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.refute_irm_orthogonality">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">refute_irm_orthogonality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trim_propensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.02,</span> <span class="pre">0.98)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#refute_irm_orthogonality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">refute_irm_orthogonality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trim_propensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.02,</span> <span class="pre">0.98)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#refute_irm_orthogonality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality" title="Link to this definition">#</a></dt>
 <dd><p>Comprehensive AIPW orthogonality diagnostics for IRM estimators.</p>
 <p>Implements three key diagnostic approaches based on the efficient influence function (EIF):
 1. Out-of-sample moment check (non-tautological)
@@ -726,8 +701,6 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 <li><p><strong>**inference_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional arguments passed to inference_fn</p></li>
 <li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
 <li><p><strong>strict_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
@@ -788,36 +761,6 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.orthogonality_derivatives_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">orthogonality_derivatives_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#orthogonality_derivatives_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_att" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>X_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Deprecated ATT naming wrapper around orthogonality_derivatives_atte.
-Returns legacy column names for backward compatibility:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>m1 derivatives are identically zero: d_m1,se_m1,t_m1</p></li>
-<li><p>m0 maps to g0 in IRM naming</p></li>
-<li><p>g maps to m in IRM naming (propensity)</p></li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.overlap_diagnostics_atte">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">overlap_diagnostics_atte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.95,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#overlap_diagnostics_atte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_atte" title="Link to this definition">#</a></dt>
 <dd><p>Key overlap metrics for ATTE: availability of suitable controls.
@@ -829,24 +772,6 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>eps_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.overlap_diagnostics_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">overlap_diagnostics_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.95,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#overlap_diagnostics_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use overlap_diagnostics_atte(m,d,eps_list).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>eps_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
 </ul>
@@ -867,26 +792,6 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
 <li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
 <li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>thresholds</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.trim_sensitivity_curve_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">trim_sensitivity_curve_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.9,</span> <span class="pre">0.90863636,</span> <span class="pre">0.91727273,</span> <span class="pre">0.92590909,</span> <span class="pre">0.93454545,</span> <span class="pre">0.94318182,</span> <span class="pre">0.95181818,</span> <span class="pre">0.96045455,</span> <span class="pre">0.96909091,</span> <span class="pre">0.97772727,</span> <span class="pre">0.98636364,</span> <span class="pre">0.995])</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#trim_sensitivity_curve_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>thresholds</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 </ul>
@@ -929,7 +834,7 @@ pct_clipped is the percent of observations with m outside [ε,1-ε].</p>
 and covariates intact. For binary outcomes, generates random binary
 variables with the same proportion. For continuous outcomes, generates
 random variables from a normal distribution fitted to the original data.
-A valid causal rct_design should now yield θ ≈ 0 and a large p-value.</p>
+A valid causal design should now yield θ ≈ 0 and a large p-value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
@@ -999,6 +904,87 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 <li><p><strong>psi_b</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>fold_indices</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em>]</em>)</p></li>
 <li><p><strong>strict</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.run_score_diagnostics">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">run_score_diagnostics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#run_score_diagnostics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.run_score_diagnostics" title="Link to this definition">#</a></dt>
+<dd><p>Single entry-point for score diagnostics (orthogonality) akin to run_overlap_diagnostics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>g0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>g1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>n_basis_funcs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>return_summary</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>You can call it in TWO ways:</dt><dd><ol class="upperalpha simple">
+<li><p>With raw arrays:
+run_score_diagnostics(y=…, d=…, g0=…, g1=…, m=…, theta=…)</p></li>
+<li><p>With a model/result:
+run_score_diagnostics(res=&lt;dml_ate/dml_att result dict or IRM-like model&gt;)</p></li>
+</ol>
+</dd>
+<dt>Returns a dictionary with:</dt><dd><ul class="simple">
+<li><p>params (score, trimming_threshold)</p></li>
+<li><p>oos_moment_test (if fast-path caches available on model; else omitted)</p></li>
+<li><p>orthogonality_derivatives (DataFrame)</p></li>
+<li><p>influence_diagnostics (full_sample)</p></li>
+<li><p>summary (compact DataFrame) if return_summary=True</p></li>
+<li><p>meta</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.add_score_flags">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">add_score_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effect_size_guard</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oos_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_rule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#add_score_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.add_score_flags" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>rep_score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p></li>
+<li><p><strong>thresholds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>effect_size_guard</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>oos_gate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+<li><p><strong>se_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>se_ref</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Augment run_score_diagnostics(…) dict with:</dt><dd><ul class="simple">
+<li><p>rep[‘flags’] (per-metric flags)</p></li>
+<li><p>rep[‘thresholds’] (the cutoffs used)</p></li>
+<li><p>rep[‘summary’] with a new ‘flag’ column</p></li>
+<li><p>rep[‘overall_flag’] (rollup)</p></li>
+</ul>
+</dd>
+<dt>Additional logic:</dt><dd><ul class="simple">
+<li><p>Practical effect-size guard: if the constant-basis derivative magnitude is tiny
+(&lt;= effect_size_guard), then downgrade an orthogonality RED to GREEN (if OOS is GREEN)
+or to YELLOW (otherwise). Controlled by <cite>oos_gate</cite>.</p></li>
+<li><p>Huge-n relaxation: for very large n (&gt;= 200k), relax tail/kurtosis flags slightly
+under specified value gates.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1126,6 +1112,54 @@ Returns a DataFrame containing cf_y, cf_d, rho and the change in estimates.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.refutation.unconfoundedness.uncofoundedness_validation.run_unconfoundedness_diagnostics">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.unconfoundedness.uncofoundedness_validation.</span></span><span class="sig-name descname"><span class="pre">run_unconfoundedness_diagnostics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_hat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_overlap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#run_unconfoundedness_diagnostics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.run_unconfoundedness_diagnostics" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>X</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>m_hat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>names</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>normalize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>eps_overlap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>return_summary</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Single entry-point for <em>unconfoundedness</em> validation:</dt><dd><ul class="simple">
+<li><p>Covariate balance (SMD) after implied IPW/ATT weighting</p></li>
+<li><p>Overlap diagnostics (propensity distribution by group)</p></li>
+<li><p>Weight stability (ESS, tails, concentration)</p></li>
+</ul>
+</dd>
+<dt>Usage:</dt><dd><ol class="upperalpha simple">
+<li><p>With a result dict / model:
+run_unconfoundedness_diagnostics(res=ate_result, threshold=0.10)</p></li>
+<li><p>With raw arrays:
+run_unconfoundedness_diagnostics(X=X, d=d, m_hat=m, score=”ATE”, normalize=False)</p></li>
+</ol>
+</dd>
+<dt>Returns a dict with:</dt><dd><ul class="simple">
+<li><p>params (score, threshold, eps_overlap, normalize)</p></li>
+<li><p>balance (SMD series, unweighted SMD, pass, worst_features)</p></li>
+<li><p>weights (ESS, quantiles, top1 mass)</p></li>
+<li><p>overlap (KS distance, tail shares, group min/max m)</p></li>
+<li><p>summary (metric/value/flag)</p></li>
+<li><p>thresholds, flags, overall_flag</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-causalkit.refutation.score.score_validation">
 <span id="orthogonality-checks"></span><h2>Orthogonality Checks<a class="headerlink" href="#module-causalkit.refutation.score.score_validation" title="Link to this heading">#</a></h2>
@@ -1187,29 +1221,6 @@ Uses IRM naming: g0,g1 are outcome regressions E[Y|X,D=0/1], m is propensity P(D
 <li><p>Matches DoubleML’s <cite>score=’ATTE’</cite> (weights ω=D/E[D], ar{ω}=m(X)/E[D]).</p></li>
 <li><p>g1 enters only via θ; ∂ψ/∂g1 = 0.</p></li>
 </ul>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.aipw_score_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">aipw_score_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#aipw_score_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.aipw_score_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use aipw_score_atte(y,d,g0,g1,m,theta,p_treated,trimming_threshold).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1323,7 +1334,7 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.influence_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">influence_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#influence_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.influence_summary" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">influence_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_hat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ATE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#influence_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.influence_summary" title="Link to this definition">#</a></dt>
 <dd><p>Compute influence diagnostics showing where uncertainty comes from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1337,8 +1348,6 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 <li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 10</em>) – Number of top influential observations to return</p></li>
 <li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1352,7 +1361,7 @@ Uses IRM naming: g0,g1 outcomes; m propensity.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.refute_irm_orthogonality">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">refute_irm_orthogonality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trim_propensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.02,</span> <span class="pre">0.98)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#refute_irm_orthogonality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">refute_irm_orthogonality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trim_propensity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.02,</span> <span class="pre">0.98)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_folds_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_oos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#refute_irm_orthogonality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality" title="Link to this definition">#</a></dt>
 <dd><p>Comprehensive AIPW orthogonality diagnostics for IRM estimators.</p>
 <p>Implements three key diagnostic approaches based on the efficient influence function (EIF):
 1. Out-of-sample moment check (non-tautological)
@@ -1370,8 +1379,6 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 <li><p><strong>**inference_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional arguments passed to inference_fn</p></li>
 <li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>clip_eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
 <li><p><strong>strict_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
@@ -1432,36 +1439,6 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.orthogonality_derivatives_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">orthogonality_derivatives_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#orthogonality_derivatives_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_att" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>X_basis</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>m0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>p1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>eps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Deprecated ATT naming wrapper around orthogonality_derivatives_atte.
-Returns legacy column names for backward compatibility:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>m1 derivatives are identically zero: d_m1,se_m1,t_m1</p></li>
-<li><p>m0 maps to g0 in IRM naming</p></li>
-<li><p>g maps to m in IRM naming (propensity)</p></li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.overlap_diagnostics_atte">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">overlap_diagnostics_atte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.95,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#overlap_diagnostics_atte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_atte" title="Link to this definition">#</a></dt>
 <dd><p>Key overlap metrics for ATTE: availability of suitable controls.
@@ -1473,24 +1450,6 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>eps_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.overlap_diagnostics_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">overlap_diagnostics_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.95,</span> <span class="pre">0.97,</span> <span class="pre">0.98,</span> <span class="pre">0.99]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#overlap_diagnostics_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use overlap_diagnostics_atte(m,d,eps_list).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>eps_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>)</p></li>
 </ul>
@@ -1511,26 +1470,6 @@ Reports conditional shares: among CONTROLS, fraction with m(X) ≥ threshold; am
 <li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
 <li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-<li><p><strong>thresholds</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.trim_sensitivity_curve_att">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">trim_sensitivity_curve_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inference_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.9,</span> <span class="pre">0.90863636,</span> <span class="pre">0.91727273,</span> <span class="pre">0.92590909,</span> <span class="pre">0.93454545,</span> <span class="pre">0.94318182,</span> <span class="pre">0.95181818,</span> <span class="pre">0.96045455,</span> <span class="pre">0.96909091,</span> <span class="pre">0.97772727,</span> <span class="pre">0.98636364,</span> <span class="pre">0.995])</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">inference_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#trim_sensitivity_curve_att"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att" title="Link to this definition">#</a></dt>
-<dd><p>Deprecated: use trim_sensitivity_curve_atte(inference_fn,data,m,d,thresholds).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>inference_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><em>...</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>]</em><em>]</em>)</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>)</p></li>
-<li><p><strong>g</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 <li><p><strong>thresholds</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a>)</p></li>
 </ul>
@@ -1573,7 +1512,7 @@ pct_clipped is the percent of observations with m outside [ε,1-ε].</p>
 and covariates intact. For binary outcomes, generates random binary
 variables with the same proportion. For continuous outcomes, generates
 random variables from a normal distribution fitted to the original data.
-A valid causal rct_design should now yield θ ≈ 0 and a large p-value.</p>
+A valid causal design should now yield θ ≈ 0 and a large p-value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
@@ -1648,6 +1587,87 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.run_score_diagnostics">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">run_score_diagnostics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trimming_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_basis_funcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#run_score_diagnostics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.run_score_diagnostics" title="Link to this definition">#</a></dt>
+<dd><p>Single entry-point for score diagnostics (orthogonality) akin to run_overlap_diagnostics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>g0</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>g1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>m</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>theta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>n_basis_funcs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>return_summary</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>You can call it in TWO ways:</dt><dd><ol class="upperalpha simple">
+<li><p>With raw arrays:
+run_score_diagnostics(y=…, d=…, g0=…, g1=…, m=…, theta=…)</p></li>
+<li><p>With a model/result:
+run_score_diagnostics(res=&lt;dml_ate/dml_att result dict or IRM-like model&gt;)</p></li>
+</ol>
+</dd>
+<dt>Returns a dictionary with:</dt><dd><ul class="simple">
+<li><p>params (score, trimming_threshold)</p></li>
+<li><p>oos_moment_test (if fast-path caches available on model; else omitted)</p></li>
+<li><p>orthogonality_derivatives (DataFrame)</p></li>
+<li><p>influence_diagnostics (full_sample)</p></li>
+<li><p>summary (compact DataFrame) if return_summary=True</p></li>
+<li><p>meta</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="causalkit.refutation.score.score_validation.add_score_flags">
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.score.score_validation.</span></span><span class="sig-name descname"><span class="pre">add_score_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rep_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effect_size_guard</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oos_gate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_rule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/score/score_validation.html#add_score_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.score.score_validation.add_score_flags" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>rep_score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p></li>
+<li><p><strong>thresholds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>effect_size_guard</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
+<li><p><strong>oos_gate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+<li><p><strong>se_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>se_ref</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Augment run_score_diagnostics(…) dict with:</dt><dd><ul class="simple">
+<li><p>rep[‘flags’] (per-metric flags)</p></li>
+<li><p>rep[‘thresholds’] (the cutoffs used)</p></li>
+<li><p>rep[‘summary’] with a new ‘flag’ column</p></li>
+<li><p>rep[‘overall_flag’] (rollup)</p></li>
+</ul>
+</dd>
+<dt>Additional logic:</dt><dd><ul class="simple">
+<li><p>Practical effect-size guard: if the constant-basis derivative magnitude is tiny
+(&lt;= effect_size_guard), then downgrade an orthogonality RED to GREEN (if OOS is GREEN)
+or to YELLOW (otherwise). Controlled by <cite>oos_gate</cite>.</p></li>
+<li><p>Huge-n relaxation: for very large n (&gt;= 200k), relax tail/kurtosis flags slightly
+under specified value gates.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -1702,7 +1722,6 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.score.score_validation">Placebo and Subset Refutation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_ate"><code class="docutils literal notranslate"><span class="pre">aipw_score_ate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_atte"><code class="docutils literal notranslate"><span class="pre">aipw_score_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_att"><code class="docutils literal notranslate"><span class="pre">aipw_score_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.extract_nuisances"><code class="docutils literal notranslate"><span class="pre">extract_nuisances()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check_with_fold_nuisances"><code class="docutils literal notranslate"><span class="pre">oos_moment_check_with_fold_nuisances()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check"><code class="docutils literal notranslate"><span class="pre">oos_moment_check()</span></code></a></li>
@@ -1710,16 +1729,15 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.influence_summary"><code class="docutils literal notranslate"><span class="pre">influence_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality"><code class="docutils literal notranslate"><span class="pre">refute_irm_orthogonality()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_atte"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_att"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_atte"><code class="docutils literal notranslate"><span class="pre">overlap_diagnostics_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_att"><code class="docutils literal notranslate"><span class="pre">overlap_diagnostics_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_atte"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_ate"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_ate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_placebo_outcome"><code class="docutils literal notranslate"><span class="pre">refute_placebo_outcome()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_placebo_treatment"><code class="docutils literal notranslate"><span class="pre">refute_placebo_treatment()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_subset"><code class="docutils literal notranslate"><span class="pre">refute_subset()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check_from_psi"><code class="docutils literal notranslate"><span class="pre">oos_moment_check_from_psi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.run_score_diagnostics"><code class="docutils literal notranslate"><span class="pre">run_score_diagnostics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.add_score_flags"><code class="docutils literal notranslate"><span class="pre">add_score_flags()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.unconfoundedness.uncofoundedness_validation">Sensitivity Analysis</a><ul class="nav section-nav flex-column">
@@ -1727,12 +1745,12 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.validate_unconfoundedness_balance"><code class="docutils literal notranslate"><span class="pre">validate_unconfoundedness_balance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.get_sensitivity_summary"><code class="docutils literal notranslate"><span class="pre">get_sensitivity_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_benchmark"><code class="docutils literal notranslate"><span class="pre">sensitivity_benchmark()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.run_unconfoundedness_diagnostics"><code class="docutils literal notranslate"><span class="pre">run_unconfoundedness_diagnostics()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.score.score_validation">Orthogonality Checks</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_ate"><code class="docutils literal notranslate"><span class="pre">aipw_score_ate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_atte"><code class="docutils literal notranslate"><span class="pre">aipw_score_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.aipw_score_att"><code class="docutils literal notranslate"><span class="pre">aipw_score_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.extract_nuisances"><code class="docutils literal notranslate"><span class="pre">extract_nuisances()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check_with_fold_nuisances"><code class="docutils literal notranslate"><span class="pre">oos_moment_check_with_fold_nuisances()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check"><code class="docutils literal notranslate"><span class="pre">oos_moment_check()</span></code></a></li>
@@ -1740,16 +1758,15 @@ Returns (fold-wise DF, t_fold_agg, t_strict if requested).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.influence_summary"><code class="docutils literal notranslate"><span class="pre">influence_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_irm_orthogonality"><code class="docutils literal notranslate"><span class="pre">refute_irm_orthogonality()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_atte"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.orthogonality_derivatives_att"><code class="docutils literal notranslate"><span class="pre">orthogonality_derivatives_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_atte"><code class="docutils literal notranslate"><span class="pre">overlap_diagnostics_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.overlap_diagnostics_att"><code class="docutils literal notranslate"><span class="pre">overlap_diagnostics_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_atte"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_atte()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_att"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_att()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.trim_sensitivity_curve_ate"><code class="docutils literal notranslate"><span class="pre">trim_sensitivity_curve_ate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_placebo_outcome"><code class="docutils literal notranslate"><span class="pre">refute_placebo_outcome()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_placebo_treatment"><code class="docutils literal notranslate"><span class="pre">refute_placebo_treatment()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.refute_subset"><code class="docutils literal notranslate"><span class="pre">refute_subset()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.oos_moment_check_from_psi"><code class="docutils literal notranslate"><span class="pre">oos_moment_check_from_psi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.run_score_diagnostics"><code class="docutils literal notranslate"><span class="pre">run_score_diagnostics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.score.score_validation.add_score_flags"><code class="docutils literal notranslate"><span class="pre">add_score_flags()</span></code></a></li>
 </ul>
 </li>
 </ul>
