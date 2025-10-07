@@ -495,7 +495,7 @@ treated (T=1) and control (T=0) groups. Returns differences and confidence inter
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The CausalData object containing treatment and outcome variables.</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -507,10 +507,10 @@ treated (T=1) and control (T=0) groups. Returns differences and confidence inter
 - relative_ci: Tuple of (lower, upper) bounds for the relative difference confidence interval</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the CausalData object doesn’t have both treatment and outcome variables defined,
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the CausalData object doesn’t have both treatment and outcome variables defined,
     or if the treatment variable is not binary.</p>
 </dd>
 </dl>
@@ -528,7 +528,7 @@ Returns p-value, absolute/relative differences, and their confidence intervals
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="generated/causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The CausalData object containing treatment and outcome variables.</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – The confidence level for calculating confidence intervals (between 0 and 1).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -540,10 +540,10 @@ Returns p-value, absolute/relative differences, and their confidence intervals
 - relative_ci: Tuple (lower, upper) for the relative difference CI</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If treatment/outcome are missing, treatment is not binary, outcome is not binary,
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If treatment/outcome are missing, treatment is not binary, outcome is not binary,
     groups are empty, or confidence_level is outside (0, 1).</p>
 </dd>
 </dl>
@@ -563,21 +563,21 @@ DoubleML-style IRM estimator that consumes CausalData directly (not DoubleML).</
 <li><p><strong>ml_g</strong> (<em>estimator</em><em>, </em><em>optional</em>) – Learner for g(D,X)=E[Y|X,D]. If outcome is binary and learner is classifier,
 predict_proba will be used; otherwise predict().</p></li>
 <li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – Learner for m(X)=E[D|X] (propensity). If None, a CatBoostClassifier is used.</p></li>
-<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
-<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions (currently only 1 supported by IRM).</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI in (0,1).</p></li>
-<li><p><strong>normalize_ipw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to normalize IPW terms within the score.</p></li>
-<li><p><strong>trimming_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default &quot;truncate&quot;</em>) – Trimming approach for propensity (only “truncate” supported).</p></li>
-<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1e-2</em>) – Trimming threshold for propensity.</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for fold creation.</p></li>
-<li><p><strong>store_diagnostic_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
+<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions (currently only 1 supported by IRM).</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI in (0,1).</p></li>
+<li><p><strong>normalize_ipw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to normalize IPW terms within the score.</p></li>
+<li><p><strong>trimming_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default &quot;truncate&quot;</em>) – Trimming approach for propensity (only “truncate” supported).</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 1e-2</em>) – Trimming threshold for propensity.</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for fold creation.</p></li>
+<li><p><strong>store_diagnostic_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Keys: coefficient, std_error, p_value, confidence_interval, model</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -602,22 +602,22 @@ our internal DoubleML-style IRM estimator that consumes CausalData directly.</p>
 <li><p><strong>ml_g</strong> (<em>estimator</em><em>, </em><em>optional</em>) – Learner for g(D,X)=E[Y|X,D]. If outcome is binary and learner is classifier,
 predict_proba will be used; otherwise predict().</p></li>
 <li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – Learner for m(X)=E[D|X] (propensity). If None, a CatBoostClassifier is used.</p></li>
-<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
-<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions (currently only 1 supported by IRM).</p></li>
+<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
+<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions (currently only 1 supported by IRM).</p></li>
 <li><p><strong>score</strong> (<em>{&quot;ATE&quot;</em><em>,</em><em>&quot;ATTE&quot;}</em><em>, </em><em>default &quot;ATE&quot;</em>) – Target estimand.</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI in (0,1).</p></li>
-<li><p><strong>normalize_ipw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to normalize IPW terms within the score.</p></li>
-<li><p><strong>trimming_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>default &quot;truncate&quot;</em>) – Trimming approach for propensity (only “truncate” supported).</p></li>
-<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 1e-2</em>) – Trimming threshold for propensity.</p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for fold creation.</p></li>
-<li><p><strong>store_diagnostic_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI in (0,1).</p></li>
+<li><p><strong>normalize_ipw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default False</em>) – Whether to normalize IPW terms within the score.</p></li>
+<li><p><strong>trimming_rule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default &quot;truncate&quot;</em>) – Trimming approach for propensity (only “truncate” supported).</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 1e-2</em>) – Trimming threshold for propensity.</p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Random seed for fold creation.</p></li>
+<li><p><strong>store_diagnostic_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Keys: coefficient, std_error, p_value, confidence_interval, model</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -644,9 +644,9 @@ signals (an estimate of the conditional average treatment effect for each unit).
 Defaults to CatBoostRegressor if None.</p></li>
 <li><p><strong>ml_m</strong> (<em>classifier</em><em>, </em><em>optional</em>) – ML learner for propensity m(X) = P[D=1 | X] supporting fit/predict_proba.
 Defaults to CatBoostClassifier if None.</p></li>
-<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
-<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions for sample splitting.</p></li>
-<li><p><strong>use_blp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default False</em>) – If True, and X_new is provided, returns cate from obj.blp_predict(X_new) aligned to X_new.
+<li><p><strong>n_folds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for cross-fitting.</p></li>
+<li><p><strong>n_rep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 1</em>) – Number of repetitions for sample splitting.</p></li>
+<li><p><strong>use_blp</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default False</em>) – If True, and X_new is provided, returns cate from obj.blp_predict(X_new) aligned to X_new.
 If False (default), uses obj._orthogonal_signals (in-sample estimates) and appends to data.</p></li>
 <li><p><strong>X_new</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – New covariate matrix for out-of-sample CATE prediction via best linear predictor.
 Must contain the same feature columns as the confounders in <cite>data</cite>.</p></li>
@@ -660,7 +660,7 @@ If use_blp is True and X_new is provided: returns a DataFrame with ‘cate’ co
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If treatment is not binary 0/1 or required metadata is missing.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If treatment is not binary 0/1 or required metadata is missing.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -691,12 +691,12 @@ filtered CausalData instance.</p></li>
 used as a single column named ‘q’. If a DataFrame, it should contain a
 single column specifying groups. If None, groups are formed by
 pd.qcut over the in-sample CATEs into <cite>n_groups</cite> quantiles labeled 0..n_groups-1.</p></li>
-<li><p><strong>n_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of quantile groups if <cite>groups</cite> is None.</p></li>
-<li><p><strong>ml_g</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
-<li><p><strong>ml_m</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
-<li><p><strong>n_folds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
-<li><p><strong>n_rep</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for two-sided normal-approximation intervals.</p></li>
+<li><p><strong>n_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of quantile groups if <cite>groups</cite> is None.</p></li>
+<li><p><strong>ml_g</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
+<li><p><strong>ml_m</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
+<li><p><strong>n_folds</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
+<li><p><strong>n_rep</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Learners and DoubleML cross-fitting controls (as in ATE/ATT).</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for two-sided normal-approximation intervals.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

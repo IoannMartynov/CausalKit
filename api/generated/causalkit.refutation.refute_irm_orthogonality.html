@@ -462,14 +462,14 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inference_fn</strong> (<em>Callable</em>) – The inference function (dml_ate or dml_att)</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="causalkit.data.causaldata.CausalData.html#causalkit.data.causaldata.CausalData" title="causalkit.data.causaldata.CausalData"><em>CausalData</em></a>) – The causal data object</p></li>
-<li><p><strong>trim_propensity</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em><em>, </em><em>default</em><em> (</em><em>0.02</em><em>, </em><em>0.98</em><em>)</em>) – Propensity score trimming bounds (min, max) to avoid extreme weights</p></li>
-<li><p><strong>n_basis_funcs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>]</em><em>, </em><em>default None</em><em> (</em><em>len</em><em>(</em><em>confounders</em><em>)</em><em>+1</em><em>)</em>) – Number of basis functions for orthogonality derivative tests (constant + covariates).
+<li><p><strong>trim_propensity</strong> (<em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default</em><em> (</em><em>0.02</em><em>, </em><em>0.98</em><em>)</em>) – Propensity score trimming bounds (min, max) to avoid extreme weights</p></li>
+<li><p><strong>n_basis_funcs</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default None</em><em> (</em><em>len</em><em>(</em><em>confounders</em><em>)</em><em>+1</em><em>)</em>) – Number of basis functions for orthogonality derivative tests (constant + covariates).
 If None, defaults to the number of confounders in <cite>data</cite> plus 1 for the constant term.</p></li>
-<li><p><strong>n_folds_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for out-of-sample moment check</p></li>
-<li><p><strong>**inference_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Additional arguments passed to inference_fn</p></li>
-<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
-<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
-<li><p><strong>strict_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>)</p></li>
+<li><p><strong>n_folds_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default 5</em>) – Number of folds for out-of-sample moment check</p></li>
+<li><p><strong>**inference_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Additional arguments passed to inference_fn</p></li>
+<li><p><strong>score</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>trimming_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>strict_oos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -482,7 +482,7 @@ If None, defaults to the number of confounders in <cite>data</cite> plus 1 for t
 - overall_assessment: Summary diagnostic assessment</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, Any]</p>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
