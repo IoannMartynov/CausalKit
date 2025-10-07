@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
-      <change beforePath="$PROJECT_DIR$/docs/examples.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +106,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#86 on test",
+    "git-widget-placeholder": "#87 on test",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
     "node.js.detected.package.eslint": "true",
@@ -302,15 +308,7 @@
       <workItem from="1758864633771" duration="14016000" />
       <workItem from="1758982225595" duration="48994000" />
       <workItem from="1759334983192" duration="1862000" />
-      <workItem from="1759426665181" duration="52181000" />
-    </task>
-    <task id="LOCAL-00062" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755540558692</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1755540558692</updated>
+      <workItem from="1759426665181" duration="56990000" />
     </task>
     <task id="LOCAL-00063" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
       <option name="closed" value="true" />
@@ -696,7 +694,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759608430849</updated>
     </task>
-    <option name="localTasksCounter" value="111" />
+    <task id="LOCAL-00111" summary="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
+      <option name="closed" value="true" />
+      <created>1759608759320</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1759608759320</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
