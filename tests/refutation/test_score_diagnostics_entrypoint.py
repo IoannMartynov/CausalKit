@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.refutation.score.score_validation import run_score_diagnostics
+from causalis.refutation.score.score_validation import run_score_diagnostics
 
 
 def _make_synth(seed=0, n=300):

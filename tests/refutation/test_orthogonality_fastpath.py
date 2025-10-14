@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.data import CausalData
-from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.refutation.score.score_validation import (
+from causalis.data import CausalData
+from causalis.inference.ate.dml_ate import dml_ate
+from causalis.refutation.score.score_validation import (
     refute_irm_orthogonality,
     oos_moment_check_from_psi,
 )

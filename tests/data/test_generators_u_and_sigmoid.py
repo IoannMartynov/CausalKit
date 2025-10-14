@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.data.generators import CausalDatasetGenerator, _sigmoid
+from causalis.data.generators import CausalDatasetGenerator, _sigmoid
 
 
 def test_sigmoid_supports_ndarrays_and_bounds():

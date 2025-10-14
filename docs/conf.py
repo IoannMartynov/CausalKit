@@ -20,13 +20,13 @@ _DOCS_DIR = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(_DOCS_DIR, '..')))
 
 # -- Project information -----------------------------------------------------
-project = 'CausalKit'
-copyright = f'{datetime.now().year}, CausalKit Team'
+project = 'Causalis'
+copyright = f'{datetime.now().year}, Causalid Team'
 author = 'Ioann Martynov'
 
 # Version information
 try:
-    import causalkit as _ck
+    import causalis as _ck
     release = str(getattr(_ck, "__version__", "0.0.0"))
     version = release
 except Exception:

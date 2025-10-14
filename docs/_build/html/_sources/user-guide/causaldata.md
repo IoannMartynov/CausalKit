@@ -17,7 +17,7 @@ This organization makes it easier to perform causal inference analyses and ensur
 You can create a `CausalData` object by passing a pandas DataFrame along with column specifications:
 
 ```python
-from causalkit.data import CausalData
+from causalis.data import CausalData
 import pandas as pd
 
 # Create a sample DataFrame
@@ -54,7 +54,7 @@ Once you've created a `CausalData` object, you can access the data in several wa
 ### Accessing the Full DataFrame
 
 ```python
-from causalkit.data import CausalData
+from causalis.data import CausalData
 import pandas as pd
 
 # Create a sample DataFrame and CausalData object
@@ -79,7 +79,7 @@ full_df = sample_causal_data.df
 ### Accessing Specific Column Types
 
 ```python
-from causalkit.data import CausalData
+from causalis.data import CausalData
 import pandas as pd
 
 # Create a sample DataFrame and CausalData object
@@ -114,7 +114,7 @@ If you specified multiple columns for any category (e.g., multiple target column
 The `get_df()` method allows you to retrieve specific columns or column categories:
 
 ```python
-from causalkit.data import CausalData
+from causalis.data import CausalData
 import pandas as pd
 
 # Create a sample DataFrame and CausalData object
@@ -147,7 +147,7 @@ no_cofounders = sample_causal_data.get_df(include_target=True, include_treatment
 `CausalData` works seamlessly with CausalKit's data generation functions:
 
 ```python
-from causalkit.data import generate_rct_data, CausalData
+from causalis.data import generate_rct_data, CausalData
 
 # Generate RCT data
 rct_df = generate_rct_data()
@@ -170,7 +170,7 @@ print(rct_causal_data.treatment.value_counts())
 `CausalData` supports multiple target and treatment columns:
 
 ```python
-from causalkit.data import CausalData
+from causalis.data import CausalData
 import pandas as pd
 
 # Create a sample DataFrame with multiple targets and treatments

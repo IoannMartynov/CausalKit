@@ -3,7 +3,7 @@ import pandas as pd
 
 from sklearn.linear_model import LogisticRegression, LinearRegression
 
-from causalkit.eda.eda import PropensityModel, OutcomeModel
+from causalis.eda.eda import PropensityModel, OutcomeModel
 
 
 def make_synth(n=200, seed=0):

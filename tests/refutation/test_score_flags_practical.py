@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.refutation.score.score_validation import add_score_flags
+from causalis.refutation.score.score_validation import add_score_flags
 
 
 def _base_rep():

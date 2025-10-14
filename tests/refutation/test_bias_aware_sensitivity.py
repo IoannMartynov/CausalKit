@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from types import SimpleNamespace
 
-from causalkit.refutation.unconfoundedness.uncofoundedness_validation import (
+from causalis.refutation.unconfoundedness.uncofoundedness_validation import (
     sensitivity_analysis,
     get_sensitivity_summary,
 )

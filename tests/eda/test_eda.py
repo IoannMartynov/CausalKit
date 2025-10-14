@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.data.causaldata import CausalData
-from causalkit.eda import CausalEDA
+from causalis.data.causaldata import CausalData
+from causalis.eda import CausalEDA
 
 
 def make_synth(n=200, seed=0):
@@ -34,7 +34,7 @@ def test_fit_propensity_and_confounders_means_direct_calls():
     ps_model = eda.fit_propensity()
     
     # Test that fit_propensity returns a PropensityModel
-    from causalkit.eda.eda import PropensityModel
+    from causalis.eda.eda import PropensityModel
     assert isinstance(ps_model, PropensityModel)
     
     # Test propensity scores are accessible and valid

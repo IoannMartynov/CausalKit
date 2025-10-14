@@ -1,6 +1,6 @@
 import numpy as np
 
-from causalkit.data.generators import CausalDatasetGenerator
+from causalis.data.generators import CausalDatasetGenerator
 
 
 def test_copula_respects_corr_for_normals():

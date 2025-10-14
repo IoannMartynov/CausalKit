@@ -3,7 +3,7 @@ import pandas.api.types as pdtypes
 import numpy as np
 import pytest
 
-from causalkit.data.causaldata import CausalData
+from causalis.data.causaldata import CausalData
 
 
 def test_causaldata_accepts_bool_and_stores_numeric():

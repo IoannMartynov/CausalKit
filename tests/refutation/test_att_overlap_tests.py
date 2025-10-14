@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression, LinearRegression
 
-from causalkit.refutation.overlap import att_overlap_tests
-from causalkit.data.causaldata import CausalData
-from causalkit.inference.atte.dml_atte import dml_atte
+from causalis.refutation.overlap import att_overlap_tests
+from causalis.data.causaldata import CausalData
+from causalis.inference.atte.dml_atte import dml_atte
 
 
 def test_att_overlap_tests_structure_and_basic_flags_random():

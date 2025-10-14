@@ -4,24 +4,24 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Code quality](https://img.shields.io/badge/code%20quality-A-brightgreen)
 
-## [Official Documentation and Examples](https://ioannmartynov.github.io/CausalKit/index.html)
+## [Official Documentation and Examples](https://ioannmartynov.github.io/Causalis/index.html)
 
 ## Installation
 
 Install from github directly
 
 ```bash
-pip install git+https://github.com/ioannmartynov/causalkit.git
+pip install git+https://github.com/ioannmartynov/causalis.git
 ```
 
 
 
 
 # Scenarios Covered
-| Is RCT        | Treatment | Outcome    | EDA | Estimands | Refutation | Docs                                                                       |
-|---------------|-----------|------------|-----|-----------|------------|----------------------------------------------------------------------------|
-| Observational | Binary    | Continuous | Yes | ATE       | Yes        | [Example](https://ioannmartynov.github.io/CausalKit/examples/dml_ate.html) |
-| Observational | Binary    | Continuous | Yes | ATT       | Yes        | [Example](https://ioannmartynov.github.io/CausalKit/examples/dml_att.html) |
+| Is RCT        | Treatment | Outcome    | EDA | Estimands | Refutation | Docs                                                                      |
+|---------------|-----------|------------|-----|-----------|------------|---------------------------------------------------------------------------|
+| Observational | Binary    | Continuous | Yes | ATE       | Yes        | [Example](https://ioannmartynov.github.io/Causalis/examples/dml_ate.html) |
+| Observational | Binary    | Continuous | Yes | ATT       | Yes        | [Example](https://ioannmartynov.github.io/Causalis/examples/dml_att.html) |
 
 # Don't forget to press Star ⭐️⭐️⭐️⭐️⭐️
 

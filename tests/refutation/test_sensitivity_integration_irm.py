@@ -1,10 +1,10 @@
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
-from causalkit.data.causaldata import CausalData
-from causalkit.data.generators import generate_rct
-from causalkit.inference.ate import dml_ate
-from causalkit.inference.atte import dml_atte
-from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis, get_sensitivity_summary
+from causalis.data.causaldata import CausalData
+from causalis.data.generators import generate_rct
+from causalis.inference.ate import dml_ate
+from causalis.inference.atte import dml_atte
+from causalis.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis, get_sensitivity_summary
 
 
 def _make_cd(n=600, random_state=3, target_type="normal"):

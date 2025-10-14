@@ -3,12 +3,12 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "causalkit"
+name = "causalis"
 version = "0.1.0"
 description = "A Python toolkit for causal inference and experimentation"
 readme = "README.md"
 authors = [
-    {name = "CausalKit Team"}
+    {name = "causalis Team"}
 ]
 license = {text = "MIT"}
 classifiers = [
@@ -52,4 +52,4 @@ docs = [
 [tool.setuptools]
 
 [tool.setuptools.packages.find]
-include = ["causalkit", "causalkit.*"]
+include = ["causalis", "causalis.*"]

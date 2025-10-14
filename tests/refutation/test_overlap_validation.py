@@ -2,7 +2,7 @@ import math
 import numpy as np
 import pytest
 
-from causalkit.refutation.overlap.overlap_validation import (
+from causalis.refutation.overlap.overlap_validation import (
     auc_for_m,
     positivity_overlap_checks,
     att_weight_sum_identity,
@@ -100,7 +100,7 @@ def test_overlap_report_autodetects_normalize_ipw_from_result_dict():
             "normalize_ipw": True,  # should trigger Hájek logic automatically
         }
     }
-    from causalkit.refutation.overlap.overlap_validation import overlap_report_from_result
+    from causalis.refutation.overlap.overlap_validation import overlap_report_from_result
 
     rep = overlap_report_from_result(res)  # no explicit use_hajek passed
     # ipw_sum_* flags should not be NA because normalize_ipw=True was detected

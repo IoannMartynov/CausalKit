@@ -1,6 +1,6 @@
-from causalkit.data.generators import CausalDatasetGenerator
-from causalkit.refutation.score.score_validation import refute_irm_orthogonality
-from causalkit.inference.atte.dml_atte import dml_atte
+from causalis.data.generators import CausalDatasetGenerator
+from causalis.refutation.score.score_validation import refute_irm_orthogonality
+from causalis.inference.atte.dml_atte import dml_atte
 
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 

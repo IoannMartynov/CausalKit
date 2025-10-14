@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from causalkit.data.causaldata import CausalData
-from causalkit.inference.ate import dml_ate
-from causalkit.inference.atte import dml_atte
+from causalis.data.causaldata import CausalData
+from causalis.inference.ate import dml_ate
+from causalis.inference.atte import dml_atte
 
 
 def _make_synth(n=120, seed=123):

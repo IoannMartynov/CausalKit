@@ -1,4 +1,4 @@
-CausalKit
+Causalis
 =========
 
 Evaluate the impact of the treatment on the outcome metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
@@ -32,7 +32,7 @@ Then import the library
 
 .. code-block:: python
 
-    import causalkit
+    import causalis
 
 Scenarios Covered
 --------

@@ -3,8 +3,8 @@ import pytest
 
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from causalkit.data.generators import CausalDatasetGenerator
-from causalkit.inference.atte.dml_atte import dml_atte
+from causalis.data.generators import CausalDatasetGenerator
+from causalis.inference.atte.dml_atte import dml_atte
 
 
 @pytest.mark.parametrize("normalize_ipw", [False, True])

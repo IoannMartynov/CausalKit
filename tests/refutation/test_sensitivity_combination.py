@@ -6,9 +6,9 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestRegressor
 
-from causalkit.data.causaldata import CausalData
-from causalkit.inference.estimators.irm import IRM
-from causalkit.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis, get_sensitivity_summary
+from causalis.data.causaldata import CausalData
+from causalis.inference.estimators.irm import IRM
+from causalis.refutation.unconfoundedness.uncofoundedness_validation import sensitivity_analysis, get_sensitivity_summary
 
 
 def make_synth(n=400, seed=123):

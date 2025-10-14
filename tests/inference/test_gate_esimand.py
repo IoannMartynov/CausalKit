@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from causalkit.data.generators import CausalDatasetGenerator
-from causalkit.inference.gate import gate_esimand
+from causalis.data.generators import CausalDatasetGenerator
+from causalis.inference.gate import gate_esimand
 
 
 def test_gate_esimand_default_quintiles_shape_and_columns():
