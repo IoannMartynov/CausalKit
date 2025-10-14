@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(_DOCS_DIR, '..')))
 
 # -- Project information -----------------------------------------------------
 project = 'Causalis'
-copyright = f'{datetime.now().year}, Causalid Team'
+copyright = f'{datetime.now().year}, Causalis Team'
 author = 'Ioann Martynov'
 
 # Version information
@@ -117,12 +117,12 @@ nbsphinx_thumbnails = {
 html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'logo': {
-        'text': 'CausalKit',
+        'text': 'Causalis',
     },
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/IoannMartynov/CausalKit",
+            "url": "https://github.com/IoannMartynov/Causalis",
             "icon": "fa-brands fa-square-github",
             "type": "fontawesome",
         }],

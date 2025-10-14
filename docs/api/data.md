@@ -1,6 +1,6 @@
 # Data Module
 
-The `causalkit.data` module provides functions for generating synthetic data for causal inference tasks.
+The `causalis.data` module provides functions for generating synthetic data for causal inference tasks.
 
 ## Overview
 
@@ -13,11 +13,11 @@ This module includes functions for generating:
 ## API Reference
 
 ```{eval-rst}
-.. currentmodule:: causalkit.data
+.. currentmodule:: causalis.data
 
 .. autosummary::
    :toctree: generated
-   :caption: Public objects in causalkit.data
+   :caption: Public objects in causalis.data
    :recursive:
    :nosignatures:
 
@@ -26,7 +26,7 @@ This module includes functions for generating:
 ```
 
 ```{eval-rst}
-.. currentmodule:: causalkit.data.causaldata
+.. currentmodule:: causalis.data.causaldata
 
 CausalData
 ----------
@@ -40,7 +40,7 @@ CausalData
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.data.generators
+.. automodule:: causalis.data.generators
    :members:
    :undoc-members:
    :show-inheritance:

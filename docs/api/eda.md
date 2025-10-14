@@ -1,6 +1,6 @@
 # EDA Module
 
-The `causalkit.eda` module provides exploratory diagnostics for causal designs with binary treatment. It helps assess treatment predictability, overlap/positivity, covariate balance, and outcome modeling quality before running inference.
+The `causalis.eda` module provides exploratory diagnostics for causal designs with binary treatment. It helps assess treatment predictability, overlap/positivity, covariate balance, and outcome modeling quality before running inference.
 
 ## Overview
 
@@ -19,11 +19,11 @@ Main capabilities:
 ## API Reference
 
 ```{eval-rst}
-.. currentmodule:: causalkit.eda
+.. currentmodule:: causalis.eda
 
 .. autosummary::
    :toctree: generated
-   :caption: Public objects in causalkit.eda
+   :caption: Public objects in causalis.eda
    :recursive:
    :nosignatures:
 
@@ -34,7 +34,7 @@ Main capabilities:
 ### CausalEDA
 
 ```{eval-rst}
-.. automodule:: causalkit.eda.eda
+.. automodule:: causalis.eda.eda
    :members: CausalEDA
    :undoc-members:
    :show-inheritance:
@@ -43,7 +43,7 @@ Main capabilities:
 Selected methods:
 
 ```{eval-rst}
-.. currentmodule:: causalkit.eda.eda
+.. currentmodule:: causalis.eda.eda
 
 .. autosummary::
    :toctree: generated
@@ -64,7 +64,7 @@ Selected methods:
 ### CausalDataLite
 
 ```{eval-rst}
-.. currentmodule:: causalkit.eda.eda
+.. currentmodule:: causalis.eda.eda
 
 .. autoclass:: CausalDataLite
    :members:
