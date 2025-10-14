@@ -557,7 +557,7 @@ document.write(`
 <span class="p">)</span>
 
 <span class="c1"># 7) Generate data (full dataframe includes ground-truth columns: propensity, mu0, mu1, cate)</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">generated_df</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
 <span class="c1"># Ground-truth ATT (on the natural scale): E[tau(X) | T=1] = mean CATE among the treated</span>
@@ -584,7 +584,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ground-truth ATT from the DGP: 1.380
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ground-truth ATT from the DGP: 1.386
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -617,53 +617,53 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.706136</td>
+      <td>2.237316</td>
       <td>0.0</td>
       <td>27.656605</td>
-      <td>3.333432</td>
-      <td>46.382141</td>
+      <td>5.352554</td>
+      <td>72.552568</td>
       <td>1.0</td>
-      <td>1.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>11.655105</td>
+      <td>5.771469</td>
       <td>0.0</td>
       <td>11.520191</td>
-      <td>8.376763</td>
-      <td>127.422983</td>
-      <td>0.0</td>
+      <td>6.798247</td>
+      <td>188.481287</td>
       <td>1.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2.408184</td>
-      <td>0.0</td>
-      <td>33.005414</td>
-      <td>8.877611</td>
-      <td>9.845915</td>
+      <td>6.374653</td>
       <td>1.0</td>
+      <td>33.005414</td>
+      <td>2.055459</td>
+      <td>51.040440</td>
       <td>0.0</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>11.421869</td>
+      <td>2.364177</td>
       <td>1.0</td>
       <td>35.286777</td>
-      <td>7.284653</td>
-      <td>10.250580</td>
-      <td>1.0</td>
+      <td>4.429404</td>
+      <td>166.992239</td>
+      <td>0.0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.826404</td>
+      <td>8.378079</td>
       <td>0.0</td>
       <td>0.587578</td>
-      <td>7.063883</td>
-      <td>141.029200</td>
+      <td>6.658307</td>
+      <td>179.371126</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -691,7 +691,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 1000000, &#39;n_columns&#39;: 7}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;n_rows&#39;: 10000, &#39;n_columns&#39;: 7}
 </pre></div>
 </div>
 </div>
@@ -750,29 +750,29 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>649795</td>
-      <td>3.190565</td>
-      <td>3.760819</td>
-      <td>-14.542244</td>
-      <td>-1.616254</td>
-      <td>0.651085</td>
-      <td>3.173112</td>
-      <td>5.715907</td>
-      <td>8.013993</td>
-      <td>22.348315</td>
+      <td>6530</td>
+      <td>3.187197</td>
+      <td>3.754761</td>
+      <td>-12.770866</td>
+      <td>-1.579204</td>
+      <td>0.699571</td>
+      <td>3.149215</td>
+      <td>5.720443</td>
+      <td>7.931635</td>
+      <td>17.323664</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>350205</td>
-      <td>5.326606</td>
-      <td>3.944180</td>
-      <td>-13.242403</td>
-      <td>0.286981</td>
-      <td>2.656550</td>
-      <td>5.296816</td>
-      <td>7.964068</td>
-      <td>10.389444</td>
-      <td>23.599618</td>
+      <td>3470</td>
+      <td>5.222463</td>
+      <td>3.986593</td>
+      <td>-7.310514</td>
+      <td>0.151741</td>
+      <td>2.508651</td>
+      <td>5.205242</td>
+      <td>7.975189</td>
+      <td>10.351169</td>
+      <td>18.147842</td>
     </tr>
   </tbody>
 </table>
@@ -787,8 +787,8 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/426d49120232e82bd36e0169a8296aa5b2710479017d4e720b34e40e750e47e2.png" src="../_images/426d49120232e82bd36e0169a8296aa5b2710479017d4e720b34e40e750e47e2.png" />
-<img alt="../_images/5598ad8d79f51b76e0b331effec06bf1400e7bbd0ecd2f288864fcd7615f5271.png" src="../_images/5598ad8d79f51b76e0b331effec06bf1400e7bbd0ecd2f288864fcd7615f5271.png" />
+<img alt="../_images/7c797fd3e17a3daf1c8964f17085b04c9926b2c89059970a84c9c1bbbc34251e.png" src="../_images/7c797fd3e17a3daf1c8964f17085b04c9926b2c89059970a84c9c1bbbc34251e.png" />
+<img alt="../_images/8a18276178a1e6c0cd28a48deacc36aac966eb31f00a509d827e108f479e0425.png" src="../_images/8a18276178a1e6c0cd28a48deacc36aac966eb31f00a509d827e108f479e0425.png" />
 </div>
 </div>
 </section>
@@ -838,38 +838,38 @@ document.write(`
   <tbody>
     <tr>
       <th>spend_last_month</th>
-      <td>89.624530</td>
-      <td>119.126909</td>
-      <td>29.502379</td>
-      <td>0.532363</td>
+      <td>90.260494</td>
+      <td>119.486105</td>
+      <td>29.225611</td>
+      <td>0.526811</td>
     </tr>
     <tr>
       <th>premium_user</th>
-      <td>0.199164</td>
-      <td>0.343816</td>
-      <td>0.144651</td>
-      <td>0.329646</td>
+      <td>0.194793</td>
+      <td>0.355043</td>
+      <td>0.160250</td>
+      <td>0.364805</td>
     </tr>
     <tr>
       <th>avg_sessions_week</th>
-      <td>4.851794</td>
-      <td>5.280836</td>
-      <td>0.429042</td>
-      <td>0.215655</td>
+      <td>4.903763</td>
+      <td>5.298405</td>
+      <td>0.394642</td>
+      <td>0.197681</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.575649</td>
-      <td>0.644037</td>
-      <td>0.068388</td>
-      <td>0.140546</td>
+      <td>0.576876</td>
+      <td>0.646110</td>
+      <td>0.069234</td>
+      <td>0.142388</td>
     </tr>
     <tr>
       <th>tenure_months</th>
-      <td>23.499908</td>
-      <td>24.931247</td>
-      <td>1.431339</td>
-      <td>0.119316</td>
+      <td>23.336403</td>
+      <td>24.894323</td>
+      <td>1.557920</td>
+      <td>0.129076</td>
     </tr>
   </tbody>
 </table>
@@ -887,7 +887,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.7067
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6962
 </pre></div>
 </div>
 </div>
@@ -901,7 +901,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.002277, &#39;share_above&#39;: 0.000132, &#39;flag&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0121, &#39;share_above&#39;: 0.0004, &#39;flag&#39;: False}
 </pre></div>
 </div>
 </div>
@@ -944,48 +944,48 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>num__tenure_months</td>
-      <td>-0.000069</td>
-      <td>0.132061</td>
-      <td>1.141178</td>
-      <td>0.030613</td>
-      <td>-1.563992e-05</td>
+      <td>num__spend_last_month</td>
+      <td>-0.000340</td>
+      <td>0.568471</td>
+      <td>1.765565</td>
+      <td>0.136983</td>
+      <td>-0.000077</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>num__avg_sessions_week</td>
-      <td>0.000034</td>
-      <td>0.201335</td>
-      <td>1.223034</td>
-      <td>0.047077</td>
-      <td>7.753262e-06</td>
+      <td>num__tenure_months</td>
+      <td>0.000292</td>
+      <td>0.175348</td>
+      <td>1.191661</td>
+      <td>0.040684</td>
+      <td>0.000066</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>num__spend_last_month</td>
-      <td>0.000030</td>
-      <td>0.552962</td>
-      <td>1.738395</td>
-      <td>0.133507</td>
-      <td>6.854993e-06</td>
+      <td>num__premium_user</td>
+      <td>0.000120</td>
+      <td>0.349319</td>
+      <td>1.418102</td>
+      <td>0.082673</td>
+      <td>0.000027</td>
     </tr>
     <tr>
       <th>3</th>
       <td>num__urban_resident</td>
-      <td>0.000008</td>
-      <td>0.153708</td>
-      <td>1.166150</td>
-      <td>0.035731</td>
-      <td>1.901407e-06</td>
+      <td>-0.000103</td>
+      <td>0.169225</td>
+      <td>1.184386</td>
+      <td>0.039233</td>
+      <td>-0.000023</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>num__premium_user</td>
-      <td>-0.000004</td>
-      <td>0.310007</td>
-      <td>1.363435</td>
-      <td>0.073366</td>
-      <td>-8.695062e-07</td>
+      <td>num__avg_sessions_week</td>
+      <td>0.000031</td>
+      <td>0.230236</td>
+      <td>1.258897</td>
+      <td>0.053783</td>
+      <td>0.000007</td>
     </tr>
   </tbody>
 </table>
@@ -1000,7 +1000,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9516d6d12ac9386d5c5c316a92e4336c5eb6f2c344e7d80832eaf8594c0503d0.png" src="../_images/9516d6d12ac9386d5c5c316a92e4336c5eb6f2c344e7d80832eaf8594c0503d0.png" />
+<img alt="../_images/2736c7fccb73bda80dd13a36f0fd9296fb5b199ff145cbbedbe22c61182105f0.png" src="../_images/2736c7fccb73bda80dd13a36f0fd9296fb5b199ff145cbbedbe22c61182105f0.png" />
 </div>
 </div>
 </section>
@@ -1018,7 +1018,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.5566146469268665, &#39;mae&#39;: 2.836959528300751}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.645288976705851, &#39;mae&#39;: 2.905875481642826}
 </pre></div>
 </div>
 </div>
@@ -1057,28 +1057,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>avg_sessions_week</td>
-      <td>0.000065</td>
+      <td>premium_user</td>
+      <td>0.001576</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>premium_user</td>
-      <td>-0.000034</td>
+      <td>spend_last_month</td>
+      <td>-0.001158</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>spend_last_month</td>
-      <td>-0.000028</td>
+      <td>avg_sessions_week</td>
+      <td>-0.000562</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>tenure_months</td>
-      <td>-0.000021</td>
+      <td>urban_resident</td>
+      <td>0.000089</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>urban_resident</td>
-      <td>0.000018</td>
+      <td>tenure_months</td>
+      <td>0.000055</td>
     </tr>
   </tbody>
 </table>
@@ -1089,7 +1089,7 @@ document.write(`
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="inference">
 <h1>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h1>
-<p>Now time to estimate ATE with Double Machine Learning</p>
+<p>Now time to estimate ATЕE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
@@ -1109,9 +1109,9 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.3786408942734056
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.3028994051092602
 0.0
-(1.3619207495185848, 1.3953610390282265)
+(1.0561145643875967, 1.5496842458309237)
 </pre></div>
 </div>
 </div>
@@ -1169,79 +1169,79 @@ document.write(`
     <tr>
       <th>2</th>
       <td>edge_0.02_below</td>
-      <td>0.000320</td>
+      <td>0.001300</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>3</th>
       <td>edge_0.02_above</td>
-      <td>0.000020</td>
+      <td>0.000000</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>4</th>
       <td>KS</td>
-      <td>0.298345</td>
+      <td>0.291272</td>
       <td>YELLOW</td>
     </tr>
     <tr>
       <th>5</th>
       <td>AUC</td>
-      <td>0.706591</td>
+      <td>0.696701</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>6</th>
       <td>ESS_treated_ratio</td>
-      <td>0.720880</td>
+      <td>0.632449</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>7</th>
       <td>ESS_control_ratio</td>
-      <td>0.894052</td>
+      <td>0.795967</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>8</th>
       <td>tails_w1_q99/med</td>
-      <td>6.374348</td>
+      <td>10.777459</td>
       <td>YELLOW</td>
     </tr>
     <tr>
       <th>9</th>
       <td>tails_w0_q99/med</td>
-      <td>4.080778</td>
+      <td>6.571975</td>
       <td>YELLOW</td>
     </tr>
     <tr>
       <th>10</th>
       <td>ATT_identity_relerr</td>
-      <td>0.007859</td>
-      <td>GREEN</td>
+      <td>0.070511</td>
+      <td>YELLOW</td>
     </tr>
     <tr>
       <th>11</th>
       <td>clip_m_total</td>
-      <td>0.000085</td>
+      <td>0.000000</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>12</th>
       <td>calib_ECE</td>
-      <td>0.003160</td>
+      <td>0.019505</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>13</th>
       <td>calib_slope</td>
-      <td>0.972758</td>
+      <td>0.815776</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>14</th>
       <td>calib_intercept</td>
-      <td>-0.014894</td>
+      <td>-0.097113</td>
       <td>GREEN</td>
     </tr>
   </tbody>
@@ -1287,49 +1287,49 @@ document.write(`
     <tr>
       <th>0</th>
       <td>se_plugin</td>
-      <td>8.530843e-03</td>
+      <td>0.125913</td>
       <td>NA</td>
     </tr>
     <tr>
       <th>1</th>
       <td>psi_p99_over_med</td>
-      <td>7.667134e+00</td>
+      <td>8.868324</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>2</th>
       <td>psi_kurtosis</td>
-      <td>8.160709e+01</td>
+      <td>1388.840488</td>
       <td>RED</td>
     </tr>
     <tr>
       <th>3</th>
       <td>max_|t|_g1</td>
-      <td>0.000000e+00</td>
+      <td>0.000000</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>4</th>
       <td>max_|t|_g0</td>
-      <td>3.231864e+00</td>
+      <td>2.484521</td>
       <td>YELLOW</td>
     </tr>
     <tr>
       <th>5</th>
       <td>max_|t|_m</td>
-      <td>5.435535e-01</td>
+      <td>1.165779</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>6</th>
       <td>oos_tstat_fold</td>
-      <td>-2.096166e-07</td>
+      <td>-0.000402</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>7</th>
       <td>oos_tstat_strict</td>
-      <td>-2.096167e-07</td>
+      <td>-0.000402</td>
       <td>GREEN</td>
     </tr>
   </tbody>
@@ -1395,7 +1395,7 @@ document.write(`
     <tr>
       <th>0</th>
       <td>balance_max_smd</td>
-      <td>3.130265e-03</td>
+      <td>3.963837e-02</td>
       <td>GREEN</td>
     </tr>
     <tr>
@@ -1413,7 +1413,7 @@ document.write(`
     <tr>
       <th>3</th>
       <td>ess_control_ratio</td>
-      <td>5.111244e-01</td>
+      <td>3.390213e-01</td>
       <td>RED</td>
     </tr>
     <tr>
@@ -1425,31 +1425,31 @@ document.write(`
     <tr>
       <th>5</th>
       <td>w_tail_ratio_control</td>
-      <td>1.063209e+01</td>
+      <td>1.321510e+01</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>6</th>
       <td>top1_mass_share_treated</td>
-      <td>2.855470e-02</td>
+      <td>2.881844e-02</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>7</th>
       <td>top1_mass_share_control</td>
-      <td>8.679737e-02</td>
+      <td>1.242615e-01</td>
       <td>GREEN</td>
     </tr>
     <tr>
       <th>8</th>
       <td>ks_m_treated_vs_control</td>
-      <td>2.983451e-01</td>
+      <td>2.912719e-01</td>
       <td>YELLOW</td>
     </tr>
     <tr>
       <th>9</th>
       <td>pct_m_outside_overlap</td>
-      <td>8.200000e-03</td>
+      <td>0.000000e+00</td>
       <td>GREEN</td>
     </tr>
   </tbody>
@@ -1459,31 +1459,75 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">get_sensitivity_summary</span><span class="p">,</span>
+    <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">sensitivity_benchmark</span>
 <span class="p">)</span>
 
-<span class="n">summary_str</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">atte_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">get_sensitivity_summary</span><span class="p">(</span><span class="n">atte_result</span><span class="p">))</span>  <span class="c1"># or print(summary_str)</span>
+<span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">atte_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>================== Sensitivity Analysis ==================
-
------------------- Scenario          ------------------
-Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.01; cf_d=0.1, rho=1.0
-
------------------- Bounds with CI    ------------------
-          CI lower  theta lower           theta  theta upper      CI upper
-     d    1.361921    -2.231618        1.378641     4.988900      1.395361
-
------------------- Robustness (SNR proxy) -------------
-          H_0   SNR proxy (%)  adj (%)
-     d    0.0        0.614981 0.000000
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 1.3028994051092602,
+ &#39;se&#39;: 0.12591294670120004,
+ &#39;level&#39;: 0.95,
+ &#39;z&#39;: 1.959963984540054,
+ &#39;sampling_ci&#39;: (1.0561145643875967, 1.5496842458309237),
+ &#39;theta_bounds_confounding&#39;: (-0.7349788867797697, 3.3407776969982903),
+ &#39;bias_aware_ci&#39;: (-0.981763727501433, 3.587562537719953),
+ &#39;max_bias&#39;: 2.03787829188903,
+ &#39;sigma2&#39;: 13.23191609168223,
+ &#39;nu2&#39;: 0.31385839388470366,
+ &#39;params&#39;: {&#39;cf_y&#39;: 0.01, &#39;cf_d&#39;: 0.01, &#39;rho&#39;: 1.0, &#39;use_signed_rr&#39;: False}}
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">sensitivity_benchmark</span><span class="p">(</span><span class="n">atte_result</span><span class="p">,</span> <span class="n">benchmarking_set</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;tenure_months&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cf_y</th>
+      <th>cf_d</th>
+      <th>rho</th>
+      <th>theta_long</th>
+      <th>theta_short</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>d</th>
+      <td>0.000007</td>
+      <td>0.034929</td>
+      <td>-1.0</td>
+      <td>1.302899</td>
+      <td>1.408257</td>
+      <td>-0.105358</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </section>
 </section>

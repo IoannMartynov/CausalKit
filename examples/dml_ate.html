@@ -1260,9 +1260,9 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>### Score
-</pre></div>
-</div>
+</section>
+<section id="score">
+<h3>Score<a class="headerlink" href="#score" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.score.score_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_score_diagnostics</span>
@@ -1471,31 +1471,75 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">get_sensitivity_summary</span><span class="p">,</span>
+    <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">sensitivity_benchmark</span>
 <span class="p">)</span>
 
-<span class="n">summary_str</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">get_sensitivity_summary</span><span class="p">(</span><span class="n">ate_result</span><span class="p">))</span>  <span class="c1"># or print(summary_str)</span>
+<span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>================== Sensitivity Analysis ==================
-
------------------- Scenario          ------------------
-Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.01; cf_d=0.1, rho=1.0
-
------------------- Bounds with CI    ------------------
-          CI lower  theta lower           theta  theta upper      CI upper
-     d    1.532968    -3.022785        1.766254     6.555292      1.999539
-
------------------- Robustness (SNR proxy) -------------
-          H_0   SNR proxy (%)  adj (%)
-     d    0.0        6.313402 1.313402
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 1.766253520771568,
+ &#39;se&#39;: 0.11902521860734187,
+ &#39;level&#39;: 0.95,
+ &#39;z&#39;: 1.959963984540054,
+ &#39;sampling_ci&#39;: (1.5329683790491713, 1.9995386624939646),
+ &#39;theta_bounds_confounding&#39;: (-3.0227845865106566, 6.5552916280537925),
+ &#39;bias_aware_ci&#39;: (-3.2560697282330535, 6.788576769776189),
+ &#39;max_bias&#39;: 4.789038107282225,
+ &#39;sigma2&#39;: 13.136641553423134,
+ &#39;nu2&#39;: 1.7458713400781616,
+ &#39;params&#39;: {&#39;cf_y&#39;: 0.01, &#39;cf_d&#39;: 0.1, &#39;rho&#39;: 1.0, &#39;use_signed_rr&#39;: False}}
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">sensitivity_benchmark</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">benchmarking_set</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;tenure_months&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cf_y</th>
+      <th>cf_d</th>
+      <th>rho</th>
+      <th>theta_long</th>
+      <th>theta_short</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>d</th>
+      <td>0.000034</td>
+      <td>3.037675e-07</td>
+      <td>-1.0</td>
+      <td>1.766254</td>
+      <td>1.845679</td>
+      <td>-0.079425</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </section>
 </section>
@@ -1556,6 +1600,7 @@ Sensitivity parameters: cf_y=0.01; cf_d=0.1, rho=1.0
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overlap">Overlap</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#score">Score</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sutva">SUTVA</a></li>
 </ul>
 </li>

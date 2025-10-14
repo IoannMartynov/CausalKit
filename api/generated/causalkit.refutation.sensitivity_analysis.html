@@ -452,32 +452,34 @@ document.write(`
 <h1>causalkit.refutation.sensitivity_analysis<a class="headerlink" href="#causalkit-refutation-sensitivity-analysis" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.sensitivity_analysis">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity_analysis" title="Link to this definition">#</a></dt>
-<dd><p>Create a sensitivity-style summary for an IRM-based effect estimate.</p>
+<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_signed_rr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/refutation/unconfoundedness/sensitivity.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.sensitivity_analysis" title="Link to this definition">#</a></dt>
+<dd><p>Compute bias-aware components and cache them on <cite>effect_estimation[“bias_aware”]</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results from dml_ate or dml_att;
-must include:
-- ‘model’: A fitted IRM model object
-- ‘coefficient’, ‘std_error’, ‘confidence_interval’ are used if present</p></li>
-<li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Sensitivity parameter for the outcome equation (confounding strength)</p></li>
-<li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Sensitivity parameter for the treatment equation (confounding strength)</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders (for display only)</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI display</p></li>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>effect_estimation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em>)</p></li>
+<li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>use_signed_rr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A formatted sensitivity analysis summary report</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dl>
+<dl class="simple">
+<dt>Returns a dict with:</dt><dd><ul class="simple">
+<li><p>theta, se, level, z</p></li>
+<li><p>sampling_ci</p></li>
+<li><p>theta_bounds_confounding = (theta - max_bias, theta + max_bias)</p></li>
+<li><p>bias_aware_ci = [theta - (max_bias + z*se), theta + (max_bias + z*se)]</p></li>
+<li><p>max_bias and components (sigma2, nu2)</p></li>
+<li><p>params (cf_y, cf_d, rho, use_signed_rr)</p></li>
+</ul>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>This implementation prefers DoubleML-style model.sensitivity_analysis if available
-(for backward compatibility). Otherwise, it formats key statistics from the IRM
-model together with the provided sensitivity parameters for reporting.</p>
 </dd></dl>
 
 </section>

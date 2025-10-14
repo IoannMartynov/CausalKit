@@ -1,0 +1,1176 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>causalkit.refutation.unconfoundedness.sensitivity &#8212; CausalKit 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=5afa6543" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=2caa9db7"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/design-tabs.js?v=df1d7cd1"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/causalkit/refutation/unconfoundedness/sensitivity';</script>
+    <link rel="icon" href="../../../../_static/logo.svg"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">CausalKit</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../research.html">
+    Research
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../user-guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../research.html">
+    Research
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">causalkit.re...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for causalkit.refutation.unconfoundedness.sensitivity</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Sensitivity functions refactored into a dedicated module.</span>
+
+<span class="sd">This module centralizes bias-aware sensitivity helpers and the public</span>
+<span class="sd">entry points used by refutation utilities for unconfoundedness.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sensitivity_analysis&quot;</span><span class="p">,</span> <span class="s2">&quot;sensitivity_benchmark&quot;</span><span class="p">,</span> <span class="s2">&quot;get_sensitivity_summary&quot;</span><span class="p">]</span>
+
+<span class="c1"># ---------------- Internals ----------------</span>
+
+<span class="n">_ESSENTIALLY_ZERO</span> <span class="o">=</span> <span class="mf">1e-32</span>
+
+
+<span class="c1"># ---------------- Core sensitivity primitives (public, legacy-compatible) ----------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_sensitivity_bias_unified</span><span class="p">(</span>
+    <span class="n">sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">psi_sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">psi_nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    max_bias = sqrt(max(sigma2 * nu2, 0)). Influence function via delta method.</span>
+<span class="sd">    Returns zero IF on the boundary and an IF shaped like psi_sigma2 otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sigma2_f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sigma2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(()))</span>
+    <span class="n">nu2_f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nu2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(()))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">sigma2_f</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">nu2_f</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">psi_sigma2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">max_bias</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma2_f</span> <span class="o">*</span> <span class="n">nu2_f</span><span class="p">))</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">max_bias</span> <span class="k">if</span> <span class="n">max_bias</span> <span class="o">&gt;</span> <span class="n">_ESSENTIALLY_ZERO</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_sigma2</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">psi_sigma2</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psi_sigma2</span><span class="p">))</span>
+    <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">psi_nu2</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">psi_nu2</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psi_nu2</span><span class="p">))</span>
+    <span class="n">psi_max_bias</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigma2_f</span> <span class="o">*</span> <span class="n">psi_nu2</span> <span class="o">+</span> <span class="n">nu2_f</span> <span class="o">*</span> <span class="n">psi_sigma2</span><span class="p">)</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="k">return</span> <span class="n">max_bias</span><span class="p">,</span> <span class="n">psi_max_bias</span>
+
+<span class="c1"># Backward-compatible alias</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_sensitivity_bias</span><span class="p">(</span>
+    <span class="n">sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">psi_sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">psi_nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">_compute_sensitivity_bias_unified</span><span class="p">(</span><span class="n">sigma2</span><span class="p">,</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_sigma2</span><span class="p">,</span> <span class="n">psi_nu2</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_combine_nu2</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine sensitivity levers into nu2 via per-unit quadratic form.</span>
+
+<span class="sd">    nu2_i = (sqrt(2*m_alpha_i))^2 * cf_y + (|rr_i|)^2 * cf_d + 2*rho*sqrt(cf_y*cf_d)*|rr_i|*sqrt(2*m_alpha_i)</span>
+<span class="sd">    Returns (nu2, psi_nu2) with psi_nu2 centered.</span>
+
+<span class="sd">    Note: we use abs(rr) for a conservative worst-case cross-term; the quadratic</span>
+<span class="sd">    form is PSD for signed rr as well, but abs() avoids reductions when rr &lt; 0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cf_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_y</span><span class="p">)</span>
+    <span class="n">cf_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_d</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">cf_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cf_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cf_y and cf_d must be &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_d</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cf_y</span> <span class="o">*</span> <span class="n">cf_d</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="c1"># numeric PSD clamp</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">nu2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">base</span><span class="p">))</span>
+    <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">base</span> <span class="o">-</span> <span class="n">nu2</span>
+    <span class="k">return</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_nu2</span>
+
+
+<span class="c1"># ---------------- Bias-aware helpers (local variants + pullers) ----------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_combine_nu2_local</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">rr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">use_signed_rr</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Nu^2 via per-unit quadratic form with optional sign-preserving rr.&quot;&quot;&quot;</span>
+    <span class="n">cf_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_y</span><span class="p">);</span> <span class="n">cf_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cf_d</span><span class="p">);</span> <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">cf_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cf_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cf_y and cf_d must be &gt;= 0.&quot;</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rr</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_signed_rr</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>  <span class="c1"># worst-case sign</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_y</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">cf_d</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cf_y</span> <span class="o">*</span> <span class="n">cf_d</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">nu2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">base</span><span class="p">))</span>
+    <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">base</span> <span class="o">-</span> <span class="n">nu2</span>
+    <span class="k">return</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_nu2</span>
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_sensitivity_bias_local</span><span class="p">(</span>
+    <span class="n">sigma2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">nu2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">psi_sigma2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">psi_nu2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backward-compatible wrapper delegating to unified helper.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_compute_sensitivity_bias_unified</span><span class="p">(</span><span class="n">sigma2</span><span class="p">,</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_sigma2</span><span class="p">,</span> <span class="n">psi_nu2</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pull_theta_se_ci</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">level</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Robustly extract θ, se, and sampling CI.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span> <span class="k">as</span> <span class="n">_norm</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="c1"># theta</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">effect_estimation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coefficient&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># se</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">se</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">effect_estimation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;std_error&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">se_</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">se</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">se_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># sampling CI</span>
+    <span class="n">ci</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence_interval&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;confint&#39;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ci_df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">confint</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ci_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                <span class="n">lower</span> <span class="o">=</span> <span class="kc">None</span><span class="p">;</span> <span class="n">upper</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ci_lower&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">level</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">,</span> <span class="s1">&#39;2.5 %&#39;</span><span class="p">,</span> <span class="s1">&#39;2.5%&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ci_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="k">break</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ci_upper&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mf">0.5</span><span class="o">+</span><span class="n">level</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">,</span> <span class="s1">&#39;97.5 %&#39;</span><span class="p">,</span> <span class="s1">&#39;97.5%&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ci_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="k">break</span>
+                <span class="k">if</span> <span class="n">lower</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]);</span> <span class="n">upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">ci</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">ci</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">_norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">ci</span> <span class="o">=</span> <span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">z</span><span class="o">*</span><span class="n">se</span><span class="p">,</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">z</span><span class="o">*</span><span class="n">se</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">),</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+
+<span class="c1"># ---------------- Public API: bias-aware CI and text summaries ----------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_bias_aware_ci</span><span class="p">(</span>
+    <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+    <span class="n">use_signed_rr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a dict with:</span>
+<span class="sd">      - theta, se, level, z</span>
+<span class="sd">      - sampling_ci</span>
+<span class="sd">      - theta_bounds_confounding = [theta_lower, theta_upper] = theta ± max_bias</span>
+<span class="sd">      - bias_aware_ci = [theta - (max_bias + z*se), theta + (max_bias + z*se)]</span>
+<span class="sd">      - max_bias and components (sigma2, nu2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span> <span class="k">as</span> <span class="n">_norm</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pass the usual result dict with a fitted model under key &#39;model&#39;.&quot;</span><span class="p">)</span>
+    <span class="n">theta</span><span class="p">,</span> <span class="n">se</span><span class="p">,</span> <span class="n">sampling_ci</span> <span class="o">=</span> <span class="n">_pull_theta_se_ci</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span><span class="o">/</span><span class="mf">2.0</span><span class="p">))</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="c1"># Default: no confounding info → bias_aware = sampling CI</span>
+    <span class="n">max_bias</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">;</span> <span class="n">nu2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_sensitivity_element_est&quot;</span><span class="p">):</span>
+        <span class="n">elems</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_sensitivity_element_est</span><span class="p">()</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;sigma2&quot;</span><span class="p">])</span>
+        <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;psi_sigma2&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">psi_sigma2</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psi_sigma2</span><span class="p">))</span>
+        <span class="n">m_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;m_alpha&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;riesz_rep&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">_combine_nu2_local</span><span class="p">(</span><span class="n">m_alpha</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">cf_y</span><span class="p">,</span> <span class="n">cf_d</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">use_signed_rr</span><span class="o">=</span><span class="n">use_signed_rr</span><span class="p">)</span>
+        <span class="n">max_bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_compute_sensitivity_bias_unified</span><span class="p">(</span><span class="n">sigma2</span><span class="p">,</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_sigma2</span><span class="p">,</span> <span class="n">psi_nu2</span><span class="p">)</span>
+
+    <span class="n">theta_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span>
+    <span class="n">theta_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span>
+    <span class="c1"># Graceful fallback: if se is non-finite, report confounding bounds only</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">se</span><span class="p">)</span> <span class="ow">and</span> <span class="n">se</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">z</span><span class="p">)):</span>
+        <span class="n">bias_aware_ci</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bias_aware_ci</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">)),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">theta</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
+        <span class="n">se</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">),</span>
+        <span class="n">level</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+        <span class="n">sampling_ci</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">sampling_ci</span><span class="p">)),</span>
+        <span class="n">theta_bounds_confounding</span><span class="o">=</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta_lower</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta_upper</span><span class="p">)),</span>
+        <span class="n">bias_aware_ci</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">bias_aware_ci</span><span class="p">)),</span>
+        <span class="n">max_bias</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">),</span>
+        <span class="n">sigma2</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sigma2</span><span class="p">),</span>
+        <span class="n">nu2</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">nu2</span><span class="p">),</span>
+        <span class="n">params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">cf_y</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">cf_y</span><span class="p">),</span> <span class="n">cf_d</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">cf_d</span><span class="p">),</span> <span class="n">rho</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span> <span class="n">use_signed_rr</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">use_signed_rr</span><span class="p">)),</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">format_bias_aware_summary</span><span class="p">(</span><span class="n">res</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pretty, one-row printout (aligned with new summary style).&quot;&quot;&quot;</span>
+    <span class="n">lbl</span> <span class="o">=</span> <span class="p">(</span><span class="n">label</span> <span class="ow">or</span> <span class="s1">&#39;theta&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">ci_l</span><span class="p">,</span> <span class="n">ci_u</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;sampling_ci&#39;</span><span class="p">]</span>
+    <span class="n">th_l</span><span class="p">,</span> <span class="n">th_u</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;theta_bounds_confounding&#39;</span><span class="p">]</span>
+    <span class="n">bci_l</span><span class="p">,</span> <span class="n">bci_u</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;bias_aware_ci&#39;</span><span class="p">]</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">];</span> <span class="n">se</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;se&#39;</span><span class="p">]</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">];</span> <span class="n">z</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+    <span class="n">cf</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
+
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;================== Bias-aware Interval ==================&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Scenario          ------------------&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Significance Level: level=</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sensitivity parameters: cf_y=</span><span class="si">{</span><span class="n">cf</span><span class="p">[</span><span class="s1">&#39;cf_y&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">; cf_d=</span><span class="si">{</span><span class="n">cf</span><span class="p">[</span><span class="s1">&#39;cf_d&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, rho=</span><span class="si">{</span><span class="n">cf</span><span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, use_signed_rr=</span><span class="si">{</span><span class="n">cf</span><span class="p">[</span><span class="s1">&#39;use_signed_rr&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Components        ------------------&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta&#39;</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;se&#39;</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;z&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;max_bias&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;sigma2&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;nu2&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lbl</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">se</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">8.4f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;max_bias&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;sigma2&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;nu2&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Intervals         ------------------&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Sampling CI lower&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Conf. θ lower&#39;</span><span class="si">:</span><span class="s2">&gt;16</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Bias-aware lower&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Bias-aware upper&#39;</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Conf. θ upper&#39;</span><span class="si">:</span><span class="s2">&gt;16</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Sampling CI upper&#39;</span><span class="si">:</span><span class="s2">&gt;20</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lbl</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_l</span><span class="si">:</span><span class="s2">18.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">th_l</span><span class="si">:</span><span class="s2">16.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">bci_l</span><span class="si">:</span><span class="s2">18.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">bci_u</span><span class="si">:</span><span class="s2">18.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">th_u</span><span class="si">:</span><span class="s2">16.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_u</span><span class="si">:</span><span class="s2">20.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------- Human-facing wrappers and legacy formatting ----------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_sensitivity_summary</span><span class="p">(</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Format the sensitivity analysis summary into the expected output format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    summary : pd.DataFrame</span>
+<span class="sd">        The sensitivity summary DataFrame from DoubleML</span>
+<span class="sd">    cf_y : float</span>
+<span class="sd">        Sensitivity parameter for the outcome equation</span>
+<span class="sd">    cf_d : float</span>
+<span class="sd">        Sensitivity parameter for the treatment equation</span>
+<span class="sd">    rho : float</span>
+<span class="sd">        Correlation parameter</span>
+<span class="sd">    level : float</span>
+<span class="sd">        Confidence level</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Formatted sensitivity analysis report</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create the formatted output</span>
+    <span class="n">output_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;================== Sensitivity Analysis ==================&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Scenario          ------------------&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Significance Level: level=</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sensitivity parameters: cf_y=</span><span class="si">{</span><span class="n">cf_y</span><span class="si">}</span><span class="s2">; cf_d=</span><span class="si">{</span><span class="n">cf_d</span><span class="si">}</span><span class="s2">, rho=</span><span class="si">{</span><span class="n">rho</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Bounds with CI section</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Bounds with CI    ------------------&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create header for the table</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;CI lower&#39;</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta lower&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;theta upper&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;CI upper&#39;</span><span class="si">:</span><span class="s2">&gt;13</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+    <span class="c1"># Extract values from summary DataFrame</span>
+    <span class="c1"># The summary should contain bounds and confidence intervals</span>
+    <span class="n">lower_lbl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
+    <span class="n">upper_lbl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="mf">0.5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %&quot;</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="c1"># Format the row data - adjust column names based on actual DoubleML output</span>
+        <span class="n">row_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">idx</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ci_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lower_lbl</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;2.5 %&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;2.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">theta_lower</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta lower&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower_bound&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;estimate&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;coef&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)))</span>
+            <span class="n">theta_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;theta upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper_bound&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">ci_upper</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ci_upper&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">upper_lbl</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;97.5 %&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;97.5%&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))))</span>
+            <span class="n">row_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_lower</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_lower</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">theta_upper</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">ci_upper</span><span class="si">:</span><span class="s2">13.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_str</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="c1"># Fallback formatting if exact column names differ</span>
+            <span class="n">row_values</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">11.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2">&quot;</span>
+                          <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">values</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]]</span>
+            <span class="n">row_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row_values</span><span class="p">)</span>
+            <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_str</span><span class="p">)</span>
+
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Robustness SNR proxy section</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;------------------ Robustness (risk proxy) -------------&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create header for robustness values</span>
+    <span class="n">rob_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;H_0&#39;</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;risk proxy (%)&#39;</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;adj (%)&#39;</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_header</span><span class="p">)</span>
+
+    <span class="c1"># Add robustness values if present, else placeholders</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">summary</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">row_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">idx</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">h_0</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;H_0&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;null_hypothesis&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">rv</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RV&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;robustness_value&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">rva</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RVa&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;robustness_value_adjusted&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">h_0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rv</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rva</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_row</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="n">rob_row</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row_name</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">6.1f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">15.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="mf">0.0</span><span class="si">:</span><span class="s2">8.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">output_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rob_row</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_lines</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_sensitivity_summary">
+<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.get_sensitivity_summary.html#causalkit.refutation.get_sensitivity_summary">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sensitivity_summary</span><span class="p">(</span>
+    <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render a single, unified bias-aware summary string.</span>
+<span class="sd">    If bias-aware components are missing, shows a sampling-only variant with max_bias=0</span>
+<span class="sd">    and then formats via `format_bias_aware_summary` for consistency.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;theta&#39;</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bias_aware&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Build a sampling-only placeholder if needed (level fixed at 0.95 here)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">theta</span><span class="p">,</span> <span class="n">se</span><span class="p">,</span> <span class="n">ci</span> <span class="o">=</span> <span class="n">_pull_theta_se_ci</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.95</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">theta</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
+            <span class="n">se</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">),</span>
+            <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">sampling_ci</span><span class="o">=</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span>
+            <span class="n">theta_bounds_confounding</span><span class="o">=</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)),</span>  <span class="c1"># max_bias = 0</span>
+            <span class="n">bias_aware_ci</span><span class="o">=</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">se</span><span class="p">)),</span>
+            <span class="n">max_bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">sigma2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">nu2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">cf_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">use_signed_rr</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Single clean summary (reuse the one definitive formatter)</span>
+    <span class="k">return</span> <span class="n">format_bias_aware_summary</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------- Benchmarking sensitivity (short vs long model) ----------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sensitivity_benchmark</span><span class="p">(</span>
+    <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">benchmarking_set</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">fit_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a benchmark for a given set of features by refitting a short IRM model</span>
+<span class="sd">    (excluding the provided features) and contrasting it with the original (long) model.</span>
+<span class="sd">    Returns a DataFrame containing cf_y, cf_d, rho and the change in estimates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    effect_estimation : dict</span>
+<span class="sd">        A dictionary containing the fitted IRM model under the key &#39;model&#39;.</span>
+<span class="sd">    benchmarking_set : list[str]</span>
+<span class="sd">        List of confounder names to be used for benchmarking (to be removed in the short model).</span>
+<span class="sd">    fit_args : dict, optional</span>
+<span class="sd">        Additional keyword arguments for the IRM.fit() method of the short model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        A one-row DataFrame indexed by the treatment name with columns:</span>
+<span class="sd">        - cf_y, cf_d, rho: residual-based benchmarking strengths</span>
+<span class="sd">        - theta_long, theta_short, delta: effect estimates and their change (long - short)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;effect_estimation must be a dict containing a fitted IRM under key &#39;model&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Validate model type by attribute presence (duck-typing IRM)</span>
+    <span class="n">required_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;coef_&#39;</span><span class="p">,</span> <span class="s1">&#39;se_&#39;</span><span class="p">,</span> <span class="s1">&#39;_sensitivity_element_est&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">required_attrs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Sensitivity benchmarking requires a fitted IRM model with sensitivity elements.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Extract current confounders</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x_list_long</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;confounders&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to access model data confounders: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># input checks</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;benchmarking_set must be a list. </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;benchmarking_set must not be empty.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">x_list_long</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;benchmarking_set must be a subset of features </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">x_list_long</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">benchmarking_set</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">fit_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fit_args</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fit_args must be a dict. </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">fit_args</span><span class="p">)</span><span class="si">}</span><span class="s2"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">fit_args</span><span class="p">)</span><span class="si">}</span><span class="s2"> was passed.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Build short data excluding benchmarking features</span>
+    <span class="n">x_list_short</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_list_long</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">benchmarking_set</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_list_short</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;After removing benchmarking_set there are no confounders left to fit the short model.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a shallow copy of the underlying DataFrame and build a new CausalData</span>
+    <span class="n">df_long</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="n">treatment_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">treatment</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">target_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># Prefer in-scope names; fallback to import to avoid fragile self-import patterns</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">CausalData</span>  <span class="c1"># type: ignore[name-defined]</span>
+        <span class="n">IRM</span>  <span class="c1"># type: ignore[name-defined]</span>
+    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data.causaldata</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.estimators.irm</span><span class="w"> </span><span class="kn">import</span> <span class="n">IRM</span>
+
+    <span class="n">data_short</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_long</span><span class="p">,</span> <span class="n">treatment</span><span class="o">=</span><span class="n">treatment_name</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">target_name</span><span class="p">,</span> <span class="n">confounders</span><span class="o">=</span><span class="n">x_list_short</span><span class="p">)</span>
+
+    <span class="c1"># Clone/construct a short IRM with same hyperparameters/learners</span>
+    <span class="n">irm_short</span> <span class="o">=</span> <span class="n">IRM</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">data_short</span><span class="p">,</span>
+        <span class="n">ml_g</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">ml_g</span><span class="p">,</span>
+        <span class="n">ml_m</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">ml_m</span><span class="p">,</span>
+        <span class="n">n_folds</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;n_folds&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="n">n_rep</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;n_rep&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">score</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;ATE&#39;</span><span class="p">),</span>
+        <span class="n">normalize_ipw</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;normalize_ipw&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="n">trimming_rule</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;trimming_rule&#39;</span><span class="p">,</span> <span class="s1">&#39;truncate&#39;</span><span class="p">),</span>
+        <span class="n">trimming_threshold</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;trimming_threshold&#39;</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">),</span>
+        <span class="n">weights</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;random_state&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Fit short model</span>
+    <span class="k">if</span> <span class="n">fit_args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">irm_short</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">irm_short</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">**</span><span class="n">fit_args</span><span class="p">)</span>
+
+    <span class="c1"># Long model stats</span>
+    <span class="n">theta_long</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Short model stats</span>
+    <span class="n">theta_short</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">irm_short</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Compute residual-based strengths on the long model</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">treatment_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">m_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">m_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">g0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g0_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">g1_hat_</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">r_y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">g1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="n">g0</span><span class="p">)</span>
+    <span class="n">r_d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">-</span> <span class="n">m_hat</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_center</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_center_w</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">sw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">a</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">sw</span> <span class="k">if</span> <span class="n">sw</span> <span class="o">&gt;</span> <span class="mf">1e-12</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">mu</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ols_r2_and_fit</span><span class="p">(</span><span class="n">yv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stable (weighted) OLS on centered &amp; standardized vars for R^2 and fitted component.&quot;&quot;&quot;</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Z</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Unweighted</span>
+            <span class="n">yv_c</span> <span class="o">=</span> <span class="n">_center</span><span class="p">(</span><span class="n">yv</span><span class="p">)</span>
+            <span class="n">Zc</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">col_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanstd</span><span class="p">(</span><span class="n">Zc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">col_std</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">col_std</span> <span class="o">&gt;</span> <span class="mf">1e-12</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">Zcs</span> <span class="o">=</span> <span class="n">Zc</span><span class="p">[:,</span> <span class="n">valid</span><span class="p">]</span> <span class="o">/</span> <span class="n">col_std</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">Zcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Zcs</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">yv_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yv_c</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">lstsq</span>
+            <span class="n">beta</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">Zcs</span><span class="p">,</span> <span class="n">yv_c</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+            <span class="n">yhat</span> <span class="o">=</span> <span class="n">Zcs</span> <span class="o">@</span> <span class="n">beta</span>
+            <span class="n">denom</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yv_c</span><span class="p">,</span> <span class="n">yv_c</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">denom</span><span class="p">)</span> <span class="ow">or</span> <span class="n">denom</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yhat</span><span class="p">,</span> <span class="n">yhat</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="ow">or</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">denom</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">r2</span><span class="p">,</span> <span class="n">yhat</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Weighted</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+            <span class="c1"># sanitize weights and features to avoid NaN/inf propagation</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">sw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sw</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">yv_c</span> <span class="o">=</span> <span class="n">_center_w</span><span class="p">(</span><span class="n">yv</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+            <span class="c1"># Weighted column means</span>
+            <span class="n">muZ</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sw</span>
+            <span class="n">Zc</span> <span class="o">=</span> <span class="n">Z</span> <span class="o">-</span> <span class="n">muZ</span>
+            <span class="c1"># Weighted std per column</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">Zc</span> <span class="o">*</span> <span class="n">Zc</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">sw</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">std</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">std</span> <span class="o">&gt;</span> <span class="mf">1e-12</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">Zcs</span> <span class="o">=</span> <span class="n">Zc</span><span class="p">[:,</span> <span class="n">valid</span><span class="p">]</span> <span class="o">/</span> <span class="n">std</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">Zcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Zcs</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">yv_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yv_c</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="c1"># Weighted least squares via sqrt(w)</span>
+            <span class="n">swr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>
+            <span class="n">Zsw</span> <span class="o">=</span> <span class="n">Zcs</span> <span class="o">*</span> <span class="n">swr</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">ysw</span> <span class="o">=</span> <span class="n">yv_c</span> <span class="o">*</span> <span class="n">swr</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">lstsq</span>
+            <span class="n">beta</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">lstsq</span><span class="p">(</span><span class="n">Zsw</span><span class="p">,</span> <span class="n">ysw</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+            <span class="n">yhat</span> <span class="o">=</span> <span class="n">Zcs</span> <span class="o">@</span> <span class="n">beta</span>
+            <span class="n">denom</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ysw</span><span class="p">,</span> <span class="n">ysw</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">denom</span><span class="p">)</span> <span class="ow">or</span> <span class="n">denom</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">swr</span> <span class="o">*</span> <span class="n">yhat</span><span class="p">,</span> <span class="n">swr</span> <span class="o">*</span> <span class="n">yhat</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="ow">or</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">yv_c</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">denom</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">r2</span><span class="p">,</span> <span class="n">yhat</span>
+
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">benchmarking_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="c1"># ATT weighting if applicable</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">))</span> <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">))</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">w_att</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">is_att</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ATT&#39;</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">w_att</span> <span class="k">if</span> <span class="n">is_att</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="n">R2y</span><span class="p">,</span> <span class="n">yhat_u</span> <span class="o">=</span> <span class="n">_ols_r2_and_fit</span><span class="p">(</span><span class="n">r_y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+    <span class="n">R2d</span><span class="p">,</span> <span class="n">dhat_u</span> <span class="o">=</span> <span class="n">_ols_r2_and_fit</span><span class="p">(</span><span class="n">r_d</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+    <span class="n">cf_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">R2y</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-12</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">R2y</span><span class="p">))</span>
+    <span class="n">cf_d</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">R2d</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-12</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">R2d</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_safe_corr</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">w</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">_center</span><span class="p">(</span><span class="n">u</span><span class="p">);</span> <span class="n">v</span> <span class="o">=</span> <span class="n">_center</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">su</span><span class="p">,</span> <span class="n">sv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">su</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">sv</span><span class="p">))</span> <span class="ow">or</span> <span class="n">su</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sv</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">_center_w</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">w</span><span class="p">);</span> <span class="n">v</span> <span class="o">=</span> <span class="n">_center_w</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="n">sw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+        <span class="n">su</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">u</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">sw</span> <span class="k">if</span> <span class="n">sw</span> <span class="o">&gt;</span> <span class="mf">1e-12</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)))</span>
+        <span class="n">sv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">sw</span> <span class="k">if</span> <span class="n">sw</span> <span class="o">&gt;</span> <span class="mf">1e-12</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">su</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sv</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">v</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">sw</span> <span class="k">if</span> <span class="n">sw</span> <span class="o">&gt;</span> <span class="mf">1e-12</span> <span class="k">else</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">cov</span> <span class="o">/</span> <span class="p">(</span><span class="n">su</span> <span class="o">*</span> <span class="n">sv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">_safe_corr</span><span class="p">(</span><span class="n">yhat_u</span><span class="p">,</span> <span class="n">dhat_u</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">theta_long</span> <span class="o">-</span> <span class="n">theta_short</span>
+
+    <span class="n">df_benchmark</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;cf_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cf_y</span><span class="p">],</span>
+            <span class="s2">&quot;cf_d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cf_d</span><span class="p">],</span>
+            <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">rho</span><span class="p">],</span>
+            <span class="s2">&quot;theta_long&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_long</span><span class="p">],</span>
+            <span class="s2">&quot;theta_short&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">theta_short</span><span class="p">],</span>
+            <span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">delta</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">treatment_name</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">df_benchmark</span>
+
+
+<span class="c1"># ---------------- Main entry for producing textual sensitivity summary ----------------</span>
+
+<div class="viewcode-block" id="sensitivity_analysis">
+<a class="viewcode-back" href="../../../../api/generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sensitivity_analysis</span><span class="p">(</span>
+    <span class="n">effect_estimation</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cf_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">cf_d</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+    <span class="n">use_signed_rr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute bias-aware components and cache them on `effect_estimation[&quot;bias_aware&quot;]`.</span>
+
+<span class="sd">    Returns a dict with:</span>
+<span class="sd">      - theta, se, level, z</span>
+<span class="sd">      - sampling_ci</span>
+<span class="sd">      - theta_bounds_confounding = (theta - max_bias, theta + max_bias)</span>
+<span class="sd">      - bias_aware_ci = [theta - (max_bias + z*se), theta + (max_bias + z*se)]</span>
+<span class="sd">      - max_bias and components (sigma2, nu2)</span>
+<span class="sd">      - params (cf_y, cf_d, rho, use_signed_rr)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;model&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">effect_estimation</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pass a result dict with a fitted model under key &#39;model&#39;.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;level must be in (0,1).&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cf_y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">cf_d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cf_y and cf_d must be &gt;= 0.&quot;</span><span class="p">)</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span> <span class="k">as</span> <span class="n">_norm</span>
+
+    <span class="n">theta</span><span class="p">,</span> <span class="n">se</span><span class="p">,</span> <span class="n">sampling_ci</span> <span class="o">=</span> <span class="n">_pull_theta_se_ci</span><span class="p">(</span><span class="n">effect_estimation</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">level</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">effect_estimation</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+    <span class="n">max_bias</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">nu2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_sensitivity_element_est&quot;</span><span class="p">):</span>
+        <span class="n">elems</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_sensitivity_element_est</span><span class="p">()</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;sigma2&quot;</span><span class="p">])</span>
+        <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;psi_sigma2&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">psi_sigma2</span> <span class="o">=</span> <span class="n">psi_sigma2</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psi_sigma2</span><span class="p">))</span>
+        <span class="n">m_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;m_alpha&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">rr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">[</span><span class="s2">&quot;riesz_rep&quot;</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_nu2</span> <span class="o">=</span> <span class="n">_combine_nu2_local</span><span class="p">(</span>
+            <span class="n">m_alpha</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="n">cf_y</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="n">cf_d</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">use_signed_rr</span><span class="o">=</span><span class="n">use_signed_rr</span>
+        <span class="p">)</span>
+        <span class="n">max_bias</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_compute_sensitivity_bias_unified</span><span class="p">(</span><span class="n">sigma2</span><span class="p">,</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">psi_sigma2</span><span class="p">,</span> <span class="n">psi_nu2</span><span class="p">)</span>
+
+    <span class="n">theta_lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span>
+    <span class="n">theta_upper</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span>
+    <span class="c1"># Graceful fallback: if se is non-finite, report confounding bounds only</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">se</span><span class="p">)</span> <span class="ow">and</span> <span class="n">se</span> <span class="o">&gt;=</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">z</span><span class="p">)):</span>
+        <span class="n">bias_aware_ci</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bias_aware_ci</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">)),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">)),</span>
+        <span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">theta</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
+        <span class="n">se</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">se</span><span class="p">),</span>
+        <span class="n">level</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+        <span class="n">sampling_ci</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">sampling_ci</span><span class="p">)),</span>
+        <span class="n">theta_bounds_confounding</span><span class="o">=</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">theta_lower</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">theta_upper</span><span class="p">)),</span>
+        <span class="n">bias_aware_ci</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">bias_aware_ci</span><span class="p">)),</span>
+        <span class="n">max_bias</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">max_bias</span><span class="p">),</span>
+        <span class="n">sigma2</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sigma2</span><span class="p">),</span>
+        <span class="n">nu2</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">nu2</span><span class="p">),</span>
+        <span class="n">params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">cf_y</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">cf_y</span><span class="p">),</span>
+            <span class="n">cf_d</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">cf_d</span><span class="p">),</span>
+            <span class="n">rho</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)),</span>
+            <span class="n">use_signed_rr</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">use_signed_rr</span><span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">effect_estimation</span><span class="p">[</span><span class="s2">&quot;bias_aware&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, CausalKit Team.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

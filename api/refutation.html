@@ -471,10 +471,10 @@ document.write(`
 <td><p>Re-estimate the effect on a random subset (default 80 %) to check sample-stability of the estimate.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.refutation.sensitivity_analysis.html#causalkit.refutation.sensitivity_analysis" title="causalkit.refutation.sensitivity_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sensitivity_analysis</span></code></a></p></td>
-<td><p>Create a sensitivity-style summary for an IRM-based effect estimate.</p></td>
+<td><p>Compute bias-aware components and cache them on <cite>effect_estimation[&quot;bias_aware&quot;]</cite>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/causalkit.refutation.get_sensitivity_summary.html#causalkit.refutation.get_sensitivity_summary" title="causalkit.refutation.get_sensitivity_summary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_sensitivity_summary</span></code></a></p></td>
-<td><p>Get the sensitivity summary string if available.</p></td>
+<td><p>Render a single, unified bias-aware summary string.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/causalkit.refutation.refute_irm_orthogonality.html#causalkit.refutation.refute_irm_orthogonality" title="causalkit.refutation.refute_irm_orthogonality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refute_irm_orthogonality</span></code></a></p></td>
 <td><p>Comprehensive AIPW orthogonality diagnostics for IRM estimators.</p></td>
@@ -998,36 +998,6 @@ under specified value gates.</p></li>
 causal effect estimates returned by dml_ate and dml_att (which are based on the
 internal IRM estimator). It no longer relies on DoubleML objects.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_analysis">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.unconfoundedness.uncofoundedness_validation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#sensitivity_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_analysis" title="Link to this definition">#</a></dt>
-<dd><p>Create a sensitivity-style summary for an IRM-based effect estimate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Any</em><em>]</em>) – A dictionary containing the effect estimation results from dml_ate or dml_att;
-must include:
-- ‘model’: A fitted IRM model object
-- ‘coefficient’, ‘std_error’, ‘confidence_interval’ are used if present</p></li>
-<li><p><strong>cf_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Sensitivity parameter for the outcome equation (confounding strength)</p></li>
-<li><p><strong>cf_d</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Sensitivity parameter for the treatment equation (confounding strength)</p></li>
-<li><p><strong>rho</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 1.0</em>) – Correlation parameter between unobserved confounders (for display only)</p></li>
-<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default 0.95</em>) – Confidence level for CI display</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A formatted sensitivity analysis summary report</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This implementation prefers DoubleML-style model.sensitivity_analysis if available
-(for backward compatibility). Otherwise, it formats key statistics from the IRM
-model together with the provided sensitivity parameters for reporting.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="causalkit.refutation.unconfoundedness.uncofoundedness_validation.validate_unconfoundedness_balance">
 <span class="sig-prename descclassname"><span class="pre">causalkit.refutation.unconfoundedness.uncofoundedness_validation.</span></span><span class="sig-name descname"><span class="pre">validate_unconfoundedness_balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#validate_unconfoundedness_balance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.validate_unconfoundedness_balance" title="Link to this definition">#</a></dt>
 <dd><p>Assess covariate balance under the unconfoundedness assumption by computing
@@ -1067,47 +1037,6 @@ variances in the two groups.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.unconfoundedness.uncofoundedness_validation.get_sensitivity_summary">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.unconfoundedness.uncofoundedness_validation.</span></span><span class="sig-name descname"><span class="pre">get_sensitivity_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#get_sensitivity_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.get_sensitivity_summary" title="Link to this definition">#</a></dt>
-<dd><p>Get the sensitivity summary string if available.</p>
-<p>Checks for a top-level ‘sensitivity_summary’ (set by sensitivity_analysis)
-and falls back to model.sensitivity_summary if present.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>effect_estimation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_benchmark">
-<span class="sig-prename descclassname"><span class="pre">causalkit.refutation.unconfoundedness.uncofoundedness_validation.</span></span><span class="sig-name descname"><span class="pre">sensitivity_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">effect_estimation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmarking_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/causalkit/refutation/unconfoundedness/uncofoundedness_validation.html#sensitivity_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_benchmark" title="Link to this definition">#</a></dt>
-<dd><p>Computes a benchmark for a given set of features by refitting a short IRM model
-(excluding the provided features) and contrasting it with the original (long) model.
-Returns a DataFrame containing cf_y, cf_d, rho and the change in estimates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>effect_estimation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – A dictionary containing the fitted IRM model under the key ‘model’.</p></li>
-<li><p><strong>benchmarking_set</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of confounder names to be used for benchmarking (to be removed in the short model).</p></li>
-<li><p><strong>fit_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments for the IRM.fit() method of the short model.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A one-row DataFrame indexed by the treatment name with columns:
-- cf_y, cf_d, rho: residual-based benchmarking strengths
-- theta_long, theta_short, delta: effect estimates and their change (long - short)</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.3)">pandas.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1741,10 +1670,7 @@ under specified value gates.</p></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-causalkit.refutation.unconfoundedness.uncofoundedness_validation">Sensitivity Analysis</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_analysis"><code class="docutils literal notranslate"><span class="pre">sensitivity_analysis()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.validate_unconfoundedness_balance"><code class="docutils literal notranslate"><span class="pre">validate_unconfoundedness_balance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.get_sensitivity_summary"><code class="docutils literal notranslate"><span class="pre">get_sensitivity_summary()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.sensitivity_benchmark"><code class="docutils literal notranslate"><span class="pre">sensitivity_benchmark()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.refutation.unconfoundedness.uncofoundedness_validation.run_unconfoundedness_diagnostics"><code class="docutils literal notranslate"><span class="pre">run_unconfoundedness_diagnostics()</span></code></a></li>
 </ul>
 </li>
