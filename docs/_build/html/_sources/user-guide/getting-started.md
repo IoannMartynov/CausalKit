@@ -19,7 +19,7 @@ CausalKit provides several functions for generating synthetic data for causal in
 ### Generating A/B Test Data
 
 ```python
-from causalkit.data import generate_ab_test_data
+from causalis.data import generate_ab_test_data
 
 # Generate A/B test data with default parameters
 df = generate_ab_test_data()
@@ -37,7 +37,7 @@ print(df_custom.head())
 ### Generating Randomized Controlled Trial (RCT) Data
 
 ```python
-from causalkit.data import generate_rct_data
+from causalis.data import generate_rct_data
 
 # Generate RCT data with default parameters
 df = generate_rct_data()
@@ -61,7 +61,7 @@ CausalKit provides utilities for splitting traffic data for experiments.
 
 ```python
 import pandas as pd
-from causalkit.design.traffic_splitter import split_traffic
+from causalis.design.traffic_splitter import split_traffic
 
 # Create a sample DataFrame
 df = pd.DataFrame({
@@ -86,7 +86,7 @@ train_df, test_df = split_traffic(df, split_ratio=0.7, stratify_column='feature_
 
 ```python
 import numpy as np
-from causalkit.inference import compare_ab
+from causalis.inference import compare_ab
 
 # Generate some sample data
 control = np.random.normal(10, 2, 1000)  # Control group data
@@ -99,7 +99,7 @@ compare_ab(control, treatment)
 ### Advanced Analysis with PLR
 
 ```python
-from causalkit.inference import compare_ab_with_plr
+from causalis.inference import compare_ab_with_plr
 
 # Compare using Partial Linear Regression
 compare_ab_with_plr(control, treatment)

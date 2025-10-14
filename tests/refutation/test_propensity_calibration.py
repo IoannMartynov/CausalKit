@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.refutation.overlap.overlap_validation import (
+from causalis.refutation.overlap.overlap_validation import (
     ece_binary,
     calibration_report_m,
 )

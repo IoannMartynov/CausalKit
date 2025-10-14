@@ -5,8 +5,8 @@ Tests for the ttest function in the inference module.
 import pytest
 import pandas as pd
 import numpy as np
-from causalkit.data import CausalData
-from causalkit.inference.atte.ttest import ttest
+from causalis.data import CausalData
+from causalis.inference.atte.ttest import ttest
 
 
 @pytest.fixture

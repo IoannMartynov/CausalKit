@@ -18,7 +18,7 @@ CausalKit requires:
 The simplest way to install CausalKit is using pip:
 
 ```bash
-pip install causalkit
+pip install causalis
 ```
 
 This will install CausalKit and all its dependencies.
@@ -36,7 +36,7 @@ git clone https://github.com/yourusername/causalkit.git
 2. Navigate to the cloned directory:
 
 ```bash
-cd causalkit
+cd causalis
 ```
 
 3. Install the package in development mode:
@@ -50,8 +50,9 @@ pip install -e .
 You can verify that CausalKit is installed correctly by importing it in Python:
 
 ```python
-import causalkit
-print(causalkit.__version__)
+import causalis
+
+print(causalis.__version__)
 ```
 
 ## Installing optional dependencies
@@ -59,7 +60,7 @@ print(causalkit.__version__)
 For development or running tests, you can install additional dependencies:
 
 ```bash
-pip install causalkit[dev]
+pip install causalis[dev]
 ```
 
 This will install additional packages like pytest, flake8, and sphinx for development and testing.

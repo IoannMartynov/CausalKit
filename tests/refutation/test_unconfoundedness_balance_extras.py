@@ -4,10 +4,10 @@ import pytest
 
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
-from causalkit.data.causaldata import CausalData
-from causalkit.data.generators import generate_rct
-from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.refutation.unconfoundedness.uncofoundedness_validation import validate_unconfoundedness_balance
+from causalis.data.causaldata import CausalData
+from causalis.data.generators import generate_rct
+from causalis.inference.ate.dml_ate import dml_ate
+from causalis.refutation.unconfoundedness.uncofoundedness_validation import validate_unconfoundedness_balance
 
 
 def test_unconfoundedness_balance_extras_outputs():

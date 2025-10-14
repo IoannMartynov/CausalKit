@@ -6,8 +6,8 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from causalkit.data import CausalData
-from causalkit.inference.atte.bootstrap_diff_means import bootstrap_diff_means
+from causalis.data import CausalData
+from causalis.inference.atte.bootstrap_diff_means import bootstrap_diff_means
 
 
 @pytest.fixture

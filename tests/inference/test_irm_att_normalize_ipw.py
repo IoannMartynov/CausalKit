@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.data.causaldata import CausalData
-from causalkit.inference.estimators.irm import IRM
+from causalis.data.causaldata import CausalData
+from causalis.inference.estimators.irm import IRM
 
 from sklearn.linear_model import LinearRegression, LogisticRegression
 

@@ -4,11 +4,11 @@ import pytest
 
 from sklearn.linear_model import LogisticRegression, LinearRegression
 
-from causalkit.data.causaldata import CausalData
-from causalkit.data.generators import generate_rct
-from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.inference.atte.dml_atte import dml_atte
-from causalkit.refutation import validate_unconfoundedness_balance
+from causalis.data.causaldata import CausalData
+from causalis.data.generators import generate_rct
+from causalis.inference.ate.dml_ate import dml_ate
+from causalis.inference.atte.dml_atte import dml_atte
+from causalis.refutation import validate_unconfoundedness_balance
 
 
 @pytest.mark.parametrize("normalize_ipw", [False, True])

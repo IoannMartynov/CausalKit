@@ -31,10 +31,11 @@ pip install -e ".[dev]"
 You can also create a conda env using the provided file (useful for local development):
 ```bash
 conda env create -f environment.yml
-conda activate causalkit
+conda activate causalis
 ```
 
 You're all set! Import the library to get started:
+
 ```python
-import causalkit
+import causalis
 ```

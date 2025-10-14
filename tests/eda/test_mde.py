@@ -3,7 +3,7 @@ Tests for the calculate_mde function in the rct_design module.
 """
 
 import pytest
-from causalkit.eda.rct_design import calculate_mde
+from causalis.eda.rct_design import calculate_mde
 
 
 def test_mde_calculation_for_conversion_data():

@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.data import CausalData
-from causalkit.inference.ate.dml_ate import dml_ate
-from causalkit.refutation.score.score_validation import trim_sensitivity_curve_ate
+from causalis.data import CausalData
+from causalis.inference.ate.dml_ate import dml_ate
+from causalis.refutation.score.score_validation import trim_sensitivity_curve_ate
 
 
 def _make_data(n=300, seed=321):

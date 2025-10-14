@@ -33,8 +33,8 @@ T-tests are appropriate when:
 ### Example Usage
 
 ```python
-from causalkit.data import generate_rct_data, CausalData
-from causalkit.inference import ttest
+from causalis.data import generate_rct_data, CausalData
+from causalis.inference import ttest
 
 # Generate sample RCT data
 df = generate_rct_data(

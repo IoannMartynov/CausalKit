@@ -1,7 +1,7 @@
 import sys
 from io import StringIO
 
-from causalkit.refutation.sutva.sutva_validation import (
+from causalis.refutation.sutva.sutva_validation import (
     print_sutva_questions,
     QUESTIONS,
 )
@@ -24,7 +24,7 @@ def test_import_has_no_side_effects():
     # Ensure importing the module does not print anything by reloading it in isolation
     import importlib
 
-    module_name = "causalkit.refutation.sutva.sutva_validation"
+    module_name = "causalis.refutation.sutva.sutva_validation"
 
     # Remove from sys.modules to force a clean import
     if module_name in sys.modules:

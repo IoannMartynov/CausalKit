@@ -7,13 +7,13 @@ import numpy as np
 import pandas as pd
 from unittest.mock import Mock
 
-from causalkit.data.causaldata import CausalData
-from causalkit.refutation import (
+from causalis.data.causaldata import CausalData
+from causalis.refutation import (
     refute_placebo_outcome,
     refute_placebo_treatment,
     refute_subset,
 )
-from causalkit.refutation.score.score_validation import _is_binary, _generate_random_outcome, _generate_random_treatment
+from causalis.refutation.score.score_validation import _is_binary, _generate_random_outcome, _generate_random_treatment
 
 
 @pytest.fixture

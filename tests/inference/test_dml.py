@@ -1,13 +1,13 @@
 """
-Test for the DoubleML implementation in causalkit.
+Test for the DoubleML implementation in causalis.
 """
 
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
-from causalkit.data import CausalData
-from causalkit.inference.ate import dml_ate_source
+from causalis.data import CausalData
+from causalis.inference.ate import dml_ate_source
 
 
 def test_dml():

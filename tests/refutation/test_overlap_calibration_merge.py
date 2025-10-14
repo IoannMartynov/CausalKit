@@ -1,6 +1,6 @@
 import numpy as np
 
-from causalkit.refutation.overlap.overlap_validation import positivity_overlap_checks
+from causalis.refutation.overlap.overlap_validation import positivity_overlap_checks
 
 
 def test_positivity_overlap_checks_includes_calibration():

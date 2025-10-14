@@ -7,11 +7,11 @@ def test_import_additional_subpackages():
     """
     try:
         # Top-level subpackages that were previously missing in the package list
-        import causalkit.eda.eda as eda_module
-        import causalkit.refutation.score.score_validation as ref_module
+        import causalis.eda.eda as eda_module
+        import causalis.refutation.score.score_validation as ref_module
 
         # Nested subpackage inside inference should also be present
-        import causalkit.inference.atte as att_module
+        import causalis.inference.atte as att_module
 
         # Basic sanity: referenced attributes exist
         assert hasattr(eda_module, "eda") or hasattr(eda_module, "__all__") or True

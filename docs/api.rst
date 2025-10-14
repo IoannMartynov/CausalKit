@@ -1,7 +1,7 @@
 API Reference
 =============
 
-This section provides detailed documentation for all modules and functions in CausalKit.
+This section provides detailed documentation for all modules and functions in Causalis.
 
 .. toctree::
    :maxdepth: 2

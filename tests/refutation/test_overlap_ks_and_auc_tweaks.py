@@ -2,7 +2,7 @@ import numpy as np
 import math
 import pytest
 
-from causalkit.refutation.overlap.overlap_validation import (
+from causalis.refutation.overlap.overlap_validation import (
     _ks_statistic,
     ks_distance,
     positivity_overlap_checks,

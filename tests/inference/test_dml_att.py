@@ -1,13 +1,13 @@
 """
-Test for the DoubleML implementation for ATT estimation in causalkit.
+Test for the DoubleML implementation for ATT estimation in causalis.
 """
 
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
-from causalkit.data import CausalData
-from causalkit.inference import dml_atte_source
+from causalis.data import CausalData
+from causalis.inference import dml_atte_source
 
 
 def test_dml_att():

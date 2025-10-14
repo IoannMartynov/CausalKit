@@ -5,7 +5,7 @@ CausalData is the light-weight input container used across CausalKit. It wraps a
 ## Quick start
 
 ```python
-from causalkit.data import generate_rct_data, CausalData
+from causalis.data import generate_rct_data, CausalData
 
 # Example data
 df = generate_rct_data(n_users=5_000)
@@ -51,7 +51,7 @@ Note: Internally, the stored DataFrame is trimmed to only these columns: [outcom
 ## Common snippets
 
 ```python
-from causalkit.data import generate_rct_data, CausalData
+from causalis.data import generate_rct_data, CausalData
 
 df = generate_rct_data(n_users=1_000)
 causal_data = CausalData(
@@ -62,12 +62,12 @@ causal_data = CausalData(
 )
 
 # Access pieces
-causal_data.treatment     # Series
-causal_data.target        # Series
-causal_data.confounders   # list[str]
+causal_data.treatment  # Series
+causal_data.target  # Series
+causal_data.confounders  # list[str]
 
 # Full data used by CausalData
-default_df = causal_data.df           # or equivalently
+default_df = causal_data.df  # or equivalently
 default_df = causal_data.get_df()
 
 # DataFrame of only confounders

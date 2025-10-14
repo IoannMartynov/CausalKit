@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from causalkit.refutation.unconfoundedness.uncofoundedness_validation import get_sensitivity_summary
+from causalis.refutation.unconfoundedness.uncofoundedness_validation import get_sensitivity_summary
 
 
 def test_bias_aware_summary_formatting_includes_intervals():

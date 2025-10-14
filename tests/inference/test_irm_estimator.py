@@ -4,9 +4,9 @@ import pytest
 
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
-from causalkit.data.causaldata import CausalData
-from causalkit.data.generators import generate_rct
-from causalkit.inference.estimators import IRM
+from causalis.data.causaldata import CausalData
+from causalis.data.generators import generate_rct
+from causalis.inference.estimators import IRM
 
 
 def make_causal_data(n=1000, target_type="normal", random_state=1):

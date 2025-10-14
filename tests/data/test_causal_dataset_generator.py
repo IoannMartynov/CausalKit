@@ -5,7 +5,7 @@ Tests for the CausalDatasetGenerator class.
 import pytest
 import pandas as pd
 import numpy as np
-from causalkit.data import CausalDatasetGenerator, CausalData
+from causalis.data import CausalDatasetGenerator, CausalData
 
 
 @pytest.fixture

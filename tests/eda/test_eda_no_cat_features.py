@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from causalkit.eda.eda import CausalEDA, CausalDataLite
+from causalis.eda.eda import CausalEDA, CausalDataLite
 
 
 def make_dummy_data(n=200, seed=0):
