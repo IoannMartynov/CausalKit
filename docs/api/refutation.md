@@ -1,6 +1,6 @@
 # Refutation Module
 
-The `causalkit.refutation` package provides robustness and refutation utilities to stress-test causal estimates by perturbing data, checking identifying assumptions, and running sensitivity analyses.
+The `causalis.refutation` package provides robustness and refutation utilities to stress-test causal estimates by perturbing data, checking identifying assumptions, and running sensitivity analyses.
 
 ## Overview
 
@@ -12,11 +12,11 @@ Key utilities:
 ## API Reference (Package)
 
 ```{eval-rst}
-.. currentmodule:: causalkit.refutation
+.. currentmodule:: causalis.refutation
 
 .. autosummary::
    :toctree: generated
-   :caption: Public objects in causalkit.refutation
+   :caption: Public objects in causalis.refutation
    :nosignatures:
 
    refute_placebo_outcome
@@ -30,7 +30,7 @@ Key utilities:
 ## Placebo and Subset Refutation
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.score.score_validation
+.. automodule:: causalis.refutation.score.score_validation
    :members: refute_placebo_outcome, refute_placebo_treatment, refute_subset
    :undoc-members:
    :show-inheritance:
@@ -39,7 +39,7 @@ Key utilities:
 ## Sensitivity Analysis
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.unconfoundedness.uncofoundedness_validation
+.. automodule:: causalis.refutation.unconfoundedness.uncofoundedness_validation
    :members: sensitivity_analysis, get_sensitivity_summary
    :undoc-members:
    :show-inheritance:
@@ -48,7 +48,7 @@ Key utilities:
 ## Orthogonality Checks
 
 ```{eval-rst}
-.. automodule:: causalkit.refutation.score.score_validation
+.. automodule:: causalis.refutation.score.score_validation
    :members: refute_irm_orthogonality
    :undoc-members:
    :show-inheritance:

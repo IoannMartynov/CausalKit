@@ -1,6 +1,6 @@
 # Inference Module
 
-The `causalkit.inference` package provides statistical inference tools for causal analysis across several estimands:
+The `causalis.inference` package provides statistical inference tools for causal analysis across several estimands:
 - ATT: Average Treatment effect on the Treated
 - ATE: Average Treatment Effect
 - CATE: Conditional Average Treatment Effect (per-observation signals)
@@ -16,11 +16,11 @@ At a glance:
 ## API Reference (Package)
 
 ```{eval-rst}
-.. currentmodule:: causalkit.inference
+.. currentmodule:: causalis.inference
 
 .. autosummary::
    :toctree: generated
-   :caption: Common re-exports in causalkit.inference
+   :caption: Common re-exports in causalis.inference
    :nosignatures:
 
    ttest
@@ -32,21 +32,21 @@ At a glance:
 ## ATT Utilities
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.atte.ttest
+.. automodule:: causalis.inference.atte.ttest
    :members: ttest
    :undoc-members:
    :show-inheritance:
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.atte.conversion_z_test
+.. automodule:: causalis.inference.atte.conversion_z_test
    :members: conversion_z_test
    :undoc-members:
    :show-inheritance:
 ```
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.atte.dml_atte
+.. automodule:: causalis.inference.atte.dml_atte
    :members: dml_atte
    :undoc-members:
    :show-inheritance:
@@ -55,7 +55,7 @@ At a glance:
 ## ATE Utilities
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.ate.dml_ate
+.. automodule:: causalis.inference.ate.dml_ate
    :members: dml_ate
    :undoc-members:
    :show-inheritance:
@@ -64,7 +64,7 @@ At a glance:
 ## CATE Utilities
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.cate.cate_esimand
+.. automodule:: causalis.inference.cate.cate_esimand
    :members: cate_esimand
    :undoc-members:
    :show-inheritance:
@@ -73,7 +73,7 @@ At a glance:
 ## GATE Utilities
 
 ```{eval-rst}
-.. automodule:: causalkit.inference.gate.gate_esimand
+.. automodule:: causalis.inference.gate.gate_esimand
    :members: gate_esimand
    :undoc-members:
    :show-inheritance:

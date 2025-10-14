@@ -26,7 +26,7 @@ Install from github directly
 
 .. code-block:: bash
 
-   pip install git+https://github.com/ioannmartynov/causalkit.git
+   pip install git+https://github.com/ioannmartynov/causalis.git
 
 Then import the library
 

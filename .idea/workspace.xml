@@ -4,148 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="Refactored sensitivity functions into a standalone module; added tests for bias-aware sensitivity and benchmarking methods.">
-      <change afterPath="$PROJECT_DIR$/causalis/data/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/causalis/eda/rct_design/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/causalis/inference/ate/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/causalis/inference/atte/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit.egg-info/PKG-INFO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit.egg-info/SOURCES.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit.egg-info/dependency_links.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit.egg-info/requires.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit.egg-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/data/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/data/causaldata.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/data/causaldata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/data/generators.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/data/generators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/eda/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/eda/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/eda/eda.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/eda/eda.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/eda/rct_design/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/eda/rct_design/mde.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/eda/rct_design/mde.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/eda/rct_design/traffic_splitter.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/eda/rct_design/traffic_splitter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/ate/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/ate/dml_ate.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/ate/dml_ate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/ate/dml_ate_source.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/ate/dml_ate_source.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/bootstrap_diff_means.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/atte/bootstrap_diff_means.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/conversion_z_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/atte/conversion_z_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/dml_atte.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/atte/dml_atte.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/dml_atte_source.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/atte/dml_atte_source.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/atte/ttest.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/atte/ttest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/cate/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/cate/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/cate/cate_esimand.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/cate/cate_esimand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/estimators/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/estimators/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/estimators/irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/estimators/irm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/gate/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/gate/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/inference/gate/gate_esimand.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/inference/gate/gate_esimand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/overlap/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/overlap/overlap_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/overlap/overlap_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/score/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/score/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/score/score_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/score/score_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/sutva/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/sutva/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/sutva/sutva_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/sutva/sutva_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/unconfoundedness/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/sensitivity.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/unconfoundedness/sensitivity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/refutation/unconfoundedness/uncofoundedness_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/api/analysis.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/api/analysis.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/examples/rct_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/examples/rct_analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/causaldata.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/causaldata.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/getting-started.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/getting-started.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/installation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_sources/user-guide/installation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/searchindex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/basic_example.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/basic_example.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/causaldata.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/causaldata.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/datasets_benchmarks.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/datasets_benchmarks.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dgp_benchmarking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dgp_benchmarking.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_ate.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_att.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_att.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_att_refutation.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_att_refutation.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_atte.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/eda_test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/eda_test.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/rct_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/rct_analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/rct_benchmark.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/rct_benchmark.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/scenario_1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/scenario_1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/research/dgp_benchmarking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/research/dgp_benchmarking.ipynb" afterDir="false" />
+    <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly.">
+      <change beforePath="$PROJECT_DIR$/docs/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/api.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/api/data.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/data.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/api/design.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/api/eda.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/eda.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/api/inference.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/inference.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/api/refutation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/refutation.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/research/dgp_benchmarking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/research/dgp_benchmarking.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/research/rct_benchmark.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/research/rct_benchmark.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/user-guide/causaldata.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/user-guide/causaldata.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/user-guide/eda.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/user-guide/eda.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/user-guide/inference.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/user-guide/inference.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/user-guide/installation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/user-guide/installation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_causal_dataset_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_causal_dataset_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_causaldata_numeric_df.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_causaldata_numeric_df.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_copula_confounders.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_copula_confounders.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_diagnostic_data_storage.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_diagnostic_data_storage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_generators_semantics_and_categorical.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_semantics_and_categorical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_generators_u_and_sigmoid.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_generators_u_and_sigmoid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_models_kfold.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_models_kfold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_oracle_nuisance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_oracle_nuisance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/test_poisson_and_calibrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/data/test_poisson_and_calibrator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/docs/test_docs_api_refs.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/docs/test_docs_api_refs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/eda/test_eda.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_eda.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/eda/test_eda_no_cat_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_eda_no_cat_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/eda/test_mde.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_mde.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/eda/test_packaging_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/eda/test_packaging_imports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_bootstrap_diff_means.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_bootstrap_diff_means.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_conversion_z_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_conversion_z_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_dml.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_dml_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_dml_att.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_gate_esimand.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_gate_esimand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_installation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_installation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_irm_att_normalize_ipw.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_irm_att_normalize_ipw.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_irm_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_irm_estimator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_irm_score_identities.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_irm_score_identities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/inference/test_ttest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/inference/test_ttest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_att_overlap_tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_att_overlap_tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_bias_aware_sensitivity.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_bias_aware_sensitivity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_calibration_stability.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_calibration_stability.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_diagnostic_data_flag.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_diagnostic_data_flag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_dml_att_refutation_after_inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_dml_att_refutation_after_inference.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_format_sensitivity_summary_labels.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_format_sensitivity_summary_labels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_att.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_default_basis.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_default_basis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_fastpath.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_fastpath.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_irm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_naming.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_orthogonality_nullable_float_confounds.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_orthogonality_nullable_float_confounds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_overlap_calibration_merge.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_overlap_calibration_merge.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_overlap_checks.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_overlap_checks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_overlap_ks_and_auc_tweaks.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_overlap_ks_and_auc_tweaks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_overlap_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_overlap_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_propensity_calibration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_refutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_refutation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_refutation_namespace.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_refutation_namespace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_refutation_placebo_min.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_refutation_placebo_min.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_run_overlap_diagnostics.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_run_overlap_diagnostics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_score_diagnostics_entrypoint.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_score_diagnostics_entrypoint.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_score_flags.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_score_flags.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_score_flags_in_run.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_score_flags_in_run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_score_flags_practical.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_score_flags_practical.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_score_se_plugin_flag.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_score_se_plugin_flag.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_benchmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_benchmark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_benchmark_att.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_benchmark_att.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_combination.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_combination.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_integration_irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_integration_irm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sutva_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sutva_validation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_trim_sensitivity_ate.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_trim_sensitivity_ate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_unconfoundedness_balance.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_unconfoundedness_balance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/refutation/test_unconfoundedness_balance_extras.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_unconfoundedness_balance_extras.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +108,7 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#89 on test",
+    "git-widget-placeholder": "#90 on test",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
     "node.js.detected.package.eslint": "true",
@@ -446,15 +314,7 @@
       <workItem from="1759944786305" duration="111000" />
       <workItem from="1759944904554" duration="17000" />
       <workItem from="1759944929120" duration="216000" />
-      <workItem from="1759945167785" duration="20010000" />
-    </task>
-    <task id="LOCAL-00065" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755599751363</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1755599751363</updated>
+      <workItem from="1759945167785" duration="20556000" />
     </task>
     <task id="LOCAL-00066" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
       <option name="closed" value="true" />
@@ -840,7 +700,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760463330352</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly.">
+      <option name="closed" value="true" />
+      <created>1760464888199</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1760464888199</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -868,7 +736,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added ttest" />
     <MESSAGE value="added analysis module for A/B testing with t-test, OLS regression, and DoubleML PLR support" />
     <MESSAGE value="enhanced test suite with pytest fixtures, added detailed coverage for t-test, MDE, installation, causaldata, and docs build" />
     <MESSAGE value="consolidated tests for `generate_rct_data`, `generate_obs_data`, and `CausalData.get_df` into a unified `test_data.py` for improved maintainability; renamed `causaldata` class to `CausalData` with stricter validations; updated imports and docs accordingly" />
@@ -893,7 +760,8 @@
     <MESSAGE value="added linear and nonlinear data generating process benchmarking documentation; included mathematical model details, implementation scripts, and relevant examples" />
     <MESSAGE value="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data" />
     <MESSAGE value="Refactored sensitivity functions into a standalone module; added tests for bias-aware sensitivity and benchmarking methods." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored sensitivity functions into a standalone module; added tests for bias-aware sensitivity and benchmarking methods." />
+    <MESSAGE value="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Ckit$test_ckit.coverage" NAME="test_ckit Coverage Results" MODIFIED="1753037125330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />

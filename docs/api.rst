@@ -7,7 +7,6 @@ This section provides detailed documentation for all modules and functions in Ca
    :maxdepth: 2
 
    api/data
-   api/design
    api/eda
    api/inference
    api/refutation
