@@ -14,7 +14,7 @@ def _make_cd(n=600, random_state=3, target_type="normal"):
     return CausalData(df=df[[y, d] + xcols], treatment=d, outcome=y, confounders=xcols)
 
 
-def test_sensitivity_with_dml_ate_runs_and_returns_string():
+def test_sensitivity_with_dml_ate_runs_and_returns_dict():
     cd = _make_cd(n=400, random_state=11, target_type="normal")
     ml_g = RandomForestRegressor(n_estimators=30, random_state=1)
     ml_m = RandomForestClassifier(n_estimators=30, random_state=1)
@@ -22,15 +22,14 @@ def test_sensitivity_with_dml_ate_runs_and_returns_string():
     res = dml_ate(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3)
     out = sensitivity_analysis(res, cf_y=0.02, cf_d=0.03, rho=1.0)
 
-    assert isinstance(out, str)
-    assert "Sensitivity Analysis" in out
-    # Integration: summary should also be retrievable
+    assert isinstance(out, dict)
+    # Integration: summary should be retrievable via the getter
     summ = get_sensitivity_summary(res)
     assert isinstance(summ, str)
-    assert "Bounds with CI" in summ
+    assert any(kw in summ for kw in ("Bias-aware Interval", "Intervals"))
 
 
-def test_sensitivity_with_dml_att_runs_and_returns_string():
+def test_sensitivity_with_dml_att_runs_and_returns_dict():
     cd = _make_cd(n=400, random_state=7, target_type="normal")
     ml_g = RandomForestRegressor(n_estimators=25, random_state=0)
     ml_m = RandomForestClassifier(n_estimators=25, random_state=0)
@@ -38,5 +37,7 @@ def test_sensitivity_with_dml_att_runs_and_returns_string():
     res = dml_atte(cd, ml_g=ml_g, ml_m=ml_m, n_folds=3)
     out = sensitivity_analysis(res, cf_y=0.01, cf_d=0.04, rho=0.8)
 
-    assert isinstance(out, str)
-    assert "Sensitivity Analysis" in out
+    assert isinstance(out, dict)
+    summ = get_sensitivity_summary(res)
+    assert isinstance(summ, str)
+    assert "Bias-aware Interval" in summ

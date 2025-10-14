@@ -6,12 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalkit/refutation/unconfoundedness/uncofoundedness_validation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_format_sensitivity_summary_labels.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_format_sensitivity_summary_labels.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_combination.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_combination.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/refutation/test_sensitivity_integration_irm.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/refutation/test_sensitivity_integration_irm.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,41 +89,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python tests.Python tests in tests.executor": "Run",
-    "Python tests.pytest for tests.test_cate_esimand.executor": "Run",
-    "Python tests.pytest for tests.test_cate_esimand.test_cate_esimand_adds_column_and_length_matches.executor": "Run",
-    "Python tests.pytest for tests.test_causalforestdml.executor": "Run",
-    "Python tests.pytest for tests.test_causalforestdml.test_causalforestdml.executor": "Run",
-    "Python tests.pytest in refutation.executor": "Run",
-    "Python tests.pytest in test_causal_dataset_generator.py.executor": "Run",
-    "Python tests.pytest in test_diagnostic_data_expanded.py.executor": "Run",
-    "Python tests.pytest in test_generators_deterministic.py.executor": "Run",
-    "Python tests.pytest in test_inference_dml_comparison.py.executor": "Run",
-    "Python tests.pytest in test_mde.py.executor": "Run",
-    "Python tests.pytest in test_oracle_nuisance.py.executor": "Run",
-    "Python.test_causaldata_get_df.executor": "Run",
-    "Python.test_ckit.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#87 on test",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "junie.project.settings",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.Python tests in tests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_cate_esimand.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_cate_esimand.test_cate_esimand_adds_column_and_length_matches.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_causalforestdml.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for tests.test_causalforestdml.test_causalforestdml.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in refutation.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_causal_dataset_generator.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_diagnostic_data_expanded.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_generators_deterministic.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_inference_dml_comparison.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_mde.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_oracle_nuisance.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_causaldata_get_df.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_ckit.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/docs/examples" />
@@ -135,7 +139,7 @@
       <recent name="$PROJECT_DIR$/tests/eda" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_causal_dataset_generator.py">
+  <component name="RunManager" selected="Python tests.Python tests in tests">
     <configuration name="Python tests in tests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="Ckit" />
       <option name="ENV_FILES" value="" />
@@ -149,24 +153,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_diagnostic_data_expanded.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="Ckit" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_diagnostic_data_expanded.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -185,6 +171,24 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_generators_deterministic.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in refutation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Ckit" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/refutation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/refutation&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -226,19 +230,19 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in test_causal_dataset_generator.py" />
         <item itemvalue="Python tests.Python tests in tests" />
+        <item itemvalue="Python tests.pytest in refutation" />
+        <item itemvalue="Python tests.pytest in test_causal_dataset_generator.py" />
         <item itemvalue="Python tests.pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_generators_deterministic.py" />
         <item itemvalue="Python tests.pytest in test_oracle_nuisance.py" />
-        <item itemvalue="Python tests.pytest in /Users/ioannmartynov/PycharmProjects/Ckit/tests/test_diagnostic_data_expanded.py" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PY-252.26199.168" />
-        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.26830.99" />
+        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
       </set>
     </attachedChunks>
   </component>
@@ -308,15 +312,11 @@
       <workItem from="1758864633771" duration="14016000" />
       <workItem from="1758982225595" duration="48994000" />
       <workItem from="1759334983192" duration="1862000" />
-      <workItem from="1759426665181" duration="56990000" />
-    </task>
-    <task id="LOCAL-00063" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755594290146</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1755594290146</updated>
+      <workItem from="1759426665181" duration="59473000" />
+      <workItem from="1759944786305" duration="111000" />
+      <workItem from="1759944904554" duration="17000" />
+      <workItem from="1759944929120" duration="216000" />
+      <workItem from="1759945167785" duration="18379000" />
     </task>
     <task id="LOCAL-00064" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
       <option name="closed" value="true" />
@@ -702,7 +702,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759608759320</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="removed large CatBoost training output example file; streamlined repository by eliminating unnecessary data">
+      <option name="closed" value="true" />
+      <created>1759853842333</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1759853842334</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -766,8 +774,8 @@
     <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_oracle_nuisance_py.coverage" NAME="pytest in test_oracle_nuisance.py Coverage Results" MODIFIED="1759176542857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ckit$pytest_for_tests_test_cate_esimand.coverage" NAME="pytest for tests.test_cate_esimand Coverage Results" MODIFIED="1755451575284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/Ckit$test_causaldata_get_df.coverage" NAME="test_causaldata_get_df Coverage Results" MODIFIED="1753037054789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/Ckit$pytest_in_refutation.coverage" NAME="pytest in refutation Coverage Results" MODIFIED="1758040082514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/refutation" />
     <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_causal_dataset_generator_py.coverage" NAME="pytest in test_causal_dataset_generator.py Coverage Results" MODIFIED="1759608060369" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Ckit$pytest_in_refutation.coverage" NAME="pytest in refutation Coverage Results" MODIFIED="1759946892844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/refutation" />
     <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_mde_py.coverage" NAME="pytest in test_mde.py Coverage Results" MODIFIED="1759057624413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_generators_deterministic_py.coverage" NAME="pytest in test_generators_deterministic.py Coverage Results" MODIFIED="1759178338617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Ckit$pytest_in_test_diagnostic_data_expanded_py.coverage" NAME="pytest in test_diagnostic_data_expanded.py Coverage Results" MODIFIED="1759176141655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
