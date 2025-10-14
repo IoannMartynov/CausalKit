@@ -13,14 +13,14 @@ CausalKit simplifies the process of conducting causal inference studies by provi
 ## Installation
 
 ```bash
-pip install causalkit
+pip install causalis
 ```
 
 Or clone the repository and install from source:
 
 ```bash
 git clone https://github.com/yourusername/causalkit.git
-cd causalkit
+cd causalis
 pip install -e .
 ```
 
@@ -29,9 +29,9 @@ pip install -e .
 Here's a simple example of generating A/B test data and analyzing the results:
 
 ```python
-import causalkit
-from causalkit.data import generate_ab_test_data
-from causalkit.inference import compare_ab
+import causalis
+from causalis.data import generate_ab_test_data
+from causalis.inference import compare_ab
 
 # Generate synthetic A/B test data
 df = generate_ab_test_data(

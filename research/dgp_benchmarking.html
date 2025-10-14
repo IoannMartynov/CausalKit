@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Linear and Nonlinear Data Generating Process benchmarking &#8212; CausalKit 0.1.0 documentation</title>
+    <title>Linear and Nonlinear Data Generating Process benchmarking &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
     <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -224,7 +224,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -338,7 +338,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -523,7 +523,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
 
 <span class="n">confounder_specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>     <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>   <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
@@ -610,7 +610,7 @@ Ground-truth ATT from the DGP: 0.800
 <h3>Wrap it in CausalData Object<a class="headerlink" href="#wrap-it-in-causaldata-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
 
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -717,7 +717,7 @@ Ground-truth ATT from the DGP: 0.800
 <h2>Estimate ATE and ATTE<a class="headerlink" href="#estimate-ate-and-atte" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -739,7 +739,7 @@ Ground-truth ATT from the DGP: 0.800
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
 <span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -898,7 +898,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span>
 
 <span class="c1"># 1) Confounders</span>
 <span class="n">confounder_specs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1020,7 +1020,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
 
 <span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
     <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
@@ -1122,7 +1122,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -1144,7 +1144,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.inference.atte</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_atte</span>
 
 <span class="c1"># Estimate Average Treatment Effect on Treatment (ATTE)</span>
 <span class="n">atte_result</span> <span class="o">=</span> <span class="n">dml_atte</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">normalize_ipw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">store_diagnostic_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -1261,7 +1261,7 @@ Adding more data makes the intervals narrower. You can try it when changes the n
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

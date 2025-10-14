@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>DML ATE Example &#8212; CausalKit 0.1.0 documentation</title>
+    <title>DML ATE Example &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -135,7 +135,7 @@
     <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -222,7 +222,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -336,7 +336,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -444,7 +444,7 @@ document.write(`
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
 
 <span class="c1"># Reproducibility</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
@@ -598,7 +598,7 @@ document.write(`
 <h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 
 <span class="c1"># shape of data</span>
@@ -1103,7 +1103,7 @@ document.write(`
 <p>Now time to estimate ATE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
 
 <span class="c1"># Estimate Average Treatment Effect (ATE)</span>
 <span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
@@ -1135,7 +1135,7 @@ document.write(`
 <h3>Overlap<a class="headerlink" href="#overlap" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w">  </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w">  </span><span class="nn">causalis.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="n">rep</span> <span class="o">=</span> <span class="n">run_overlap_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
 <span class="n">rep</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
 </pre></div>
@@ -1265,7 +1265,7 @@ document.write(`
 <h3>Score<a class="headerlink" href="#score" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.score.score_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_score_diagnostics</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.refutation.score.score_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_score_diagnostics</span>
 <span class="n">rep_score</span> <span class="o">=</span> <span class="n">run_score_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
 <span class="n">rep_score</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
 </pre></div>
@@ -1372,7 +1372,7 @@ document.write(`
 <h2>Uncofoundedness<a class="headerlink" href="#uncofoundedness" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_unconfoundedness_diagnostics</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_unconfoundedness_diagnostics</span>
 
 <span class="n">rep_uc</span> <span class="o">=</span> <span class="n">run_unconfoundedness_diagnostics</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">ate_result</span><span class="p">)</span>
 <span class="n">rep_uc</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span>
@@ -1470,7 +1470,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.refutation.unconfoundedness.uncofoundedness_validation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">sensitivity_benchmark</span>
 <span class="p">)</span>
 
@@ -1633,7 +1633,7 @@ document.write(`
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>
