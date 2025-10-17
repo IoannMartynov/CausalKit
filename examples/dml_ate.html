@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5afa6543" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=e0b54744" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -47,7 +47,7 @@
     <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/dml_ate';</script>
-    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="icon" href="../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Research" href="../research.html" />
@@ -131,8 +131,8 @@
       
     
     
-    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">Causalis</p>
@@ -699,15 +699,22 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
-<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">eda</span><span class="o">.</span><span class="n">outcome_hist</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b72221847ae1d83ea2fe2d2d12b3d374559dee16ff0ca2b5568424d33b31d9d8.png" src="../_images/b72221847ae1d83ea2fe2d2d12b3d374559dee16ff0ca2b5568424d33b31d9d8.png" />
-<img alt="../_images/5ae3382d34ed881745b454340975bb10d082cf62cb12bd2170b45afaaf47326e.png" src="../_images/5ae3382d34ed881745b454340975bb10d082cf62cb12bd2170b45afaaf47326e.png" />
+<img alt="../_images/f1946e252b6aa5220e5fc9b797e5be0282e421f6e27b3abef952df7c1f5fac02.png" src="../_images/f1946e252b6aa5220e5fc9b797e5be0282e421f6e27b3abef952df7c1f5fac02.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">eda</span><span class="o">.</span><span class="n">outcome_boxplot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/76f4797f23e483420154fc88bd749e787c34d9508861d461be0b567d030049a4.png" src="../_images/76f4797f23e483420154fc88bd749e787c34d9508861d461be0b567d030049a4.png" />
 </div>
 </div>
 </section>
@@ -912,107 +919,13 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If your DataFrame has a &#39;shap_mean&#39; column:</span>
-<span class="n">shap_df</span> <span class="o">=</span> <span class="n">shap_values_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shap_df</span><span class="p">[</span><span class="s1">&#39;shap_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
-<span class="n">shap_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;mean_abs_shap&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">shap_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>feature</th>
-      <th>shap_mean</th>
-      <th>shap_mean_abs</th>
-      <th>odds_mult_abs</th>
-      <th>exact_pp_change_abs</th>
-      <th>exact_pp_change_signed</th>
-      <th>mean_abs_shap</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>num__spend_last_month</td>
-      <td>0.000299</td>
-      <td>0.166002</td>
-      <td>1.180575</td>
-      <td>0.027438</td>
-      <td>0.000047</td>
-      <td>0.000299</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>num__premium_user</td>
-      <td>-0.000269</td>
-      <td>0.306301</td>
-      <td>1.358391</td>
-      <td>0.052687</td>
-      <td>-0.000042</td>
-      <td>0.000269</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>num__urban_resident</td>
-      <td>0.000245</td>
-      <td>0.158900</td>
-      <td>1.172220</td>
-      <td>0.026210</td>
-      <td>0.000039</td>
-      <td>0.000245</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>num__avg_sessions_week</td>
-      <td>-0.000141</td>
-      <td>0.174082</td>
-      <td>1.190153</td>
-      <td>0.028841</td>
-      <td>-0.000022</td>
-      <td>0.000141</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>num__tenure_months</td>
-      <td>-0.000135</td>
-      <td>0.194878</td>
-      <td>1.215163</td>
-      <td>0.032482</td>
-      <td>-0.000021</td>
-      <td>0.000135</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
-<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">ps_model</span><span class="o">.</span><span class="n">plot_m_overlap</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/9b53a05526ac6bc208946a7a9616d4e3856045796f2e8631c16ed2b50105f971.png" src="../_images/9b53a05526ac6bc208946a7a9616d4e3856045796f2e8631c16ed2b50105f971.png" />
+<img alt="../_images/a3fda565981754afce9b6d33f8e04b43daa173330bb44b3900370e54b1858779.png" src="../_images/a3fda565981754afce9b6d33f8e04b43daa173330bb44b3900370e54b1858779.png" />
 </div>
 </div>
 </section>
@@ -1474,7 +1387,7 @@ document.write(`
     <span class="n">sensitivity_analysis</span><span class="p">,</span> <span class="n">sensitivity_benchmark</span>
 <span class="p">)</span>
 
-<span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="n">sensitivity_analysis</span><span class="p">(</span><span class="n">ate_result</span><span class="p">,</span> <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1484,12 +1397,12 @@ document.write(`
  &#39;level&#39;: 0.95,
  &#39;z&#39;: 1.959963984540054,
  &#39;sampling_ci&#39;: (1.5329683790491713, 1.9995386624939646),
- &#39;theta_bounds_confounding&#39;: (-3.0227845865106566, 6.5552916280537925),
- &#39;bias_aware_ci&#39;: (-3.2560697282330535, 6.788576769776189),
- &#39;max_bias&#39;: 4.789038107282225,
+ &#39;theta_bounds_confounding&#39;: (-0.6290871351011709, 4.161594176644307),
+ &#39;bias_aware_ci&#39;: (-0.8623722768235678, 4.394879318366703),
+ &#39;max_bias&#39;: 2.395340655872739,
  &#39;sigma2&#39;: 13.136641553423134,
- &#39;nu2&#39;: 1.7458713400781616,
- &#39;params&#39;: {&#39;cf_y&#39;: 0.01, &#39;cf_d&#39;: 0.1, &#39;rho&#39;: 1.0, &#39;use_signed_rr&#39;: False}}
+ &#39;nu2&#39;: 0.43676740621591587,
+ &#39;params&#39;: {&#39;cf_y&#39;: 0.01, &#39;cf_d&#39;: 0.01, &#39;rho&#39;: 1.0, &#39;use_signed_rr&#39;: False}}
 </pre></div>
 </div>
 </div>
