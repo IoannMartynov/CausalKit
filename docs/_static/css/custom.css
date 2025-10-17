@@ -2,10 +2,10 @@
     /* Primary brand colors (light mode) */
     --pst-color-primary: black;
     --pst-color-secondary: green;
-    --pst-color-accent: #024554;
-    --pst-color-target: #024554;
+    --pst-color-accent: #214F39;
+    --pst-color-target: #214F39;
 
     /* Helpful link overrides for visibility */
-    --pst-color-link: #024554;
+    --pst-color-link: #214F39;
     --pst-color-link-hover: #347355;
 }

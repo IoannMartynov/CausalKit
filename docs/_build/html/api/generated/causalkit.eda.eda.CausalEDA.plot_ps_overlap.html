@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.eda.eda.CausalEDA.plot_ps_overlap &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.eda.eda.CausalEDA.plot_ps_overlap &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5afa6543" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=e0b54744" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -47,11 +47,9 @@
     <script src="../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap';</script>
-    <link rel="icon" href="../../_static/logo.svg"/>
+    <link rel="icon" href="../../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="causalkit.eda.eda.CausalEDA.confounders_means" href="causalkit.eda.eda.CausalEDA.confounders_means.html" />
-    <link rel="prev" title="causalkit.eda.eda.CausalEDA.positivity_check" href="causalkit.eda.eda.CausalEDA.positivity_check.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -131,11 +129,11 @@
       
     
     
-    <img src="../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -170,7 +168,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API Reference
   </a>
@@ -222,7 +220,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -247,10 +245,6 @@ document.write(`
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -261,7 +255,9 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -297,7 +293,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API Reference
   </a>
@@ -336,7 +332,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -344,54 +340,6 @@ document.write(`
       </div>
     
   </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../data.html">Data Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.data.causaldata.CausalData.html">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../eda.html">EDA Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalEDA.html">causalkit.eda.CausalEDA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalDataLite.html">causalkit.eda.CausalDataLite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.data_shape.html">causalkit.eda.eda.CausalEDA.data_shape</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_stats.html">causalkit.eda.eda.CausalEDA.outcome_stats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.fit_propensity.html">causalkit.eda.eda.CausalEDA.fit_propensity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_roc_auc.html">causalkit.eda.eda.CausalEDA.confounders_roc_auc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.positivity_check.html">causalkit.eda.eda.CausalEDA.positivity_check</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.eda.eda.CausalEDA.plot_ps_overlap</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_means.html">causalkit.eda.eda.CausalEDA.confounders_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_fit.html">causalkit.eda.eda.CausalEDA.outcome_fit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_plots.html">causalkit.eda.eda.CausalEDA.outcome_plots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.treatment_features.html">causalkit.eda.eda.CausalEDA.treatment_features</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../inference.html">Inference Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_atte_source.html">causalkit.inference.dml_atte_source</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_outcome.html">causalkit.refutation.refute_placebo_outcome</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_treatment.html">causalkit.refutation.refute_placebo_treatment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
-</ul>
-</details></li>
-</ul>
-</div>
-</nav></div>
-    </div>
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
@@ -425,12 +373,6 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="../eda.html" class="nav-link">EDA Module</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page">causalkit.ed...</li>
   </ul>
 </nav>
@@ -450,16 +392,6 @@ document.write(`
                   
   <section id="causalkit-eda-eda-causaleda-plot-ps-overlap">
 <h1>causalkit.eda.eda.CausalEDA.plot_ps_overlap<a class="headerlink" href="#causalkit-eda-eda-causaleda-plot-ps-overlap" title="Link to this heading">#</a></h1>
-<dl class="py method">
-<dt class="sig sig-object py" id="causalkit.eda.eda.CausalEDA.plot_ps_overlap">
-<span class="sig-prename descclassname"><span class="pre">CausalEDA.</span></span><span class="sig-name descname"><span class="pre">plot_ps_overlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/eda/eda.html#CausalEDA.plot_ps_overlap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.eda.eda.CausalEDA.plot_ps_overlap" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ps</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>ndarray</em></a><em> | </em><em>None</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
@@ -472,47 +404,12 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="causalkit.eda.eda.CausalEDA.positivity_check.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">causalkit.eda.eda.CausalEDA.positivity_check</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="causalkit.eda.eda.CausalEDA.confounders_means.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">causalkit.eda.eda.CausalEDA.confounders_means</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.eda.eda.CausalEDA.plot_ps_overlap"><code class="docutils literal notranslate"><span class="pre">CausalEDA.plot_ps_overlap()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
@@ -537,7 +434,7 @@ document.write(`
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

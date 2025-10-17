@@ -5,15 +5,133 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bdaf58bc-5549-4cdb-81ff-7db2c048c475" name="Changes" comment="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly.">
-      <change beforePath="$PROJECT_DIR$/docs/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api/data.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/data.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api/design.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api/eda.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/eda.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api/inference.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/inference.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/api/refutation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/api/refutation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_static/new_logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_static/new_logo_big.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/user-guide/quick_notaton.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/causalis/eda/eda.py" beforeDir="false" afterPath="$PROJECT_DIR$/causalis/eda/eda.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.buildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.buildinfo.bak" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.buildinfo.bak" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/data.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/data.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/eda.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/eda.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.data.causaldata.CausalData.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.data.causaldata.CausalData.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.data.generators.generate_rct_data.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.data.generators.generate_rct_data.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.CausalDataLite.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.CausalDataLite.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.CausalEDA.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.CausalEDA.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.confounders_means.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.confounders_means.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.data_shape.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.data_shape.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_plots.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_plots.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_stats.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.outcome_stats.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.positivity_check.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.positivity_check.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.treatment_features.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.eda.eda.CausalEDA.treatment_features.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.bootstrap_diff_means.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.bootstrap_diff_means.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.conversion_z_test.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.conversion_z_test.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.dml_atte_source.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.dml_atte_source.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.ttest.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.inference.ttest.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.get_sensitivity_summary.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.get_sensitivity_summary.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_irm_orthogonality.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_irm_orthogonality.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_placebo_outcome.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_placebo_outcome.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_placebo_treatment.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_placebo_treatment.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_subset.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.refute_subset.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.sensitivity_analysis.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/generated/causalkit.refutation.sensitivity_analysis.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/inference.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/inference.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/refutation.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/api/refutation.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples/dml_ate.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples/dml_ate.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples/dml_atte.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/examples/dml_atte.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/research.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/research.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/research/dgp_benchmarking.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/research/dgp_benchmarking.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/causaldata.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/causaldata.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/eda.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/eda.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/inference.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/inference.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/installation.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/.doctrees/user-guide/installation.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/_modules/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_modules/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/_static/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_static/css/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/_static/dgp_benchmarking.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/_static/dgp_benchmarking.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/data.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/eda.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/eda.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.data.causaldata.CausalData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.data.causaldata.CausalData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.data.generators.generate_rct_data.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.data.generators.generate_rct_data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.CausalDataLite.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.CausalDataLite.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.CausalEDA.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.CausalEDA.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.confounders_means.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.confounders_means.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.confounders_roc_auc.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.data_shape.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.data_shape.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.fit_propensity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_fit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_plots.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_plots.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_stats.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.outcome_stats.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.plot_ps_overlap.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.positivity_check.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.positivity_check.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.treatment_features.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.eda.eda.CausalEDA.treatment_features.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.bootstrap_diff_means.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.bootstrap_diff_means.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.cate_esimand.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.cate_esimand.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.causalforestdml.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.causalforestdml.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.conversion_z_test.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.conversion_z_test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml_att.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml_att.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml_atte_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.dml_atte_source.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.gate_esimand.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.gate_esimand.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.ttest.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.inference.ttest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.get_sensitivity_summary.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.get_sensitivity_summary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_irm_orthogonality.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_irm_orthogonality.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_placebo_outcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_placebo_outcome.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_placebo_treatment.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_placebo_treatment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_subset.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.refute_subset.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.sensitivity_analysis.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.sensitivity_analysis.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.sensitivity_analysis_set.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/generated/causalkit.refutation.sensitivity_analysis_set.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/inference.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/inference.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/api/refutation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/api/refutation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/examples.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/examples.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/examples/dml_ate.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/examples/dml_ate.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/examples/dml_atte.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/examples/dml_atte.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/py-modindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/py-modindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/research.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/research.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/research/dgp_benchmarking.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/research/dgp_benchmarking.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/causal_inference_fundamentals.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/causal_inference_fundamentals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/causaldata.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/causaldata.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/eda.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/eda.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/inference.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/inference.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/installation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/installation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/math_eda_irm_refutation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/math_eda_irm_refutation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/notation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/notation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/html/user-guide/refutation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/html/user-guide/refutation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/htmlopen/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/htmlopen/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_ate.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/examples/dml_atte.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_build/jupyter_execute/research/dgp_benchmarking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_build/jupyter_execute/research/dgp_benchmarking.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_static/css/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/_static/dgp_benchmarking.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/_static/dgp_benchmarking.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/catboost_training.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn/events.out.tfevents" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/learn_error.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/catboost_info/time_left.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_ate.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/docs/examples/dml_atte.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/research.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/research.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/user-guide.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/user-guide.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/catboost_training.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/learn/events.out.tfevents" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/catboost_info/time_left.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/docs/test_docs_build.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/docs/test_docs_conf_version.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/docs/test_docs_config.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +226,8 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#90 on test",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "test",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/Users/ioannmartynov/PycharmProjects/Ckit/docs/examples",
     "node.js.detected.package.eslint": "true",
@@ -130,11 +249,11 @@
       <recent name="$PROJECT_DIR$/docs/_static/css" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/_static" />
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/tests/data" />
       <recent name="$PROJECT_DIR$/tests/docs" />
       <recent name="$PROJECT_DIR$/tests/inference" />
-      <recent name="$PROJECT_DIR$/docs/research" />
-      <recent name="$PROJECT_DIR$/tests/eda" />
     </key>
   </component>
   <component name="RunManager" selected="Python tests.Python tests in tests">
@@ -314,23 +433,8 @@
       <workItem from="1759944786305" duration="111000" />
       <workItem from="1759944904554" duration="17000" />
       <workItem from="1759944929120" duration="216000" />
-      <workItem from="1759945167785" duration="20556000" />
-    </task>
-    <task id="LOCAL-00066" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755600084021</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1755600084021</updated>
-    </task>
-    <task id="LOCAL-00067" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
-      <option name="closed" value="true" />
-      <created>1755600908744</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1755600908744</updated>
+      <workItem from="1759945167785" duration="24888000" />
+      <workItem from="1760632797162" duration="19607000" />
     </task>
     <task id="LOCAL-00068" summary="added tests for ATT and placebo refutation helpers; fixed confounder key typo in placebo methods">
       <option name="closed" value="true" />
@@ -708,7 +812,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760464888199</updated>
     </task>
-    <option name="localTasksCounter" value="115" />
+    <task id="LOCAL-00115" summary="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly.">
+      <option name="closed" value="true" />
+      <created>1760465428316</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1760465428316</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Renamed `causalkit` to `causalis` across the codebase; updated imports, module references, documentation, and test files accordingly.">
+      <option name="closed" value="true" />
+      <created>1760465600592</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1760465600592</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

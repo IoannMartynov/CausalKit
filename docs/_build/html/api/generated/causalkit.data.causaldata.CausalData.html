@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>causalkit.data.causaldata.CausalData &#8212; CausalKit 0.1.0 documentation</title>
+    <title>causalkit.data.causaldata.CausalData &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=5afa6543" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=e0b54744" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -47,11 +47,9 @@
     <script src="../../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/causalkit.data.causaldata.CausalData';</script>
-    <link rel="icon" href="../../_static/logo.svg"/>
+    <link rel="icon" href="../../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="causalkit.data.generators.generate_rct_data" href="causalkit.data.generators.generate_rct_data.html" />
-    <link rel="prev" title="Data Module" href="../data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -131,11 +129,11 @@
       
     
     
-    <img src="../../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -170,7 +168,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API Reference
   </a>
@@ -222,7 +220,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -247,10 +245,6 @@ document.write(`
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -261,7 +255,9 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -297,7 +293,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../api.html">
     API Reference
   </a>
@@ -336,7 +332,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -344,54 +340,6 @@ document.write(`
       </div>
     
   </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../data.html">Data Module</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">causalkit.data.causaldata.CausalData</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.data.generators.generate_rct_data.html">causalkit.data.generators.generate_rct_data</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="../design.html">Design Module</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../eda.html">EDA Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalEDA.html">causalkit.eda.CausalEDA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.CausalDataLite.html">causalkit.eda.CausalDataLite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.data_shape.html">causalkit.eda.eda.CausalEDA.data_shape</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_stats.html">causalkit.eda.eda.CausalEDA.outcome_stats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.fit_propensity.html">causalkit.eda.eda.CausalEDA.fit_propensity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_roc_auc.html">causalkit.eda.eda.CausalEDA.confounders_roc_auc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.positivity_check.html">causalkit.eda.eda.CausalEDA.positivity_check</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.plot_ps_overlap.html">causalkit.eda.eda.CausalEDA.plot_ps_overlap</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.confounders_means.html">causalkit.eda.eda.CausalEDA.confounders_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_fit.html">causalkit.eda.eda.CausalEDA.outcome_fit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.outcome_plots.html">causalkit.eda.eda.CausalEDA.outcome_plots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.eda.eda.CausalEDA.treatment_features.html">causalkit.eda.eda.CausalEDA.treatment_features</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../inference.html">Inference Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.ttest.html">causalkit.inference.ttest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.conversion_z_test.html">causalkit.inference.conversion_z_test</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.bootstrap_diff_means.html">causalkit.inference.bootstrap_diff_means</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.inference.dml_atte_source.html">causalkit.inference.dml_atte_source</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../refutation.html">Refutation Module</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_outcome.html">causalkit.refutation.refute_placebo_outcome</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_placebo_treatment.html">causalkit.refutation.refute_placebo_treatment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_subset.html">causalkit.refutation.refute_subset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.sensitivity_analysis.html">causalkit.refutation.sensitivity_analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.get_sensitivity_summary.html">causalkit.refutation.get_sensitivity_summary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="causalkit.refutation.refute_irm_orthogonality.html">causalkit.refutation.refute_irm_orthogonality</a></li>
-</ul>
-</details></li>
-</ul>
-</div>
-</nav></div>
-    </div>
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
@@ -425,12 +373,6 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API Reference</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="../data.html" class="nav-link">Data Module</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page">causalkit.da...</li>
   </ul>
 </nav>
@@ -450,253 +392,6 @@ document.write(`
                   
   <section id="causalkit-data-causaldata-causaldata">
 <h1>causalkit.data.causaldata.CausalData<a class="headerlink" href="#causalkit-data-causaldata-causaldata" title="Link to this heading">#</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">causalkit.data.causaldata.</span></span><span class="sig-name descname"><span class="pre">CausalData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/causaldata.html#CausalData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.causaldata.CausalData" title="Link to this definition">#</a></dt>
-<dd><p>Container for causal inference datasets.</p>
-<p>Wraps a pandas DataFrame and stores the names of treatment, outcome, and optional confounder columns.
-The stored DataFrame is restricted to only those columns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – The DataFrame containing the data. Cannot contain NaN values.
-Only columns specified in outcome, treatment, and confounders will be stored.</p></li>
-<li><p><strong>treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Column name representing the treatment variable.</p></li>
-<li><p><strong>outcome</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Column name representing the outcome (target) variable.</p></li>
-<li><p><strong>confounders</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Column name(s) representing the confounders/covariates.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.df">
-<span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#causalkit.data.causaldata.CausalData.df" title="Link to this definition">#</a></dt>
-<dd><p>A copy of the original data restricted to [outcome, treatment] + confounders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.treatment">
-<span class="sig-name descname"><span class="pre">treatment</span></span><a class="headerlink" href="#causalkit.data.causaldata.CausalData.treatment" title="Link to this definition">#</a></dt>
-<dd><p>Name of the treatment column.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.outcome">
-<span class="sig-name descname"><span class="pre">outcome</span></span><a class="headerlink" href="#causalkit.data.causaldata.CausalData.outcome" title="Link to this definition">#</a></dt>
-<dd><p>Name of the outcome (target) column.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.confounders">
-<span class="sig-name descname"><span class="pre">confounders</span></span><a class="headerlink" href="#causalkit.data.causaldata.CausalData.confounders" title="Link to this definition">#</a></dt>
-<dd><p>Names of the confounder columns (may be empty).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create CausalData object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access columns by role</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">target</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">treatment</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/causaldata.html#CausalData.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.causaldata.CausalData.__init__" title="Link to this definition">#</a></dt>
-<dd><p>Initialize a CausalData object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
-<li><p><strong>treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>outcome</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>confounders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="causalkit.data.causaldata.CausalData.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(df, treatment, outcome[, confounders])</p></td>
-<td><p>Initialize a CausalData object.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#causalkit.data.causaldata.CausalData.get_df" title="causalkit.data.causaldata.CausalData.get_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_df</span></code></a>([columns, include_treatment, ...])</p></td>
-<td><p>Get a DataFrame from the CausalData object with specified columns.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p class="rubric">Attributes</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#id2" title="causalkit.data.causaldata.CausalData.confounders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confounders</span></code></a></p></td>
-<td><p>List of confounder column names.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#id1" title="causalkit.data.causaldata.CausalData.outcome"><code class="xref py py-obj docutils literal notranslate"><span class="pre">outcome</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#causalkit.data.causaldata.CausalData.target" title="causalkit.data.causaldata.CausalData.target"><code class="xref py py-obj docutils literal notranslate"><span class="pre">target</span></code></a></p></td>
-<td><p>Get the outcome/outcome variable.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#id3" title="causalkit.data.causaldata.CausalData.treatment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">treatment</span></code></a></p></td>
-<td><p>Get the treatment variable.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treatment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outcome</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/causaldata.html#CausalData.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
-<dd><p>Initialize a CausalData object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.2)"><em>DataFrame</em></a>)</p></li>
-<li><p><strong>treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>outcome</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
-<li><p><strong>confounders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.target">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.2)"><span class="pre">Series</span></a></em><a class="headerlink" href="#causalkit.data.causaldata.CausalData.target" title="Link to this definition">#</a></dt>
-<dd><p>Get the outcome/outcome variable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The outcome column as a pandas Series.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.Series</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">outcome</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.2)"><span class="pre">Series</span></a></em><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id2">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">confounders</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
-<dd><p>List of confounder column names.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id3">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">treatment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.2)"><span class="pre">Series</span></a></em><a class="headerlink" href="#id3" title="Link to this definition">#</a></dt>
-<dd><p>Get the treatment variable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The treatment column as a pandas Series.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.Series</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.get_df">
-<span class="sig-name descname"><span class="pre">get_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_treatment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_confounders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/causaldata.html#CausalData.get_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.causaldata.CausalData.get_df" title="Link to this definition">#</a></dt>
-<dd><p>Get a DataFrame from the CausalData object with specified columns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>columns</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Specific column names to include in the returned DataFrame.
-If provided, these columns will be included in addition to any columns
-specified by the include parameters.
-If None, columns will be determined solely by the include parameters.
-If None and no include parameters are True, returns the entire DataFrame.</p></li>
-<li><p><strong>include_treatment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default True</em>) – Whether to include treatment column(s) in the returned DataFrame.</p></li>
-<li><p><strong>include_target</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default True</em>) – Whether to include target column(s) in the returned DataFrame.</p></li>
-<li><p><strong>include_confounders</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>default True</em>) – Whether to include confounder column(s) in the returned DataFrame.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame containing the specified columns.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_rct</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">generate_rct</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create CausalData object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span> <span class="o">=</span> <span class="n">CausalData</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">treatment</span><span class="o">=</span><span class="s1">&#39;treatment&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;outcome&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">confounders</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;invited_friend&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get specific columns</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get all columns</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">causal_data</span><span class="o">.</span><span class="n">get_df</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="causalkit.data.causaldata.CausalData.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/causalkit/data/causaldata.html#CausalData.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#causalkit.data.causaldata.CausalData.__repr__" title="Link to this definition">#</a></dt>
-<dd><p>String representation of the CausalData object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
 
@@ -709,61 +404,12 @@ If None and no include parameters are True, returns the entire DataFrame.</p></l
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../data.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Data Module</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="causalkit.data.generators.generate_rct_data.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">causalkit.data.generators.generate_rct_data</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData"><code class="docutils literal notranslate"><span class="pre">CausalData</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.df"><code class="docutils literal notranslate"><span class="pre">CausalData.df</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.treatment"><code class="docutils literal notranslate"><span class="pre">CausalData.treatment</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.outcome"><code class="docutils literal notranslate"><span class="pre">CausalData.outcome</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.confounders"><code class="docutils literal notranslate"><span class="pre">CausalData.confounders</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.__init__"><code class="docutils literal notranslate"><span class="pre">CausalData.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">CausalData.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.target"><code class="docutils literal notranslate"><span class="pre">CausalData.target</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><code class="docutils literal notranslate"><span class="pre">CausalData.outcome</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><code class="docutils literal notranslate"><span class="pre">CausalData.confounders</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><code class="docutils literal notranslate"><span class="pre">CausalData.treatment</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.get_df"><code class="docutils literal notranslate"><span class="pre">CausalData.get_df()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#causalkit.data.causaldata.CausalData.__repr__"><code class="docutils literal notranslate"><span class="pre">CausalData.__repr__()</span></code></a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
@@ -788,7 +434,7 @@ If None and no include parameters are True, returns the entire DataFrame.</p></l
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

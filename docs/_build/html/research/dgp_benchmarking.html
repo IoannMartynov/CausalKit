@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Linear and Nonlinear Data Generating Process benchmarking &#8212; CausalKit 0.1.0 documentation</title>
+    <title>Linear and Nonlinear Data Generating Process benchmarking &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -49,11 +49,9 @@
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'research/dgp_benchmarking';</script>
-    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="icon" href="../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API Reference" href="../api.html" />
-    <link rel="prev" title="Research" href="../research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -133,11 +131,11 @@
       
     
     
-    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -165,7 +163,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../research.html">
     Research
   </a>
@@ -224,7 +222,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -263,7 +261,9 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -292,7 +292,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../research.html">
     Research
   </a>
@@ -338,7 +338,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -346,18 +346,6 @@ document.write(`
       </div>
     
   </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Linear and Nonlinear Data Generating Process benchmarking</a></li>
-</ul>
-</div>
-</nav></div>
-    </div>
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
@@ -391,9 +379,6 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../research.html" class="nav-link">Research</a></li>
-    
     <li class="breadcrumb-item active" aria-current="page">Linear and...</li>
   </ul>
 </nav>
@@ -523,7 +508,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 from typing import List, Dict, Any
 
-from causalkit.data import CausalDatasetGenerator
+from causalis.data import CausalDatasetGenerator
 
 confounder_specs: List[Dict[str, Any]] = [
     {&quot;name&quot;: &quot;tenure_months&quot;,     &quot;dist&quot;: &quot;normal&quot;,   &quot;mu&quot;: 24, &quot;sd&quot;: 12},
@@ -610,7 +595,7 @@ Ground-truth ATT from the DGP: 0.800
 <h3>Wrap it in CausalData Object<a class="headerlink" href="#wrap-it-in-causaldata-object" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.data import CausalData
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.data import CausalData
 
 causal_data = CausalData(
     df=df,
@@ -717,7 +702,7 @@ causal_data.df.head()
 <h2>Estimate ATE and ATTE<a class="headerlink" href="#estimate-ate-and-atte" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.ate import dml_ate
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.inference.ate import dml_ate
 
 # Estimate Average Treatment Effect (ATE)
 ate_result = dml_ate(causal_data, n_folds=4, normalize_ipw=False, store_diagnostic_data=False, random_state=123)
@@ -739,7 +724,7 @@ ate_result = dml_ate(causal_data, n_folds=4, normalize_ipw=False, store_diagnost
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.atte import dml_atte
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.inference.atte import dml_atte
 
 # Estimate Average Treatment Effect on Treatment (ATTE)
 atte_result = dml_atte(causal_data, n_folds=4, normalize_ipw=False, store_diagnostic_data=False, random_state=123)
@@ -898,7 +883,7 @@ g_1(x) = \mathbb{E}[Y \mid X=x, D=1]
 <div class="cell_input docutils container">
 <div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 from typing import List, Dict, Any, Tuple
-from causalkit.data import CausalDatasetGenerator
+from causalis.data import CausalDatasetGenerator
 
 # 1) Confounders
 confounder_specs: List[Dict[str, Any]] = [
@@ -1020,7 +1005,7 @@ Ground-truth ATT from the DGP: 1.567
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.data import CausalData
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.data import CausalData
 
 causal_data = CausalData(
     df=df,
@@ -1122,7 +1107,7 @@ causal_data.df.head()
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.ate import dml_ate
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.inference.ate import dml_ate
 
 # Estimate Average Treatment Effect (ATE)
 ate_result = dml_ate(causal_data, n_folds=4, normalize_ipw=False, store_diagnostic_data=False, random_state=123)
@@ -1144,7 +1129,7 @@ ate_result = dml_ate(causal_data, n_folds=4, normalize_ipw=False, store_diagnost
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalkit.inference.atte import dml_atte
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.inference.atte import dml_atte
 
 # Estimate Average Treatment Effect on Treatment (ATTE)
 atte_result = dml_atte(causal_data, n_folds=4, normalize_ipw=False, store_diagnostic_data=False, random_state=123)
@@ -1180,24 +1165,6 @@ Adding more data makes the intervals narrower. You can try it when changes the n
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../research.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Research</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../api.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API Reference</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -1261,7 +1228,7 @@ Adding more data makes the intervals narrower. You can try it when changes the n
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

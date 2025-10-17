@@ -1,9 +1,15 @@
 # Research
+## Benchmarking
+````{grid} 3
+:gutter: 2
+:margin: 2
 
-```{toctree}
-:maxdepth: 1
-:titlesonly:
-:class: nbsphinx-gallery
+```{grid-item-card} Linear and Nonlinear Data Generating Process benchmarking
+:img-top: _static/dgp_benchmarking.png
+:img-alt: Forest plot preview
+:link: research/dgp_benchmarking
+:link-type: doc
+:class-card: sd-shadow-sm sd-rounded-2xl sd-text-center
 
-research/dgp_benchmarking
+Benchmark simple DGP from causalis.data.generators.
 ```

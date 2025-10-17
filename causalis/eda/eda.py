@@ -285,17 +285,163 @@ class PropensityModel:
         _warn_once("propensity_scores", "m")
         return self.m
 
-    def plot_m_overlap(self):
-        """Plot overlaid histograms of m(x) for treated vs control."""
-        plt.figure()
-        t = self.d
-        m = self.m
-        plt.hist(m[t == 1], bins=30, alpha=0.5, density=True, label="treated")
-        plt.hist(m[t == 0], bins=30, alpha=0.5, density=True, label="control")
-        plt.xlabel("m(x) = P(D=1|X)")
-        plt.ylabel("Density")
-        plt.legend()
-        plt.title("Overlap of m(x) by treatment group")
+    def plot_m_overlap(
+            self,
+            clip=(0.01, 0.99),
+            bins="fd",
+            kde=True,
+            shade_overlap=True,
+            ax=None,
+            figsize=(9, 5.5),
+            dpi=220,
+            font_scale=1.15,
+            save=None,
+            save_dpi=None,
+            transparent=False,
+            color_t=None,  # None -> use Matplotlib defaults
+            color_c=None,  # None -> use Matplotlib defaults
+    ):
+        """
+        Overlap plot for m(x)=P(D=1|X) with high-res rendering.
+        - x in [0,1]
+        - Stable NumPy KDE w/ boundary reflection (no SciPy warnings)
+        - Uses Matplotlib default colors unless color_t/color_c are provided
+        """
+        import numpy as np
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
+
+        # ------- Helpers --------------------------------------------------------
+        def _silverman_bandwidth(x):
+            x = np.asarray(x, float)
+            n = x.size
+            if n < 2:
+                return 0.04
+            sd = np.std(x, ddof=1)
+            iqr = np.subtract(*np.percentile(x, [75, 25]))
+            s = sd if iqr <= 0 else min(sd, iqr / 1.34)
+            h = 0.9 * s * n ** (-1 / 5)
+            return float(max(h, 0.02))
+
+        def _kde_reflect(x, xs, h):
+            x = np.asarray(x, float)
+            if x.size == 0:
+                return np.zeros_like(xs)
+            if x.size < 2 or np.std(x) < 1e-8:
+                mu = float(np.mean(x)) if x.size else 0.5
+                h0 = max(h, 0.02)
+                z = (xs - mu) / h0
+                return np.exp(-0.5 * z ** 2) / (np.sqrt(2 * np.pi) * h0)
+            xr = np.concatenate([x, -x, 2 - x])  # reflect at 0 and 1
+            diff = (xs[None, :] - xr[:, None]) / h
+            kern = np.exp(-0.5 * diff ** 2) / (np.sqrt(2 * np.pi) * h)
+            return kern.mean(axis=0)
+
+        def _patch_color(patches, fallback):
+            # Grab facecolor from the first bar; fallback to cycle color if needed
+            for p in patches:
+                fc = p.get_facecolor()
+                if fc is not None:
+                    return fc  # RGBA
+            return fallback
+
+        # ------- Data -----------------------------------------------------------
+        d = np.asarray(self.d).astype(int)
+        m = np.asarray(self.m, dtype=float)
+        mask = np.isfinite(m) & np.isfinite(d)
+        d, m = d[mask], m[mask]
+        mt = m[d == 1]
+        mc = m[d == 0]
+        if mt.size == 0 or mc.size == 0:
+            raise ValueError("Both treated and control must have at least one observation after cleaning.")
+
+        # Clamp to [0,1] to keep plot stable and inside bounds
+        mtp = np.clip(mt, 0.0, 1.0)
+        mcp = np.clip(mc, 0.0, 1.0)
+
+        # ------- Figure/axes with high DPI & scaled fonts ----------------------
+        rc = {
+            "font.size": 11 * font_scale,
+            "axes.titlesize": 13 * font_scale,
+            "axes.labelsize": 12 * font_scale,
+            "legend.fontsize": 10 * font_scale,
+            "xtick.labelsize": 10 * font_scale,
+            "ytick.labelsize": 10 * font_scale,
+        }
+        with mpl.rc_context(rc):
+            if ax is None:
+                fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+            else:
+                fig = ax.figure
+                try:
+                    fig.set_dpi(dpi)
+                except Exception:
+                    pass
+
+            # ------- Histograms (ALWAYS [0,1]) ---------------------------------
+            ht = ax.hist(mtp, bins=bins, range=(0.0, 1.0), density=True,
+                         alpha=0.45, label=f"Treated (n={mt.size})",
+                         edgecolor="white", linewidth=0.6,
+                         color=color_t)  # None -> default color
+            hc = ax.hist(mcp, bins=bins, range=(0.0, 1.0), density=True,
+                         alpha=0.45, label=f"Control (n={mc.size})",
+                         edgecolor="white", linewidth=0.6,
+                         color=color_c)  # None -> default color
+
+            # Determine the actual colors used (so KDE/means match the bars)
+            cycle = mpl.rcParams["axes.prop_cycle"].by_key().get("color", ["C0", "C1"])
+            used_t = color_t or _patch_color(ht[2], cycle[0])
+            used_c = color_c or _patch_color(hc[2], cycle[1])
+
+            # ------- KDE (stable NumPy implementation) -------------------------
+            if kde:
+                if clip:
+                    lo, hi = np.quantile(np.clip(m, 0, 1), [clip[0], clip[1]])
+                    lo, hi = float(max(0.0, lo)), float(min(1.0, hi))
+                    if not (hi > lo):
+                        lo, hi = 0.0, 1.0
+                else:
+                    lo, hi = 0.0, 1.0
+
+                xs = np.linspace(0.0, 1.0, 800)
+                h_t = _silverman_bandwidth(mtp)
+                h_c = _silverman_bandwidth(mcp)
+                yt = _kde_reflect(mtp, xs, h_t)
+                yc = _kde_reflect(mcp, xs, h_c)
+
+                ax.plot(xs, yt, linewidth=2.2, label="Treated (KDE)", color=used_t, antialiased=True)
+                ax.plot(xs, yc, linewidth=2.2, linestyle="--", label="Control (KDE)", color=used_c, antialiased=True)
+
+                if shade_overlap:
+                    y_min = np.minimum(yt, yc)
+                    ax.fill_between(xs, y_min, 0, alpha=0.12, color="grey", rasterized=False)
+
+            # ------- Means ------------------------------------------------------
+            ax.axvline(float(mtp.mean()), linestyle=":", linewidth=1.8, color=used_t, alpha=0.95)
+            ax.axvline(float(mcp.mean()), linestyle=":", linewidth=1.8, color=used_c, alpha=0.95)
+
+            # ------- Cosmetics --------------------------------------------------
+            ax.set_xlabel(r"$m(x) = \mathbb{P}(D=1 \mid X)$")
+            ax.set_ylabel("Density")
+            ax.set_title("Propensity Overlap by Treatment Group")
+            ax.set_xlim(0.0, 1.0)
+            ax.grid(True, linewidth=0.5, alpha=0.45)
+            for spine in ("top", "right"):
+                ax.spines[spine].set_visible(False)
+            ax.legend(frameon=False)
+            fig.tight_layout()
+
+            # ------- Optional save ---------------------------------------------
+            if save is not None:
+                ext = str(save).lower().split(".")[-1]
+                _dpi = save_dpi or (300 if ext in {"png", "jpg", "jpeg", "tif", "tiff"} else dpi)
+                fig.savefig(
+                    save, dpi=_dpi, bbox_inches="tight", pad_inches=0.1,
+                    transparent=transparent,
+                    facecolor="none" if transparent else "white"
+                )
+
+        return fig
 
     def positivity_check_m(self, bounds: Tuple[float, float] = (0.05, 0.95)) -> Dict[str, Any]:
         """Check overlap/positivity for m(x) based on thresholds."""
@@ -320,16 +466,16 @@ class PropensityModel:
 
 class OutcomeModel:
     """A model for outcome prediction and related diagnostics.
-    
+
     This class encapsulates outcome predictions and provides methods for:
     - Computing RMSE and MAE regression metrics
     - Extracting SHAP values for outcome prediction
-    
+
     The class is returned by CausalEDA.outcome_fit() and provides a cleaner
     interface for outcome model analysis.
     """
-    
-    def __init__(self, 
+
+    def __init__(self,
                  predicted_outcomes: np.ndarray,
                  actual_outcomes: np.ndarray,
                  fitted_model: Any,
@@ -337,7 +483,7 @@ class OutcomeModel:
                  X_for_shap: Optional[np.ndarray] = None,
                  cat_features_for_shap: Optional[List[int]] = None):
         """Initialize OutcomeModel with fitted model artifacts.
-        
+
         Parameters
         ----------
         predicted_outcomes : np.ndarray
@@ -1025,13 +1171,14 @@ class CausalEDA:
                 m = pm.m
         df = self.d.df
         t = df[self.d.treatment].astype(int).values
-        plt.figure()
-        plt.hist(m[t == 1], bins=30, alpha=0.5, density=True, label="treated")
-        plt.hist(m[t == 0], bins=30, alpha=0.5, density=True, label="control")
-        plt.xlabel("m(x) = P(D=1|X)")
-        plt.ylabel("Density")
-        plt.legend()
-        plt.title("Overlap of m(x)")
+        fig, ax = plt.subplots()
+        ax.hist(m[t == 1], bins=30, alpha=0.5, density=True, label="treated")
+        ax.hist(m[t == 0], bins=30, alpha=0.5, density=True, label="control")
+        ax.set_xlabel("m(x) = P(D=1|X)")
+        ax.set_ylabel("Density")
+        ax.legend()
+        ax.set_title("Overlap of m(x)")
+        return fig
 
     # Back-compat shims for public API
     def confounders_roc_auc(self, ps: Optional[np.ndarray] = None) -> float:
@@ -1129,8 +1276,358 @@ class CausalEDA:
         
         return balance_df
 
+    from typing import Optional, Tuple
 
+    def outcome_hist(
+            self,
+            treatment: Optional[str] = None,
+            target: Optional[str] = None,
+            bins="fd",  # smarter default (still accepts int)
+            density: bool = True,
+            alpha: float = 0.45,
+            sharex: bool = True,
+            kde: bool = True,  # overlay smooth density (SciPy-free)
+            clip: Optional[Tuple[float, float]] = (0.01, 0.99),  # trim tails for nicer view
+            figsize: Tuple[float, float] = (9, 5.5),
+            dpi: int = 220,
+            font_scale: float = 1.15,
+            save: Optional[str] = None,  # "outcome.png" / ".svg" / ".pdf"
+            save_dpi: Optional[int] = None,
+            transparent: bool = False,
+    ):
+        """
+        Plot the distribution of the outcome for each treatment on a single, pretty plot.
 
+        Features
+        --------
+        - High-DPI canvas + scalable fonts
+        - Default Matplotlib colors; KDE & mean lines match their histogram colors
+        - Numeric outcomes: shared x-range (optional), optional KDE, quantile clipping
+        - Categorical outcomes: normalized grouped bars by treatment
+        - Optional hi-res export (PNG/SVG/PDF)
+        """
+        import numpy as np
+        import pandas as pd
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
+
+        # ---------- Helpers -----------------------------------------------------
+        def _silverman_bandwidth(x: np.ndarray) -> float:
+            x = np.asarray(x, float)
+            n = x.size
+            if n < 2:
+                return 0.04
+            sd = np.std(x, ddof=1)
+            iqr = np.subtract(*np.percentile(x, [75, 25]))
+            s = sd if iqr <= 0 else min(sd, iqr / 1.34)
+            h = 0.9 * s * n ** (-1 / 5)
+            return float(max(h, 1e-6))
+
+        def _kde_unbounded(x: np.ndarray, xs: np.ndarray, h: float) -> np.ndarray:
+            """
+            Gaussian KDE on R, implemented with NumPy (no SciPy).
+            Handles degenerate cases by drawing a small bump at the mean.
+            """
+            x = np.asarray(x, float)
+            if x.size == 0:
+                return np.zeros_like(xs)
+            if x.size < 2 or np.std(x) < 1e-12:
+                mu = float(np.mean(x)) if x.size else 0.0
+                h0 = max(h, 1e-3)
+                z = (xs - mu) / h0
+                return np.exp(-0.5 * z ** 2) / (np.sqrt(2 * np.pi) * h0)
+            diff = (xs[None, :] - x[:, None]) / h
+            kern = np.exp(-0.5 * diff ** 2) / (np.sqrt(2 * np.pi) * h)
+            return kern.mean(axis=0)
+
+        def _first_patch_color(patches, fallback):
+            for p in patches:
+                fc = p.get_facecolor()
+                if fc is not None:
+                    return fc
+            return fallback
+
+        # ---------- Data & columns ---------------------------------------------
+        df = self.d.df
+        t_col = treatment or self.d.treatment
+        y_col = target or self.d.target
+        if t_col not in df.columns or y_col not in df.columns:
+            raise ValueError("Specified treatment/outcome columns not found in DataFrame.")
+
+        treatments = pd.unique(df[t_col])  # preserves input order
+        # Filter rows with valid outcome & treatment
+        valid = df[[t_col, y_col]].dropna()
+        if valid.empty:
+            raise ValueError("No non-missing values for the selected treatment/outcome.")
+
+        # ---------- Figure with high DPI & scaled fonts ------------------------
+        rc = {
+            "font.size": 11 * font_scale,
+            "axes.titlesize": 13 * font_scale,
+            "axes.labelsize": 12 * font_scale,
+            "legend.fontsize": 10 * font_scale,
+            "xtick.labelsize": 10 * font_scale,
+            "ytick.labelsize": 10 * font_scale,
+        }
+        with mpl.rc_context(rc):
+            fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+
+            # ---------- Branch: categorical vs numeric -------------------------
+            if not pd.api.types.is_numeric_dtype(valid[y_col]):
+                # CATEGORICAL: normalized grouped bars
+                vals = pd.unique(valid[y_col])
+                # Stable, readable category order
+                vals_sorted = sorted(vals, key=lambda v: (str(type(v)), str(v)))
+                width = 0.8 / max(1, len(treatments))
+                x = np.arange(len(vals_sorted))
+
+                # Color cycle
+                cycle = mpl.rcParams["axes.prop_cycle"].by_key().get("color", ["C0", "C1", "C2", "C3"])
+
+                for i, tr in enumerate(treatments):
+                    sub = valid.loc[valid[t_col] == tr, y_col]
+                    counts = sub.value_counts(normalize=True)
+                    heights = [float(counts.get(v, 0.0)) for v in vals_sorted]
+                    ax.bar(x + i * width, heights, width=width, alpha=alpha,
+                           label=f"{tr} (n={sub.shape[0]})",
+                           color=cycle[i % len(cycle)],
+                           edgecolor="white", linewidth=0.6)
+
+                ax.set_xticks(x + (len(treatments) - 1) * width / 2)
+                ax.set_xticklabels([str(v) for v in vals_sorted])
+                ax.set_ylabel("Proportion")
+                ax.set_xlabel(str(y_col))
+                ax.set_title("Outcome distribution by treatment (categorical)")
+                ax.grid(True, axis="y", linewidth=0.5, alpha=0.45)
+                for spine in ("top", "right"):
+                    ax.spines[spine].set_visible(False)
+                ax.legend(title=str(t_col), frameon=False)
+                fig.tight_layout()
+
+            else:
+                # NUMERIC: overlay histograms (+ optional KDE) per treatment
+                y_all = valid[y_col].to_numpy()
+
+                # Shared x-limits for all treatments if requested
+                if sharex:
+                    if clip:
+                        lo, hi = np.quantile(y_all, [clip[0], clip[1]])
+                    else:
+                        lo, hi = np.nanmin(y_all), np.nanmax(y_all)
+                    if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+                        lo, hi = float(np.nanmin(y_all)), float(np.nanmax(y_all))
+                    hist_range = (float(lo), float(hi))
+                    ax.set_xlim(*hist_range)
+                else:
+                    hist_range = None  # each call to hist will expand limits as needed
+
+                # Keep track of colors actually used so KDE/means match
+                cycle = mpl.rcParams["axes.prop_cycle"].by_key().get("color", ["C0", "C1", "C2", "C3"])
+                used_colors = {}
+
+                # Draw hists
+                for i, tr in enumerate(treatments):
+                    y_vals = valid.loc[valid[t_col] == tr, y_col].to_numpy()
+                    y_vals = y_vals[np.isfinite(y_vals)]
+                    if y_vals.size == 0:
+                        continue
+
+                    h = ax.hist(
+                        y_vals,
+                        bins=bins,
+                        density=density,
+                        alpha=alpha,
+                        label=f"{tr} (n={y_vals.size})",
+                        range=hist_range,
+                        edgecolor="white",
+                        linewidth=0.6,
+                        color=None,  # let Matplotlib choose
+                    )
+                    color_this = _first_patch_color(h[2], cycle[i % len(cycle)])
+                    used_colors[tr] = color_this
+
+                # KDE overlays (SciPy-free, stable)
+                if kde and len(used_colors) > 0:
+                    # Build a common grid for smooth lines
+                    if hist_range is None:
+                        # Determine from all numeric values (optionally clipped)
+                        if clip:
+                            lo, hi = np.quantile(y_all, [clip[0], clip[1]])
+                        else:
+                            lo, hi = np.nanmin(y_all), np.nanmax(y_all)
+                        if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+                            lo, hi = float(np.nanmin(y_all)), float(np.nanmax(y_all))
+                    else:
+                        lo, hi = hist_range
+
+                    xs = np.linspace(float(lo), float(hi), 800)
+
+                    for tr in treatments:
+                        if tr not in used_colors:
+                            continue
+                        y_vals = valid.loc[valid[t_col] == tr, y_col].to_numpy()
+                        y_vals = y_vals[np.isfinite(y_vals)]
+                        if y_vals.size == 0:
+                            continue
+                        hbw = _silverman_bandwidth(y_vals)
+                        dens = _kde_unbounded(y_vals, xs, hbw)
+                        # If histogram is counts, scale KDE area roughly to counts for visual parity
+                        if not density:
+                            # approximate scaling by total count and bin width near midrange
+                            bw = (hi - lo) / (bins if isinstance(bins, int) else 30)
+                            dens = dens * y_vals.size * bw
+                        ax.plot(xs, dens, linewidth=2.2, color=used_colors[tr],
+                                label=f"{tr} (KDE)")
+
+                # Mean lines
+                for tr in treatments:
+                    y_vals = valid.loc[valid[t_col] == tr, y_col].to_numpy()
+                    y_vals = y_vals[np.isfinite(y_vals)]
+                    if y_vals.size == 0:
+                        continue
+                    mu = float(np.mean(y_vals))
+                    # Clamp mean line to visible range if sharex & clipped
+                    if sharex and hist_range is not None:
+                        mu = float(np.clip(mu, hist_range[0], hist_range[1]))
+                    ax.axvline(mu, linestyle=":", linewidth=1.8,
+                               color=used_colors.get(tr, "k"), alpha=0.95)
+
+                ax.set_xlabel(str(y_col))
+                ax.set_ylabel("Density" if density else "Count")
+                ax.set_title("Outcome distribution by treatment")
+                ax.grid(True, linewidth=0.5, alpha=0.45)
+                for spine in ("top", "right"):
+                    ax.spines[spine].set_visible(False)
+                ax.legend(title=str(t_col), frameon=False)
+                fig.tight_layout()
+
+            # -------- Optional high-res save -----------------------------------
+            if save is not None:
+                ext = str(save).lower().split(".")[-1]
+                _dpi = save_dpi or (300 if ext in {"png", "jpg", "jpeg", "tif", "tiff"} else dpi)
+                fig.savefig(
+                    save,
+                    dpi=_dpi,
+                    bbox_inches="tight",
+                    pad_inches=0.1,
+                    transparent=transparent,
+                    facecolor="none" if transparent else "white",
+                )
+
+        return fig
+
+    from typing import Optional, Tuple
+
+    def outcome_boxplot(
+            self,
+            treatment: Optional[str] = None,
+            target: Optional[str] = None,
+            figsize: Tuple[float, float] = (9, 5.5),
+            dpi: int = 220,
+            font_scale: float = 1.15,
+            showfliers: bool = True,
+            patch_artist: bool = True,
+            save: Optional[str] = None,  # "boxplot.png" / ".svg" / ".pdf"
+            save_dpi: Optional[int] = None,
+            transparent: bool = False,
+    ):
+        """
+        Prettified boxplot of the outcome by treatment.
+
+        Features
+        --------
+        - High-DPI figure, scalable fonts
+        - Soft modern color styling (default Matplotlib palette)
+        - Optional outliers, gentle transparency
+        - Optional save to PNG/SVG/PDF
+        """
+        import numpy as np
+        import pandas as pd
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
+
+        # --- Data setup --------------------------------------------------------
+        df = self.d.df
+        t_col = treatment or self.d.treatment
+        y_col = target or self.d.target
+
+        if t_col not in df.columns or y_col not in df.columns:
+            raise ValueError("Specified treatment/outcome columns not found in DataFrame.")
+
+        # Drop rows with missing outcome
+        df_valid = df[[t_col, y_col]].dropna()
+        if df_valid.empty:
+            raise ValueError("No valid rows with both treatment and outcome present.")
+
+        treatments = pd.unique(df_valid[t_col])
+        data = [df_valid.loc[df_valid[t_col] == tr, y_col].values for tr in treatments]
+
+        # --- Matplotlib rc settings --------------------------------------------
+        rc = {
+            "font.size": 11 * font_scale,
+            "axes.titlesize": 13 * font_scale,
+            "axes.labelsize": 12 * font_scale,
+            "legend.fontsize": 10 * font_scale,
+            "xtick.labelsize": 10 * font_scale,
+            "ytick.labelsize": 10 * font_scale,
+        }
+
+        with mpl.rc_context(rc):
+            fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+
+            # Use Matplotlib default color cycle
+            cycle = mpl.rcParams["axes.prop_cycle"].by_key().get("color", ["C0", "C1", "C2", "C3"])
+            colors = [cycle[i % len(cycle)] for i in range(len(treatments))]
+
+            # --- Draw boxplot ---------------------------------------------------
+            bp = ax.boxplot(
+                data,
+                patch_artist=patch_artist,
+                labels=[str(tr) for tr in treatments],
+                showfliers=showfliers,
+                boxprops=dict(linewidth=1.1, alpha=0.8),
+                whiskerprops=dict(linewidth=1.0, alpha=0.8),
+                capprops=dict(linewidth=1.0, alpha=0.8),
+                medianprops=dict(linewidth=2.0, color="black"),
+                flierprops=dict(
+                    marker="o",
+                    markersize=4,
+                    markerfacecolor="grey",
+                    alpha=0.6,
+                    markeredgewidth=0.3,
+                ),
+            )
+
+            # --- Colorize boxes with soft fill ---------------------------------
+            if patch_artist:
+                for patch, color in zip(bp["boxes"], colors):
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.35)
+                    patch.set_edgecolor(color)
+
+            # --- Titles and cosmetics ------------------------------------------
+            ax.set_xlabel(str(t_col))
+            ax.set_ylabel(str(y_col))
+            ax.set_title("Outcome by treatment (boxplot)")
+            ax.grid(True, axis="y", linewidth=0.5, alpha=0.45)
+            for spine in ("top", "right"):
+                ax.spines[spine].set_visible(False)
+            fig.tight_layout()
+
+            # --- Optional save -------------------------------------------------
+            if save is not None:
+                ext = str(save).lower().split(".")[-1]
+                _dpi = save_dpi or (300 if ext in {"png", "jpg", "jpeg", "tif", "tiff"} else dpi)
+                fig.savefig(
+                    save,
+                    dpi=_dpi,
+                    bbox_inches="tight",
+                    pad_inches=0.1,
+                    transparent=transparent,
+                    facecolor="none" if transparent else "white",
+                )
+
+        return fig
 
     def outcome_plots(self,
                       treatment: Optional[str] = None,
@@ -1166,67 +1663,21 @@ class CausalEDA:
         Tuple[matplotlib.figure.Figure, matplotlib.figure.Figure]
             (fig_distribution, fig_boxplot)
         """
-        df = self.d.df
-        t_col = treatment or self.d.treatment
-        y_col = target or self.d.target
-
-        if t_col not in df.columns or y_col not in df.columns:
-            raise ValueError("Specified treatment/outcome columns not found in DataFrame.")
-
-        # Determine unique treatments preserving natural sort
-        treatments = pd.unique(df[t_col])
-
-        # Distribution plot (overlayed)
-        fig1 = plt.figure(figsize=figsize)
-        ax1 = fig1.gca()
-
-        # Only support numeric outcome for histogram/boxplot in this minimal implementation
-        if not pd.api.types.is_numeric_dtype(df[y_col]):
-            # Fallback: draw normalized bars per treatment for categorical outcome
-            # Compute frequency of outcome values per treatment and stack them side-by-side
-            vals = pd.unique(df[y_col])
-            vals_sorted = sorted(vals, key=lambda v: (str(type(v)), v))
-            width = 0.8 / max(1, len(treatments))
-            x = np.arange(len(vals_sorted))
-            for i, tr in enumerate(treatments):
-                sub = df[df[t_col] == tr][y_col]
-                counts = pd.Series(sub).value_counts(normalize=True)
-                heights = [counts.get(v, 0.0) for v in vals_sorted]
-                ax1.bar(x + i * width, heights, width=width, alpha=alpha, label=str(tr))
-            ax1.set_xticks(x + (len(treatments) - 1) * width / 2)
-            ax1.set_xticklabels([str(v) for v in vals_sorted])
-            ax1.set_ylabel("Proportion")
-            ax1.set_xlabel(str(y_col))
-            ax1.set_title("Target distribution by treatment (categorical)")
-            ax1.legend(title=str(t_col))
-        else:
-            # Numeric outcome: overlay histograms/density
-            # Determine common x-limits if sharex
-            xmin, xmax = None, None
-            if sharex:
-                xmin = float(df[y_col].min())
-                xmax = float(df[y_col].max())
-            for tr in treatments:
-                y_vals = df.loc[df[t_col] == tr, y_col].dropna().values
-                if len(y_vals) == 0:
-                    continue
-                ax1.hist(y_vals, bins=bins, density=density, alpha=alpha, label=str(tr), range=(xmin, xmax) if sharex else None)
-            ax1.set_xlabel(str(y_col))
-            ax1.set_ylabel("Density" if density else "Count")
-            ax1.set_title("Target distribution by treatment")
-            ax1.legend(title=str(t_col))
-
-        # Boxplot by treatment
-        fig2 = plt.figure(figsize=figsize)
-        ax2 = fig2.gca()
-        # Create data in order of treatments
-        data = [df.loc[df[t_col] == tr, y_col].dropna().values for tr in treatments]
-        ax2.boxplot(data, labels=[str(tr) for tr in treatments], showfliers=True)
-        ax2.set_xlabel(str(t_col))
-        ax2.set_ylabel(str(y_col))
-        ax2.set_title("Target by treatment (boxplot)")
-
-        return fig1, fig2
+        fig_hist = self.outcome_hist(
+            treatment=treatment,
+            target=target,
+            bins=bins,
+            density=density,
+            alpha=alpha,
+            figsize=figsize,
+            sharex=sharex,
+        )
+        fig_box = self.outcome_boxplot(
+            treatment=treatment,
+            target=target,
+            figsize=figsize,
+        )
+        return fig_hist, fig_box
 
     def m_features(self) -> pd.DataFrame:
         """Return feature attribution from the fitted m(x) model.
