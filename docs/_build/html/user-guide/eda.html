@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Exploratory Data Analysis (EDA) &#8212; CausalKit 0.1.0 documentation</title>
+    <title>Exploratory Data Analysis (EDA) &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -47,7 +47,7 @@
     <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/eda';</script>
-    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="icon" href="../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Inference" href="inference.html" />
@@ -131,11 +131,11 @@
       
     
     
-    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -222,7 +222,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -332,7 +332,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -422,8 +422,8 @@ document.write(`
 <li><p>Fit a simple outcome model (confounders only) and inspect predictive accuracy and feature attributions</p></li>
 </ul>
 <p>Typical workflow</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>  <span class="c1"># optional import if you need to construct CausalData</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalis.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">causalis.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalData</span>  <span class="c1"># optional import if you need to construct CausalData</span>
 
 <span class="c1"># Prepare your dataset (must be CausalData or compatible with df/treatment/outcome/confounders)</span>
 <span class="n">causal_data</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># your CausalData object</span>
@@ -431,24 +431,24 @@ document.write(`
 <span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
 
 <span class="c1"># 1) Quick dataset checks</span>
-<span class="n">shape</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>            <span class="c1"># {&#39;n_rows&#39;: ..., &#39;n_columns&#39;: ...}</span>
-<span class="n">stats</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>         <span class="c1"># outcome summary by treatment</span>
-<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>    <span class="c1"># histogram + boxplot by treatment</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>  <span class="c1"># {&#39;n_rows&#39;: ..., &#39;n_columns&#39;: ...}</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>  <span class="c1"># outcome summary by treatment</span>
+<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>  <span class="c1"># histogram + boxplot by treatment</span>
 
 <span class="c1"># 2) Propensity and overlap</span>
 <span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
-<span class="n">auc</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>              <span class="c1"># treatment predictability</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>  <span class="c1"># treatment predictability</span>
 <span class="n">positivity</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
-<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>                 <span class="c1"># overlap of propensity scores</span>
-<span class="n">shap_t</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>              <span class="c1"># features driving treatment</span>
+<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>  <span class="c1"># overlap of propensity scores</span>
+<span class="n">shap_t</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>  <span class="c1"># features driving treatment</span>
 
 <span class="c1"># 3) Balance</span>
-<span class="n">balance</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>   <span class="c1"># means, abs diff, SMD</span>
+<span class="n">balance</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>  <span class="c1"># means, abs diff, SMD</span>
 
 <span class="c1"># 4) Outcome model (confounders only)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
-<span class="n">metrics</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">scores</span>                <span class="c1"># RMSE/MAE</span>
-<span class="n">shap_y</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">shap</span>                   <span class="c1"># features driving outcome</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">scores</span>  <span class="c1"># RMSE/MAE</span>
+<span class="n">shap_y</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">shap</span>  <span class="c1"># features driving outcome</span>
 </pre></div>
 </div>
 <p>Notes</p>
@@ -516,7 +516,7 @@ document.write(`
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>DML ATE Example &#8212; CausalKit 0.1.0 documentation</title>
+    <title>DML ATE Example &#8212; Causalis 0.1.0 documentation</title>
   
   
   
@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=5afa6543" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -43,14 +44,14 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/design-tabs.js?v=df1d7cd1"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/dml_ate';</script>
-    <link rel="icon" href="../_static/logo.svg"/>
+    <link rel="icon" href="../_static/new_logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DML ATT Example" href="dml_att.html" />
-    <link rel="prev" title="Notebooks" href="../notebooks.html" />
+    <link rel="next" title="Research" href="../research.html" />
+    <link rel="prev" title="DML ATT Example" href="dml_atte.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -130,11 +131,11 @@
       
     
     
-    <img src="../_static/logo_big.svg" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../_static/logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../_static/new_logo_big.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/new_logo_big.svg" class="logo__image only-dark" alt=""/>`);</script>
   
   
-    <p class="title logo__title">CausalKit</p>
+    <p class="title logo__title">Causalis</p>
   
 </a></div>
     
@@ -156,8 +157,15 @@
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -214,7 +222,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -276,8 +284,15 @@ document.write(`
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../notebooks.html">
-    Notebooks
+  <a class="nav-link nav-internal" href="../examples.html">
+    Real World Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../research.html">
+    Research
   </a>
 </li>
 
@@ -321,7 +336,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/IoannMartynov/CausalKit" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/IoannMartynov/Causalis" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -336,9 +351,9 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATE Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dml_att.html">DML ATT Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dml_atte.html">DML ATT Example</a></li>
 
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">DML ATE Example</a></li>
 </ul>
 </div>
 </nav></div>
@@ -377,7 +392,7 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../notebooks.html" class="nav-link">Notebooks</a></li>
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Real World Examples</a></li>
     
     <li class="breadcrumb-item active" aria-current="page">DML ATE Example</li>
   </ul>
@@ -426,72 +441,72 @@ document.write(`
 <p>Let’s generate data of how feature (Treatment) impact on ARPU (Outcome) with linear effect (theta) = 1.8</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalDatasetGenerator</span><span class="p">,</span> <span class="n">CausalData</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from causalis.data import CausalDatasetGenerator, CausalData
 
-<span class="c1"># Reproducibility</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+# Reproducibility
+np.random.seed(42)
 
-<span class="n">confounder_specs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;sd&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="s2">&quot;bernoulli&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="mf">0.60</span><span class="p">},</span>
-<span class="p">]</span>
+confounder_specs = [
+    {&quot;name&quot;: &quot;tenure_months&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 24, &quot;sd&quot;: 12},
+    {&quot;name&quot;: &quot;avg_sessions_week&quot;, &quot;dist&quot;: &quot;normal&quot;, &quot;mu&quot;: 5, &quot;sd&quot;: 2},
+    {&quot;name&quot;: &quot;spend_last_month&quot;, &quot;dist&quot;: &quot;uniform&quot;, &quot;a&quot;: 0, &quot;b&quot;: 200},
+    {&quot;name&quot;: &quot;premium_user&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.25},
+    {&quot;name&quot;: &quot;urban_resident&quot;, &quot;dist&quot;: &quot;bernoulli&quot;, &quot;p&quot;: 0.60},
+]
 
-<span class="c1"># Causal effect and noise</span>
-<span class="n">theta</span> <span class="o">=</span> <span class="mf">1.8</span>  <span class="c1"># ATE: +1.8 ARPU units if new_feature = 1</span>
-<span class="n">sigma_y</span> <span class="o">=</span> <span class="mf">3.5</span>  <span class="c1"># ARPU noise std</span>
-<span class="n">target_t_rate</span> <span class="o">=</span> <span class="mf">0.35</span>  <span class="c1"># ~35% treated</span>
+# Causal effect and noise
+theta = 1.8  # ATE: +1.8 ARPU units if new_feature = 1
+sigma_y = 3.5  # ARPU noise std
+target_d_rate = 0.2  # ~20% treated
 
-<span class="c1"># Effects of confounders on ARPU (baseline, additive)</span>
-<span class="c1"># Order: tenure_months, avg_sessions_week, spend_last_month, premium_user, urban_resident</span>
-<span class="n">beta_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.05</span><span class="p">,</span>  <span class="c1"># tenure_months: small positive effect</span>
-    <span class="mf">0.40</span><span class="p">,</span>  <span class="c1"># avg_sessions_week: strong positive effect</span>
-    <span class="mf">0.02</span><span class="p">,</span>  <span class="c1"># spend_last_month: recent spend correlates with ARPU</span>
-    <span class="mf">2.00</span><span class="p">,</span>  <span class="c1"># premium_user: premium users have higher ARPU</span>
-    <span class="mf">1.00</span><span class="p">,</span>  <span class="c1"># urban_resident: urban users slightly higher ARPU</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# Effects of confounders on ARPU (baseline, additive)
+# Order: tenure_months, avg_sessions_week, spend_last_month, premium_user, urban_resident
+beta_y = np.array([
+    0.05,  # tenure_months: small positive effect
+    0.40,  # avg_sessions_week: strong positive effect
+    0.02,  # spend_last_month: recent spend correlates with ARPU
+    2.00,  # premium_user: premium users have higher ARPU
+    1.00,  # urban_resident: urban users slightly higher ARPU
+], dtype=float)
 
-<span class="c1"># Effects of confounders on treatment assignment (log-odds scale)</span>
-<span class="n">beta_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-    <span class="mf">0.015</span><span class="p">,</span>  <span class="c1"># tenure_months</span>
-    <span class="mf">0.10</span><span class="p">,</span>  <span class="c1"># avg_sessions_week</span>
-    <span class="mf">0.002</span><span class="p">,</span>  <span class="c1"># spend_last_month</span>
-    <span class="mf">0.75</span><span class="p">,</span>  <span class="c1"># premium_user</span>
-    <span class="mf">0.30</span><span class="p">,</span>  <span class="c1"># urban_resident: more likely to get the feature</span>
-<span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+# Effects of confounders on treatment assignment (log-odds scale)
+beta_d = np.array([
+    0.015,  # tenure_months
+    0.10,  # avg_sessions_week
+    0.002,  # spend_last_month
+    0.75,  # premium_user
+    0.30,  # urban_resident: more likely to get the feature
+], dtype=float)
 
-<span class="n">gen</span> <span class="o">=</span> <span class="n">CausalDatasetGenerator</span><span class="p">(</span>
-    <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
-    <span class="n">outcome_type</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span>
-    <span class="n">sigma_y</span><span class="o">=</span><span class="n">sigma_y</span><span class="p">,</span>
-    <span class="n">target_t_rate</span><span class="o">=</span><span class="n">target_t_rate</span><span class="p">,</span>
-    <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">confounder_specs</span><span class="o">=</span><span class="n">confounder_specs</span><span class="p">,</span>
-    <span class="n">beta_y</span><span class="o">=</span><span class="n">beta_y</span><span class="p">,</span>
-    <span class="n">beta_t</span><span class="o">=</span><span class="n">beta_t</span><span class="p">,</span>
-<span class="p">)</span>
+gen = CausalDatasetGenerator(
+    theta=theta,
+    outcome_type=&quot;continuous&quot;,
+    sigma_y=sigma_y,
+    target_d_rate=target_d_rate,
+    seed=42,
+    confounder_specs=confounder_specs,
+    beta_y=beta_y,
+    beta_d=beta_d,
+)
 
 
-<span class="c1"># Create dataset</span>
-<span class="n">causal_data</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">to_causal_data</span><span class="p">(</span>
-    <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-    <span class="n">confounders</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;tenure_months&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;avg_sessions_week&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;spend_last_month&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;premium_user&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;urban_resident&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="p">)</span>
+# Create dataset
+causal_data = gen.to_causal_data(
+    n=10_000,
+    confounders = [
+    &quot;tenure_months&quot;,
+    &quot;avg_sessions_week&quot;,
+    &quot;spend_last_month&quot;,
+    &quot;premium_user&quot;,
+    &quot;urban_resident&quot;,
+]
+)
 
-<span class="c1"># Show first few rows</span>
-<span class="n">causal_data</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+# Show first few rows
+causal_data.df.head()
 </pre></div>
 </div>
 </div>
@@ -515,7 +530,7 @@ document.write(`
     <tr style="text-align: right;">
       <th></th>
       <th>y</th>
-      <th>t</th>
+      <th>d</th>
       <th>tenure_months</th>
       <th>avg_sessions_week</th>
       <th>spend_last_month</th>
@@ -526,8 +541,8 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>5.927714</td>
-      <td>1.0</td>
+      <td>4.127714</td>
+      <td>0.0</td>
       <td>27.656605</td>
       <td>5.352554</td>
       <td>72.552568</td>
@@ -583,19 +598,11 @@ document.write(`
 <h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.eda</span><span class="w"> </span><span class="kn">import</span> <span class="n">CausalEDA</span>
-<span class="n">eda</span> <span class="o">=</span> <span class="n">CausalEDA</span><span class="p">(</span><span class="n">causal_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="general-dataset-information">
-<h3>General dataset information<a class="headerlink" href="#general-dataset-information" title="Link to this heading">#</a></h3>
-<p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of data</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">data_shape</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.eda import CausalEDA
+eda = CausalEDA(causal_data)
+
+# shape of data
+eda.data_shape()
 </pre></div>
 </div>
 </div>
@@ -605,10 +612,13 @@ document.write(`
 </div>
 </div>
 </div>
+<section id="general-dataset-information">
+<h3>General dataset information<a class="headerlink" href="#general-dataset-information" title="Link to this heading">#</a></h3>
+<p>Let’s see how outcome differ between clients who recieved the feature and didn’t</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) Outcome statistics by treatment</span>
-<span class="n">eda</span><span class="o">.</span><span class="n">outcome_stats</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># 1) Outcome statistics by treatment
+eda.outcome_stats()
 </pre></div>
 </div>
 </div>
@@ -659,28 +669,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0.0</th>
-      <td>6519</td>
-      <td>6.011340</td>
-      <td>3.925893</td>
+      <td>8030</td>
+      <td>6.137433</td>
+      <td>3.933863</td>
       <td>-9.866447</td>
-      <td>1.012888</td>
-      <td>3.426894</td>
-      <td>6.030504</td>
-      <td>8.676781</td>
-      <td>10.952265</td>
+      <td>1.118291</td>
+      <td>3.517427</td>
+      <td>6.157583</td>
+      <td>8.847907</td>
+      <td>11.114776</td>
       <td>20.770359</td>
     </tr>
     <tr>
       <th>1.0</th>
-      <td>3481</td>
-      <td>8.553615</td>
-      <td>3.934260</td>
-      <td>-5.507710</td>
-      <td>3.525225</td>
-      <td>5.909860</td>
-      <td>8.566860</td>
-      <td>11.216054</td>
-      <td>13.602967</td>
+      <td>1970</td>
+      <td>8.608973</td>
+      <td>3.942856</td>
+      <td>-3.821492</td>
+      <td>3.666892</td>
+      <td>5.986613</td>
+      <td>8.560912</td>
+      <td>11.247429</td>
+      <td>13.552612</td>
       <td>21.377687</td>
     </tr>
   </tbody>
@@ -689,15 +699,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) Outcome distribution by treatment (hist + boxplot)</span>
-<span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_plots</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># 2) Outcome distribution by treatment (hist + boxplot)
+fig1, fig2 = eda.outcome_plots()
+plt.show()
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fa149fa07c0df489aa5f7b735ce2bfee005068f3fd99c6b50e4f14ca8aca23f4.png" src="../_images/fa149fa07c0df489aa5f7b735ce2bfee005068f3fd99c6b50e4f14ca8aca23f4.png" />
-<img alt="../_images/a168dc26ca1011c1dcf5048a0961c9382dddc1e1fc85336a7f7cde711e1788df.png" src="../_images/a168dc26ca1011c1dcf5048a0961c9382dddc1e1fc85336a7f7cde711e1788df.png" />
+<img alt="../_images/b72221847ae1d83ea2fe2d2d12b3d374559dee16ff0ca2b5568424d33b31d9d8.png" src="../_images/b72221847ae1d83ea2fe2d2d12b3d374559dee16ff0ca2b5568424d33b31d9d8.png" />
+<img alt="../_images/5ae3382d34ed881745b454340975bb10d082cf62cb12bd2170b45afaaf47326e.png" src="../_images/5ae3382d34ed881745b454340975bb10d082cf62cb12bd2170b45afaaf47326e.png" />
 </div>
 </div>
 </section>
@@ -706,9 +716,9 @@ document.write(`
 <p>Now let’s examine how propensity score differ treatments</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Shows means of confounders for control/treated groups, absolute differences, and SMD values</span>
-<span class="n">confounders_balance_df</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">confounders_means</span><span class="p">()</span>
-<span class="n">display</span><span class="p">(</span><span class="n">confounders_balance_df</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Shows means of confounders for control/treated groups, absolute differences, and SMD values
+confounders_balance_df = eda.confounders_means()
+display(confounders_balance_df)
 </pre></div>
 </div>
 </div>
@@ -747,38 +757,38 @@ document.write(`
   <tbody>
     <tr>
       <th>premium_user</th>
-      <td>0.198343</td>
-      <td>0.347889</td>
-      <td>0.149545</td>
-      <td>0.340423</td>
-    </tr>
-    <tr>
-      <th>avg_sessions_week</th>
-      <td>4.905841</td>
-      <td>5.293265</td>
-      <td>0.387423</td>
-      <td>0.193959</td>
+      <td>0.218057</td>
+      <td>0.382234</td>
+      <td>0.164176</td>
+      <td>0.364037</td>
     </tr>
     <tr>
       <th>tenure_months</th>
-      <td>23.170108</td>
-      <td>25.200827</td>
-      <td>2.030718</td>
-      <td>0.168676</td>
+      <td>23.405355</td>
+      <td>25.799499</td>
+      <td>2.394143</td>
+      <td>0.199024</td>
+    </tr>
+    <tr>
+      <th>avg_sessions_week</th>
+      <td>4.976354</td>
+      <td>5.302999</td>
+      <td>0.326645</td>
+      <td>0.163509</td>
     </tr>
     <tr>
       <th>urban_resident</th>
-      <td>0.578003</td>
-      <td>0.643781</td>
-      <td>0.065778</td>
-      <td>0.135209</td>
+      <td>0.587547</td>
+      <td>0.655330</td>
+      <td>0.067783</td>
+      <td>0.140072</td>
     </tr>
     <tr>
       <th>spend_last_month</th>
-      <td>97.801230</td>
-      <td>105.271930</td>
-      <td>7.470700</td>
-      <td>0.129267</td>
+      <td>99.288113</td>
+      <td>104.941250</td>
+      <td>5.653137</td>
+      <td>0.097172</td>
     </tr>
   </tbody>
 </table>
@@ -786,40 +796,40 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity model fit</span>
-<span class="n">ps_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">fit_propensity</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Propensity model fit
+ps_model = eda.fit_propensity()
 
-<span class="c1"># ROC AUC - shows how predictable treatment is from confounders</span>
-<span class="n">roc_auc_score</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">roc_auc</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ROC AUC from PropensityModel:&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+# ROC AUC - shows how predictable treatment is from confounders
+roc_auc_score = ps_model.roc_auc
+print(&quot;ROC AUC from PropensityModel:&quot;, round(roc_auc_score, 4))
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.6053
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ROC AUC from PropensityModel: 0.5926
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Positivity check - assess overlap between treatment groups</span>
-<span class="n">positivity_result</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">positivity_check</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positivity check from PropensityModel:&quot;</span><span class="p">,</span> <span class="n">positivity_result</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Positivity check - assess overlap between treatment groups
+positivity_result = ps_model.positivity_check()
+print(&quot;Positivity check from PropensityModel:&quot;, positivity_result)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0008, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Positivity check from PropensityModel: {&#39;bounds&#39;: (0.05, 0.95), &#39;share_below&#39;: 0.0121, &#39;share_above&#39;: 0.0, &#39;flag&#39;: False}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># SHAP values - feature importance for treatment assignment from confounders</span>
-<span class="n">shap_values_df</span> <span class="o">=</span> <span class="n">ps_model</span><span class="o">.</span><span class="n">shap</span>
-<span class="n">display</span><span class="p">(</span><span class="n">shap_values_df</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># SHAP values - feature importance for treatment assignment from confounders
+shap_values_df = ps_model.shap
+display(shap_values_df)
 </pre></div>
 </div>
 </div>
@@ -844,33 +854,57 @@ document.write(`
       <th></th>
       <th>feature</th>
       <th>shap_mean</th>
+      <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>spend_last_month</td>
-      <td>-0.000322</td>
+      <td>num__spend_last_month</td>
+      <td>0.000299</td>
+      <td>0.166002</td>
+      <td>1.180575</td>
+      <td>0.027438</td>
+      <td>0.000047</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>tenure_months</td>
-      <td>0.000140</td>
+      <td>num__premium_user</td>
+      <td>-0.000269</td>
+      <td>0.306301</td>
+      <td>1.358391</td>
+      <td>0.052687</td>
+      <td>-0.000042</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>avg_sessions_week</td>
-      <td>0.000122</td>
+      <td>num__urban_resident</td>
+      <td>0.000245</td>
+      <td>0.158900</td>
+      <td>1.172220</td>
+      <td>0.026210</td>
+      <td>0.000039</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>premium_user</td>
-      <td>0.000052</td>
+      <td>num__avg_sessions_week</td>
+      <td>-0.000141</td>
+      <td>0.174082</td>
+      <td>1.190153</td>
+      <td>0.028841</td>
+      <td>-0.000022</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>urban_resident</td>
-      <td>0.000008</td>
+      <td>num__tenure_months</td>
+      <td>-0.000135</td>
+      <td>0.194878</td>
+      <td>1.215163</td>
+      <td>0.032482</td>
+      <td>-0.000021</td>
     </tr>
   </tbody>
 </table>
@@ -878,14 +912,107 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Propensity score overlap graph</span>
-<span class="n">ps_model</span><span class="o">.</span><span class="n">ps_graph</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># If your DataFrame has a &#39;shap_mean&#39; column:
+shap_df = shap_values_df.copy()
+shap_df[&#39;mean_abs_shap&#39;] = shap_df[&#39;shap_mean&#39;].abs()
+shap_df.sort_values(&#39;mean_abs_shap&#39;, ascending=False, inplace=True)
+display(shap_df)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c7c4b11eb29d99e1c57798027b7500bcb86e2a5a69b52ec614a141268dbfd6c4.png" src="../_images/c7c4b11eb29d99e1c57798027b7500bcb86e2a5a69b52ec614a141268dbfd6c4.png" />
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>feature</th>
+      <th>shap_mean</th>
+      <th>shap_mean_abs</th>
+      <th>odds_mult_abs</th>
+      <th>exact_pp_change_abs</th>
+      <th>exact_pp_change_signed</th>
+      <th>mean_abs_shap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>num__spend_last_month</td>
+      <td>0.000299</td>
+      <td>0.166002</td>
+      <td>1.180575</td>
+      <td>0.027438</td>
+      <td>0.000047</td>
+      <td>0.000299</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>num__premium_user</td>
+      <td>-0.000269</td>
+      <td>0.306301</td>
+      <td>1.358391</td>
+      <td>0.052687</td>
+      <td>-0.000042</td>
+      <td>0.000269</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>num__urban_resident</td>
+      <td>0.000245</td>
+      <td>0.158900</td>
+      <td>1.172220</td>
+      <td>0.026210</td>
+      <td>0.000039</td>
+      <td>0.000245</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>num__avg_sessions_week</td>
+      <td>-0.000141</td>
+      <td>0.174082</td>
+      <td>1.190153</td>
+      <td>0.028841</td>
+      <td>-0.000022</td>
+      <td>0.000141</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>num__tenure_months</td>
+      <td>-0.000135</td>
+      <td>0.194878</td>
+      <td>1.215163</td>
+      <td>0.032482</td>
+      <td>-0.000021</td>
+      <td>0.000135</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Propensity score overlap graph
+ps_model.ps_graph()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9b53a05526ac6bc208946a7a9616d4e3856045796f2e8631c16ed2b50105f971.png" src="../_images/9b53a05526ac6bc208946a7a9616d4e3856045796f2e8631c16ed2b50105f971.png" />
 </div>
 </div>
 </section>
@@ -894,25 +1021,25 @@ document.write(`
 <p>Let’s analyze how confounders predict outcome</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Outcome model fit</span>
-<span class="n">outcome_model</span> <span class="o">=</span> <span class="n">eda</span><span class="o">.</span><span class="n">outcome_fit</span><span class="p">()</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># Outcome model fit
+outcome_model = eda.outcome_fit()
 
-<span class="c1"># RMSE and MAE of regression model</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">outcome_model</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
+# RMSE and MAE of regression model
+print(outcome_model.scores)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.6896558290948964, &#39;mae&#39;: 2.94099663606919}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;rmse&#39;: 3.656989617205263, &#39;mae&#39;: 2.90424413216463}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2) SHAP values - feature importance for outcome prediction from confounders</span>
-<span class="n">shap_outcome_df</span> <span class="o">=</span> <span class="n">outcome_model</span><span class="o">.</span><span class="n">shap</span>
-<span class="n">display</span><span class="p">(</span><span class="n">shap_outcome_df</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span># 2) SHAP values - feature importance for outcome prediction from confounders
+shap_outcome_df = outcome_model.shap
+display(shap_outcome_df)
 </pre></div>
 </div>
 </div>
@@ -942,28 +1069,28 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>spend_last_month</td>
-      <td>0.002252</td>
+      <td>avg_sessions_week</td>
+      <td>-0.000502</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>tenure_months</td>
-      <td>-0.001747</td>
+      <td>spend_last_month</td>
+      <td>0.000350</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>avg_sessions_week</td>
-      <td>-0.000951</td>
+      <td>urban_resident</td>
+      <td>0.000245</td>
     </tr>
     <tr>
       <th>3</th>
       <td>premium_user</td>
-      <td>0.000729</td>
+      <td>-0.000055</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>urban_resident</td>
-      <td>-0.000282</td>
+      <td>tenure_months</td>
+      <td>-0.000038</td>
     </tr>
   </tbody>
 </table>
@@ -976,26 +1103,26 @@ document.write(`
 <p>Now time to estimate ATE with Double Machine Learning</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.inference.ate</span><span class="w"> </span><span class="kn">import</span> <span class="n">dml_ate</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.inference.ate import dml_ate
 
-<span class="c1"># Estimate Average Treatment Effect (ATE)</span>
-<span class="n">ate_result</span> <span class="o">=</span> <span class="n">dml_ate</span><span class="p">(</span><span class="n">causal_data</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+# Estimate Average Treatment Effect (ATE)
+ate_result = dml_ate(causal_data, n_folds=4, confidence_level=0.95)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_result</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>print(ate_result.get(&#39;coefficient&#39;))
+print(ate_result.get(&#39;p_value&#39;))
+print(ate_result.get(&#39;confidence_interval&#39;))
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;coefficient&#39;: 1.7547754158492368,
- &#39;std_error&#39;: 0.08120639822820347,
- &#39;p_value&#39;: 1.4835396169728733e-103,
- &#39;confidence_interval&#39;: (1.5956138000077407, 1.913937031690733),
- &#39;model&#39;: &lt;doubleml.irm.irm.DoubleMLIRM at 0x14de1bb60&gt;}
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.766253520771568
+0.0
+(1.5329683790491713, 1.9995386624939646)
 </pre></div>
 </div>
 </div>
@@ -1004,125 +1131,17 @@ document.write(`
 </section>
 <section id="refutation">
 <h2>Refutation<a class="headerlink" href="#refutation" title="Link to this heading">#</a></h2>
-<section id="placebo">
-<h3>Placebo<a class="headerlink" href="#placebo" title="Link to this heading">#</a></h3>
+<section id="overlap">
+<h3>Overlap<a class="headerlink" href="#overlap" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import refutation utilities</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">causalkit.refutation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">refute_placebo_outcome</span><span class="p">,</span>
-    <span class="n">refute_placebo_treatment</span><span class="p">,</span>
-    <span class="n">refute_subset</span><span class="p">,</span>
-    <span class="n">refute_irm_orthogonality</span><span class="p">,</span>
-    <span class="n">sensitivity_analysis</span><span class="p">,</span>
-    <span class="n">sensitivity_analysis_set</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Replacing outcome with dummy random variable must broke our model and effect will be near zero</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing an outcome with placebo</span>
-<span class="n">ate_placebo_outcome</span> <span class="o">=</span> <span class="n">refute_placebo_outcome</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_outcome</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from  causalis.refutation import *
+rep = run_overlap_diagnostics(res=ate_result)
+rep[&quot;summary&quot;]
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 0.0010896926888271316, &#39;p_value&#39;: 0.863664499475262}
-</pre></div>
-</div>
-</div>
-</div>
-<p>Replacing treatment with dummy random variable must broke our model and effect will be near zero</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replacing treatment with placebo</span>
-<span class="n">ate_placebo_treatment</span> <span class="o">=</span> <span class="n">refute_placebo_treatment</span><span class="p">(</span>
-    <span class="n">dml_ate</span><span class="p">,</span>
-    <span class="n">causal_data</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">ate_placebo_treatment</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 0.05021278313460212, &#39;p_value&#39;: 0.5290821466624945}
-</pre></div>
-</div>
-</div>
-</div>
-<p>Let’s chanllege our dataset and romove random parts. Theta shoul be near estimated</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inference on subsets</span>
-<span class="n">subset_fractions</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
-
-<span class="n">ate_subset_results</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">fraction</span> <span class="ow">in</span> <span class="n">subset_fractions</span><span class="p">:</span>
-    <span class="n">subset_result</span> <span class="o">=</span> <span class="n">refute_subset</span><span class="p">(</span>
-        <span class="n">dml_ate</span><span class="p">,</span>
-        <span class="n">causal_data</span><span class="p">,</span>
-        <span class="n">fraction</span><span class="o">=</span><span class="n">fraction</span><span class="p">,</span>
-        <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-    <span class="p">)</span>
-    <span class="n">ate_subset_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subset_result</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; With </span><span class="si">{</span><span class="n">fraction</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">% subset: theta = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;theta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p_value = </span><span class="si">{</span><span class="n">subset_result</span><span class="p">[</span><span class="s1">&#39;p_value&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 30% subset: theta = 1.5725, p_value = 0.0000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> With 50% subset: theta = 1.8468, p_value = 0.0000
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="orthogonality">
-<h3>Orthogonality<a class="headerlink" href="#orthogonality" title="Link to this heading">#</a></h3>
-<p>Orthogonality tests show us “Does we correct specify the model”</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ate_ortho_check</span> <span class="o">=</span> <span class="n">refute_irm_orthogonality</span><span class="p">(</span><span class="n">dml_ate</span><span class="p">,</span> <span class="n">causal_data</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Out-of-sample moment check</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 1. Out-of-Sample Moment Check ---&quot;</span><span class="p">)</span>
-<span class="n">oos_test</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;oos_moment_test&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-statistic: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;tstat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P-value: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;pvalue&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fold-wise results:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">oos_test</span><span class="p">[</span><span class="s1">&#39;fold_results&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 1. Out-of-Sample Moment Check ---
-T-statistic: 0.3617
-P-value: 0.7176
-Interpretation: Should be ≈ 0 if moment condition holds
-
-Fold-wise results:
-</pre></div>
-</div>
 <div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1141,465 +1160,309 @@ Fold-wise results:
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>fold</th>
-      <th>n</th>
-      <th>psi_mean</th>
-      <th>psi_var</th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>2000</td>
-      <td>0.142070</td>
-      <td>64.367381</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>2000</td>
-      <td>0.114837</td>
-      <td>71.748247</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>2000</td>
-      <td>0.106751</td>
-      <td>65.548761</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>2000</td>
-      <td>0.091285</td>
-      <td>62.569903</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>2000</td>
-      <td>-0.307471</td>
-      <td>68.208318</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-<p>psi_mean is near zero on every fold, so the test is successful</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Orthogonality derivatives</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 2. Orthogonality (Gateaux Derivative) Tests ---&quot;</span><span class="p">)</span>
-<span class="n">ortho_derivs</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;orthogonality_derivatives&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample derivatives:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample derivatives:&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">])</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (full sample):&quot;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_full&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in full sample&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠ PROBLEMATIC derivatives (trimmed sample):&quot;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">ortho_derivs</span><span class="p">[</span><span class="s1">&#39;problematic_trimmed&#39;</span><span class="p">])</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✓ No problematic derivatives in trimmed sample&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 2. Orthogonality (Gateaux Derivative) Tests ---
-Interpretation: Large |t| (&gt;2) indicate calibration issues
-
-Full sample derivatives:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>basis</th>
-      <th>d_m1</th>
-      <th>se_m1</th>
-      <th>t_m1</th>
-      <th>d_m0</th>
-      <th>se_m0</th>
-      <th>t_m0</th>
-      <th>d_g</th>
-      <th>se_g</th>
-      <th>t_g</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trimmed sample derivatives:
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>basis</th>
-      <th>d_m1</th>
-      <th>se_m1</th>
-      <th>t_m1</th>
-      <th>d_m0</th>
-      <th>se_m0</th>
-      <th>t_m0</th>
-      <th>d_g</th>
-      <th>se_g</th>
-      <th>t_g</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>-0.027778</td>
-      <td>0.015464</td>
-      <td>-1.796300</td>
-      <td>0.009315</td>
-      <td>0.007849</td>
-      <td>1.186833</td>
-      <td>-0.103516</td>
-      <td>0.296654</td>
-      <td>-0.348945</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>0.005088</td>
-      <td>0.016336</td>
-      <td>0.311467</td>
-      <td>0.003259</td>
-      <td>0.008088</td>
-      <td>0.402935</td>
-      <td>0.137892</td>
-      <td>0.322104</td>
-      <td>0.428097</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>0.003129</td>
-      <td>0.016049</td>
-      <td>0.194959</td>
-      <td>0.000922</td>
-      <td>0.008162</td>
-      <td>0.112934</td>
-      <td>0.028325</td>
-      <td>0.385094</td>
-      <td>0.073553</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>-0.001588</td>
-      <td>0.014938</td>
-      <td>-0.106328</td>
-      <td>-0.000145</td>
-      <td>0.008205</td>
-      <td>-0.017732</td>
-      <td>0.021827</td>
-      <td>0.282692</td>
-      <td>0.077210</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>-0.000312</td>
-      <td>0.012767</td>
-      <td>-0.024401</td>
-      <td>0.002863</td>
-      <td>0.009497</td>
-      <td>0.301462</td>
-      <td>-0.019862</td>
-      <td>0.231095</td>
-      <td>-0.085947</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>5</td>
-      <td>0.000451</td>
-      <td>0.015937</td>
-      <td>0.028314</td>
-      <td>-0.001855</td>
-      <td>0.007660</td>
-      <td>-0.242168</td>
-      <td>0.138553</td>
-      <td>0.316203</td>
-      <td>0.438177</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✓ No problematic derivatives in full sample
-
-✓ No problematic derivatives in trimmed sample
-</pre></div>
-</div>
-</div>
-</div>
-<p>t_m1, t_m0, t_g should be above 2.
-Even after trimming our data t_m1, t_m0, t_g above 2 across all confounders</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Influence diagnostics</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- 3. Influence Diagnostics ---&quot;</span><span class="p">)</span>
-<span class="n">influence</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;influence_diagnostics&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpretation: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Full sample influence metrics:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Trimmed sample influence metrics:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Plugin SE: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;se_plugin&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Kurtosis: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P99/Median ratio: </span><span class="si">{</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;trimmed_sample&#39;</span><span class="p">][</span><span class="s1">&#39;p99_over_med&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Top influential observations (full sample):&quot;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">influence</span><span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">][</span><span class="s1">&#39;top_influential&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- 3. Influence Diagnostics ---
-Interpretation: Heavy tails or extreme kurtosis suggest instability
-
-Full sample influence metrics:
-  Plugin SE: 0.0815
-  Kurtosis: 7.64
-  P99/Median ratio: 6.59
-
-Trimmed sample influence metrics:
-  Plugin SE: 0.0815
-  Kurtosis: 7.64
-  P99/Median ratio: 6.60
-
-Top influential observations (full sample):
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>i</th>
-      <th>psi</th>
-      <th>g</th>
-      <th>res_t</th>
-      <th>res_c</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>7299</td>
-      <td>-78.668133</td>
-      <td>0.100071</td>
-      <td>-7.970469</td>
-      <td>-0.000000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>874</td>
-      <td>63.471801</td>
-      <td>0.116169</td>
-      <td>8.132480</td>
+      <td>edge_0.01_below</td>
       <td>0.000000</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>edge_0.01_above</td>
+      <td>0.000000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>9405</td>
-      <td>49.195863</td>
-      <td>0.169723</td>
-      <td>8.457407</td>
-      <td>0.000000</td>
+      <td>edge_0.02_below</td>
+      <td>0.001000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>9116</td>
-      <td>-46.282651</td>
-      <td>0.164969</td>
-      <td>-7.989467</td>
-      <td>-0.000000</td>
+      <td>edge_0.02_above</td>
+      <td>0.000000</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>294</td>
-      <td>-44.627395</td>
-      <td>0.213603</td>
-      <td>-9.570962</td>
-      <td>-0.000000</td>
+      <td>KS</td>
+      <td>0.139672</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>7634</td>
-      <td>44.388611</td>
-      <td>0.742768</td>
-      <td>-0.000000</td>
-      <td>-12.113462</td>
+      <td>AUC</td>
+      <td>0.592382</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>8409</td>
-      <td>44.028348</td>
-      <td>0.284715</td>
-      <td>12.696785</td>
-      <td>0.000000</td>
+      <td>ESS_treated_ratio</td>
+      <td>0.742224</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>5821</td>
-      <td>-43.885460</td>
-      <td>0.153316</td>
-      <td>-6.377281</td>
-      <td>-0.000000</td>
+      <td>ESS_control_ratio</td>
+      <td>0.970455</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>8085</td>
-      <td>-43.798883</td>
-      <td>0.247829</td>
-      <td>-11.536566</td>
-      <td>-0.000000</td>
+      <td>tails_w1_q99/med</td>
+      <td>6.278831</td>
+      <td>GREEN</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>731</td>
-      <td>43.545110</td>
-      <td>0.165439</td>
-      <td>6.820135</td>
-      <td>0.000000</td>
+      <td>tails_w0_q99/med</td>
+      <td>2.844508</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>ATT_identity_relerr</td>
+      <td>0.037683</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>clip_m_total</td>
+      <td>0.000100</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>calib_ECE</td>
+      <td>0.036215</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>calib_slope</td>
+      <td>0.520588</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>calib_intercept</td>
+      <td>-0.637457</td>
+      <td>RED</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="score">
+<h3>Score<a class="headerlink" href="#score" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.refutation.score.score_validation import run_score_diagnostics
+rep_score = run_score_diagnostics(res=ate_result)
+rep_score[&quot;summary&quot;]
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>se_plugin</td>
+      <td>1.190252e-01</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>psi_p99_over_med</td>
+      <td>1.355647e+01</td>
+      <td>YELLOW</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>psi_kurtosis</td>
+      <td>6.047594e+01</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>max_|t|_g1</td>
+      <td>5.463687e+00</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>max_|t|_g0</td>
+      <td>1.384511e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>max_|t|_m</td>
+      <td>1.388284e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>oos_tstat_fold</td>
+      <td>1.241609e-15</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>oos_tstat_strict</td>
+      <td>1.241615e-15</td>
+      <td>GREEN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="sutva">
+<h3>SUTVA<a class="headerlink" href="#sutva" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>print_sutva_questions()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.) Are your clients independent (i)?
+2.) Do you measure confounders, treatment, and outcome in the same intervals?
+3.) Do you measure confounders before treatment and outcome after?
+4.) Do you have a consistent label of treatment, such as if a person does not receive a treatment, he has a label 0?
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="uncofoundedness">
+<h2>Uncofoundedness<a class="headerlink" href="#uncofoundedness" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.refutation.unconfoundedness.uncofoundedness_validation import run_unconfoundedness_diagnostics
+
+rep_uc = run_unconfoundedness_diagnostics(res=ate_result)
+rep_uc[&#39;summary&#39;]
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>value</th>
+      <th>flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>balance_max_smd</td>
+      <td>2.195631e-02</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>balance_frac_violations</td>
+      <td>0.000000e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>ess_treated_ratio</td>
+      <td>7.422239e-01</td>
+      <td>YELLOW</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ess_control_ratio</td>
+      <td>9.704552e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>w_tail_ratio_treated</td>
+      <td>1.167923e+13</td>
+      <td>RED</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>w_tail_ratio_control</td>
+      <td>1.729690e+00</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>top1_mass_share_treated</td>
+      <td>1.412602e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>top1_mass_share_control</td>
+      <td>2.566909e-02</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>ks_m_treated_vs_control</td>
+      <td>1.396717e-01</td>
+      <td>GREEN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>pct_m_outside_overlap</td>
+      <td>1.000000e-02</td>
+      <td>GREEN</td>
     </tr>
   </tbody>
 </table>
@@ -1607,84 +1470,33 @@ Top influential observations (full sample):
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trimming information</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Propensity Score Trimming ---&quot;</span><span class="p">)</span>
-<span class="n">trim_info</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;trimming_info&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trimming bounds: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Observations trimmed: </span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;n_trimmed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">trim_info</span><span class="p">[</span><span class="s1">&#39;pct_trimmed&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>from causalis.refutation.unconfoundedness.uncofoundedness_validation import (
+    sensitivity_analysis, sensitivity_benchmark
+)
+
+sensitivity_analysis(ate_result, cf_y=0.01, cf_d=0.1, rho=1.0, level=0.95)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Propensity Score Trimming ---
-Trimming bounds: (0.02, 0.98)
-Observations trimmed: 0 (0.0%)
-</pre></div>
-</div>
-</div>
-</div>
-<p>In this test we analyze distribution of theta before trimming and after. There is no big difference. So test passed</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Diagnostic conditions breakdown</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Diagnostic Conditions Assessment ---&quot;</span><span class="p">)</span>
-<span class="n">conditions</span> <span class="o">=</span> <span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;diagnostic_conditions&#39;</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Individual condition checks:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">condition</span><span class="p">,</span> <span class="n">passed</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ PASS&quot;</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="s2">&quot;✗ FAIL&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Overall: </span><span class="si">{</span><span class="n">ate_ortho_check</span><span class="p">[</span><span class="s1">&#39;overall_assessment&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--- Diagnostic Conditions Assessment ---
-Individual condition checks:
-  oos_moment_ok: ✓ PASS
-  derivs_full_ok: ✓ PASS
-  derivs_trim_ok: ✓ PASS
-  se_reasonable: ✓ PASS
-  no_extreme_influence: ✓ PASS
-  trimming_reasonable: ✓ PASS
-
-Overall: PASS: Strong evidence for orthogonality
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="sensitivity-analysis">
-<h3>Sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Link to this heading">#</a></h3>
-<p>Let’s analyze how unobserved confounder could look</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bench_sets</span> <span class="o">=</span> <span class="n">causal_data</span><span class="o">.</span><span class="n">confounders</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">sensitivity_analysis_set</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
-    <span class="n">benchmarking_set</span><span class="o">=</span><span class="n">bench_sets</span><span class="p">,</span>
-    <span class="n">level</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-    <span class="n">null_hypothesis</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;theta&#39;: 1.766253520771568,
+ &#39;se&#39;: 0.11902521860734187,
+ &#39;level&#39;: 0.95,
+ &#39;z&#39;: 1.959963984540054,
+ &#39;sampling_ci&#39;: (1.5329683790491713, 1.9995386624939646),
+ &#39;theta_bounds_confounding&#39;: (-3.0227845865106566, 6.5552916280537925),
+ &#39;bias_aware_ci&#39;: (-3.2560697282330535, 6.788576769776189),
+ &#39;max_bias&#39;: 4.789038107282225,
+ &#39;sigma2&#39;: 13.136641553423134,
+ &#39;nu2&#39;: 1.7458713400781616,
+ &#39;params&#39;: {&#39;cf_y&#39;: 0.01, &#39;cf_d&#39;: 0.1, &#39;rho&#39;: 1.0, &#39;use_signed_rr&#39;: False}}
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build a DataFrame with confounders as rows and the metrics as columns</span>
-<span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="k">else</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-<span class="p">})</span><span class="o">.</span><span class="n">T</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_df</span>
+<div class="highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>sensitivity_benchmark(ate_result, benchmarking_set =[&#39;tenure_months&#39;])
 </pre></div>
 </div>
 </div>
@@ -1710,84 +1522,25 @@ Overall: PASS: Strong evidence for orthogonality
       <th>cf_y</th>
       <th>cf_d</th>
       <th>rho</th>
-      <th>delta_theta</th>
+      <th>theta_long</th>
+      <th>theta_short</th>
+      <th>delta</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>tenure_months</th>
-      <td>0.019343</td>
-      <td>0.004555</td>
-      <td>1.000000</td>
-      <td>0.125310</td>
-    </tr>
-    <tr>
-      <th>avg_sessions_week</th>
-      <td>0.031075</td>
-      <td>0.010474</td>
-      <td>1.000000</td>
-      <td>0.172854</td>
-    </tr>
-    <tr>
-      <th>spend_last_month</th>
-      <td>0.080634</td>
-      <td>0.006735</td>
-      <td>0.982448</td>
-      <td>0.177995</td>
-    </tr>
-    <tr>
-      <th>premium_user</th>
-      <td>0.062270</td>
-      <td>0.031318</td>
-      <td>1.000000</td>
-      <td>0.360557</td>
-    </tr>
-    <tr>
-      <th>urban_resident</th>
-      <td>0.018716</td>
-      <td>0.000000</td>
-      <td>1.000000</td>
-      <td>0.093394</td>
+      <th>d</th>
+      <td>0.000034</td>
+      <td>3.037675e-07</td>
+      <td>-1.0</td>
+      <td>1.766254</td>
+      <td>1.845679</td>
+      <td>-0.079425</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
-<p>It is business domain and data knowledge relative question. In this situation we will stop on the most influential confounder ‘premium_user’ and test theta when we do not observe anothere confounder with strength of ‘premium_user’</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run sensitivity analysis on our ATE result</span>
-<span class="n">sensitivity_report_1</span> <span class="o">=</span> <span class="n">sensitivity_analysis</span><span class="p">(</span>
-    <span class="n">ate_result</span><span class="p">,</span>
-    <span class="n">cf_y</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting outcome</span>
-    <span class="n">cf_d</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>  <span class="c1"># Confounding strength affecting treatment</span>
-    <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Perfect correlation between unobserved confounders</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">sensitivity_report_1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>================== Sensitivity Analysis ==================
-
------------------- Scenario          ------------------
-Significance Level: level=0.95
-Sensitivity parameters: cf_y=0.06; cf_d=0.03, rho=1.0
-
------------------- Bounds with CI    ------------------
-   CI lower  theta lower     theta  theta upper  CI upper
-t  1.284916     1.418741  1.754775      2.09081  2.224353
-
------------------- Robustness Values ------------------
-   H_0     RV (%)    RVa (%)
-t  0.0  20.106836  18.701604
-</pre></div>
-</div>
-</div>
-</div>
-<p>CI lower &gt;&gt; 0. It means test is passed</p>
-</section>
 </section>
 </section>
 
@@ -1802,20 +1555,20 @@ t  0.0  20.106836  18.701604
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../notebooks.html"
+       href="dml_atte.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Notebooks</p>
+        <p class="prev-next-title">DML ATT Example</p>
       </div>
     </a>
     <a class="right-next"
-       href="dml_att.html"
+       href="../research.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">DML ATT Example</p>
+        <p class="prev-next-title">Research</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1846,11 +1599,12 @@ t  0.0  20.106836  18.701604
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#refutation">Refutation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo">Placebo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonality">Orthogonality</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-analysis">Sensitivity analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overlap">Overlap</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#score">Score</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sutva">SUTVA</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uncofoundedness">Uncofoundedness</a></li>
 </ul>
   </nav></div>
 
@@ -1879,7 +1633,7 @@ t  0.0  20.106836  18.701604
 
   <p class="copyright">
     
-      © Copyright 2025, CausalKit Team.
+      © Copyright 2025, Causalis Team.
       <br/>
     
   </p>

@@ -6,6 +6,7 @@ This guide will help you get started with Causal Inference and CausalKit and und
 :maxdepth: 2
 
 user-guide/causal_inference_fundamentals
+user-guide/quick_notation
 user-guide/installation
 user-guide/causaldata
 user-guide/eda

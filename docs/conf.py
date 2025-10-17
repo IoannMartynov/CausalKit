@@ -141,10 +141,10 @@ html_css_files = [
 ]
 
 # Favicon for the site
-html_favicon = '_static/logo.svg'
+html_favicon = '_static/new_logo.svg'
 
 # Logo in the navbar (PyData Sphinx Theme)
-html_logo = '_static/logo_big.svg'
+html_logo = '_static/new_logo_big.svg'
 
 # Disable "Show Source" links across all pages
 html_show_sourcelink = False
