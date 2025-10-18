@@ -21,7 +21,9 @@
       ~CausalEDA.fit_m
       ~CausalEDA.fit_propensity
       ~CausalEDA.m_features
+      ~CausalEDA.outcome_boxplot
       ~CausalEDA.outcome_fit
+      ~CausalEDA.outcome_hist
       ~CausalEDA.outcome_plots
       ~CausalEDA.outcome_stats
       ~CausalEDA.plot_m_overlap
@@ -33,5 +35,12 @@
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CausalEDA.Optional
+      ~CausalEDA.Tuple
    
    

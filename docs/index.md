@@ -6,21 +6,39 @@
 
 Evaluate the impact of the treatment on the outcome metric within the sample population, while controlling for confounding factors, to inform resource allocation decisions.
 ````
-
-````{grid} 2
+## Why Causalis?
+````{grid} 1
 :gutter: 2
 :margin: 1
 
-```{card}
+```{grid-item-card} **RCT Inference**: 
 :class-card: sd-shadow-sm sd-rounded-2xl
 
-**RCT Inference**: Estimate effect in your AB test
+
+Estimate effect in your AB test
 ```
 
-```{card}
+```{grid-item-card} **Observational Data Inference**:
 :class-card: sd-shadow-sm sd-rounded-2xl
 
-**Observational Data Inference**: Estimate effect on observational data
+Estimate effect on observational data
+```
+```{grid-item-card} **DML Inference Refutation**:
+:class-card: sd-shadow-sm sd-rounded-2xl
+
+Check assumptions and robustness of the inference
+```
+
+```{grid-item-card} **EDA for your Data**:
+:class-card: sd-shadow-sm sd-rounded-2xl
+
+Propensity score distribution, SMD, and other useful plots
+```
+```{grid-item-card} **Modern State-of-the-Art Casusal Inference**:
+:class-card: sd-shadow-sm sd-rounded-2xl
+
+Double Machine Learning Interactive Regression Model. Designed 
+for capturing nonlinear effects
 ```
 ````
 
@@ -35,6 +53,8 @@ research
 api
 ```
 
+
+
 ## Installation
 
 ```bash
@@ -46,7 +66,7 @@ pip install git+https://github.com/ioannmartynov/causalis.git
 ```
 
 
-
+## Explore Causalis
 ````{grid} 1
 :gutter: 2
 :margin: 2
@@ -77,6 +97,6 @@ Applied Causalis to real world examples
 Theory research
 ```
 ````
-## References
+##### References
 
 [https://github.com/DoubleML/doubleml-for-py](https://github.com/DoubleML/doubleml-for-py)
