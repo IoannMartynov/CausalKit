@@ -50,7 +50,7 @@
     <link rel="icon" href="_static/new_logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="DML ATT Example" href="examples/dml_atte.html" />
+    <link rel="next" title="DML ATE Example" href="examples/dml_ate.html" />
     <link rel="prev" title="Math notation for EDA, IRM, and refutation diagnostics (CausalKit)" href="user-guide/math_eda_irm_refutation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -350,10 +350,11 @@ document.write(`
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic synthetic examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="examples/dml_ate.html">DML ATE Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples/dml_atte.html">DML ATT Example</a></li>
 
-<li class="toctree-l1"><a class="reference internal" href="examples/dml_ate.html">DML ATE Example</a></li>
 </ul>
 </div>
 </nav></div>
@@ -408,20 +409,35 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="real-world-examples">
+  <section class="tex2jax_ignore mathjax_ignore" id="real-world-examples">
 <h1>Real World Examples<a class="headerlink" href="#real-world-examples" title="Link to this heading">#</a></h1>
-<p>This section contains examples of how to use CausalKit for various causal inference tasks.</p>
-<style>
-  /* Hide Previous/Next navigation on the Examples page only */
-  .prev-next-area { display: none !important; }
-</style><section id="general-examples">
-<h2>General Examples<a class="headerlink" href="#general-examples" title="Link to this heading">#</a></h2>
+<section id="basic-synthetic-examples">
+<h2>Basic synthetic examples<a class="headerlink" href="#basic-synthetic-examples" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/dml_atte.html">DML ATT Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/dml_atte.html#inference">Inference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/dml_ate.html">DML ATE Example</a></li>
-</ul>
+</div>
+<div class="sd-container-fluid sd-sphinx-override sd-m-2 docutils">
+<div class="sd-row sd-row-cols-3 sd-row-cols-xs-3 sd-row-cols-sm-3 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-rounded-2xl sd-text-center docutils">
+<img alt="ATE example" class="sd-card-img-top" src="_images/dml_ate.png" />
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+ATE example</div>
+<p class="sd-card-text">ATE estimation workflow</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="examples/dml_ate.html"><span class="doc">DML ATE Example</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-rounded-2xl sd-text-center docutils">
+<img alt="ATT example" class="sd-card-img-top" src="_images/dml_atte.png" />
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+ATT example</div>
+<p class="sd-card-text">ATTE estimation workflow</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="examples/dml_atte.html"><span class="doc">DML ATT Example</span></a></div>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -446,11 +462,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="examples/dml_atte.html"
+       href="examples/dml_ate.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">DML ATT Example</p>
+        <p class="prev-next-title">DML ATE Example</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -472,7 +488,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-examples">General Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-synthetic-examples">Basic synthetic examples</a></li>
 </ul>
   </nav></div>
 
