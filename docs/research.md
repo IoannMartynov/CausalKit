@@ -1,4 +1,13 @@
 # Research
+
+```{toctree}
+:hidden:
+:caption: Benchmarking
+:maxdepth: 1
+
+research/dgp_benchmarking
+```
+
 ## Benchmarking
 ````{grid} 3
 :gutter: 2
